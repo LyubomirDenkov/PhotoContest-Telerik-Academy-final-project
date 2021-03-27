@@ -1,11 +1,11 @@
 package application.photocontest.enums;
 
 public enum UserRoles {
-    JUNKIE,ENTHUSIAST,MASTER,DICTATOR,ORGANIZER,ADMIN;
+    USER,ORGANIZER,ADMIN;
 
 
     @Override
     public String toString() {
-        return super.name().toLowerCase();
+        return name().toLowerCase();
     }
 }
