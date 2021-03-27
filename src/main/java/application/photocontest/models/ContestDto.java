@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class ContestDto {
 
-    public static final String CITY_ID_ERROR_MESSAGE = "City Id must be positive.";
-    public static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
+    private static final String CITY_ID_ERROR_MESSAGE = "City Id must be positive.";
+    private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
 
 
     @NotNull

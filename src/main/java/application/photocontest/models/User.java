@@ -37,13 +37,9 @@ public class User {
     }
 
     public User(int id,
-                String userName,
-                String email,
-                String firstName,
-                String lastName,
-                String password,
-                String role,
-                int points) {
+                String userName, String email,
+                String firstName, String lastName,
+                String password, String role, int points) {
 
         this.id = id;
         this.userName = userName;
