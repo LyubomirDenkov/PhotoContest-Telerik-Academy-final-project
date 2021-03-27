@@ -21,6 +21,13 @@ create or replace table contest
         foreign key (category_id) references category (category_id)
 );
 
+create or replace table roles
+(
+    role_id int auto_increment
+        primary key,
+    name    varchar(30) not null
+);
+
 create or replace table users
 (
     user_id    int auto_increment
@@ -30,7 +37,7 @@ create or replace table users
     first_name varchar(20) not null,
     last_name  varchar(20) not null,
     password   varchar(30) not null,
-    role       varchar(50) not null,
+    `rank`     varchar(50) not null,
     points     int         not null,
     constraint users_email_uindex
         unique (email),
@@ -43,10 +50,7 @@ create or replace table images
     image_id int auto_increment
         primary key,
     URL      varchar(300) not null,
-    user_id  int          not null,
-    points   int          not null,
-    constraint images_users_fk
-        foreign key (user_id) references users (user_id)
+    points   int          not null
 );
 
 create or replace table contest_image
@@ -58,4 +62,26 @@ create or replace table contest_image
     constraint contest_photos_images_fk
         foreign key (image_id) references images (image_id)
 );
+
+create or replace table users_images
+(
+    user_id  int not null,
+    image_id int not null,
+    constraint users_images__fk
+        foreign key (user_id) references users (user_id),
+    constraint users_images_images_fk
+        foreign key (image_id) references images (image_id)
+);
+
+create or replace table users_roles
+(
+    user_id int not null,
+    role_id int not null,
+    constraint users_roles__fk
+        foreign key (role_id) references roles (role_id),
+    constraint users_roles_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
+
 
