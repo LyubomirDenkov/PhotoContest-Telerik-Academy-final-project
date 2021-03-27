@@ -1,6 +1,7 @@
 package application.photocontest.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "images")
@@ -14,8 +15,6 @@ public class Image {
     @Column(name = "URL")
     private String url;
 
-    @Column(name = "user_id")
-    private int userId;
 
     @Column(name = "points")
     private int points;
@@ -25,10 +24,9 @@ public class Image {
 
     }
 
-    public Image(int id, String url, int userId, int points) {
+    public Image(int id, String url, int points) {
         this.id = id;
         this.url = url;
-        this.userId = userId;
         this.points = points;
     }
 
@@ -48,19 +46,24 @@ public class Image {
         this.url = url;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public int getPoints() {
         return points;
     }
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Image image = (Image) o;
+        return getId() == image.getId() && getPoints() == image.getPoints() && getUrl().equals(image.getUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUrl(), getPoints());
     }
 }

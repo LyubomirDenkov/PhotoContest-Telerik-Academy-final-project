@@ -77,4 +77,6 @@ public class Contest {
     public void setPhaseTwo(Time phaseTwo) {
         this.phaseTwo = phaseTwo;
     }
+
+
 }
