@@ -22,8 +22,13 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public Category create(Category name) {
-        return null;
+    public Category create(Category category) {
+        try (Session session = sessionFactory.openSession()) {
+
+            session.save(category);
+
+            return category;
+        }
     }
 
 
