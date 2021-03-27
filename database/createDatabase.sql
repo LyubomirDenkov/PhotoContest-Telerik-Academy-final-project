@@ -25,7 +25,7 @@ create or replace table users
 (
     user_id    int auto_increment
         primary key,
-    user_name  varchar(20) not null,
+    user_name  varchar(30) not null,
     email      varchar(50) not null,
     first_name varchar(20) not null,
     last_name  varchar(20) not null,
@@ -49,7 +49,7 @@ create or replace table images
         foreign key (user_id) references users (user_id)
 );
 
-create or replace table contest_photos
+create or replace table contest_image
 (
     contest_id int not null,
     image_id   int null,
