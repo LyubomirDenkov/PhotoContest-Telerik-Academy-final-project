@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS `photo_contest`;
-CREATE DATABASE  IF NOT EXISTS `photo_contest`;
-USE `photo_contest`;
+DROP DATABASE IF EXISTS `photo-contest`;
+CREATE DATABASE  IF NOT EXISTS `photo-contest`;
+USE `photo-contest`;
 
 create or replace table category
 (
