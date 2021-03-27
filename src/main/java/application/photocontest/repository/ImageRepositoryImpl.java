@@ -20,6 +20,16 @@ public class ImageRepositoryImpl implements ImageRepository {
 
 
     @Override
+    public List<Image> getAll() {
+        return null;
+    }
+
+    @Override
+    public Image getById(int id) {
+        return null;
+    }
+
+    @Override
     public Image create(Image name) {
         return null;
     }
@@ -30,17 +40,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public Image delete(int id) {
-        return null;
-    }
+    public void delete(int id) {
 
-    @Override
-    public List<Image> getAll() {
-        return null;
-    }
-
-    @Override
-    public Image getById(int id) {
-        return null;
     }
 }

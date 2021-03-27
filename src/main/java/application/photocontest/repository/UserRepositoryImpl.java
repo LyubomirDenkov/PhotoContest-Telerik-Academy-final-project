@@ -1,7 +1,9 @@
 package application.photocontest.repository;
 
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,25 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> getAll() {
+        return null;
+    }
+
+    @Override
+    public User getById(int id) {
+
+        try(Session session = sessionFactory.openSession()){
+
+            User user = session.get(User.class,id);
+
+            if (user == null){
+                throw new EntityNotFoundException("User",id);
+            }
+            return user;
+        }
+    }
+
+    @Override
     public User create(User name) {
         return null;
     }
@@ -29,17 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User delete(int id) {
-        return null;
-    }
+    public void delete(int id) {
 
-    @Override
-    public List<User> getAll() {
-        return null;
-    }
-
-    @Override
-    public User getById(int id) {
-        return null;
     }
 }

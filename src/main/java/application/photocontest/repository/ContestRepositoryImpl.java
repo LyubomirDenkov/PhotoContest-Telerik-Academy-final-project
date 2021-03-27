@@ -19,6 +19,16 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
+    public List<Contest> getAll() {
+        return null;
+    }
+
+    @Override
+    public Contest getById(int id) {
+        return null;
+    }
+
+    @Override
     public Contest create(Contest name) {
         return null;
     }
@@ -29,17 +39,7 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
-    public Contest delete(int id) {
-        return null;
-    }
+    public void delete(int id) {
 
-    @Override
-    public List<Contest> getAll() {
-        return null;
-    }
-
-    @Override
-    public Contest getById(int id) {
-        return null;
     }
 }
