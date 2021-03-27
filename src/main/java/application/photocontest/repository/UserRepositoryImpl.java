@@ -5,6 +5,7 @@ import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +23,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<User> query = session.createQuery("from User ", User.class);
+
+            return query.list();
+        }
     }
 
     @Override
@@ -41,7 +47,47 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User create(User name) {
-        return null;
+      return null;
+    }
+
+    @Override
+    public User getByUserName(String userName) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<User> query = session.createQuery("from User " +
+                    "where userName = :userName ", User.class);
+
+            query.setParameter("userName", userName);
+
+            List<User> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("User", "userName", userName);
+
+            }
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<User> query = session.createQuery("from User " +
+                    "where email = :email ", User.class);
+
+            query.setParameter("email", email);
+
+            List<User> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("User", "email", email);
+
+            }
+            return result.get(0);
+        }
     }
 
     @Override

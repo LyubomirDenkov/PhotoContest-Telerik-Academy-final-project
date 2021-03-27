@@ -1,6 +1,17 @@
 package application.photocontest.controllers.authentications;
 
+import application.photocontest.exceptions.AuthenticationFailureException;
+import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.exceptions.UnauthorizedOperationException;
+import application.photocontest.models.User;
+import application.photocontest.service.contracts.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpSession;
 
 @Component
 public class AuthenticationHelper {
@@ -10,8 +21,10 @@ public class AuthenticationHelper {
 
     public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong email or password.";
 
+    private final UserService userService;
 
-    /*public AuthenticationHelper(UserService userService) {
+
+    public AuthenticationHelper(UserService userService) {
         this.userService = userService;
     }
 
@@ -48,6 +61,6 @@ public class AuthenticationHelper {
         } catch (EntityNotFoundException e) {
             throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
         }
-    }*/
+    }
 
 }
