@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public class CategoryRepositoryImpl implements CategoryRepository {
 
+
     private final SessionFactory sessionFactory;
 
     @Autowired
     public CategoryRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
 
     @Override
     public Category create(Category name) {

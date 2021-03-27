@@ -1,6 +1,5 @@
 package application.photocontest.service;
 
-
 import application.photocontest.models.Category;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.service.contracts.CategoryService;
@@ -11,6 +10,7 @@ import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+
 
     private final CategoryRepository categoryRepository;
 

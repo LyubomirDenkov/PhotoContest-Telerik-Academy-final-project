@@ -1,8 +1,7 @@
 package application.photocontest.repository;
 
-
-import application.photocontest.models.Category;
-import application.photocontest.repository.contracts.CategoryRepository;
+import application.photocontest.models.Contest;
+import application.photocontest.repository.contracts.ContestRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ContestRepositoryImpl implements CategoryRepository {
+public class ContestRepositoryImpl implements ContestRepository {
 
     private final SessionFactory sessionFactory;
 
@@ -19,29 +18,28 @@ public class ContestRepositoryImpl implements CategoryRepository {
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
-    public Category create(Category name) {
+    public Contest create(Contest name) {
         return null;
     }
 
     @Override
-    public Category update(Category name) {
+    public Contest update(Contest name) {
         return null;
     }
 
     @Override
-    public Category delete(int id) {
+    public Contest delete(int id) {
         return null;
     }
 
     @Override
-    public List<Category> getAll() {
+    public List<Contest> getAll() {
         return null;
     }
 
     @Override
-    public Category getById(int id) {
+    public Contest getById(int id) {
         return null;
     }
 }
