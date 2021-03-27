@@ -1,5 +1,7 @@
 package application.photocontest.service;
 
+import application.photocontest.enums.UserRanks;
+import application.photocontest.models.Rank;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.getByEmail(email);
     }
 
-    private void calculateUserRank(User user){
+    private void calculateUserRank(User user) {
 
         //TODO optimized
         /*
@@ -55,16 +57,45 @@ public class UserServiceImpl implements UserService {
          (1001 – infinity) points – Wise and Benevolent Photo Dictator (can still be jury)
          */
 
-        if (user.getRank().equals(JUNKIE.toString()) && user.getPoints() > 50){
-                user.setRank(ENTHUSIAST.toString());
+        /*switch (UserRanks.valueOf(user.getRank())){
+            case JUNKIE:
+                if (user.getPoints() > 50){
+                    user.setRank(ENTHUSIAST.toString());
+                }
+                break;
+            case ENTHUSIAST:
+                if (user.getPoints() > 150){
+                    user.setRank(MASTER.toString());
+                }
+                break;
+            case MASTER:
+                if (user.getPoints() > 1000){
+                    user.setRank(DICTATOR.toString());
+                }
+                break;
+            default:return;
+        }*/
+
+
+        if (user.getRank().getName().equals(JUNKIE.toString())) {
+            if (user.getPoints() > 50) {
+                user.setRank(userRepository.getRankByName(ENTHUSIAST.toString()));
+                userRepository.update(user);
+            }
             return;
         }
-        if (user.getRank().equals(ENTHUSIAST.toString()) && user.getPoints() > 150){
-                user.setRank(MASTER.toString());
+        if (user.getRank().getName().equals(ENTHUSIAST.toString())) {
+            if (user.getPoints() > 150) {
+                user.setRank(userRepository.getRankByName(MASTER.toString()));
+                userRepository.update(user);
+            }
             return;
         }
-        if (user.getRank().equals(MASTER.toString()) && user.getPoints() > 1000){
-                user.setRank(DICTATOR.toString());
+        if (user.getRank().getName().equals(MASTER.toString())) {
+            if (user.getPoints() > 1000) {
+                user.setRank(userRepository.getRankByName(DICTATOR.toString()));
+                userRepository.update(user);
+            }
             return;
         }
 

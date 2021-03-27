@@ -31,8 +31,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "rank_id")
-    private String rank;
+    @ManyToOne
+    @JoinColumn(name = "rank_id")
+    private Rank rank;
 
     @Column(name = "points")
     private int points;
@@ -52,10 +53,9 @@ public class User {
                 String firstName,
                 String lastName,
                 String password,
-                String rank,
+                Rank rank,
                 int points,
                 Set<Role> roles) {
-
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -64,14 +64,6 @@ public class User {
         this.password = password;
         this.rank = rank;
         this.points = points;
-        this.roles = roles;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -123,12 +115,12 @@ public class User {
         this.password = password;
     }
 
-    public String getRank() {
+    public Rank getRank() {
         return rank;
     }
 
-    public void setRank(String role) {
-        this.rank = role;
+    public void setRank(Rank rank) {
+        this.rank = rank;
     }
 
     public int getPoints() {
@@ -137,6 +129,14 @@ public class User {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @JsonIgnore
@@ -163,16 +163,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getPoints() == user.getPoints() && Objects.equals(getUserName(),
-                user.getUserName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getFirstName(),
-                user.getFirstName()) && Objects.equals(getLastName(), user.getLastName()) && Objects.equals(getPassword(),
-                user.getPassword()) && Objects.equals(getRank(), user.getRank()) && Objects.equals(getRoles(), user.getRoles());
+        return getId() == user.getId() && getPoints() == user.getPoints() && getUserName().equals(user.getUserName()) && getEmail().equals(user.getEmail()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getPassword().equals(user.getPassword()) && getRank().equals(user.getRank()) && getRoles().equals(user.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserName(), getEmail(),
-                getFirstName(), getLastName(), getPassword(),
-                getRank(), getPoints(), getRoles());
+        return Objects.hash(getId(), getUserName(), getEmail(), getFirstName(), getLastName(), getPassword(), getRank(), getPoints(), getRoles());
     }
 }
