@@ -2,13 +2,14 @@ package application.photocontest.service;
 
 import application.photocontest.models.Contest;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ContestServiceImpl implements ContestRepository {
+public class ContestServiceImpl implements ContestService {
 
     private final ContestRepository contestRepository;
 
@@ -16,7 +17,6 @@ public class ContestServiceImpl implements ContestRepository {
     public ContestServiceImpl(ContestRepository contestRepository) {
         this.contestRepository = contestRepository;
     }
-
 
     @Override
     public Contest create(Contest name) {

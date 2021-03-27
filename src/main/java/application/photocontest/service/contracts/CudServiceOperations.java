@@ -1,6 +1,6 @@
 package application.photocontest.service.contracts;
 
-public interface CudOperations<T> {
+public interface CudServiceOperations<T> {
     T create(T name);
 
     T update(T name);

@@ -1,6 +1,7 @@
 package application.photocontest.service;
 
 import application.photocontest.models.User;
+import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserService userService) {
-        this.userService = userService;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
