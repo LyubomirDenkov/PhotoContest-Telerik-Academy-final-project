@@ -15,6 +15,9 @@ import static application.photocontest.enums.UserRanks.*;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final int JUNKIE_CEILING_POINTS = 50;
+    private static final int ENTHUSIAST_CEILING_POINTS = 150;
+    private static final int MASTER_CEILING_POINTS = 1000;
     private final UserRepository userRepository;
 
     @Autowired
@@ -48,57 +51,34 @@ public class UserServiceImpl implements UserService {
 
     private void calculateUserRank(User user) {
 
-        //TODO optimized
-        /*
-        Ranking:
-         (0-50) points – Junkie
-         (51 – 150) points – Enthusiast
-         (151 – 1000) points – Master (can now be invited as jury)
-         (1001 – infinity) points – Wise and Benevolent Photo Dictator (can still be jury)
-         */
-
-        /*switch (UserRanks.valueOf(user.getRank())){
-            case JUNKIE:
-                if (user.getPoints() > 50){
-                    user.setRank(ENTHUSIAST.toString());
-                }
-                break;
-            case ENTHUSIAST:
-                if (user.getPoints() > 150){
-                    user.setRank(MASTER.toString());
-                }
-                break;
-            case MASTER:
-                if (user.getPoints() > 1000){
-                    user.setRank(DICTATOR.toString());
-                }
-                break;
-            default:return;
-        }*/
-
+        if (user.getRank().getName().equals(DICTATOR.toString())){
+            return;
+        }
 
         if (user.getRank().getName().equals(JUNKIE.toString())) {
-            if (user.getPoints() > 50) {
-                user.setRank(userRepository.getRankByName(ENTHUSIAST.toString()));
-                userRepository.update(user);
+            if (isUserHavePointsToUpgradeRank(user,JUNKIE_CEILING_POINTS)) {
+              setNewUserRank(user, ENTHUSIAST.toString());
             }
-            return;
         }
         if (user.getRank().getName().equals(ENTHUSIAST.toString())) {
-            if (user.getPoints() > 150) {
-                user.setRank(userRepository.getRankByName(MASTER.toString()));
-                userRepository.update(user);
+            if (isUserHavePointsToUpgradeRank(user,ENTHUSIAST_CEILING_POINTS)) {
+                setNewUserRank(user, MASTER.toString());
             }
-            return;
         }
         if (user.getRank().getName().equals(MASTER.toString())) {
-            if (user.getPoints() > 1000) {
-                user.setRank(userRepository.getRankByName(DICTATOR.toString()));
-                userRepository.update(user);
+            if (isUserHavePointsToUpgradeRank(user,MASTER_CEILING_POINTS)) {
+                setNewUserRank(user, DICTATOR.toString());
             }
-            return;
         }
+    }
 
+    private boolean isUserHavePointsToUpgradeRank(User user, int points){
+        return user.getPoints() > points;
+    }
+    private void setNewUserRank(User user,String rank){
+        Rank newRank = userRepository.getRankByName(rank);
+        user.setRank(newRank);
+        userRepository.update(user);
     }
 
 
