@@ -24,15 +24,6 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         return null;
     }
 
-    @Override
-    public Category update(Category name) {
-        return null;
-    }
-
-    @Override
-    public Category delete(int id) {
-        return null;
-    }
 
     @Override
     public List<Category> getAll() {
