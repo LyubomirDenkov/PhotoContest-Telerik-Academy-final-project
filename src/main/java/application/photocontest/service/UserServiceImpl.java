@@ -1,5 +1,6 @@
 package application.photocontest.service;
 
+import application.photocontest.enums.UserRoles;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
@@ -19,6 +20,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAll() {
+        return null;
+    }
+
+    @Override
+    public User getById(int id) {
+        return null;
+    }
+
+    @Override
     public User create(User name) {
         return null;
     }
@@ -30,16 +41,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User delete(int id) {
-        return null;
-    }
-
-    @Override
-    public List<User> getAll() {
-        return null;
-    }
-
-    @Override
-    public User getById(int id) {
         return null;
     }
 }
