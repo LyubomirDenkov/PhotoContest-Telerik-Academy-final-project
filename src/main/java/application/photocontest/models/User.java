@@ -1,7 +1,11 @@
 package application.photocontest.models;
 
+import application.photocontest.enums.UserRoles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -27,19 +31,30 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "rank")
+    private String rank;
 
     @Column(name = "points")
     private int points;
 
+    @JsonIgnore
+    @OneToMany
+    @JoinTable(name = "users_roles",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
     public User() {
     }
 
     public User(int id,
-                String userName, String email,
-                String firstName, String lastName,
-                String password, String role, int points) {
+                String userName,
+                String email,
+                String firstName,
+                String lastName,
+                String password,
+                String rank,
+                int points,
+                Set<Role> roles) {
 
         this.id = id;
         this.userName = userName;
@@ -47,8 +62,17 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.role = role;
+        this.rank = rank;
         this.points = points;
+        this.roles = roles;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public int getId() {
@@ -99,12 +123,12 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getRank() {
+        return rank;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRank(String role) {
+        this.rank = role;
     }
 
     public int getPoints() {
@@ -115,20 +139,40 @@ public class User {
         this.points = points;
     }
 
+    @JsonIgnore
+    public boolean isAdmin() {
+
+        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.ADMIN.toString()));
+
+    }
+    @JsonIgnore
+    public boolean isOrganizer() {
+
+        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.ORGANIZER.toString()));
+
+    }
+    @JsonIgnore
+    public boolean isUser() {
+
+        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.USER.toString()));
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getPoints() == user.getPoints()
-                && getUserName().equals(user.getUserName()) && getEmail().equals(user.getEmail())
-                && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName())
-                && getPassword().equals(user.getPassword()) && getRole().equals(user.getRole());
+        return getId() == user.getId() && getPoints() == user.getPoints() && Objects.equals(getUserName(),
+                user.getUserName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getFirstName(),
+                user.getFirstName()) && Objects.equals(getLastName(), user.getLastName()) && Objects.equals(getPassword(),
+                user.getPassword()) && Objects.equals(getRank(), user.getRank()) && Objects.equals(getRoles(), user.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserName(), getEmail(), getFirstName(),
-                getLastName(), getPassword(), getRole(), getPoints());
+        return Objects.hash(getId(), getUserName(), getEmail(),
+                getFirstName(), getLastName(), getPassword(),
+                getRank(), getPoints(), getRoles());
     }
 }
