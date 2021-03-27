@@ -1,9 +1,9 @@
 package application.photocontest.repository.contracts;
 
 public interface CudRepositoryOperations<T> {
-    T create(T name);
+    T create(T type);
 
-    T update(T name);
+    T update(T type);
 
     void delete(int id);
 

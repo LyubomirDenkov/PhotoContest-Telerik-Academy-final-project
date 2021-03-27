@@ -32,7 +32,16 @@ public class UserServiceImpl implements UserService {
         calculateUserRank(user);
         return user;
 
+    }
 
+    @Override
+    public User getByUserName(String userName) {
+        return userRepository.getByUserName(userName);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.getByEmail(email);
     }
 
     private void calculateUserRank(User user){
@@ -45,7 +54,6 @@ public class UserServiceImpl implements UserService {
          (151 – 1000) points – Master (can now be invited as jury)
          (1001 – infinity) points – Wise and Benevolent Photo Dictator (can still be jury)
          */
-
 
         if (user.getRank().equals(JUNKIE.toString()) && user.getPoints() > 50){
                 user.setRank(ENTHUSIAST.toString());
@@ -64,27 +72,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User create(User name) {
-        return null;
+    public User create(User user) {
+        return userRepository.create(user);
     }
 
     @Override
-    public User update(User name) {
+    public User update(User user) {
         return null;
     }
 
     @Override
     public void delete(int id) {
         return;
-    }
-
-    @Override
-    public User getByUserName(String userName) {
-        return userRepository.getByUserName(userName);
-    }
-
-    @Override
-    public User getByEmail(String email) {
-        return userRepository.getByEmail(email);
     }
 }

@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,11 +44,6 @@ public class UserRepositoryImpl implements UserRepository {
             }
             return user;
         }
-    }
-
-    @Override
-    public User create(User name) {
-      return null;
     }
 
     @Override
@@ -90,13 +86,46 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Transactional
     @Override
-    public User update(User name) {
-        return null;
+    public User create(User user) {
+
+        try (Session session = sessionFactory.openSession()) {
+
+            session.save(user);
+
+            return getByUserName(user.getUserName());
+        }
     }
 
+    @Transactional
+    @Override
+    public User update(User user) {
+
+        try (Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            session.update(user);
+
+            session.getTransaction().commit();
+        }
+        return user;
+    }
+
+    @Transactional
     @Override
     public void delete(int id) {
 
+        User userToDelete = getById(id);
+
+        try (Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            session.delete(userToDelete);
+
+            session.getTransaction().commit();
+        }
     }
 }
