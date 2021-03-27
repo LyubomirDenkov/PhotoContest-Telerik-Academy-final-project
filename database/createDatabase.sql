@@ -2,6 +2,9 @@ DROP DATABASE IF EXISTS `photo-contest`;
 CREATE DATABASE  IF NOT EXISTS `photo-contest`;
 USE `photo-contest`;
 
+
+
+
 create or replace table category
 (
     category_id int auto_increment
@@ -21,30 +24,6 @@ create or replace table contest
         foreign key (category_id) references category (category_id)
 );
 
-create or replace table roles
-(
-    role_id int auto_increment
-        primary key,
-    name    varchar(30) not null
-);
-
-create or replace table users
-(
-    user_id    int auto_increment
-        primary key,
-    user_name  varchar(30) not null,
-    email      varchar(50) not null,
-    first_name varchar(20) not null,
-    last_name  varchar(20) not null,
-    password   varchar(30) not null,
-    `rank`     varchar(50) not null,
-    points     int         not null,
-    constraint users_email_uindex
-        unique (email),
-    constraint users_user_name_uindex
-        unique (user_name)
-);
-
 create or replace table images
 (
     image_id int auto_increment
@@ -61,6 +40,41 @@ create or replace table contest_image
         foreign key (contest_id) references contest (contest_id),
     constraint contest_photos_images_fk
         foreign key (image_id) references images (image_id)
+);
+
+create or replace table ranks
+(
+    rank_id int auto_increment
+        primary key,
+    name    varchar(50) not null,
+    constraint ranks_name_uindex
+        unique (name)
+);
+
+create or replace table roles
+(
+    role_id int auto_increment
+        primary key,
+    name    varchar(30) not null
+);
+
+create or replace table users
+(
+    user_id    int auto_increment
+        primary key,
+    user_name  varchar(30) not null,
+    email      varchar(50) not null,
+    first_name varchar(20) not null,
+    last_name  varchar(20) not null,
+    password   varchar(30) not null,
+    rank_id    int         not null,
+    points     int         not null,
+    constraint users_email_uindex
+        unique (email),
+    constraint users_user_name_uindex
+        unique (user_name),
+    constraint users_ranks_fk
+        foreign key (rank_id) references ranks (rank_id)
 );
 
 create or replace table users_images
@@ -82,6 +96,4 @@ create or replace table users_roles
     constraint users_roles_users_fk
         foreign key (user_id) references users (user_id)
 );
-
-
 

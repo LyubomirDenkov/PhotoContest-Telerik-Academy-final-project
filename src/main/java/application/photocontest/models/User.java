@@ -31,7 +31,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "rank")
+    @Column(name = "rank_id")
     private String rank;
 
     @Column(name = "points")
