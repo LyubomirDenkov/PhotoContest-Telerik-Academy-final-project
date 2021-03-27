@@ -17,8 +17,9 @@ public class Contest {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "category_id")
-    private int categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column(name = "phase_one")
     private Date phaseOne;
@@ -29,10 +30,10 @@ public class Contest {
     public Contest() {
     }
 
-    public Contest(int id, String title, int categoryId, Date phaseOne, Time phaseTwo) {
+    public Contest(int id, String title, Category category, Date phaseOne, Time phaseTwo) {
         this.id = id;
         this.title = title;
-        this.categoryId = categoryId;
+        this.category = category;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
     }
@@ -53,12 +54,12 @@ public class Contest {
         this.title = title;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Date getPhaseOne() {
