@@ -1,15 +1,13 @@
 package application.photocontest.modelmappers;
 
-import application.photocontest.enums.UserRoles;
 import application.photocontest.models.Rank;
-import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.RegisterDto;
+import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.JUNKIE;
 
@@ -40,16 +38,30 @@ public class UserMapper {
         return user;
     }
 
-    /*public User fromDto(int id, UserDto userDto) {
+    public User fromDto(int id, UpdateUserDto userDto) {
 
         User user = userRepository.getById(id);
+        user.setEmail(userDto.getEmail());
 
-        dtoToObject(userDto, user);
+        if (userDto.getOldPassword().isPresent() && userDto.getNewPassword().isPresent() && userDto.getRepeatPassword().isPresent()){
+
+            comparePasswords(userDto.getOldPassword().toString(),user.getPassword());
+
+            comparePasswords(userDto.getNewPassword().toString(),userDto.getRepeatPassword().toString());
+
+            user.setPassword(userDto.getNewPassword().toString());
+        }
 
         return user;
     }
 
-    private void dtoToObject(UserDto userDto, User user) {
+    private void comparePasswords(String firstPassword,String secondPassword){
+        if (!firstPassword.equals(secondPassword)){
+            throw new IllegalArgumentException();
+        }
+    }
+
+    /*private void dtoToObject(UserDto userDto, User user) {
 
         City city = cityService.getById(userDto.getAddress().getCityId());
 

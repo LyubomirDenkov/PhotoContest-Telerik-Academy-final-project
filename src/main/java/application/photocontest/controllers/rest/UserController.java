@@ -4,6 +4,7 @@ import application.photocontest.controllers.authentications.AuthenticationHelper
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.RegisterDto;
+import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -48,11 +49,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id,@Valid @RequestBody UpdateUserDto userDto) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
-        return userService.update(user, id);
+        User userToUpdate = userMapper.fromDto(id,userDto);
+
+        return userService.update(user, userToUpdate);
     }
 
     @DeleteMapping("/{id}")

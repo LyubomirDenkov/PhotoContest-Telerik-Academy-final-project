@@ -1,6 +1,7 @@
 package application.photocontest.service;
 
 import application.photocontest.enums.UserRoles;
+import application.photocontest.exceptions.IllegalDeleteException;
 import application.photocontest.models.Rank;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.getByEmail(email);
     }
 
+    //TODO
     private void calculateUserRank(User user) {
 
         if (user.getRank().getName().equals(DICTATOR.toString())){
@@ -104,11 +106,12 @@ public class UserServiceImpl implements UserService {
         userRepository.update(user);
     }
 
+    //TODO
     @Override
-    public User update(User user,int id) {
+    public User update(User user,User userToUpdate) {
 
-        if (user.getId() != id && !user.isAdmin()){
-            throw new IllegalArgumentException();
+        if (user.getId() != userToUpdate.getId() && !user.isAdmin()){
+            throw new IllegalDeleteException("something");
         }
 
         return userRepository.update(user);
@@ -118,7 +121,7 @@ public class UserServiceImpl implements UserService {
     public void delete(User user,int id) {
 
         if (user.getId() != id && !user.isAdmin()){
-            throw new IllegalArgumentException();
+            throw new IllegalDeleteException("something");
         }
 
         userRepository.delete(id);
