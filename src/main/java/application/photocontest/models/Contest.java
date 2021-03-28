@@ -1,10 +1,9 @@
 package application.photocontest.models;
 
-
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "contest")
@@ -99,19 +98,5 @@ public class Contest {
         this.phaseTwo = phaseTwo;
     }
 
-    public Set<User> getJury() {
-        return jury;
-    }
 
-    public void setJury(Set<User> jury) {
-        this.jury = jury;
-    }
-
-    public Set<User> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(Set<User> participants) {
-        this.participants = participants;
-    }
 }

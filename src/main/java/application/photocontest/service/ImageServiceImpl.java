@@ -1,6 +1,7 @@
 package application.photocontest.service;
 
 import application.photocontest.models.Image;
+import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.service.contracts.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Image image, int id) {
 
     }
 }

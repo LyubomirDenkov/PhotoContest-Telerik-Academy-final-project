@@ -105,11 +105,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user,int id) {
+
+        if (user.getId() != id && !user.isAdmin()){
+            throw new IllegalArgumentException();
+        }
+
         return userRepository.update(user);
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(User user,int id) {
+
+        if (user.getId() != id && !user.isAdmin()){
+            throw new IllegalArgumentException();
+        }
+
         userRepository.delete(id);
     }
 }

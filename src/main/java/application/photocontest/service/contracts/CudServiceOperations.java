@@ -5,6 +5,6 @@ public interface CudServiceOperations<T> {
 
     T update(T type,int id);
 
-    void delete(int id);
+    void delete(T type,int id);
 
 }

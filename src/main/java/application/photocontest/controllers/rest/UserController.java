@@ -28,13 +28,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll(){
-       return userService.getAll();
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    public User getById(@RequestHeader HttpHeaders headers,@PathVariable int id) {
-        User user = authenticationHelper.tryGetUser(headers);
+    public User getById(@PathVariable int id) {
         return userService.getById(id);
     }
 
@@ -47,11 +46,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
-        return userService.update(user,id);
+        return userService.update(user, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        User user = authenticationHelper.tryGetUser(headers);
+        userService.delete(user, id);
     }
 
 }
