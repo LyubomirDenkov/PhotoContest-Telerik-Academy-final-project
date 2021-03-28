@@ -2,9 +2,6 @@ DROP DATABASE IF EXISTS `photo-contest`;
 CREATE DATABASE  IF NOT EXISTS `photo-contest`;
 USE `photo-contest`;
 
-
-
-
 create or replace table category
 (
     category_id int auto_increment
@@ -75,6 +72,26 @@ create or replace table users
         unique (user_name),
     constraint users_ranks_fk
         foreign key (rank_id) references ranks (rank_id)
+);
+
+create or replace table contest_jury
+(
+    contest_id int not null,
+    user_id    int not null,
+    constraint contest_jury_contest_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_jury_user_fk
+        foreign key (user_id) references users (user_id)
+);
+
+create or replace table contest_participants
+(
+    contest_id int not null,
+    user_id    int not null,
+    constraint contest_users_contest_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_users_users_fk
+        foreign key (user_id) references users (user_id)
 );
 
 create or replace table users_images

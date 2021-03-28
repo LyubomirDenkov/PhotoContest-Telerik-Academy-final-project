@@ -1,9 +1,10 @@
 package application.photocontest.models;
 
+
 import javax.persistence.*;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "contest")
@@ -28,15 +29,34 @@ public class Contest {
     @Column(name = "phase_two")
     private Time phaseTwo;
 
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "contest_jury",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> jury;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "contest_participants",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> participants;
+
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, Date phaseOne, Time phaseTwo) {
+    public Contest(int id, String title, Category category, Date phaseOne,
+                   Time phaseTwo, Set<User> jury, Set<User> participants) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
+        this.jury = jury;
+        this.participants = participants;
     }
 
     public int getId() {
@@ -79,5 +99,19 @@ public class Contest {
         this.phaseTwo = phaseTwo;
     }
 
+    public Set<User> getJury() {
+        return jury;
+    }
 
+    public void setJury(Set<User> jury) {
+        this.jury = jury;
+    }
+
+    public Set<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<User> participants) {
+        this.participants = participants;
+    }
 }
