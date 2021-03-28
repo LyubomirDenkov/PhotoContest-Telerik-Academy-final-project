@@ -29,23 +29,25 @@ public class ContestMapper {
         this.userRepository = userRepository;
     }
 
-    public Contest fromDto(ContestDto contestDto) {
+    public Contest fromDto(ContestDto contestDto, User user) {
 
         Contest contest = new Contest();
-        dtoToObject(contestDto, contest);
+        dtoToObject(contestDto, contest, user);
 
         return contest;
     }
 
-    public Contest dtoToObject(ContestDto contestDto, Contest contest) {
+    public Contest dtoToObject(ContestDto contestDto, Contest contest,User user) {
+
 
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setTitle(contestDto.getTitle());
-        contest.setCreator(userRepository.getById(contestDto.getCreatorId()));
+        contest.setCreator(user.getUserName());
 
-       Set<User> participants = new HashSet<>();
+
+        Set<User> participants = new HashSet<>();
 
         for (Integer participant : contestDto.getParticipants()) {
             participants.add(userRepository.getById(participant));

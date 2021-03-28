@@ -3,9 +3,11 @@ package application.photocontest.repository;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Rank;
 import application.photocontest.repository.contracts.ContestRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -54,12 +56,39 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
-    public Contest update(Contest name) {
-        return null;
+    public Contest update(Contest contest) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            session.update(contest);
+
+            session.getTransaction().commit();
+        }
+        return contest;
     }
 
     @Override
     public void delete(int id) {
 
+    }
+
+    @Override
+    public Contest getByTitle(String title) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<Contest> query = session.createQuery("from Contest " +
+                    "where title = :title ", Contest.class);
+
+            query.setParameter("title", title);
+
+            List<Contest> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("Contest", "title", title);
+
+            }
+            return result.get(0);
+        }
     }
 }

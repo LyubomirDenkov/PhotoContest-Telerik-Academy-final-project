@@ -1,5 +1,6 @@
 package application.photocontest.service;
 
+import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.*;
 
@@ -45,16 +47,39 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public Contest create(User user, Contest contest) {
         verifyUserIsOrganizer(user);
-        return contestRepository.create(contest);
+        boolean ifContestTitleExist = true;
+
+        try {
+            contestRepository.getByTitle(contest.getTitle());
+        } catch (EntityNotFoundException e) {
+            ifContestTitleExist = false;
+        }
+        if (ifContestTitleExist) {
+            throw new DuplicateEntityException("Contest", "title", contest.getTitle());
+        }
+
+        Contest contestToCreate = contestRepository.create(contest);
+        addJuryAndParticipantsToContest(contestToCreate);
+        return contestToCreate;
+
     }
 
     @Override
-    public Contest update(Contest user,Contest name) {
+    public Contest update(Contest user, Contest name) {
         return null;
     }
 
     @Override
     public void delete(Contest contest, int id) {
 
+    }
+
+    private void addJuryAndParticipantsToContest(Contest contest) {
+        Set<User> jury = contest.getJury();
+        Set<User> participants = contest.getParticipants();
+
+        contest.setParticipants(participants);
+        contest.setJury(jury);
+        contestRepository.update(contest);
     }
 }

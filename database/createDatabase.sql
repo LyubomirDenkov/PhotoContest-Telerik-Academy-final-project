@@ -22,11 +22,10 @@ or replace table contest
     category_id int         not null,
     phase_one   timestamp        not null,
     phase_two   timestamp        not null,
-user_id int not null,
+creator varchar (50) not null,
     constraint contest_category_fk
         foreign key (category_id) references category (category_id),
-constraint contest_users_fk
-        foreign key (user_id) references users (user_id)
+
 );
 
 create

@@ -12,8 +12,6 @@ public class ContestDto {
 
     private static final String CITY_ID_ERROR_MESSAGE = "City Id must be positive.";
     private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
-    public static final String CREATOR_ID_ERROR_MESSAGE = "Creator Id must be positive.";
-
 
     @NotNull
     @Size(min = 5, max = 50, message = TITLE_ERROR_MESSAGE)
@@ -27,8 +25,6 @@ public class ContestDto {
 
     private Timestamp phaseTwo;
 
-    @Positive(message = CREATOR_ID_ERROR_MESSAGE)
-    private int creatorId;
 
     private Set<Integer> participants;
 
@@ -38,12 +34,11 @@ public class ContestDto {
     }
 
     public ContestDto(String title, int categoryId, Timestamp phaseOne,
-                      Timestamp phaseTwo, int creatorId, Set<Integer> participants, Set<Integer> jury) {
+                      Timestamp phaseTwo, Set<Integer> participants, Set<Integer> jury) {
         this.title = title;
         this.categoryId = categoryId;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
-        this.creatorId = creatorId;
         this.participants = participants;
         this.jury = jury;
     }
@@ -80,13 +75,6 @@ public class ContestDto {
         this.phaseTwo = phaseTwo;
     }
 
-    public int getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(int creatorId) {
-        this.creatorId = creatorId;
-    }
 
     public Set<Integer> getParticipants() {
         return participants;

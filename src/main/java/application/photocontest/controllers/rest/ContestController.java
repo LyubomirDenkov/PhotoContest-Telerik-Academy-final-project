@@ -70,8 +70,9 @@ public class ContestController {
 
         User user = authenticationHelper.tryGetUser(headers);
 
+
         try {
-            Contest contest = contestMapper.fromDto(contestDto);
+            Contest contest = contestMapper.fromDto(contestDto,user);
             return contestService.create(user, contest);
 
         } catch (UnauthorizedOperationException e) {
