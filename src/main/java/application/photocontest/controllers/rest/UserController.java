@@ -1,6 +1,9 @@
 package application.photocontest.controllers.rest;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
+import application.photocontest.exceptions.DuplicateEntityException;
+import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.RegisterDto;
@@ -8,7 +11,9 @@ import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,13 +34,13 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll(@RequestHeader HttpHeaders headers){
+    public List<User> getAll(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
-       return userService.getAll(user);
+        return userService.getAll(user);
     }
 
     @GetMapping("/{id}")
-    public User getById(@RequestHeader HttpHeaders headers,@PathVariable int id) {
+    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
         return userService.getById(user, id);
     }
@@ -50,19 +55,29 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id,@Valid @RequestBody UpdateUserDto userDto) {
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto) {
 
         User user = authenticationHelper.tryGetUser(headers);
-
-        User userToUpdate = userMapper.fromDto(id,userDto);
-
-        return userService.update(user, userToUpdate);
+        try {
+            User userToUpdate = userMapper.fromDto(id, userDto);
+            return userService.update(user, userToUpdate);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalArgumentException | DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        User user = authenticationHelper.tryGetUser(headers);
-        userService.delete(user, id);
-    }
 
+        User user = authenticationHelper.tryGetUser(headers);
+        try {
+            userService.delete(user, id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }

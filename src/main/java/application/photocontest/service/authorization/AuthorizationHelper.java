@@ -2,6 +2,7 @@ package application.photocontest.service.authorization;
 
 
 import application.photocontest.exceptions.UnauthorizedOperationException;
+import application.photocontest.models.Role;
 import application.photocontest.models.User;
 
 public class AuthorizationHelper {
@@ -38,5 +39,13 @@ public class AuthorizationHelper {
             throw new UnauthorizedOperationException(EMPLOYEE_CUSTOMER_AUTHORIZATION_ERROR_MESSAGE);
 
         }
+    }
+
+    public static void verifyUserIsAuthorized(User user, String... roles){
+
+         /*user.getRoles().stream().map(Role::getName)
+
+
+                 .orElseThrow(() -> new UnauthorizedOperationException("Unauthorized"));*/
     }
 }

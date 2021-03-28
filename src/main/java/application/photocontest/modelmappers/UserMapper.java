@@ -1,5 +1,8 @@
 package application.photocontest.modelmappers;
 
+import application.photocontest.exceptions.DuplicateEntityException;
+import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Rank;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.RegisterDto;
@@ -8,6 +11,8 @@ import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
+import java.util.Optional;
 
 import static application.photocontest.enums.UserRanks.JUNKIE;
 
@@ -40,18 +45,14 @@ public class UserMapper {
 
     public User fromDto(int id, UpdateUserDto userDto) {
 
+
         User user = userRepository.getById(id);
-        user.setEmail(userDto.getEmail());
 
-        if (userDto.getOldPassword().isPresent() && userDto.getNewPassword().isPresent() && userDto.getRepeatPassword().isPresent()){
-
-            comparePasswords(userDto.getOldPassword().toString(),user.getPassword());
-
-            comparePasswords(userDto.getNewPassword().toString(),userDto.getRepeatPassword().toString());
-
-            user.setPassword(userDto.getNewPassword().toString());
+        if (!user.getPassword().equals(userDto.getPassword())) {
+            throw new IllegalArgumentException("something");
         }
 
+        user.setEmail(userDto.getEmail());
         return user;
     }
 

@@ -1,7 +1,7 @@
 package application.photocontest.models.dto;
 
 import javax.validation.constraints.Email;
-import java.util.Optional;
+import javax.validation.constraints.NotEmpty;
 
 public class UpdateUserDto {
 
@@ -9,11 +9,9 @@ public class UpdateUserDto {
     @Email
     private String email;
 
-    private Optional<String> oldPassword;
+    @NotEmpty
+    private String password;
 
-    private Optional<String> newPassword;
-
-    private Optional<String> repeatPassword;
 
     public UpdateUserDto() {
     }
@@ -27,27 +25,11 @@ public class UpdateUserDto {
         this.email = email;
     }
 
-    public Optional<String> getOldPassword() {
-        return oldPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setOldPassword(Optional<String> oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public Optional<String> getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(Optional<String> newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public Optional<String> getRepeatPassword() {
-        return repeatPassword;
-    }
-
-    public void setRepeatPassword(Optional<String> repeatPassword) {
-        this.repeatPassword = repeatPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
