@@ -2,6 +2,7 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Rank;
+import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;
 import org.hibernate.Session;
@@ -102,6 +103,26 @@ public class UserRepositoryImpl implements UserRepository {
             if (result.isEmpty()) {
 
                 throw new EntityNotFoundException("Rank", "name", name);
+
+            }
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public Role getRoleByName(String name) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<Role> query = session.createQuery("from Role " +
+                    "where name = :name ", Role.class);
+
+            query.setParameter("name", name);
+
+            List<Role> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("Role", "name", name);
 
             }
             return result.get(0);

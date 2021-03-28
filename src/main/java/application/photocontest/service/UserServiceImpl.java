@@ -1,6 +1,9 @@
 package application.photocontest.service;
 
+import application.photocontest.enums.UserRoles;
+import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.models.Rank;
+import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.*;
 
@@ -26,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return null;
+      return userRepository.getAll();
     }
 
     @Override
@@ -74,8 +78,8 @@ public class UserServiceImpl implements UserService {
     private boolean isUserHavePointsToUpgradeRank(User user, int points){
         return user.getPoints() > points;
     }
-    private void setNewUserRank(User user,String rank){
-        Rank newRank = userRepository.getRankByName(rank);
+    private void setNewUserRank(User user,String rankName){
+        Rank newRank = userRepository.getRankByName(rankName);
         user.setRank(newRank);
         userRepository.update(user);
     }
@@ -83,16 +87,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        return userRepository.create(user);
+
+        User newRegisteredUser = userRepository.create(user);
+
+        addRoleToRegisteredUser(newRegisteredUser);
+
+        return newRegisteredUser;
+    }
+
+    public void addRoleToRegisteredUser(User user) {
+        Role role = userRepository.getRoleByName(UserRoles.USER.toString());
+        Set<Role> roles = user.getRoles();
+        roles.add(role);
+        user.setRoles(roles);
+        userRepository.update(user);
     }
 
     @Override
     public User update(User user) {
-        return null;
+        return userRepository.update(user);
     }
 
     @Override
     public void delete(int id) {
-        return;
+        userRepository.delete(id);
     }
 }
