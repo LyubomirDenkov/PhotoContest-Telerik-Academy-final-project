@@ -35,7 +35,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image update(Image name) {
+    public Image update(Image name,int id) {
         return null;
     }
 

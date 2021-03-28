@@ -34,7 +34,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest update(Contest name) {
+    public Contest update(Contest name,int id) {
         return null;
     }
 

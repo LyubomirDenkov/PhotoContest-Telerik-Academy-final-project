@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user,int id) {
         return userRepository.update(user);
     }
 
