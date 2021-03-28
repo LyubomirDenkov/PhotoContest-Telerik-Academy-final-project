@@ -18,7 +18,6 @@ import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.*;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
-import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserIsAuthorized;
 
 @Service
 public class UserServiceImpl implements UserService {

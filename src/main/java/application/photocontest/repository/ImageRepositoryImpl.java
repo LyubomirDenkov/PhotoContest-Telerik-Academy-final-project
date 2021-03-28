@@ -48,6 +48,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Override
     public Image create(Image image) {
+
         try (Session session = sessionFactory.openSession()) {
 
             session.save(image);

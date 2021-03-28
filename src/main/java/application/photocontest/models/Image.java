@@ -1,8 +1,8 @@
 package application.photocontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.Base64;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,20 +14,36 @@ public class Image {
     @Column(name = "image_id")
     private int id;
 
+    @Column(name = "title")
+    private String title;
 
-    private byte[] imageByteCode;
+    @Column(name = "story")
+    private String story;
+
+    @JsonIgnore
+    @Column(name = "imageData")
+    private byte[] imageData;
 
     @Column(name = "points")
     private int points;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "images_comments",
-    joinColumns = @JoinColumn(name = "image_id"),
-    inverseJoinColumns = @JoinColumn(name = "comment_id"))
+            joinColumns = @JoinColumn(name = "image_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private Set<Comment> comments;
 
     public Image() {
 
+    }
+
+    public Image(int id, String title, String story, byte[] imageData, int points, Set<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.story = story;
+        this.imageData = imageData;
+        this.points = points;
+        this.comments = comments;
     }
 
     public int getId() {
@@ -36,6 +52,30 @@ public class Image {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getStory() {
+        return story;
+    }
+
+    public void setStory(String story) {
+        this.story = story;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 
     public int getPoints() {
@@ -53,5 +93,4 @@ public class Image {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
-
 }

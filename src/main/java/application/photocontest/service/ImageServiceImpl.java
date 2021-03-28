@@ -3,20 +3,24 @@ package application.photocontest.service;
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ImageRepository;
+import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository) {
+    public ImageServiceImpl(ImageRepository imageRepository, UserRepository userRepository) {
         this.imageRepository = imageRepository;
+        this.userRepository = userRepository;
     }
 
     //TODO - who can delete ||| update
@@ -32,7 +36,16 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image create(User user, Image image) {
-        return imageRepository.create(image);
+
+        Image imageToCreate = imageRepository.create(image);
+        addImageToUserImages(user,image);
+        return imageToCreate;
+    }
+
+    public void addImageToUserImages(User user,Image image){
+        Set<Image> images = user.getImages();
+        images.add(image);
+        userRepository.update(user);
     }
 
     @Override

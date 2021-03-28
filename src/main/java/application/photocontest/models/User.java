@@ -44,6 +44,13 @@ public class User {
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_images",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<Image> images;
+
     public User() {
     }
 
@@ -156,6 +163,14 @@ public class User {
 
         return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.USER.toString()));
 
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 
     @Override
