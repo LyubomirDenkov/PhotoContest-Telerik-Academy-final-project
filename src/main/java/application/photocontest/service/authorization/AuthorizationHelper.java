@@ -1,9 +1,14 @@
 package application.photocontest.service.authorization;
 
 
+import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthorizationHelper {
 
@@ -41,11 +46,14 @@ public class AuthorizationHelper {
         }
     }
 
-    public static void verifyUserIsAuthorized(User user, String... roles){
+    public static void verifyUserHasRoles(User user, UserRoles... roles){
 
-         /*user.getRoles().stream().map(Role::getName)
+        List<String> rolesList = Arrays.stream(roles).map(UserRoles::toString).collect(Collectors.toList());
 
-
-                 .orElseThrow(() -> new UnauthorizedOperationException("Unauthorized"));*/
+         user.getRoles().stream()
+                 .map(r -> r.getName().toLowerCase())
+                 .filter(rolesList::contains)
+                 .findAny()
+                 .orElseThrow(() -> new UnauthorizedOperationException("Unauthorized"));
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.*;
+import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserIsAuthorized;
 
 @Service
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(User user, int id) {
 
-        verifyUserIsAuthorized(user);
+        verifyUserHasRoles(user,UserRoles.ADMIN);
 
         return userRepository.getById(id);
 
@@ -151,7 +152,6 @@ public class UserServiceImpl implements UserService {
         if (user.getId() != id && !user.isAdmin()) {
             throw new IllegalDeleteException("something");
         }
-
         userRepository.delete(id);
     }
 }

@@ -42,14 +42,18 @@ public class UserController {
     @GetMapping("/{id}")
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return userService.getById(user, id);
+
+        try {
+            return userService.getById(user, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @PostMapping
     public User create(@Valid @RequestBody RegisterDto dto) {
 
         User user = userMapper.fromDto(dto);
-
 
         return userService.create(user);
     }
@@ -76,6 +80,8 @@ public class UserController {
         User user = authenticationHelper.tryGetUser(headers);
         try {
             userService.delete(user, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
