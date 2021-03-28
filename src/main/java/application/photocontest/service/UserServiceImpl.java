@@ -1,6 +1,5 @@
 package application.photocontest.service;
 
-import application.photocontest.enums.UserRanks;
 import application.photocontest.models.Rank;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.UserRepository;

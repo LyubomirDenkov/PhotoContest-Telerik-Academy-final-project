@@ -1,7 +1,7 @@
 package application.photocontest.modelmappers;
 
 import application.photocontest.models.Category;
-import application.photocontest.models.CategoryDto;
+import application.photocontest.models.dto.CategoryDto;
 import application.photocontest.repository.contracts.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

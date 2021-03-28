@@ -1,4 +1,4 @@
-package application.photocontest.models;
+package application.photocontest.models.dto;
 
 import javax.validation.constraints.NotNull;
 

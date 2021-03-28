@@ -2,6 +2,7 @@ package application.photocontest.models;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity

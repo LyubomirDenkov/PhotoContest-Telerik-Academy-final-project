@@ -5,7 +5,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.CategoryMapper;
 import application.photocontest.models.Category;
-import application.photocontest.models.CategoryDto;
+import application.photocontest.models.dto.CategoryDto;
 import application.photocontest.models.User;
 import application.photocontest.service.contracts.CategoryService;
 import io.swagger.annotations.ApiOperation;
