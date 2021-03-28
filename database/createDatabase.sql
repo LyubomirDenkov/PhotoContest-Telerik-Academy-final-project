@@ -24,7 +24,7 @@ or replace table contest
     phase_two   timestamp        not null,
 user_id int not null,
     constraint contest_category_fk
-        foreign key (category_id) references category (category_id),
+        foreign key (category_id) references category (category_id)
 
 );
 

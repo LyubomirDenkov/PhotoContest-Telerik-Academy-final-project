@@ -84,7 +84,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public void delete(Contest contest, int id) {
+    public void delete(User contest, int id) {
 
     }
 

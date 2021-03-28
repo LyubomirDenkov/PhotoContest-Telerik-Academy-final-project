@@ -19,30 +19,29 @@ public class ImageServiceImpl implements ImageService {
         this.imageRepository = imageRepository;
     }
 
-
+    //TODO - who can delete ||| update
     @Override
     public List<Image> getAll(User user) {
-        return null;
+        return imageRepository.getAll();
     }
 
     @Override
     public Image getById(User user, int id) {
-        return null;
+        return imageRepository.getById(id);
     }
 
     @Override
-    public Image create(User user, Image name) {
-        return null;
+    public Image create(User user, Image image) {
+        return imageRepository.create(image);
     }
 
     @Override
-    public Image update(User user, Image secondType) {
-        return null;
+    public Image update(User user,Image image) {
+        return imageRepository.update(image);
     }
 
-
     @Override
-    public void delete(Image image, int id) {
-
+    public void delete(User user, int id) {
+        imageRepository.delete(id);
     }
 }

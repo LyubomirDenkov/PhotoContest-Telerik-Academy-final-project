@@ -1,7 +1,9 @@
 package application.photocontest.models;
 
 import javax.persistence.*;
+import java.util.Base64;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "images")
@@ -12,22 +14,20 @@ public class Image {
     @Column(name = "image_id")
     private int id;
 
-    @Column(name = "URL")
-    private String url;
 
+    private byte[] imageByteCode;
 
     @Column(name = "points")
     private int points;
 
+    @OneToMany
+    @JoinTable(name = "images_comments",
+    joinColumns = @JoinColumn(name = "image_id"),
+    inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    private Set<Comment> comments;
+
     public Image() {
 
-
-    }
-
-    public Image(int id, String url, int points) {
-        this.id = id;
-        this.url = url;
-        this.points = points;
     }
 
     public int getId() {
@@ -38,14 +38,6 @@ public class Image {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public int getPoints() {
         return points;
     }
@@ -54,16 +46,12 @@ public class Image {
         this.points = points;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
-        return getId() == image.getId() && getPoints() == image.getPoints() && getUrl().equals(image.getUrl());
+    public Set<Comment> getComments() {
+        return comments;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUrl(), getPoints());
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
+
 }

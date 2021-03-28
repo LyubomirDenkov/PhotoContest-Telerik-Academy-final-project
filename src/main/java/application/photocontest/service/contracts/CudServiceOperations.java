@@ -7,6 +7,6 @@ public interface CudServiceOperations<T> {
 
     T update(User user,T secondType);
 
-    void delete(T type,int id);
+    void delete(User user,int id);
 
 }
