@@ -10,12 +10,23 @@ public class AuthorizationHelper {
             "Only an Employee is Authorized for this operation.";
     public static final String EMPLOYEE_CUSTOMER_AUTHORIZATION_ERROR_MESSAGE =
             "Only employee or customer is authorized to make this operation.";
+    public static final String ORGANIZER_AUTHORIZATION_ERROR_MESSAGE =
+            "Only an organizer is authorized to make this operation.";
 
     public static void verifyUserIsAuthorized(User user) {
 
         if (!user.isAdmin()) {
 
             throw new UnauthorizedOperationException(EMPLOYEE_AUTHORIZATION_ERROR_MESSAGE);
+
+        }
+    }
+
+    public static void verifyUserIsOrganizer(User user) {
+
+        if (!user.isOrganizer()) {
+
+            throw new UnauthorizedOperationException(ORGANIZER_AUTHORIZATION_ERROR_MESSAGE);
 
         }
     }

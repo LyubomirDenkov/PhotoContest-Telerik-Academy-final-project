@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserIsCustomerOrEmployee;
+import static application.photocontest.service.authorization.AuthorizationHelper.*;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -43,8 +43,9 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest create(Contest name) {
-        return null;
+    public Contest create(User user, Contest contest) {
+        verifyUserIsOrganizer(user);
+        return contestRepository.create(contest);
     }
 
     @Override

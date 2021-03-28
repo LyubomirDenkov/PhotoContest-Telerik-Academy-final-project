@@ -1,7 +1,9 @@
 package application.photocontest.service.contracts;
 
+import application.photocontest.models.User;
+
 public interface CudServiceOperations<T> {
-    T create(T type);
+    T create(User user, T type);
 
     T update(T type,T secondType);
 

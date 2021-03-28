@@ -2,7 +2,7 @@ package application.photocontest.models;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -24,10 +24,14 @@ public class Contest {
     private Category category;
 
     @Column(name = "phase_one")
-    private Date phaseOne;
+    private Timestamp phaseOne;
 
     @Column(name = "phase_two")
-    private Time phaseTwo;
+    private Timestamp phaseTwo;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User creator;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -45,16 +49,19 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> participants;
 
+
+
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, Date phaseOne,
-                   Time phaseTwo, Set<User> jury, Set<User> participants) {
+    public Contest(int id, String title, Category category, Timestamp phaseOne,
+                   Timestamp phaseTwo, User creator, Set<User> jury, Set<User> participants) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
+        this.creator = creator;
         this.jury = jury;
         this.participants = participants;
     }
@@ -83,21 +90,43 @@ public class Contest {
         this.category = category;
     }
 
-    public Date getPhaseOne() {
+    public Timestamp getPhaseOne() {
         return phaseOne;
     }
 
-    public void setPhaseOne(Date phaseOne) {
+    public void setPhaseOne(Timestamp phaseOne) {
         this.phaseOne = phaseOne;
     }
 
-    public Time getPhaseTwo() {
+    public Timestamp getPhaseTwo() {
         return phaseTwo;
     }
 
-    public void setPhaseTwo(Time phaseTwo) {
+    public void setPhaseTwo(Timestamp phaseTwo) {
         this.phaseTwo = phaseTwo;
     }
 
+    public User getCreator() {
+        return creator;
+    }
 
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public Set<User> getJury() {
+        return jury;
+    }
+
+    public void setJury(Set<User> jury) {
+        this.jury = jury;
+    }
+
+    public Set<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<User> participants) {
+        this.participants = participants;
+    }
 }

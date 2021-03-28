@@ -46,3 +46,7 @@ VALUES (1, 3),
        (10, 2),
        (11, 1),
        (12, 1);
+
+INSERT INTO contest(title, category_id, phase_one, phase_two, user_id)
+VALUES ('best nature picture', 1, timestamp ('2017-05-23',  '13:10:11'),timestamp ('2017-05-24',  '12:10:11'), 1),
+       ('best nature picture', 1, timestamp ('2017-07-23',  '13:10:11'),timestamp ('2017-07-24',  '12:10:11'), 1);

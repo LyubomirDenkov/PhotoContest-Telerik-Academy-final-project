@@ -44,8 +44,13 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
-    public Contest create(Contest name) {
-        return null;
+    public Contest create(Contest contest) {
+
+        try (Session session = sessionFactory.openSession()) {
+            session.save(contest);
+
+            return contest;
+        }
     }
 
     @Override

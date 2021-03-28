@@ -1,27 +1,36 @@
-DROP DATABASE IF EXISTS `photo-contest`;
-CREATE DATABASE  IF NOT EXISTS `photo-contest`;
-USE `photo-contest`;
+DROP
+DATABASE IF EXISTS `photo-contest`;
+CREATE
+DATABASE  IF NOT EXISTS `photo-contest`;
+USE
+`photo-contest`;
 
-create or replace table category
+create
+or replace table category
 (
     category_id int auto_increment
         primary key,
     name        varchar(30) not null
 );
 
-create or replace table contest
+create
+or replace table contest
 (
     contest_id  int auto_increment
         primary key,
     title       varchar(50) not null,
     category_id int         not null,
-    phase_one   date        not null,
-    phase_two   time        not null,
+    phase_one   timestamp        not null,
+    phase_two   timestamp        not null,
+user_id int not null,
     constraint contest_category_fk
-        foreign key (category_id) references category (category_id)
+        foreign key (category_id) references category (category_id),
+constraint contest_users_fk
+        foreign key (user_id) references users (user_id)
 );
 
-create or replace table images
+create
+or replace table images
 (
     image_id int auto_increment
         primary key,
@@ -29,7 +38,8 @@ create or replace table images
     points   int          not null
 );
 
-create or replace table contest_image
+create
+or replace table contest_image
 (
     contest_id int not null,
     image_id   int null,
@@ -39,7 +49,8 @@ create or replace table contest_image
         foreign key (image_id) references images (image_id)
 );
 
-create or replace table ranks
+create
+or replace table ranks
 (
     rank_id int auto_increment
         primary key,
@@ -48,14 +59,16 @@ create or replace table ranks
         unique (name)
 );
 
-create or replace table roles
+create
+or replace table roles
 (
     role_id int auto_increment
         primary key,
     name    varchar(30) not null
 );
 
-create or replace table users
+create
+or replace table users
 (
     user_id    int auto_increment
         primary key,
@@ -74,7 +87,8 @@ create or replace table users
         foreign key (rank_id) references ranks (rank_id)
 );
 
-create or replace table contest_jury
+create
+or replace table contest_jury
 (
     contest_id int not null,
     user_id    int not null,
@@ -84,7 +98,8 @@ create or replace table contest_jury
         foreign key (user_id) references users (user_id)
 );
 
-create or replace table contest_participants
+create
+or replace table contest_participants
 (
     contest_id int not null,
     user_id    int not null,
@@ -94,7 +109,8 @@ create or replace table contest_participants
         foreign key (user_id) references users (user_id)
 );
 
-create or replace table users_images
+create
+or replace table users_images
 (
     user_id  int not null,
     image_id int not null,
@@ -104,7 +120,8 @@ create or replace table users_images
         foreign key (image_id) references images (image_id)
 );
 
-create or replace table users_roles
+create
+or replace table users_roles
 (
     user_id int not null,
     role_id int not null,

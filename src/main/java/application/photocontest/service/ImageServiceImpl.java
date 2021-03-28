@@ -31,7 +31,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image create(Image name) {
+    public Image create(User user, Image name) {
         return null;
     }
 
