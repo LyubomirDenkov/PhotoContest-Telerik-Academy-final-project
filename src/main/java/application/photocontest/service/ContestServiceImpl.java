@@ -2,6 +2,7 @@ package application.photocontest.service;
 
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
@@ -65,9 +66,22 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest update(Contest user, Contest name) {
-        return null;
+    public Contest update(User user, Contest contest) {
+
+
+        if (!user.equals(contest.getCreator()) && !user.isAdmin()) {
+            throw new UnauthorizedOperationException("something");
+        }
+
+
+
+        Contest contestToUpdate = contestRepository.update(contest);
+        addJuryAndParticipantsToContest(contestToUpdate);
+        return contestToUpdate;
+
     }
+
+
 
     @Override
     public void delete(Contest contest, int id) {

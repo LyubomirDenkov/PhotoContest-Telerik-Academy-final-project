@@ -3,9 +3,10 @@ package application.photocontest.controllers.rest;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.exceptions.DuplicateEntityException;
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
-import application.photocontest.models.Category;
+
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.ContestDto;
@@ -80,6 +81,24 @@ public class ContestController {
 
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+    @ApiOperation(value = "Update contest")
+    @PutMapping("/{id}")
+    public Contest update(@RequestHeader HttpHeaders headers, @PathVariable int id,
+                          @Valid @RequestBody ContestDto contestDto) {
+
+        User user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            Contest contestToUpdate = contestMapper.fromDto(id,contestDto);
+            return contestService.update(user,contestToUpdate);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalArgumentException | DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

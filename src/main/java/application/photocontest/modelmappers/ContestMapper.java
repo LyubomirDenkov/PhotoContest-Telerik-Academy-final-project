@@ -9,10 +9,7 @@ import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -37,33 +34,57 @@ public class ContestMapper {
         return contest;
     }
 
-    public Contest dtoToObject(ContestDto contestDto, Contest contest,User user) {
+    public Contest fromDto(int id, ContestDto contestDto) {
+        Contest contest = contestRepository.getById(id);
+
+        contest.setTitle(contestDto.getTitle());
+        contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
+        contest.setPhaseOne(contestDto.getPhaseOne());
+        contest.setPhaseTwo(contestDto.getPhaseTwo());
+        contest.setTitle(contestDto.getTitle());
+
+        setContestJuryAndParticipants(contestDto,contest);
+
+        return contest;
+    }
+
+    public Contest dtoToObject(ContestDto contestDto, Contest contest, User user) {
 
 
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setTitle(contestDto.getTitle());
-        contest.setCreator(user.getUserName());
+        contest.setCreator(user);
+
+        setContestJuryAndParticipants(contestDto,contest);
 
 
-        Set<User> participants = new HashSet<>();
+        return contest;
+    }
 
-        for (Integer participant : contestDto.getParticipants()) {
-            participants.add(userRepository.getById(participant));
-        }
-
+    private void setContestJuryAndParticipants(ContestDto contestDto, Contest contest){
         Set<User> jury = new HashSet<>();
 
         for (Integer judge : contestDto.getJury()) {
             jury.add(userRepository.getById(judge));
         }
 
+
+        Set<User> participants = new HashSet<>();
+
+        for (Integer participant : contestDto.getParticipants()) {
+            User userWithDuplicateRole = userRepository.getById(participant);
+            if (jury.contains(userWithDuplicateRole)) {
+                break;
+            }
+            participants.add(userRepository.getById(participant));
+        }
+        User creator = userRepository.getById(contest.getCreator().getId());
+        participants.remove(creator);
+
         contest.setJury(jury);
         contest.setParticipants(participants);
-
-
-        return contest;
     }
 
 }

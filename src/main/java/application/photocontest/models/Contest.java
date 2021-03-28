@@ -29,9 +29,9 @@ public class Contest {
     @Column(name = "phase_two")
     private Timestamp phaseTwo;
 
-
-    @Column(name = "creator")
-    private String creator;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User creator;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -55,7 +55,7 @@ public class Contest {
     }
 
     public Contest(int id, String title, Category category, Timestamp phaseOne,
-                   Timestamp phaseTwo, String creator, Set<User> jury, Set<User> participants) {
+                   Timestamp phaseTwo, User creator, Set<User> jury, Set<User> participants) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -106,11 +106,11 @@ public class Contest {
         this.phaseTwo = phaseTwo;
     }
 
-    public String getCreator() {
+    public User getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
+    public void setCreator(User creator) {
         this.creator = creator;
     }
 

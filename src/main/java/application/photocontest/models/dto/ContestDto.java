@@ -10,21 +10,19 @@ import java.util.Set;
 
 public class ContestDto {
 
-    private static final String CITY_ID_ERROR_MESSAGE = "City Id must be positive.";
+    private static final String CATEGORY_ID_ERROR_MESSAGE = "Category Id must be positive.";
     private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
 
     @NotNull
     @Size(min = 5, max = 50, message = TITLE_ERROR_MESSAGE)
     private String title;
 
-    @Positive(message = CITY_ID_ERROR_MESSAGE)
+    @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
-
 
     private Timestamp phaseOne;
 
     private Timestamp phaseTwo;
-
 
     private Set<Integer> participants;
 
