@@ -34,12 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAll() {
+    public List<Category> getAll(User user) {
         return categoryRepository.getAll();
     }
 
     @Override
-    public Category getById(int id) {
+    public Category getById(User user, int id) {
 
         try {
             return categoryRepository.getById(id);

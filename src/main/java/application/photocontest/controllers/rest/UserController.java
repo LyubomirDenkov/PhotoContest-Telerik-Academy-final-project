@@ -28,13 +28,15 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
+    public List<User> getAll(@RequestHeader HttpHeaders headers){
+        User user = authenticationHelper.tryGetUser(headers);
+       return userService.getAll(user);
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable int id) {
-        return userService.getById(id);
+    public User getById(@RequestHeader HttpHeaders headers,@PathVariable int id) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return userService.getById(user, id);
     }
 
     @PostMapping

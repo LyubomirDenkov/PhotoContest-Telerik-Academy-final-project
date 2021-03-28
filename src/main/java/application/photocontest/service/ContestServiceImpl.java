@@ -1,13 +1,18 @@
 package application.photocontest.service;
 
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserIsCustomerOrEmployee;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -20,13 +25,21 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<Contest> getAll() {
-        return null;
+    public List<Contest> getAll(User user) {
+        verifyUserIsCustomerOrEmployee(user);
+        return contestRepository.getAll();
     }
 
     @Override
-    public Contest getById(int id) {
-        return null;
+    public Contest getById(User user, int id) {
+
+        verifyUserIsCustomerOrEmployee(user);
+
+        try {
+            return contestRepository.getById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @Override

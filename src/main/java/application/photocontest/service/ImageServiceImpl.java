@@ -21,12 +21,12 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public List<Image> getAll() {
+    public List<Image> getAll(User user) {
         return null;
     }
 
     @Override
-    public Image getById(int id) {
+    public Image getById(User user, int id) {
         return null;
     }
 

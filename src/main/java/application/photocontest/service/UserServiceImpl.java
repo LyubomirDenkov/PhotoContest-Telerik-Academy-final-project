@@ -1,7 +1,6 @@
 package application.photocontest.service;
 
 import application.photocontest.enums.UserRoles;
-import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.models.Rank;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.*;
+import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserIsAuthorized;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,16 +29,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(User user) {
       return userRepository.getAll();
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(User user, int id) {
 
-        User user = userRepository.getById(id);
-        calculateUserRank(user);
-        return user;
+        verifyUserIsAuthorized(user);
+
+        return userRepository.getById(id);
+
 
     }
 

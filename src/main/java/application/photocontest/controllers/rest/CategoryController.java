@@ -38,15 +38,16 @@ public class CategoryController {
 
     @ApiOperation(value = "Get all categories")
     @GetMapping
-    public List<Category> getAll() {
-
-        return categoryService.getAll();
+    public List<Category> getAll(@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return categoryService.getAll(user);
     }
 
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")
-    public Category getById(@PathVariable int id) {
-        return categoryService.getById(id);
+    public Category getById(@RequestHeader HttpHeaders headers,@PathVariable int id) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return categoryService.getById(user, id);
     }
 
 

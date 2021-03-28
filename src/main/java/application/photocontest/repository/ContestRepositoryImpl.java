@@ -1,7 +1,10 @@
 package application.photocontest.repository;
 
+import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.models.Category;
 import application.photocontest.models.Contest;
 import application.photocontest.repository.contracts.ContestRepository;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,12 +23,24 @@ public class ContestRepositoryImpl implements ContestRepository {
 
     @Override
     public List<Contest> getAll() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Contest ", Contest.class).list();
+        }
     }
 
     @Override
     public Contest getById(int id) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+
+            Contest contest = session.get(Contest.class, id);
+
+            if (contest == null) {
+
+                throw new EntityNotFoundException("Contest", id);
+
+            }
+            return contest;
+        }
     }
 
     @Override
