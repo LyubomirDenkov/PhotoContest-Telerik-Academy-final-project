@@ -1,7 +1,7 @@
 DROP
 DATABASE IF EXISTS `photo-contest`;
 CREATE
-DATABASE  IF NOT EXISTS `photo-contest`;
+DATABASE IF NOT EXISTS `photo-contest`;
 USE
 `photo-contest`;
 
@@ -28,22 +28,54 @@ create or replace table ranks
         unique (name)
 );
 
-create or replace table users
+
+create or replace table user_credentials
 (
-    user_id    int auto_increment
-        primary key,
-    user_name  varchar(30) not null,
-    email      varchar(50) not null,
-    first_name varchar(20) not null,
-    last_name  varchar(20) not null,
-    password   varchar(30) not null,
-    rank_id    int         not null,
-    points     int         not null,
-    constraint users_email_uindex
-        unique (email),
+    user_name varchar(30) primary key,
+    email     varchar(50) not null,
+    password  varchar(30) not null,
     constraint users_user_name_uindex
         unique (user_name),
-    constraint users_ranks_fk
+    constraint users_email_uindex
+        unique (email)
+);
+
+create or replace table users_roles
+(
+
+    user_credentials varchar(30) not null,
+    role_id          int         not null,
+    constraint users_roles_user_credentials_fk
+        foreign key (user_credentials) references user_credentials (user_name),
+    constraint users_roles_fk
+        foreign key (role_id) references roles (role_id)
+);
+
+create or replace table organizers
+(
+    organizer_id     int auto_increment primary key,
+    user_credentials varchar(30) not null,
+    first_name       varchar(20) not null,
+    last_name        varchar(20) not null,
+
+
+    constraint organizers_user_credentials_fk
+        foreign key (user_credentials) references user_credentials (user_name)
+);
+
+
+
+create or replace table users
+(
+    user_id          int auto_increment primary key,
+    user_credentials varchar(30) not null,
+    first_name       varchar(20) not null,
+    last_name        varchar(20) not null,
+    rank_id          int         not null,
+    points           int         not null,
+    constraint users_user_credentials_fk
+        foreign key (user_credentials) references user_credentials (user_name),
+    constraint users_ranks_id_fk
         foreign key (rank_id) references ranks (rank_id)
 );
 
@@ -54,19 +86,40 @@ create or replace table comments
     comment    varchar(100) not null
 );
 
+create or replace table contest_type
+(
+    type_id int auto_increment
+        primary key,
+    name    varchar(20) not null
+);
+
+create or replace table contest_phase
+(
+    phase_id int auto_increment
+        primary key,
+    name     varchar(30) not null
+);
+
 create or replace table contest
 (
-    contest_id  int auto_increment
+    contest_id    int auto_increment
         primary key,
-    title       varchar(50)                             not null,
-    category_id int                                     not null,
-    phase_one   timestamp default current_timestamp()   not null on update current_timestamp(),
-    phase_two   timestamp default '0000-00-00 00:00:00' not null,
-    creator     int                              not null,
+    title         varchar(50)                           not null,
+    category_id   int                                   not null,
+    starting_date timestamp default current_timestamp() not null on update current_timestamp(),
+    phase1_days   int                                   not null,
+    phase2_hours  int                                   not null,
+    organizer     int                                   not null,
+    type_id       int                                   not null,
+    phase_id      int                                   not null,
     constraint contest_category_fk
         foreign key (category_id) references category (category_id),
-    constraint contest_users_fk
-        foreign key (creator) references users (user_id)
+    constraint contest_organizers_fk
+        foreign key (organizer) references organizers (organizer_id),
+    constraint contest_type_fk
+        foreign key (type_id) references contest_type (type_id),
+    constraint contest_phase_fk
+        foreign key (phase_id) references contest_phase (phase_id)
 
 );
 
@@ -79,6 +132,7 @@ create or replace table images
     imageData longblob    not null,
     points    int         not null
 );
+
 
 create or replace table contest_image
 (
@@ -100,7 +154,6 @@ create or replace table images_comments
         foreign key (image_id) references images (image_id)
 );
 
-
 create or replace table contest_participants
 (
     contest_id int not null,
@@ -108,6 +161,16 @@ create or replace table contest_participants
     constraint contest_users_contest_fk
         foreign key (contest_id) references contest (contest_id),
     constraint contest_users_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
+create or replace table contest_jury
+(
+    contest_id int not null,
+    user_id    int not null,
+    constraint contest_jury_contest_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_jury_users_fk
         foreign key (user_id) references users (user_id)
 );
 
@@ -119,14 +182,4 @@ create or replace table users_images
         foreign key (user_id) references users (user_id),
     constraint users_images_images_fk
         foreign key (image_id) references images (image_id)
-);
-
-create or replace table users_roles
-(
-    user_id int not null,
-    role_id int not null,
-    constraint users_roles__fk
-        foreign key (role_id) references roles (role_id),
-    constraint users_roles_users_fk
-        foreign key (user_id) references users (user_id)
 );
