@@ -21,14 +21,23 @@ public class AuthorizationHelper {
             "Only an organizer is authorized to make this operation.";
 
 
-    public static void verifyUserHasRoles(UserCredentials user, UserRoles... roles){
+    public static void verifyUserHasRoles(UserCredentials userCredentials, UserRoles... roles){
 
         List<String> rolesList = Arrays.stream(roles).map(UserRoles::toString).collect(Collectors.toList());
 
-         user.getRoles().stream()
+         userCredentials.getRoles().stream()
                  .map(r -> r.getName().toLowerCase())
                  .filter(rolesList::contains)
                  .findAny()
                  .orElseThrow(() -> new UnauthorizedOperationException("Unauthorized"));
+    }
+
+
+    public static void verifyIsUserOwnAccount(UserCredentials userCredentials, User user, String message){
+
+        if (!userCredentials.getUserName().equals(user.getCredentials().getUserName())){
+            throw new UnauthorizedOperationException(message);
+        }
+
     }
 }

@@ -1,5 +1,7 @@
 package application.photocontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -13,6 +15,7 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_credentials", referencedColumnName = "user_name")
     private UserCredentials userCredentials;
@@ -30,6 +33,7 @@ public class User {
     @Column(name = "points")
     private int points;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_images",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -57,6 +61,7 @@ public class User {
         this.id = id;
     }
 
+    @JsonIgnore
     public UserCredentials getCredentials() {
         return userCredentials;
     }

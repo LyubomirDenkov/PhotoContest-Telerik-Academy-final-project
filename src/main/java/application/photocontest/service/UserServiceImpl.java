@@ -3,8 +3,6 @@ package application.photocontest.service;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.exceptions.IllegalDeleteException;
-import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.*;
+import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 
 @Service
@@ -44,12 +43,10 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    //TODO later - calculate only after winning
+
     @Override
     public UserCredentials getByUserName(String userName) {
-        UserCredentials user = userRepository.getByUserName(userName);
-        //calculateUserRank(user);
-        return user;
+        return userRepository.getByUserName(userName);
     }
 
     @Override
@@ -64,7 +61,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    //TODO optimize
     private void calculateUserRank(User user) {
 
         if (user.getRank().getName().equals(DICTATOR.toString())) {
@@ -131,18 +127,17 @@ public class UserServiceImpl implements UserService {
 
         boolean isEmailExist = true;
 
-        if (!userCredentials.getUserName().equals(userToUpdate.getCredentials().getUserName())) {
-            throw new UnauthorizedOperationException("something");
-        }
+        verifyUserHasRoles(userCredentials,UserRoles.USER);
+        verifyIsUserOwnAccount(userCredentials,userToUpdate,"something");
 
         try {
-            userRepository.getByEmail(userToUpdate.getCredentials().getEmail());
+            userRepository.getByUserName(userToUpdate.getCredentials().getUserName());
         }catch (EntityNotFoundException e){
             isEmailExist = false;
         }
 
         if (isEmailExist){
-            throw new DuplicateEntityException("User","email",userToUpdate.getCredentials().getEmail());
+            throw new DuplicateEntityException("User","username",userToUpdate.getCredentials().getUserName());
         }
 
         return userRepository.update(userToUpdate);
@@ -153,9 +148,10 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.getById(id);
 
-        if (!userCredentials.getUserName().equals(user.getCredentials().getUserName())) {
-            throw new IllegalDeleteException("something");
-        }
+        verifyUserHasRoles(userCredentials,UserRoles.USER);
+
+        verifyIsUserOwnAccount(userCredentials,user,"something");
+
         userRepository.delete(id);
     }
 }

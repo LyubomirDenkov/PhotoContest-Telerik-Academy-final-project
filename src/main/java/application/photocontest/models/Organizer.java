@@ -1,5 +1,7 @@
 package application.photocontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class Organizer {
     @Column(name = "organizer_id")
     private int id;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_credentials")
     private UserCredentials userCredentials;

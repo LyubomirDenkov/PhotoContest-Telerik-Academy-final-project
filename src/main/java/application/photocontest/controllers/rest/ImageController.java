@@ -4,6 +4,7 @@ import application.photocontest.controllers.authentications.AuthenticationHelper
 import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.ImageService;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class ImageController {
                         @RequestParam(name = "title") String title,
                         @RequestParam(name = "story") String story) throws IOException {
 
-        //User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
 
         /*File file1 = new File("images.txt");
