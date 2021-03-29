@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +42,11 @@ public class ImageController {
                         @RequestParam(name = "story") String story) throws IOException {
 
         User user = authenticationHelper.tryGetUser(headers);
+
+        /*String destination = "images" + user.getUserName() + file.get().getOriginalFilename();
+
+        File file1 = new File(destination);
+        file.get().transferTo(file1);*/
 
         if (file.isPresent()) {
             byte[] bytes = Base64.getEncoder().encode(file.get().getBytes());
