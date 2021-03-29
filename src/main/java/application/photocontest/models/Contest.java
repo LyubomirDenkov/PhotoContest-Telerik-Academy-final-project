@@ -22,16 +22,15 @@ public class Contest {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "phase_one")
-    private Timestamp phaseOne;
+    @Column(name = "phase1_days")
+    private int phaseOne;
 
-    @Column(name = "phase_two")
-    private Timestamp phaseTwo;
+    @Column(name = "phase2_hours")
+    private int phaseTwo;
 
     @ManyToOne
-    @JoinColumn(name = "creator")
-    private User creator;
-
+    @JoinColumn(name = "organizer")
+    private Organizer organizer;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -40,20 +39,34 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> participants;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "contest_jury",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> jury;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "contest_image",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<User> images;
 
 
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, Timestamp phaseOne,
-                   Timestamp phaseTwo, User creator, Set<User> participants) {
+    public Contest(int id, String title, Category category, int phaseOne, int phaseTwo, Organizer organizer, Set<User> participants, Set<User> jury, Set<User> images) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
-        this.creator = creator;
+        this.organizer = organizer;
         this.participants = participants;
+        this.jury = jury;
+        this.images = images;
     }
 
     public int getId() {
@@ -80,28 +93,28 @@ public class Contest {
         this.category = category;
     }
 
-    public Timestamp getPhaseOne() {
+    public int getPhaseOne() {
         return phaseOne;
     }
 
-    public void setPhaseOne(Timestamp phaseOne) {
+    public void setPhaseOne(int phaseOne) {
         this.phaseOne = phaseOne;
     }
 
-    public Timestamp getPhaseTwo() {
+    public int getPhaseTwo() {
         return phaseTwo;
     }
 
-    public void setPhaseTwo(Timestamp phaseTwo) {
+    public void setPhaseTwo(int phaseTwo) {
         this.phaseTwo = phaseTwo;
     }
 
-    public User getCreator() {
-        return creator;
+    public Organizer getOrganizer() {
+        return organizer;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setOrganizer(Organizer organizer) {
+        this.organizer = organizer;
     }
 
     public Set<User> getParticipants() {
@@ -110,5 +123,21 @@ public class Contest {
 
     public void setParticipants(Set<User> participants) {
         this.participants = participants;
+    }
+
+    public Set<User> getJury() {
+        return jury;
+    }
+
+    public void setJury(Set<User> jury) {
+        this.jury = jury;
+    }
+
+    public Set<User> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<User> images) {
+        this.images = images;
     }
 }
