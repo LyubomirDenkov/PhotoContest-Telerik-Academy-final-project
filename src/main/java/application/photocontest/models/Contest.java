@@ -2,7 +2,7 @@ package application.photocontest.models;
 
 import javax.persistence.*;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -22,6 +22,9 @@ public class Contest {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(name = "starting_date")
+    private Date startingDate;
+
     @Column(name = "phase1_days")
     private int phaseOne;
 
@@ -31,6 +34,14 @@ public class Contest {
     @ManyToOne
     @JoinColumn(name = "organizer")
     private Organizer organizer;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private Type type;
+
+    @ManyToOne
+    @JoinColumn(name = "phase_id")
+    private Phase phase;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
