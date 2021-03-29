@@ -19,38 +19,12 @@ public class AuthorizationHelper {
     public static final String ORGANIZER_AUTHORIZATION_ERROR_MESSAGE =
             "Only an organizer is authorized to make this operation.";
 
-    public static void verifyUserIsAuthorized(User user) {
-
-        if (!user.isAdmin()) {
-
-            throw new UnauthorizedOperationException(EMPLOYEE_AUTHORIZATION_ERROR_MESSAGE);
-
-        }
-    }
-
-    public static void verifyUserIsOrganizer(User user) {
-
-        if (!user.isOrganizer()) {
-
-            throw new UnauthorizedOperationException(ORGANIZER_AUTHORIZATION_ERROR_MESSAGE);
-
-        }
-    }
-
-    public static void verifyUserIsCustomerOrEmployee(User user) {
-
-        if (!user.isAdmin() && !user.isUser()) {
-
-            throw new UnauthorizedOperationException(EMPLOYEE_CUSTOMER_AUTHORIZATION_ERROR_MESSAGE);
-
-        }
-    }
 
     public static void verifyUserHasRoles(User user, UserRoles... roles){
 
         List<String> rolesList = Arrays.stream(roles).map(UserRoles::toString).collect(Collectors.toList());
 
-         user.getRoles().stream()
+         user.getUserCredentials().getRoles().stream()
                  .map(r -> r.getName().toLowerCase())
                  .filter(rolesList::contains)
                  .findAny()

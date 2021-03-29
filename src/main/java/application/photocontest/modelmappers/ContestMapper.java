@@ -39,8 +39,8 @@ public class ContestMapper {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setPhaseOne(contestDto.getPhaseOne());
-        contest.setPhaseTwo(contestDto.getPhaseTwo());
+    /*    contest.setPhaseOne(contestDto.getPhaseOne());
+        contest.setPhaseTwo(contestDto.getPhaseTwo());*/
         contest.setTitle(contestDto.getTitle());
 
         setContestJuryAndParticipants(contestDto,contest);
@@ -51,12 +51,12 @@ public class ContestMapper {
     public Contest dtoToObject(ContestDto contestDto, Contest contest, User user) {
 
 
-        contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
+        /*contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setTitle(contestDto.getTitle());
         contest.setCreator(user);
-
+*/
         setContestJuryAndParticipants(contestDto,contest);
 
 
@@ -67,14 +67,14 @@ public class ContestMapper {
 
         Set<User> participants = new HashSet<>();
 
-        for (Integer participant : contestDto.getParticipants()) {
+        /*for (Integer participant : contestDto.getParticipants()) {
             User user = userRepository.getById(participant);
             if (user.isOrganizer()) {
                 continue;
             }
             participants.add(user);
         }
-
+*/
 
         contest.setParticipants(participants);
     }

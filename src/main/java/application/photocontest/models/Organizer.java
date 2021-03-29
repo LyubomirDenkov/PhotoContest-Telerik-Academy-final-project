@@ -13,7 +13,7 @@ public class Organizer {
 
     @OneToOne
     @JoinColumn(name = "user_credentials")
-    private Credentials credentials;
+    private UserCredentials userCredentials;
 
     @Column(name = "first_name")
     private String firstName;
@@ -24,9 +24,9 @@ public class Organizer {
     public Organizer() {
     }
 
-    public Organizer(int id, Credentials credentials, String firstName, String lastName) {
+    public Organizer(int id, UserCredentials userCredentials, String firstName, String lastName) {
         this.id = id;
-        this.credentials = credentials;
+        this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -39,12 +39,12 @@ public class Organizer {
         this.id = id;
     }
 
-    public Credentials getCredentials() {
-        return credentials;
+    public UserCredentials getCredentials() {
+        return userCredentials;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public void setCredentials(UserCredentials userCredentials) {
+        this.userCredentials = userCredentials;
     }
 
     public String getFirstName() {

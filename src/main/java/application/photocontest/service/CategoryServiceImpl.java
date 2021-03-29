@@ -12,8 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserIsAuthorized;
-
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -28,7 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category create(User user, Category category) {
 
-        verifyUserIsAuthorized(user);
 
         return categoryRepository.create(category);
     }

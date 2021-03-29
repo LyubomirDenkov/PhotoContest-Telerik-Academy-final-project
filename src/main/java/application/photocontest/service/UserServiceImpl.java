@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(User user, int id) {
 
-        verifyUserHasRoles(user,UserRoles.ADMIN);
+        verifyUserHasRoles(user,UserRoles.ORGANIZER);
 
         return userRepository.getById(id);
 
@@ -108,19 +108,19 @@ public class UserServiceImpl implements UserService {
     }
 
     public void addRoleToRegisteredUser(User user) {
-        Role role = userRepository.getRoleByName(UserRoles.USER.toString());
+       /* Role role = userRepository.getRoleByName(UserRoles.USER.toString());
         Set<Role> roles = user.getRoles();
         roles.add(role);
         user.setRoles(roles);
-        userRepository.update(user);
+        userRepository.update(user);*/
     }
 
     public void addRoleToUser(User user) {
-        Role role = userRepository.getRoleByName(UserRoles.USER.toString());
+       /* Role role = userRepository.getRoleByName(UserRoles.USER.toString());
         Set<Role> roles = user.getRoles();
         roles.add(role);
         user.setRoles(roles);
-        userRepository.update(user);
+        userRepository.update(user);*/
     }
 
     @Override
@@ -128,19 +128,19 @@ public class UserServiceImpl implements UserService {
 
         boolean isEmailExist = true;
 
-        if (user.getId() != userToUpdate.getId() && !user.isAdmin()) {
+        /*if (user.getId() != userToUpdate.getId() && !user.isAdmin()) {
             throw new UnauthorizedOperationException("something");
-        }
+        }*/
 
         try {
-            userRepository.getByEmail(userToUpdate.getEmail());
+            /*userRepository.getByEmail(userToUpdate.getEmail());*/
         }catch (EntityNotFoundException e){
             isEmailExist = false;
         }
 
-        if (isEmailExist){
+        /*if (isEmailExist){
             throw new DuplicateEntityException("User","email",userToUpdate.getEmail());
-        }
+        }*/
 
         return userRepository.update(userToUpdate);
     }
@@ -148,9 +148,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user, int id) {
 
-        if (user.getId() != id && !user.isAdmin()) {
+        /*if (user.getId() != id && !user.isAdmin()) {
             throw new IllegalDeleteException("something");
-        }
+        }*/
         userRepository.delete(id);
     }
 }

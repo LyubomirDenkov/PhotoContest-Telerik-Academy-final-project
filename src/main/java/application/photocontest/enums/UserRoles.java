@@ -1,7 +1,7 @@
 package application.photocontest.enums;
 
 public enum UserRoles {
-    USER,ORGANIZER,ADMIN;
+    USER,ORGANIZER;
 
 
     @Override

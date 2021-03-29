@@ -33,11 +33,7 @@ public class UserMapper {
         Rank baseRank = userRepository.getRankByName(JUNKIE.toString());
 
         User user = new User();
-        user.setUserName(registerDto.getUserName());
-        user.setEmail(registerDto.getEmail());
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
-        user.setPassword(registerDto.getPassword());
+
         user.setRank(baseRank);
 
         return user;
@@ -48,11 +44,11 @@ public class UserMapper {
 
         User user = userRepository.getById(id);
 
-        if (!user.getPassword().equals(userDto.getPassword())) {
+    /*    if (!user.getPassword().equals(userDto.getPassword())) {
             throw new IllegalArgumentException("something");
         }
 
-        user.setEmail(userDto.getEmail());
+        user.setEmail(userDto.getEmail());*/
         return user;
     }
 

@@ -53,7 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
 
             Query<User> query = session.createQuery("from User " +
-                    "where userName = :userName ", User.class);
+                    "where userCredentials.userName = :userName ", User.class);
 
             query.setParameter("userName", userName);
 
@@ -73,7 +73,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
 
             Query<User> query = session.createQuery("from User " +
-                    "where email = :email ", User.class);
+                    "where userCredentials.email = :email ", User.class);
 
             query.setParameter("email", email);
 
@@ -137,7 +137,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             session.save(user);
 
-            return getByUserName(user.getUserName());
+            return getByUserName(user.getUserCredentials().getUserName());
         }
     }
 

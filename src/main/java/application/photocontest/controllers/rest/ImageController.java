@@ -43,7 +43,7 @@ public class ImageController {
 
         User user = authenticationHelper.tryGetUser(headers);
 
-        String destination = "" + user.getUserName() + file.get().getOriginalFilename();
+        String destination = "../../../../../../images" + file.get().getOriginalFilename();
 
         File file1 = new File(destination);
         file.get().transferTo(file1);

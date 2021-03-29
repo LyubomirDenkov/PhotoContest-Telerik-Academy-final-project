@@ -28,14 +28,14 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public List<Contest> getAll(User user) {
-        verifyUserIsCustomerOrEmployee(user);
+
         return contestRepository.getAll();
     }
 
     @Override
     public Contest getById(User user, int id) {
 
-        verifyUserIsCustomerOrEmployee(user);
+
 
         try {
             return contestRepository.getById(id);
@@ -46,7 +46,7 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public Contest create(User user, Contest contest) {
-        verifyUserIsOrganizer(user);
+
         boolean ifContestTitleExist = true;
 
         try {
@@ -68,9 +68,9 @@ public class ContestServiceImpl implements ContestService {
     public Contest update(User user, Contest contest) {
 
 
-        if (!user.equals(contest.getCreator()) && !user.isAdmin()) {
+/*        if (!user.equals(contest.getCreator()) && !user.isAdmin()) {
             throw new UnauthorizedOperationException("something");
-        }
+        }*/
 
         Contest contestToUpdate = contestRepository.update(contest);
         addParticipantsToContest(contestToUpdate);

@@ -1,8 +1,5 @@
 package application.photocontest.models;
 
-import application.photocontest.enums.UserRoles;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -16,20 +13,15 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @Column(name = "user_name")
-    private String userName;
-
-    @Column(name = "email")
-    private String email;
+    @OneToOne
+    @JoinColumn(name = "user_credentials", referencedColumnName = "user_name")
+    private UserCredentials userCredentials;
 
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "password")
-    private String password;
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
@@ -38,40 +30,23 @@ public class User {
     @Column(name = "points")
     private int points;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_images",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "image_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> images;
 
     public User() {
     }
 
-    public User(int id,
-                String userName,
-                String email,
-                String firstName,
-                String lastName,
-                String password,
-                Rank rank,
-                int points,
-                Set<Role> roles) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName, Rank rank, int points, Set<Image> images) {
         this.id = id;
-        this.userName = userName;
-        this.email = email;
+        this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.password = password;
         this.rank = rank;
         this.points = points;
-        this.roles = roles;
+        this.images = images;
     }
 
     public int getId() {
@@ -82,20 +57,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public UserCredentials getUserCredentials() {
+        return userCredentials;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserCredentials(UserCredentials userCredentials) {
+        this.userCredentials = userCredentials;
     }
 
     public String getFirstName() {
@@ -114,14 +81,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Rank getRank() {
         return rank;
     }
@@ -138,33 +97,6 @@ public class User {
         this.points = points;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    @JsonIgnore
-    public boolean isAdmin() {
-
-        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.ADMIN.toString()));
-
-    }
-    @JsonIgnore
-    public boolean isOrganizer() {
-
-        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.ORGANIZER.toString()));
-
-    }
-    @JsonIgnore
-    public boolean isUser() {
-
-        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.USER.toString()));
-
-    }
-
     public Set<Image> getImages() {
         return images;
     }
@@ -178,11 +110,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getPoints() == user.getPoints() && getUserName().equals(user.getUserName()) && getEmail().equals(user.getEmail()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getPassword().equals(user.getPassword()) && getRank().equals(user.getRank()) && getRoles().equals(user.getRoles());
+        return getId() == user.getId() && getPoints() == user.getPoints() && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getRank().equals(user.getRank()) && getImages().equals(user.getImages());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserName(), getEmail(), getFirstName(), getLastName(), getPassword(), getRank(), getPoints(), getRoles());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getRank(), getPoints(), getImages());
     }
 }
