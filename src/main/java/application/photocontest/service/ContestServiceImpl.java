@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +59,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         Contest contestToCreate = contestRepository.create(contest);
-        addJuryAndParticipantsToContest(contestToCreate);
+        addParticipantsToContest(contestToCreate);
         return contestToCreate;
 
     }
@@ -75,7 +73,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         Contest contestToUpdate = contestRepository.update(contest);
-        addJuryAndParticipantsToContest(contestToUpdate);
+        addParticipantsToContest(contestToUpdate);
         return contestToUpdate;
 
     }
@@ -87,20 +85,13 @@ public class ContestServiceImpl implements ContestService {
 
     }
 
-    private void addJuryAndParticipantsToContest(Contest contest) {
+    private void addParticipantsToContest(Contest contest) {
         Set<User> participants = contest.getParticipants();
 
         contest.setParticipants(participants);
-        contest.setJury(getContestJury());
         contestRepository.update(contest);
     }
 
 
-    private Set<User> getContestJury() {
-        Set<User> jurySet = new HashSet<>();
-        for (User judge : contestRepository.getContestJury()) {
-            jurySet.add(judge);
-        }
-        return jurySet;
-    }
+
 }

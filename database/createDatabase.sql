@@ -12,6 +12,41 @@ create or replace table category
     name        varchar(30) not null
 );
 
+create or replace table roles
+(
+    role_id int auto_increment
+        primary key,
+    name    varchar(30) not null
+);
+
+create or replace table ranks
+(
+    rank_id int auto_increment
+        primary key,
+    name    varchar(50) not null,
+    constraint ranks_name_uindex
+        unique (name)
+);
+
+create or replace table users
+(
+    user_id    int auto_increment
+        primary key,
+    user_name  varchar(30) not null,
+    email      varchar(50) not null,
+    first_name varchar(20) not null,
+    last_name  varchar(20) not null,
+    password   varchar(30) not null,
+    rank_id    int         not null,
+    points     int         not null,
+    constraint users_email_uindex
+        unique (email),
+    constraint users_user_name_uindex
+        unique (user_name),
+    constraint users_ranks_fk
+        foreign key (rank_id) references ranks (rank_id)
+);
+
 create or replace table comments
 (
     comment_id int auto_increment
@@ -27,9 +62,12 @@ create or replace table contest
     category_id int                                     not null,
     phase_one   timestamp default current_timestamp()   not null on update current_timestamp(),
     phase_two   timestamp default '0000-00-00 00:00:00' not null,
-    creator     varchar(50)                             not null,
+    creator     int                              not null,
     constraint contest_category_fk
-        foreign key (category_id) references category (category_id)
+        foreign key (category_id) references category (category_id),
+    constraint contest_users_fk
+        foreign key (creator) references users (user_id)
+
 );
 
 create or replace table images
@@ -62,50 +100,6 @@ create or replace table images_comments
         foreign key (image_id) references images (image_id)
 );
 
-create or replace table ranks
-(
-    rank_id int auto_increment
-        primary key,
-    name    varchar(50) not null,
-    constraint ranks_name_uindex
-        unique (name)
-);
-
-create or replace table roles
-(
-    role_id int auto_increment
-        primary key,
-    name    varchar(30) not null
-);
-
-create or replace table users
-(
-    user_id    int auto_increment
-        primary key,
-    user_name  varchar(30) not null,
-    email      varchar(50) not null,
-    first_name varchar(20) not null,
-    last_name  varchar(20) not null,
-    password   varchar(30) not null,
-    rank_id    int         not null,
-    points     int         not null,
-    constraint users_email_uindex
-        unique (email),
-    constraint users_user_name_uindex
-        unique (user_name),
-    constraint users_ranks_fk
-        foreign key (rank_id) references ranks (rank_id)
-);
-
-create or replace table contest_jury
-(
-    contest_id int not null,
-    user_id    int not null,
-    constraint contest_jury_contest_fk
-        foreign key (contest_id) references contest (contest_id),
-    constraint contest_jury_user_fk
-        foreign key (user_id) references users (user_id)
-);
 
 create or replace table contest_participants
 (

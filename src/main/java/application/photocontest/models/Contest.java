@@ -1,9 +1,8 @@
 package application.photocontest.models;
 
 import javax.persistence.*;
-import java.sql.Time;
+
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -30,16 +29,8 @@ public class Contest {
     private Timestamp phaseTwo;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "creator")
     private User creator;
-
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "contest_jury",
-            joinColumns = @JoinColumn(name = "contest_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> jury;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -55,14 +46,13 @@ public class Contest {
     }
 
     public Contest(int id, String title, Category category, Timestamp phaseOne,
-                   Timestamp phaseTwo, User creator, Set<User> jury, Set<User> participants) {
+                   Timestamp phaseTwo, User creator, Set<User> participants) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.creator = creator;
-        this.jury = jury;
         this.participants = participants;
     }
 
@@ -112,14 +102,6 @@ public class Contest {
 
     public void setCreator(User creator) {
         this.creator = creator;
-    }
-
-    public Set<User> getJury() {
-        return jury;
-    }
-
-    public void setJury(Set<User> jury) {
-        this.jury = jury;
     }
 
     public Set<User> getParticipants() {

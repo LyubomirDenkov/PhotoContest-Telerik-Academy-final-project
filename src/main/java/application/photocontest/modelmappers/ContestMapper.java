@@ -68,14 +68,13 @@ public class ContestMapper {
         Set<User> participants = new HashSet<>();
 
         for (Integer participant : contestDto.getParticipants()) {
-            User userWithDuplicateRole = userRepository.getById(participant);
-            if (contestRepository.getContestJury().contains(userWithDuplicateRole)) {
-                break;
+            User user = userRepository.getById(participant);
+            if (user.isOrganizer()) {
+                continue;
             }
-            participants.add(userRepository.getById(participant));
+            participants.add(user);
         }
-        User creator = userRepository.getById(contest.getCreator().getId());
-        participants.remove(creator);
+
 
         contest.setParticipants(participants);
     }
