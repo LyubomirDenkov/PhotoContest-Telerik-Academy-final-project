@@ -5,40 +5,44 @@ DATABASE  IF NOT EXISTS `photo-contest`;
 USE
 `photo-contest`;
 
-create
-or replace table category
+create or replace table category
 (
     category_id int auto_increment
         primary key,
     name        varchar(30) not null
 );
 
-create
-or replace table contest
+create or replace table comments
+(
+    comment_id int auto_increment
+        primary key,
+    comment    varchar(100) not null
+);
+
+create or replace table contest
 (
     contest_id  int auto_increment
         primary key,
-    title       varchar(50) not null,
-    category_id int         not null,
-    phase_one   timestamp        not null,
-    phase_two   timestamp        not null,
-user_id int not null,
+    title       varchar(50)                             not null,
+    category_id int                                     not null,
+    phase_one   timestamp default current_timestamp()   not null on update current_timestamp(),
+    phase_two   timestamp default '0000-00-00 00:00:00' not null,
+    creator     varchar(50)                             not null,
     constraint contest_category_fk
         foreign key (category_id) references category (category_id)
-
 );
 
-create
-or replace table images
+create or replace table images
 (
-    image_id int auto_increment
+    image_id  int auto_increment
         primary key,
-    URL      varchar(300) not null,
-    points   int          not null
+    title     varchar(50) not null,
+    story     text        not null,
+    imageData longblob    not null,
+    points    int         not null
 );
 
-create
-or replace table contest_image
+create or replace table contest_image
 (
     contest_id int not null,
     image_id   int null,
@@ -48,8 +52,17 @@ or replace table contest_image
         foreign key (image_id) references images (image_id)
 );
 
-create
-or replace table ranks
+create or replace table images_comments
+(
+    image_id   int not null,
+    comment_id int null,
+    constraint images_comments_comments_fk
+        foreign key (comment_id) references comments (comment_id),
+    constraint images_comments_images_fk
+        foreign key (image_id) references images (image_id)
+);
+
+create or replace table ranks
 (
     rank_id int auto_increment
         primary key,
@@ -58,16 +71,14 @@ or replace table ranks
         unique (name)
 );
 
-create
-or replace table roles
+create or replace table roles
 (
     role_id int auto_increment
         primary key,
     name    varchar(30) not null
 );
 
-create
-or replace table users
+create or replace table users
 (
     user_id    int auto_increment
         primary key,
@@ -86,8 +97,7 @@ or replace table users
         foreign key (rank_id) references ranks (rank_id)
 );
 
-create
-or replace table contest_jury
+create or replace table contest_jury
 (
     contest_id int not null,
     user_id    int not null,
@@ -97,8 +107,7 @@ or replace table contest_jury
         foreign key (user_id) references users (user_id)
 );
 
-create
-or replace table contest_participants
+create or replace table contest_participants
 (
     contest_id int not null,
     user_id    int not null,
@@ -108,8 +117,7 @@ or replace table contest_participants
         foreign key (user_id) references users (user_id)
 );
 
-create
-or replace table users_images
+create or replace table users_images
 (
     user_id  int not null,
     image_id int not null,
@@ -119,8 +127,7 @@ or replace table users_images
         foreign key (image_id) references images (image_id)
 );
 
-create
-or replace table users_roles
+create or replace table users_roles
 (
     user_id int not null,
     role_id int not null,
@@ -129,4 +136,3 @@ or replace table users_roles
     constraint users_roles_users_fk
         foreign key (user_id) references users (user_id)
 );
-

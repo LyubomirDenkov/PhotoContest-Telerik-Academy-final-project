@@ -43,10 +43,10 @@ public class ImageController {
 
         User user = authenticationHelper.tryGetUser(headers);
 
-        /*String destination = "images" + user.getUserName() + file.get().getOriginalFilename();
+        String destination = "" + user.getUserName() + file.get().getOriginalFilename();
 
         File file1 = new File(destination);
-        file.get().transferTo(file1);*/
+        file.get().transferTo(file1);
 
         if (file.isPresent()) {
             byte[] bytes = Base64.getEncoder().encode(file.get().getBytes());
