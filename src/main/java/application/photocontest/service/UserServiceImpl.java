@@ -54,12 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUserName(String userName) {
-        return null;
-    }
-
-    @Override
-    public Organizer getOrganizerByUserName(String userName) {
-        return null;
+        return userRepository.getUserByUserName(userName);
     }
 
     @Override
@@ -117,17 +112,17 @@ public class UserServiceImpl implements UserService {
 
     public void addRoleToRegisteredUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getUserCredentials().getRoles();
+        Set<Role> roles = user.getCredentials().getRoles();
         roles.add(role);
-        user.getUserCredentials().setRoles(roles);
+        user.getCredentials().setRoles(roles);
         userRepository.update(user);
     }
 
     public void addRoleToUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getUserCredentials().getRoles();
+        Set<Role> roles = user.getCredentials().getRoles();
         roles.add(role);
-        user.getUserCredentials().setRoles(roles);
+        user.getCredentials().setRoles(roles);
         userRepository.update(user);
     }
 
@@ -136,18 +131,18 @@ public class UserServiceImpl implements UserService {
 
         boolean isEmailExist = true;
 
-        if (!userCredentials.getUserName().equals(userToUpdate.getUserCredentials().getUserName())) {
+        if (!userCredentials.getUserName().equals(userToUpdate.getCredentials().getUserName())) {
             throw new UnauthorizedOperationException("something");
         }
 
         try {
-            userRepository.getByEmail(userToUpdate.getUserCredentials().getEmail());
+            userRepository.getByEmail(userToUpdate.getCredentials().getEmail());
         }catch (EntityNotFoundException e){
             isEmailExist = false;
         }
 
         if (isEmailExist){
-            throw new DuplicateEntityException("User","email",userToUpdate.getUserCredentials().getEmail());
+            throw new DuplicateEntityException("User","email",userToUpdate.getCredentials().getEmail());
         }
 
         return userRepository.update(userToUpdate);
@@ -158,7 +153,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.getById(id);
 
-        if (!userCredentials.getUserName().equals(user.getUserCredentials().getUserName())) {
+        if (!userCredentials.getUserName().equals(user.getCredentials().getUserName())) {
             throw new IllegalDeleteException("something");
         }
         userRepository.delete(id);

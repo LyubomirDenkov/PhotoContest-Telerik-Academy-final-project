@@ -35,7 +35,7 @@ public class UserMapper {
         User user = new User();
         user.setFirstName(registerDto.getFirstName());
         user.setLastName(registerDto.getLastName());
-        user.setUserCredentials(userCredentials);
+        user.setCredentials(userCredentials);
 
         user.setRank(baseRank);
 

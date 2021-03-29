@@ -87,25 +87,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    @Override
-    public Organizer getOrganizerByUserName(String userName) {
-        try (Session session = sessionFactory.openSession()) {
-
-            Query<Organizer> query = session.createQuery("from Organizer " +
-                    "where userCredentials.userName = :userName ", Organizer.class);
-
-            query.setParameter("userName", userName);
-
-            List<Organizer> result = query.list();
-
-            if (result.isEmpty()) {
-
-                throw new EntityNotFoundException("Organizer", "userName", userName);
-
-            }
-            return result.get(0);
-        }
-    }
 
     @Override
     public User getByEmail(String email) {
@@ -174,7 +155,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
-            session.save(user.getUserCredentials());
+            session.save(user.getCredentials());
             session.save(user);
 
             return getById(user.getId());
@@ -189,7 +170,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             session.beginTransaction();
 
-            session.update(user.getUserCredentials());
+            session.update(user.getCredentials());
             session.update(user);
 
             session.getTransaction().commit();

@@ -9,8 +9,6 @@ public interface UserService extends GetServiceOperations<User> {
 
     User getUserByUserName(String userName);
 
-    Organizer getOrganizerByUserName(String userName);
-
     User getByEmail(String email);
 
     User create(User user);

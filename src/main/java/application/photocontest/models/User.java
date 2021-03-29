@@ -57,11 +57,11 @@ public class User {
         this.id = id;
     }
 
-    public UserCredentials getUserCredentials() {
+    public UserCredentials getCredentials() {
         return userCredentials;
     }
 
-    public void setUserCredentials(UserCredentials userCredentials) {
+    public void setCredentials(UserCredentials userCredentials) {
         this.userCredentials = userCredentials;
     }
 

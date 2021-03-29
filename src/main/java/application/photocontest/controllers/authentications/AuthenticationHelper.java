@@ -6,7 +6,6 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -55,7 +54,7 @@ public class AuthenticationHelper {
     public User verifyAuthentication(String email, String password) {
         try {
             User user = userService.getByEmail(email);
-            if (!user.getUserCredentials().getPassword().equals(password)) {
+            if (!user.getCredentials().getPassword().equals(password)) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }
             return user;
