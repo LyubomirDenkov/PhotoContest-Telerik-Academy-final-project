@@ -26,19 +26,18 @@ public class ContestDto {
 
     private Set<Integer> participants;
 
-    private Set<Integer> jury;
 
     public ContestDto() {
     }
 
     public ContestDto(String title, int categoryId, Timestamp phaseOne,
-                      Timestamp phaseTwo, Set<Integer> participants, Set<Integer> jury) {
+                      Timestamp phaseTwo, Set<Integer> participants) {
         this.title = title;
         this.categoryId = categoryId;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.participants = participants;
-        this.jury = jury;
+
     }
 
     public String getTitle() {
@@ -82,11 +81,4 @@ public class ContestDto {
         this.participants = participants;
     }
 
-    public Set<Integer> getJury() {
-        return jury;
-    }
-
-    public void setJury(Set<Integer> jury) {
-        this.jury = jury;
-    }
 }

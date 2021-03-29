@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -73,8 +74,6 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException("something");
         }
 
-
-
         Contest contestToUpdate = contestRepository.update(contest);
         addJuryAndParticipantsToContest(contestToUpdate);
         return contestToUpdate;
@@ -89,11 +88,19 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void addJuryAndParticipantsToContest(Contest contest) {
-        Set<User> jury = contest.getJury();
         Set<User> participants = contest.getParticipants();
 
         contest.setParticipants(participants);
-        contest.setJury(jury);
+        contest.setJury(getContestJury());
         contestRepository.update(contest);
+    }
+
+
+    private Set<User> getContestJury() {
+        Set<User> jurySet = new HashSet<>();
+        for (User judge : contestRepository.getContestJury()) {
+            jurySet.add(judge);
+        }
+        return jurySet;
     }
 }

@@ -64,18 +64,12 @@ public class ContestMapper {
     }
 
     private void setContestJuryAndParticipants(ContestDto contestDto, Contest contest){
-        Set<User> jury = new HashSet<>();
-
-        for (Integer judge : contestDto.getJury()) {
-            jury.add(userRepository.getById(judge));
-        }
-
 
         Set<User> participants = new HashSet<>();
 
         for (Integer participant : contestDto.getParticipants()) {
             User userWithDuplicateRole = userRepository.getById(participant);
-            if (jury.contains(userWithDuplicateRole)) {
+            if (contestRepository.getContestJury().contains(userWithDuplicateRole)) {
                 break;
             }
             participants.add(userRepository.getById(participant));
@@ -83,7 +77,6 @@ public class ContestMapper {
         User creator = userRepository.getById(contest.getCreator().getId());
         participants.remove(creator);
 
-        contest.setJury(jury);
         contest.setParticipants(participants);
     }
 

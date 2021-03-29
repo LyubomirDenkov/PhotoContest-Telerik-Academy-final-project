@@ -4,6 +4,7 @@ import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
 import application.photocontest.models.Contest;
 import application.photocontest.models.Rank;
+import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ContestRepositoryImpl implements ContestRepository {
@@ -89,6 +91,14 @@ public class ContestRepositoryImpl implements ContestRepository {
 
             }
             return result.get(0);
+        }
+    }
+
+    @Override
+    public List<User> getContestJury() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select u from User u join u.roles as r " +
+                    "where r.name = 'organizer' ", User.class).list();
         }
     }
 }
