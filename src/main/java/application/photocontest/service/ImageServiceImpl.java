@@ -39,7 +39,8 @@ public class ImageServiceImpl implements ImageService {
     public Image create(UserCredentials userCredentials, Image image) {
 
         Image imageToCreate = imageRepository.create(image);
-        //addImageToUserImages(user,image);
+        User user =  userRepository.getUserByUserName(userCredentials.getUserName());
+        addImageToUserImages(user,image);
         return imageToCreate;
     }
 

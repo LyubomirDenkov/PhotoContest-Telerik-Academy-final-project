@@ -16,13 +16,13 @@ public class ImageMapper {
     }
 
 
-    public Image toModel(String title,String story,byte[] imageData) {
+    public Image toModel(String title,String story,String imagePath) {
 
         Image image = new Image();
 
         image.setTitle(title);
         image.setStory(story);
-        image.setImageData(imageData);
+        image.setImagePath(imagePath);
 
         return image;
     }
