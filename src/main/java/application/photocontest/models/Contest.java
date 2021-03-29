@@ -105,6 +105,14 @@ public class Contest {
         this.category = category;
     }
 
+    public Date getStartingDate() {
+        return startingDate;
+    }
+
+    public void setStartingDate(Date startingDate) {
+        this.startingDate = startingDate;
+    }
+
     public int getPhaseOne() {
         return phaseOne;
     }
@@ -127,6 +135,22 @@ public class Contest {
 
     public void setOrganizer(Organizer organizer) {
         this.organizer = organizer;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Phase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(Phase phase) {
+        this.phase = phase;
     }
 
     public Set<User> getParticipants() {

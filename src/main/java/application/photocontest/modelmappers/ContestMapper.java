@@ -5,6 +5,7 @@ import application.photocontest.models.User;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.repository.contracts.OrganizerRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,14 @@ public class ContestMapper {
     private final ContestRepository contestRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final OrganizerRepository organizerRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, OrganizerRepository organizerRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.organizerRepository = organizerRepository;
     }
 
     public Contest fromDto(ContestDto contestDto, User user) {
@@ -39,7 +42,11 @@ public class ContestMapper {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setJury();
+        contest.setOrganizer(organizerRepository.getById(contestDto.getOrganizerId()));
+        contest.setStartingDate(contestDto.getStarting_date());
+        contest.setPhaseOne(contestDto.getPhaseOne());
+        contest.setPhaseTwo(contestDto.getPhaseTwo());
+
         contest.setTitle(contestDto.getTitle());
 
         setContestJuryAndParticipants(contestDto,contest);

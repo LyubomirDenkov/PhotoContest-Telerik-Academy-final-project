@@ -1,12 +1,15 @@
 package application.photocontest.models.dto;
 
 
+import application.photocontest.models.User;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import java.sql.Timestamp;
 import java.util.Set;
+
 
 public class ContestDto {
 
@@ -20,24 +23,44 @@ public class ContestDto {
     @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
 
-    private Timestamp phaseOne;
+    private Timestamp starting_date;
 
-    private Timestamp phaseTwo;
+    @Positive
+    private int phaseOne;
 
-    private Set<Integer> participants;
+    @Positive
+    private int phaseTwo;
 
+    @Positive
+    private int organizerId;
+
+    @Positive
+    private int typeId;
+
+    @Positive
+    private int phaseId;
+
+    private Set<User> participants;
+
+    private Set<User> jury;
+
+    private Set<User> images;
 
     public ContestDto() {
     }
 
-    public ContestDto(String title, int categoryId, Timestamp phaseOne,
-                      Timestamp phaseTwo, Set<Integer> participants) {
+    public ContestDto(String title,  int categoryId, Timestamp starting_date,  int phaseOne,  int phaseTwo,  int organizerId,  int typeId,  int phaseId, Set<User> participants, Set<User> jury, Set<User> images) {
         this.title = title;
         this.categoryId = categoryId;
+        this.starting_date = starting_date;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
+        this.organizerId = organizerId;
+        this.typeId = typeId;
+        this.phaseId = phaseId;
         this.participants = participants;
-
+        this.jury = jury;
+        this.images = images;
     }
 
     public String getTitle() {
@@ -56,29 +79,75 @@ public class ContestDto {
         this.categoryId = categoryId;
     }
 
-    public Timestamp getPhaseOne() {
+    public Timestamp getStarting_date() {
+        return starting_date;
+    }
+
+    public void setStarting_date(Timestamp starting_date) {
+        this.starting_date = starting_date;
+    }
+
+    public int getPhaseOne() {
         return phaseOne;
     }
 
-    public void setPhaseOne(Timestamp phaseOne) {
+    public void setPhaseOne(int phaseOne) {
         this.phaseOne = phaseOne;
     }
 
-    public Timestamp getPhaseTwo() {
+    public int getPhaseTwo() {
         return phaseTwo;
     }
 
-    public void setPhaseTwo(Timestamp phaseTwo) {
+    public void setPhaseTwo(int phaseTwo) {
         this.phaseTwo = phaseTwo;
     }
 
+    public int getOrganizerId() {
+        return organizerId;
+    }
 
-    public Set<Integer> getParticipants() {
+    public void setOrganizerId(int organizerId) {
+        this.organizerId = organizerId;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+
+    public int getPhaseId() {
+        return phaseId;
+    }
+
+    public void setPhaseId(int phaseId) {
+        this.phaseId = phaseId;
+    }
+
+    public Set<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Set<Integer> participants) {
+    public void setParticipants(Set<User> participants) {
         this.participants = participants;
     }
 
+    public Set<User> getJury() {
+        return jury;
+    }
+
+    public void setJury(Set<User> jury) {
+        this.jury = jury;
+    }
+
+    public Set<User> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<User> images) {
+        this.images = images;
+    }
 }
