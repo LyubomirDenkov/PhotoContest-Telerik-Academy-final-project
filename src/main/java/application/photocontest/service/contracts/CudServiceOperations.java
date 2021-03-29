@@ -1,12 +1,13 @@
 package application.photocontest.service.contracts;
 
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 
 public interface CudServiceOperations<T> {
-    T create(User user, T type);
+    T create(UserCredentials userCredentials, T type);
 
-    T update(User user,T secondType);
+    T update(UserCredentials userCredentials,T type);
 
-    void delete(User user,int id);
+    void delete(UserCredentials userCredentials,int id);
 
 }

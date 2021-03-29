@@ -5,6 +5,7 @@ import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,11 +21,11 @@ public class AuthorizationHelper {
             "Only an organizer is authorized to make this operation.";
 
 
-    public static void verifyUserHasRoles(User user, UserRoles... roles){
+    public static void verifyUserHasRoles(UserCredentials user, UserRoles... roles){
 
         List<String> rolesList = Arrays.stream(roles).map(UserRoles::toString).collect(Collectors.toList());
 
-         user.getUserCredentials().getRoles().stream()
+         user.getRoles().stream()
                  .map(r -> r.getName().toLowerCase())
                  .filter(rolesList::contains)
                  .findAny()

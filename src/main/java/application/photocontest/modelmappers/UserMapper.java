@@ -1,18 +1,13 @@
 package application.photocontest.modelmappers;
 
-import application.photocontest.exceptions.DuplicateEntityException;
-import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Rank;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
-import java.util.Optional;
 
 import static application.photocontest.enums.UserRanks.JUNKIE;
 
@@ -32,7 +27,15 @@ public class UserMapper {
 
         Rank baseRank = userRepository.getRankByName(JUNKIE.toString());
 
+        UserCredentials userCredentials = new UserCredentials();
+        userCredentials.setUserName(registerDto.getUserName());
+        userCredentials.setEmail(registerDto.getEmail());
+        userCredentials.setPassword(registerDto.getPassword());
+
         User user = new User();
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setUserCredentials(userCredentials);
 
         user.setRank(baseRank);
 

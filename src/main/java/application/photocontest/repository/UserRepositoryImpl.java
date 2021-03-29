@@ -1,9 +1,7 @@
 package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.models.Rank;
-import application.photocontest.models.Role;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 import application.photocontest.repository.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -49,7 +47,28 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getByUserName(String userName) {
+    public UserCredentials getByUserName(String userName) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<UserCredentials> query = session.createQuery("from UserCredentials " +
+                    "where userName = :userName ", UserCredentials.class);
+
+            query.setParameter("userName", userName);
+
+            List<UserCredentials> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("User/Organizer", "userName", userName);
+
+            }
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+
         try (Session session = sessionFactory.openSession()) {
 
             Query<User> query = session.createQuery("from User " +
@@ -62,6 +81,26 @@ public class UserRepositoryImpl implements UserRepository {
             if (result.isEmpty()) {
 
                 throw new EntityNotFoundException("User", "userName", userName);
+
+            }
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public Organizer getOrganizerByUserName(String userName) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<Organizer> query = session.createQuery("from Organizer " +
+                    "where userCredentials.userName = :userName ", Organizer.class);
+
+            query.setParameter("userName", userName);
+
+            List<Organizer> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("Organizer", "userName", userName);
 
             }
             return result.get(0);
@@ -135,9 +174,10 @@ public class UserRepositoryImpl implements UserRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
+            session.save(user.getUserCredentials());
             session.save(user);
 
-            return getByUserName(user.getUserCredentials().getUserName());
+            return getById(user.getId());
         }
     }
 
@@ -149,6 +189,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             session.beginTransaction();
 
+            session.update(user.getUserCredentials());
             session.update(user);
 
             session.getTransaction().commit();

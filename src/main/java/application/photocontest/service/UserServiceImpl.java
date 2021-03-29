@@ -5,9 +5,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.IllegalDeleteException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
-import application.photocontest.models.Rank;
-import application.photocontest.models.Role;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,26 +31,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(User user) {
+    public List<User> getAll(UserCredentials user) {
         return userRepository.getAll();
     }
 
     @Override
-    public User getById(User user, int id) {
+    public User getById(UserCredentials user, int id) {
 
         verifyUserHasRoles(user,UserRoles.ORGANIZER);
 
         return userRepository.getById(id);
 
-
     }
 
     //TODO later - calculate only after winning
     @Override
-    public User getByUserName(String userName) {
-        User user = userRepository.getByUserName(userName);
-        calculateUserRank(user);
+    public UserCredentials getByUserName(String userName) {
+        UserCredentials user = userRepository.getByUserName(userName);
+        //calculateUserRank(user);
         return user;
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return null;
+    }
+
+    @Override
+    public Organizer getOrganizerByUserName(String userName) {
+        return null;
     }
 
     @Override
@@ -105,52 +112,55 @@ public class UserServiceImpl implements UserService {
         addRoleToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
+
     }
 
     public void addRoleToRegisteredUser(User user) {
-       /* Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getRoles();
+        Role role = userRepository.getRoleByName(UserRoles.USER.toString());
+        Set<Role> roles = user.getUserCredentials().getRoles();
         roles.add(role);
-        user.setRoles(roles);
-        userRepository.update(user);*/
+        user.getUserCredentials().setRoles(roles);
+        userRepository.update(user);
     }
 
     public void addRoleToUser(User user) {
-       /* Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getRoles();
+        Role role = userRepository.getRoleByName(UserRoles.USER.toString());
+        Set<Role> roles = user.getUserCredentials().getRoles();
         roles.add(role);
-        user.setRoles(roles);
-        userRepository.update(user);*/
+        user.getUserCredentials().setRoles(roles);
+        userRepository.update(user);
     }
 
     @Override
-    public User update(User user, User userToUpdate) {
+    public User update(UserCredentials userCredentials, User userToUpdate) {
 
         boolean isEmailExist = true;
 
-        /*if (user.getId() != userToUpdate.getId() && !user.isAdmin()) {
+        if (!userCredentials.getUserName().equals(userToUpdate.getUserCredentials().getUserName())) {
             throw new UnauthorizedOperationException("something");
-        }*/
+        }
 
         try {
-            /*userRepository.getByEmail(userToUpdate.getEmail());*/
+            userRepository.getByEmail(userToUpdate.getUserCredentials().getEmail());
         }catch (EntityNotFoundException e){
             isEmailExist = false;
         }
 
-        /*if (isEmailExist){
-            throw new DuplicateEntityException("User","email",userToUpdate.getEmail());
-        }*/
+        if (isEmailExist){
+            throw new DuplicateEntityException("User","email",userToUpdate.getUserCredentials().getEmail());
+        }
 
         return userRepository.update(userToUpdate);
     }
 
     @Override
-    public void delete(User user, int id) {
+    public void delete(UserCredentials userCredentials, int id) {
 
-        /*if (user.getId() != id && !user.isAdmin()) {
+        User user = userRepository.getById(id);
+
+        if (!userCredentials.getUserName().equals(user.getUserCredentials().getUserName())) {
             throw new IllegalDeleteException("something");
-        }*/
+        }
         userRepository.delete(id);
     }
 }

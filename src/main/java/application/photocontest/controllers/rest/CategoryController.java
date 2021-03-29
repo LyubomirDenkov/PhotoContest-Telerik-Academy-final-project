@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    /*private final CategoryService categoryService;
     private final AuthenticationHelper authenticationHelper;
     private final CategoryMapper categoryMapper;
 
@@ -68,5 +68,5 @@ public class CategoryController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-    }
+    }*/
 }

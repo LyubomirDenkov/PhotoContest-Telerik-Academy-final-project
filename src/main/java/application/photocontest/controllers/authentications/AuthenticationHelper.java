@@ -4,6 +4,7 @@ import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,14 +29,14 @@ public class AuthenticationHelper {
         this.userService = userService;
     }
 
-    public User tryGetUser(HttpHeaders headers) {
+    public UserCredentials tryGetUser(HttpHeaders headers) {
         if (!headers.containsKey(AUTHORIZATION_HEADER_NAME)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, AUTHORIZATION_ERROR_MESSAGE);
         }
 
         try {
-            String email = headers.getFirst(AUTHORIZATION_HEADER_NAME);
-            return userService.getByEmail(email);
+            String userName = headers.getFirst(AUTHORIZATION_HEADER_NAME);
+            return userService.getByUserName(userName);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, INVALID_EMAIL_ERROR_MESSAGE);
         }

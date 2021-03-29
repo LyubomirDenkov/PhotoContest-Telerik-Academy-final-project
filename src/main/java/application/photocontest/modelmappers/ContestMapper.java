@@ -2,10 +2,10 @@ package application.photocontest.modelmappers;
 
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.OrganizerRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,20 +19,18 @@ public class ContestMapper {
     private final ContestRepository contestRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final OrganizerRepository organizerRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, OrganizerRepository organizerRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.organizerRepository = organizerRepository;
     }
 
-    public Contest fromDto(ContestDto contestDto, User user) {
+    public Contest fromDto(ContestDto contestDto, UserCredentials userCredentials) {
 
         Contest contest = new Contest();
-        dtoToObject(contestDto, contest, user);
+        dtoToObject(contestDto, contest, userCredentials);
 
         return contest;
     }
@@ -42,7 +40,7 @@ public class ContestMapper {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setOrganizer(organizerRepository.getById(contestDto.getOrganizerId()));
+        //contest.setOrganizer(userRepository.getOrganizerByUserName(contestDto.getOrganizerId()));
         contest.setStartingDate(contestDto.getStarting_date());
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
@@ -54,7 +52,7 @@ public class ContestMapper {
         return contest;
     }
 
-    public Contest dtoToObject(ContestDto contestDto, Contest contest, User user) {
+    public Contest dtoToObject(ContestDto contestDto, Contest contest, UserCredentials userCredentials) {
 
 
         /*contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));

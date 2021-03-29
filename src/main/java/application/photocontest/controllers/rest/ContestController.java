@@ -9,6 +9,7 @@ import application.photocontest.modelmappers.ContestMapper;
 
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.service.contracts.ContestService;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +40,7 @@ public class ContestController {
     @ApiOperation(value = "Get all contests")
     @GetMapping
     public List<Contest> getAll(@RequestHeader HttpHeaders headers) {
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
 
         try {
             return contestService.getAll(user);
@@ -54,7 +55,7 @@ public class ContestController {
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")
     public Contest getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
         try {
             return contestService.getById(user, id);
         } catch (
@@ -69,7 +70,7 @@ public class ContestController {
     public Contest create(@RequestHeader HttpHeaders headers,
                            @Valid @RequestBody ContestDto contestDto) {
 
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
 
 
         try {
@@ -88,7 +89,7 @@ public class ContestController {
     public Contest update(@RequestHeader HttpHeaders headers, @PathVariable int id,
                           @Valid @RequestBody ContestDto contestDto) {
 
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
 
         try {
             Contest contestToUpdate = contestMapper.fromDto(id,contestDto);

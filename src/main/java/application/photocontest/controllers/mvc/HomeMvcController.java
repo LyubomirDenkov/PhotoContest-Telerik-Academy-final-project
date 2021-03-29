@@ -28,9 +28,9 @@ public class HomeMvcController {
     public String homePage(Model model) {
 
         User user = new User();
-        Image image = imageService.getById(user,2);
+        //Image image = imageService.getById(user,2);
 
-        model.addAttribute("images", image.getImageData());
+        //model.addAttribute("images", image.getImageData());
 
         return "index";
     }

@@ -5,6 +5,7 @@ import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,13 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<Contest> getAll(User user) {
+    public List<Contest> getAll(UserCredentials userCredentials) {
 
         return contestRepository.getAll();
     }
 
     @Override
-    public Contest getById(User user, int id) {
+    public Contest getById(UserCredentials userCredentials, int id) {
 
 
 
@@ -45,7 +46,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest create(User user, Contest contest) {
+    public Contest create(UserCredentials userCredentials, Contest contest) {
 
         boolean ifContestTitleExist = true;
 
@@ -65,7 +66,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest update(User user, Contest contest) {
+    public Contest update(UserCredentials userCredentials, Contest contest) {
 
 
 /*        if (!user.equals(contest.getCreator()) && !user.isAdmin()) {
@@ -81,7 +82,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public void delete(User contest, int id) {
+    public void delete(UserCredentials contest, int id) {
 
     }
 

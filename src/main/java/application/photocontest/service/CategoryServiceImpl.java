@@ -3,6 +3,7 @@ package application.photocontest.service;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.service.contracts.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAll(User user) {
+    public List<Category> getAll(UserCredentials userCredentials) {
         return categoryRepository.getAll();
     }
 
     @Override
-    public Category getById(User user, int id) {
+    public Category getById(UserCredentials userCredentials, int id) {
 
         try {
             return categoryRepository.getById(id);

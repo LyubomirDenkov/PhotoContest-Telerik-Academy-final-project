@@ -2,6 +2,7 @@ package application.photocontest.service;
 
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImageService;
@@ -25,20 +26,20 @@ public class ImageServiceImpl implements ImageService {
 
     //TODO - who can delete ||| update
     @Override
-    public List<Image> getAll(User user) {
+    public List<Image> getAll(UserCredentials userCredentials) {
         return imageRepository.getAll();
     }
 
     @Override
-    public Image getById(User user, int id) {
+    public Image getById(UserCredentials userCredentials, int id) {
         return imageRepository.getById(id);
     }
 
     @Override
-    public Image create(User user, Image image) {
+    public Image create(UserCredentials userCredentials, Image image) {
 
         Image imageToCreate = imageRepository.create(image);
-        addImageToUserImages(user,image);
+        //addImageToUserImages(user,image);
         return imageToCreate;
     }
 
@@ -49,12 +50,12 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image update(User user,Image image) {
+    public Image update(UserCredentials userCredentials,Image image) {
         return imageRepository.update(image);
     }
 
     @Override
-    public void delete(User user, int id) {
+    public void delete(UserCredentials userCredentials, int id) {
         imageRepository.delete(id);
     }
 }

@@ -1,12 +1,14 @@
 package application.photocontest.repository.contracts;
 
 
-import application.photocontest.models.Rank;
-import application.photocontest.models.Role;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 
 public interface UserRepository extends GetRepositoryOperations<User>, CudRepositoryOperations<User> {
-    User getByUserName(String userName);
+    UserCredentials getByUserName(String userName);
+
+    User getUserByUserName(String userName);
+
+    Organizer getOrganizerByUserName(String userName);
 
     User getByEmail(String email);
 

@@ -6,6 +6,7 @@ import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.service.contracts.UserService;
@@ -35,16 +36,18 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll(@RequestHeader HttpHeaders headers) {
-        User user = authenticationHelper.tryGetUser(headers);
-        return userService.getAll(user);
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+
+        return userService.getAll(userCredentials);
     }
 
     @GetMapping("/{id}")
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        User user = authenticationHelper.tryGetUser(headers);
+
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
         try {
-            return userService.getById(user, id);
+            return userService.getById(userCredentials, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -55,13 +58,17 @@ public class UserController {
 
         User user = userMapper.fromDto(dto);
 
-        return userService.create(user);
+        try {
+            return userService.create(user);
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto) {
 
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
         try {
             User userToUpdate = userMapper.fromDto(id, userDto);
             return userService.update(user, userToUpdate);
@@ -77,7 +84,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
         try {
             userService.delete(user, id);
         } catch (UnauthorizedOperationException e) {

@@ -11,9 +11,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
@@ -41,17 +41,28 @@ public class ImageController {
                         @RequestParam(name = "title") String title,
                         @RequestParam(name = "story") String story) throws IOException {
 
-        User user = authenticationHelper.tryGetUser(headers);
+        //User user = authenticationHelper.tryGetUser(headers);
 
-        String destination = "../../../../../../images" + file.get().getOriginalFilename();
 
-        File file1 = new File(destination);
+        /*File file1 = new File("images.txt");
+        String str = file1.getAbsolutePath();
         file.get().transferTo(file1);
+
+        FileWriter fileWriter = new FileWriter(file1);
+        BufferedWriter bw = new BufferedWriter(fileWriter);
+
+        BufferedImage bufferedImage = ImageIO.read(file1);
+
+        BufferedImage bi = bufferedImage;
+        File outputfile = new File("saved.png");
+        ImageIO.write(bi, "png", outputfile);
+*/
 
         if (file.isPresent()) {
             byte[] bytes = Base64.getEncoder().encode(file.get().getBytes());
             Image image = imageMapper.toModel(title,story,bytes);
-            return imageService.create(user,image);
+            return null;
+            //return imageService.create(user,image);
         }else {
             throw new EOFException();
         }
