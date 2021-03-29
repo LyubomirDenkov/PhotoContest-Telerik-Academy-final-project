@@ -68,7 +68,8 @@ public class Contest {
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, int phaseOne, int phaseTwo, Organizer organizer, Set<User> participants, Set<User> jury, Set<User> images) {
+    public Contest(int id, String title, Category category, int phaseOne, int phaseTwo,
+                   Organizer organizer, Set<User> participants, Set<User> jury, Set<User> images) {
         this.id = id;
         this.title = title;
         this.category = category;

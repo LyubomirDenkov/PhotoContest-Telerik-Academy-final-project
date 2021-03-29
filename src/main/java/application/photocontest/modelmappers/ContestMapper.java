@@ -39,8 +39,7 @@ public class ContestMapper {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-    /*    contest.setPhaseOne(contestDto.getPhaseOne());
-        contest.setPhaseTwo(contestDto.getPhaseTwo());*/
+        contest.setJury();
         contest.setTitle(contestDto.getTitle());
 
         setContestJuryAndParticipants(contestDto,contest);
