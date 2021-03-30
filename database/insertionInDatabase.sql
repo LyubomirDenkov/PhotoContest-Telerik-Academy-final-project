@@ -32,7 +32,7 @@ VALUES ('nikolay9','12345678'),
        ('koki123','12345678');
 
 INSERT INTO users( user_credentials,first_name, last_name, rank_id, points)
-VALUES ('toshkata',  'Todor', 'Andonov',  1, 1),
+VALUES ('toshkata',  'Todor', 'Andonov',  2, 200),
        ('vladi',  'Vladimir', 'Venkov',  1, 1),
        ('nikolaicho', 'Nikolay', 'Georgiev',  1, 1),
        ('Peshkata',  'Petar', 'Raykov',  1, 1),
@@ -73,3 +73,6 @@ VALUES ('Nature'),
 
 INSERT INTO category(name)
 VALUES ('nature');
+
+INSERT INTO contest_type(name)
+VALUES ('open');

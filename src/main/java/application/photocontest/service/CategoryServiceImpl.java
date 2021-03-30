@@ -2,7 +2,6 @@ package application.photocontest.service;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
-import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.service.contracts.CategoryService;
@@ -25,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category create(User user, Category category) {
+    public Category create(UserCredentials user, Category category) {
 
 
         return categoryRepository.create(category);

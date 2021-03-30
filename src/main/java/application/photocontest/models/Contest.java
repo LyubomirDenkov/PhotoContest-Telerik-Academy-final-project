@@ -39,6 +39,10 @@ public class Contest {
     @JoinColumn(name = "type_id")
     private Type type;
 
+    @ManyToOne
+    @JoinColumn(name = "phase_id")
+    private Phase phase;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -66,7 +70,7 @@ public class Contest {
     }
 
     public Contest(int id, String title, Category category, Date startingDate, int phaseOne, int phaseTwo,
-                   Organizer organizer, Type type, Set<User> participants, Set<User> jury, Set<Image> images) {
+                   Organizer organizer, Type type, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -75,9 +79,18 @@ public class Contest {
         this.phaseTwo = phaseTwo;
         this.organizer = organizer;
         this.type = type;
+        this.phase = phase;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
+    }
+
+    public Phase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(Phase phase) {
+        this.phase = phase;
     }
 
     public int getId() {

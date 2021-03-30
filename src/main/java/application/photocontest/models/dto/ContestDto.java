@@ -1,6 +1,7 @@
 package application.photocontest.models.dto;
 
 
+import application.photocontest.models.Image;
 import application.photocontest.models.User;
 
 import javax.validation.constraints.NotNull;
@@ -34,25 +35,38 @@ public class ContestDto {
     @Positive
     private int typeId;
 
-    private Set<User> participants;
+    @Positive
+    private int phaseId;
 
-    private Set<User> jury;
+    private Set<Integer> participants;
 
-    private Set<User> images;
+    private Set<Integer> jury;
+
+    private Set<Image> images;
 
     public ContestDto() {
     }
 
-    public ContestDto(String title, int categoryId, Timestamp startingDate, int phaseOne, int phaseTwo, int typeId, Set<User> participants, Set<User> jury, Set<User> images) {
+    public ContestDto(String title,  int categoryId, Timestamp startingDate,  int phaseOne,
+                      int phaseTwo,  int typeId,  int phaseId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
         this.startingDate = startingDate;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.typeId = typeId;
+        this.phaseId = phaseId;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
+    }
+
+    public int getPhaseId() {
+        return phaseId;
+    }
+
+    public void setPhaseId(int phaseId) {
+        this.phaseId = phaseId;
     }
 
     public String getTitle() {
@@ -104,28 +118,27 @@ public class ContestDto {
         this.typeId = typeId;
     }
 
-
-    public Set<User> getParticipants() {
+    public Set<Integer> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Set<User> participants) {
+    public void setParticipants(Set<Integer> participants) {
         this.participants = participants;
     }
 
-    public Set<User> getJury() {
+    public Set<Integer> getJury() {
         return jury;
     }
 
-    public void setJury(Set<User> jury) {
+    public void setJury(Set<Integer> jury) {
         this.jury = jury;
     }
 
-    public Set<User> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
-    public void setImages(Set<User> images) {
+    public void setImages(Set<Image> images) {
         this.images = images;
     }
 }

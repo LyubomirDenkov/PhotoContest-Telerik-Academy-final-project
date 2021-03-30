@@ -5,6 +5,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.CategoryMapper;
 import application.photocontest.models.Category;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.CategoryDto;
 import application.photocontest.models.User;
 import application.photocontest.service.contracts.CategoryService;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    /*private final CategoryService categoryService;
+    private final CategoryService categoryService;
     private final AuthenticationHelper authenticationHelper;
     private final CategoryMapper categoryMapper;
 
@@ -39,14 +40,14 @@ public class CategoryController {
     @ApiOperation(value = "Get all categories")
     @GetMapping
     public List<Category> getAll(@RequestHeader HttpHeaders headers) {
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
         return categoryService.getAll(user);
     }
 
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")
     public Category getById(@RequestHeader HttpHeaders headers,@PathVariable int id) {
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
         return categoryService.getById(user, id);
     }
 
@@ -56,7 +57,7 @@ public class CategoryController {
     public Category create(@RequestHeader HttpHeaders headers,
                            @Valid @RequestBody CategoryDto categoryDto) {
 
-        User user = authenticationHelper.tryGetUser(headers);
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
 
         try {
             Category category = categoryMapper.fromDto(categoryDto);
@@ -68,5 +69,5 @@ public class CategoryController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-    }*/
+    }
 }
