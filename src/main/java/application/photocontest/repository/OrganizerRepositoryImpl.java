@@ -2,8 +2,7 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Organizer;
-import application.photocontest.models.User;
-import application.photocontest.repository.contracts.OrganizeRepository;
+import application.photocontest.repository.contracts.OrganizerRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class OrganizeRepositoryImpl implements OrganizeRepository {
+public class OrganizerRepositoryImpl implements OrganizerRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public OrganizeRepositoryImpl(SessionFactory sessionFactory) {
+    public OrganizerRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

@@ -3,8 +3,10 @@ package application.photocontest.controllers.authentications;
 import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
+import application.photocontest.models.Organizer;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
+import application.photocontest.service.contracts.OrganizerService;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,20 +24,29 @@ public class AuthenticationHelper {
     public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong email or password.";
 
     private final UserService userService;
+    private final OrganizerService organizerService;
 
 
-    public AuthenticationHelper(UserService userService) {
+    public AuthenticationHelper(UserService userService, OrganizerService organizerService) {
         this.userService = userService;
+        this.organizerService = organizerService;
     }
 
     public UserCredentials tryGetUser(HttpHeaders headers) {
-        if (!headers.containsKey(AUTHORIZATION_HEADER_NAME)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, AUTHORIZATION_ERROR_MESSAGE);
-        }
-
+        unauthorizedException(headers);
         try {
             String userName = headers.getFirst(AUTHORIZATION_HEADER_NAME);
             return userService.getByUserName(userName);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, INVALID_EMAIL_ERROR_MESSAGE);
+        }
+    }
+
+    public Organizer tryGetOrganizer(HttpHeaders headers) {
+        unauthorizedException(headers);
+        try {
+            String organizerName = headers.getFirst(AUTHORIZATION_HEADER_NAME);
+            return organizerService.getByUserName(organizerName);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, INVALID_EMAIL_ERROR_MESSAGE);
         }
@@ -63,4 +74,10 @@ public class AuthenticationHelper {
         }
     }
 
+
+    private void unauthorizedException(HttpHeaders headers) {
+        if (!headers.containsKey(AUTHORIZATION_HEADER_NAME)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, AUTHORIZATION_ERROR_MESSAGE);
+        }
+    }
 }

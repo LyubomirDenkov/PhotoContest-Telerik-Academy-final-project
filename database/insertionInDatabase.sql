@@ -50,3 +50,12 @@ VALUES (1, 3),
 INSERT INTO contest(title, category_id, phase_one, phase_two, creator)
 VALUES ('best nature picture', 1, timestamp ('2017-05-23',  '13:10:11'),timestamp ('2017-05-24',  '12:10:11'), 2),
        ('best nature picture', 1, timestamp ('2017-07-23',  '13:10:11'),timestamp ('2017-07-24',  '12:10:11'), 3);
+
+INSERT INTO user_credentials(user_name, email, password)
+VALUES ('nikolay7','nikolaypnc@gmail.com','12345678');
+
+INSERT INTO organizers(user_credentials, first_name, last_name)
+VALUES ('nikolay7','nikolay','georgiev');
+
+INSERT INTO category(name)
+VALUES ('nature');

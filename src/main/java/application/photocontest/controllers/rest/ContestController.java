@@ -2,12 +2,14 @@ package application.photocontest.controllers.rest;
 
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
+import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
 
 import application.photocontest.models.Contest;
+import application.photocontest.models.Organizer;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
@@ -21,6 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 
 @RestController
 @RequestMapping("/api/contests")
@@ -56,6 +60,8 @@ public class ContestController {
     @GetMapping("/{id}")
     public Contest getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         UserCredentials user = authenticationHelper.tryGetUser(headers);
+
+
         try {
             return contestService.getById(user, id);
         } catch (
@@ -70,12 +76,11 @@ public class ContestController {
     public Contest create(@RequestHeader HttpHeaders headers,
                            @Valid @RequestBody ContestDto contestDto) {
 
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
-
+        Organizer organizer = authenticationHelper.tryGetOrganizer(headers);
 
         try {
-            Contest contest = contestMapper.fromDto(contestDto,user);
-            return contestService.create(user, contest);
+            Contest contest = contestMapper.fromDto(contestDto,organizer);
+            return contestService.create(organizer, contest);
 
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -89,11 +94,11 @@ public class ContestController {
     public Contest update(@RequestHeader HttpHeaders headers, @PathVariable int id,
                           @Valid @RequestBody ContestDto contestDto) {
 
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        Organizer organizer = authenticationHelper.tryGetOrganizer(headers);
 
         try {
             Contest contestToUpdate = contestMapper.fromDto(id,contestDto);
-            return contestService.update(user,contestToUpdate);
+            return contestService.update(organizer,contestToUpdate);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

@@ -21,7 +21,7 @@ public class Image {
     private String story;
 
     @JsonIgnore
-    @Column(name = "ImagePath")
+    @Column(name = "ImageData")
     private String imagePath;
 
     @Column(name = "points")

@@ -1,19 +1,17 @@
 package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.models.Category;
-import application.photocontest.models.Contest;
-import application.photocontest.models.Rank;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 import application.photocontest.repository.contracts.ContestRepository;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class ContestRepositoryImpl implements ContestRepository {
@@ -24,6 +22,7 @@ public class ContestRepositoryImpl implements ContestRepository {
     public ContestRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
 
     @Override
     public List<Contest> getAll() {
@@ -39,13 +38,13 @@ public class ContestRepositoryImpl implements ContestRepository {
             Contest contest = session.get(Contest.class, id);
 
             if (contest == null) {
-
                 throw new EntityNotFoundException("Contest", id);
-
             }
+
             return contest;
         }
     }
+
 
     @Override
     public Contest create(Contest contest) {
@@ -97,8 +96,38 @@ public class ContestRepositoryImpl implements ContestRepository {
     @Override
     public List<User> getContestJury() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select u from User u join u.roles as r " +
+            return session.createQuery("select u from User u join u.userCredentials.roles as r " +
                     "where r.name = 'organizer' ", User.class).list();
         }
+    }
+
+    @Override
+    public Type getByType(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            Type type = session.get(Type.class, id);
+
+            if (type == null) {
+
+                throw new EntityNotFoundException("Type", id);
+
+            }
+            return type;
+
+        }
+    }
+
+    @Override
+    public Phase getByPhase(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            Phase phase = session.get(Phase.class, id);
+
+            if (phase == null) {
+
+                throw new EntityNotFoundException("Phase", id);
+
+            }
+            return phase;
+        }
+
     }
 }

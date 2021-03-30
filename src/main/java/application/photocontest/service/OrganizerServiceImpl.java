@@ -3,8 +3,8 @@ package application.photocontest.service;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.models.Organizer;
 import application.photocontest.models.UserCredentials;
-import application.photocontest.repository.contracts.OrganizeRepository;
-import application.photocontest.service.contracts.OrganizeService;
+import application.photocontest.repository.contracts.OrganizerRepository;
+import application.photocontest.service.contracts.OrganizerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +13,14 @@ import java.util.List;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 
 @Service
-public class OrganizerServiceImpl implements OrganizeService {
+public class OrganizerServiceImpl implements OrganizerService {
 
 
-    private final OrganizeRepository organizeRepository;
+    private final OrganizerRepository organizerRepository;
 
     @Autowired
-    public OrganizerServiceImpl(OrganizeRepository organizeRepository) {
-        this.organizeRepository = organizeRepository;
+    public OrganizerServiceImpl(OrganizerRepository organizerRepository) {
+        this.organizerRepository = organizerRepository;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class OrganizerServiceImpl implements OrganizeService {
 
         verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
 
-        return organizeRepository.getAll();
+        return organizerRepository.getAll();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class OrganizerServiceImpl implements OrganizeService {
 
     @Override
     public Organizer getByUserName(String userName) {
-        return organizeRepository.getByUserName(userName);
+        return organizerRepository.getByUserName(userName);
     }
 
     @Override

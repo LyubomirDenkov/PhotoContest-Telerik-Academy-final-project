@@ -39,9 +39,6 @@ public class Contest {
     @JoinColumn(name = "type_id")
     private Type type;
 
-    @ManyToOne
-    @JoinColumn(name = "phase_id")
-    private Phase phase;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -57,25 +54,27 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> jury;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_image",
             joinColumns = @JoinColumn(name = "contest_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private Set<User> images;
+    private Set<Image> images;
 
 
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, int phaseOne, int phaseTwo,
-                   Organizer organizer, Set<User> participants, Set<User> jury, Set<User> images) {
+    public Contest(int id, String title, Category category, Date startingDate, int phaseOne, int phaseTwo,
+                   Organizer organizer, Type type, Set<User> participants, Set<User> jury, Set<Image> images) {
         this.id = id;
         this.title = title;
         this.category = category;
+        this.startingDate = startingDate;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.organizer = organizer;
+        this.type = type;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
@@ -145,14 +144,6 @@ public class Contest {
         this.type = type;
     }
 
-    public Phase getPhase() {
-        return phase;
-    }
-
-    public void setPhase(Phase phase) {
-        this.phase = phase;
-    }
-
     public Set<User> getParticipants() {
         return participants;
     }
@@ -169,11 +160,11 @@ public class Contest {
         this.jury = jury;
     }
 
-    public Set<User> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
-    public void setImages(Set<User> images) {
+    public void setImages(Set<Image> images) {
         this.images = images;
     }
 }
