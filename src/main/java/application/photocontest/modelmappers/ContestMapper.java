@@ -1,12 +1,10 @@
 package application.photocontest.modelmappers;
 
-import application.photocontest.models.Contest;
-import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
+import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.OrganizeRepository;
+import application.photocontest.repository.contracts.OrganizerRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,50 +18,50 @@ public class ContestMapper {
     private final ContestRepository contestRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final OrganizeRepository organizeRepository;
+    private final OrganizerRepository organizerRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, OrganizeRepository organizeRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, OrganizerRepository organizerRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.organizeRepository = organizeRepository;
+        this.organizerRepository = organizerRepository;
     }
 
-    public Contest fromDto(ContestDto contestDto, UserCredentials userCredentials) {
+    public Contest fromDto(ContestDto contestDto, Organizer organizer) {
 
         Contest contest = new Contest();
-        dtoToObject(contestDto, contest, userCredentials);
+        dtoToObject(contestDto, contest,organizer);
 
         return contest;
     }
 
     public Contest fromDto(int id, ContestDto contestDto) {
-        Contest contest = contestRepository.getById(id);
+        Contest contestToUpdate = contestRepository.getById(id);
+
+        contestToUpdate.setTitle(contestDto.getTitle());
+        contestToUpdate.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
+        contestToUpdate.setStartingDate(contestDto.getStartingDate());
+        contestToUpdate.setPhaseOne(contestDto.getPhaseOne());
+        contestToUpdate.setPhaseTwo(contestDto.getPhaseTwo());
+        contestToUpdate.setType(contestRepository.getByType(contestDto.getTypeId()));
+
+
+        setContestJuryAndParticipants(contestDto,contestToUpdate);
+
+        return contestToUpdate;
+    }
+
+    public Contest dtoToObject(ContestDto contestDto, Contest contest, Organizer organizer) {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setOrganizer(organizeRepository.getById(contestDto.getOrganizerId()));
-        contest.setStartingDate(contestDto.getStarting_date());
+        contest.setStartingDate(contestDto.getStartingDate());
+        contest.setOrganizer(organizer);
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
+        contest.setType(contestRepository.getByType(contestDto.getTypeId()));
 
-        contest.setTitle(contestDto.getTitle());
-
-        setContestJuryAndParticipants(contestDto,contest);
-
-        return contest;
-    }
-
-    public Contest dtoToObject(ContestDto contestDto, Contest contest, UserCredentials userCredentials) {
-
-
-        /*contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setPhaseOne(contestDto.getPhaseOne());
-        contest.setPhaseTwo(contestDto.getPhaseTwo());
-        contest.setTitle(contestDto.getTitle());
-        contest.setCreator(user);
-*/
         setContestJuryAndParticipants(contestDto,contest);
 
 
@@ -72,18 +70,27 @@ public class ContestMapper {
 
     private void setContestJuryAndParticipants(ContestDto contestDto, Contest contest){
 
+        Set<User> jury = new HashSet<>();
+
+        for (User user : contestDto.getJury()) {
+            if (user.getPoints() > 150) {
+                jury.add(user);
+            }
+        }
+
         Set<User> participants = new HashSet<>();
 
-        /*for (Integer participant : contestDto.getParticipants()) {
-            User user = userRepository.getById(participant);
-            if (user.isOrganizer()) {
+        for (User participant : contestDto.getParticipants()) {
+            if (jury.contains(participant)) {
                 continue;
             }
-            participants.add(user);
+            participants.add(participant);
         }
-*/
 
+        contest.setJury(jury);
         contest.setParticipants(participants);
+
     }
+
 
 }

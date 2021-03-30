@@ -9,12 +9,13 @@ import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.*;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
-import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
+import static application.photocontest.service.authorization.AuthorizationHelper.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -57,42 +58,47 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(String email) {
         User user = userRepository.getByEmail(email);
-        calculateUserRank(user);
+     //   calculateUserRank(user);
         return user;
     }
 
-    private void calculateUserRank(User user) {
+//  private void calculateUserRank(User user) {
 
-        if (user.getRank().getName().equals(DICTATOR.toString())) {
-            return;
-        }
+//      verifyUserIsNotOrganizer(user);
 
-        if (user.getRank().getName().equals(JUNKIE.toString())) {
-            if (isUserHavePointsToUpgradeRank(user, JUNKIE_CEILING_POINTS)) {
-                setNewUserRank(user, ENTHUSIAST.toString());
-            }
-        }
-        if (user.getRank().getName().equals(ENTHUSIAST.toString())) {
-            if (isUserHavePointsToUpgradeRank(user, ENTHUSIAST_CEILING_POINTS)) {
-                setNewUserRank(user, MASTER.toString());
-            }
-        }
-        if (user.getRank().getName().equals(MASTER.toString())) {
-            if (isUserHavePointsToUpgradeRank(user, MASTER_CEILING_POINTS)) {
-                setNewUserRank(user, DICTATOR.toString());
-            }
-        }
-    }
+//      if (user.getRanks().contains(userRepository.getRankByName(DICTATOR.toString()))) {
+//          return;
+//      }
 
-    private boolean isUserHavePointsToUpgradeRank(User user, int points) {
-        return user.getPoints() > points;
-    }
+//      if (user.getRanks().contains(userRepository.getRankByName(JUNKIE.toString()))) {
+//          if (isUserHavePointsToUpgradeRank(user, JUNKIE_CEILING_POINTS)) {
+//              setNewUserRank(user, ENTHUSIAST.toString());
+//          }
+//      }
+//      if (user.getRanks().contains(userRepository.getRankByName(ENTHUSIAST.toString()))) {
+//          if (isUserHavePointsToUpgradeRank(user, ENTHUSIAST_CEILING_POINTS)) {
+//              setNewUserRank(user, MASTER.toString());
+//          }
+//      }
+//      if (user.getRanks().contains(userRepository.getRankByName(MASTER.toString()))) {
+//          if (isUserHavePointsToUpgradeRank(user, MASTER_CEILING_POINTS)) {
+//              setNewUserRank(user, DICTATOR.toString());
+//          }
+//      }
+//  }
 
-    private void setNewUserRank(User user, String rankName) {
-        Rank newRank = userRepository.getRankByName(rankName);
-        user.setRank(newRank);
-        userRepository.update(user);
-    }
+//  private boolean isUserHavePointsToUpgradeRank(User user, int points) {
+//      return user.getPoints() > points;
+//  }
+
+//  private void setNewUserRank(User user, String rankName) {
+//      Rank newRank = userRepository.getRankByName(rankName);
+//      Set<Rank> rankSet = user.getRanks();
+//      rankSet.clear();
+//      rankSet.add(newRank);
+//      user.setRanks(rankSet);
+//      userRepository.update(user);
+//  }
 
 
     @Override

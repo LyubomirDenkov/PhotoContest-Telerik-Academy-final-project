@@ -23,7 +23,7 @@ public class ContestDto {
     @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
 
-    private Timestamp starting_date;
+    private Timestamp startingDate;
 
     @Positive
     private int phaseOne;
@@ -32,13 +32,7 @@ public class ContestDto {
     private int phaseTwo;
 
     @Positive
-    private int organizerId;
-
-    @Positive
     private int typeId;
-
-    @Positive
-    private int phaseId;
 
     private Set<User> participants;
 
@@ -49,15 +43,13 @@ public class ContestDto {
     public ContestDto() {
     }
 
-    public ContestDto(String title,  int categoryId, Timestamp starting_date,  int phaseOne,  int phaseTwo,  int organizerId,  int typeId,  int phaseId, Set<User> participants, Set<User> jury, Set<User> images) {
+    public ContestDto(String title, int categoryId, Timestamp startingDate, int phaseOne, int phaseTwo, int typeId, Set<User> participants, Set<User> jury, Set<User> images) {
         this.title = title;
         this.categoryId = categoryId;
-        this.starting_date = starting_date;
+        this.startingDate = startingDate;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
-        this.organizerId = organizerId;
         this.typeId = typeId;
-        this.phaseId = phaseId;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
@@ -79,12 +71,12 @@ public class ContestDto {
         this.categoryId = categoryId;
     }
 
-    public Timestamp getStarting_date() {
-        return starting_date;
+    public Timestamp getStartingDate() {
+        return startingDate;
     }
 
-    public void setStarting_date(Timestamp starting_date) {
-        this.starting_date = starting_date;
+    public void setStartingDate(Timestamp startingDate) {
+        this.startingDate = startingDate;
     }
 
     public int getPhaseOne() {
@@ -103,13 +95,6 @@ public class ContestDto {
         this.phaseTwo = phaseTwo;
     }
 
-    public int getOrganizerId() {
-        return organizerId;
-    }
-
-    public void setOrganizerId(int organizerId) {
-        this.organizerId = organizerId;
-    }
 
     public int getTypeId() {
         return typeId;
@@ -119,13 +104,6 @@ public class ContestDto {
         this.typeId = typeId;
     }
 
-    public int getPhaseId() {
-        return phaseId;
-    }
-
-    public void setPhaseId(int phaseId) {
-        this.phaseId = phaseId;
-    }
 
     public Set<User> getParticipants() {
         return participants;

@@ -1,6 +1,6 @@
 package application.photocontest.service.contracts;
 
-import application.photocontest.models.User;
+
 import application.photocontest.models.UserCredentials;
 
 public interface CudServiceOperations<T> {

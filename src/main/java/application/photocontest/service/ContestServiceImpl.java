@@ -4,18 +4,16 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Organizer;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Set;
-
-import static application.photocontest.service.authorization.AuthorizationHelper.*;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -34,19 +32,12 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest getById(UserCredentials userCredentials, int id) {
-
-
-
-        try {
-            return contestRepository.getById(id);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    public Contest getById(UserCredentials organizer, int id) {
+        return contestRepository.getById(id);
     }
 
     @Override
-    public Contest create(UserCredentials userCredentials, Contest contest) {
+    public Contest create(Organizer organizer, Contest contest) {
 
         boolean ifContestTitleExist = true;
 
@@ -66,12 +57,12 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest update(UserCredentials userCredentials, Contest contest) {
+    public Contest update(Organizer organizer, Contest contest) {
 
 
-/*        if (!user.equals(contest.getCreator()) && !user.isAdmin()) {
+     if (!organizer.getCredentials().getUserName().equals(contest.getOrganizer().getCredentials().getUserName())) {
             throw new UnauthorizedOperationException("something");
-        }*/
+        }
 
         Contest contestToUpdate = contestRepository.update(contest);
         addParticipantsToContest(contestToUpdate);
@@ -82,8 +73,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public void delete(UserCredentials contest, int id) {
-
+    public void delete(Organizer organizer, int id) {
     }
 
     private void addParticipantsToContest(Contest contest) {
