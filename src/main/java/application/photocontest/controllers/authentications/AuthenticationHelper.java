@@ -59,12 +59,12 @@ public class AuthenticationHelper {
             throw new UnauthorizedOperationException("No user logged in.");
         }
 
-        return userService.getByEmail(currentUserEmail);
+        return userService.getUserByUserName(currentUserEmail);
     }
 
     public User verifyAuthentication(String email, String password) {
         try {
-            User user = userService.getByEmail(email);
+            User user = userService.getUserByUserName(email);
             if (!user.getCredentials().getPassword().equals(password)) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }
