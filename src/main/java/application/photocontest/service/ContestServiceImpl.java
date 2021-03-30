@@ -58,7 +58,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         Contest contestToCreate = contestRepository.create(contest);
-        addParticipantsToContest(contestToCreate);
+        addParticipantsToContestAndPoints(contestToCreate);
         return contestToCreate;
 
     }
@@ -72,7 +72,10 @@ public class ContestServiceImpl implements ContestService {
         }
 
         Contest contestToUpdate = contestRepository.update(contest);
-        addParticipantsToContest(contestToUpdate);
+
+        Set<User> participants = contest.getParticipants();
+        contest.setParticipants(participants);
+        contestRepository.update(contest);
         return contestToUpdate;
 
     }
@@ -106,20 +109,25 @@ public class ContestServiceImpl implements ContestService {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
 
+
+
         participants.add(user);
         contest.setParticipants(participants);
+        user.setPoints(user.getPoints() + 1);
+        userRepository.update(user);
         contestRepository.update(contest);
 
     }
 
 
-    private void addParticipantsToContest(Contest contest) {
+    private void addParticipantsToContestAndPoints(Contest contest) {
         Set<User> participants = contest.getParticipants();
-
+        for (User participant : participants) {
+            participant.setPoints(participant.getPoints() + 3);
+            userRepository.update(participant);
+        }
         contest.setParticipants(participants);
         contestRepository.update(contest);
     }
-
-
 
 }
