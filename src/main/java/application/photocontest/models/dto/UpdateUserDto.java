@@ -1,35 +1,44 @@
 package application.photocontest.models.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 public class UpdateUserDto {
 
 
-    @Email
-    private String email;
+    @NotEmpty
+    private String oldPassword;
 
     @NotEmpty
-    private String password;
+    private String newPassword;
+
+    @NotEmpty
+    private String repeatPassword;
 
 
     public UpdateUserDto() {
     }
 
-
-    public String getEmail() {
-        return email;
+    public String getOldPassword() {
+        return oldPassword;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
     }
 }

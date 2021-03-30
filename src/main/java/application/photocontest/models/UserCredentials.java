@@ -15,9 +15,6 @@ public class UserCredentials {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "password")
     private String password;
 
@@ -31,10 +28,9 @@ public class UserCredentials {
     public UserCredentials() {
     }
 
-    public UserCredentials(String userName, String email, String password, Set<Role> roles) {
+    public UserCredentials(String userName, String password, Set<Role> roles) {
         this.userName = userName;
-        this.email = email;
-        this.password = password;
+                this.password = password;
         this.roles = roles;
     }
 
@@ -44,14 +40,6 @@ public class UserCredentials {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {
@@ -88,11 +76,11 @@ public class UserCredentials {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserCredentials that = (UserCredentials) o;
-        return userName.equals(that.userName) && email.equals(that.email) && password.equals(that.password) && roles.equals(that.roles);
+        return getUserName().equals(that.getUserName()) && getPassword().equals(that.getPassword()) && getRoles().equals(that.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, email, password, roles);
+        return Objects.hash(getUserName(), getPassword(), getRoles());
     }
 }

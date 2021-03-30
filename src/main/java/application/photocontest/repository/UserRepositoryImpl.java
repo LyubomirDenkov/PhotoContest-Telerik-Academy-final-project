@@ -89,26 +89,6 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public User getByEmail(String email) {
-        try (Session session = sessionFactory.openSession()) {
-
-            Query<User> query = session.createQuery("from User " +
-                    "where userCredentials.email = :email ", User.class);
-
-            query.setParameter("email", email);
-
-            List<User> result = query.list();
-
-            if (result.isEmpty()) {
-
-                throw new EntityNotFoundException("User", "email", email);
-
-            }
-            return result.get(0);
-        }
-    }
-
-    @Override
     public Rank getRankByName(String name) {
 
         try (Session session = sessionFactory.openSession()) {

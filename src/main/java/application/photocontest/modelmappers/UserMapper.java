@@ -29,7 +29,6 @@ public class UserMapper {
 
         UserCredentials userCredentials = new UserCredentials();
         userCredentials.setUserName(registerDto.getUserName());
-        userCredentials.setEmail(registerDto.getEmail());
         userCredentials.setPassword(registerDto.getPassword());
 
         User user = new User();
@@ -37,7 +36,7 @@ public class UserMapper {
         user.setLastName(registerDto.getLastName());
         user.setCredentials(userCredentials);
 
-      //  user.setRank(baseRank);
+        user.setRank(baseRank);
 
         return user;
     }
@@ -47,18 +46,15 @@ public class UserMapper {
 
         User user = userRepository.getById(id);
 
-        if (!user.getCredentials().getPassword().equals(userDto.getPassword())) {
-            throw new IllegalArgumentException("something");
+        if (!userDto.getOldPassword().equals(user.getCredentials().getPassword())){
+            throw new IllegalArgumentException("Old password not match");
+        }
+        if (!userDto.getNewPassword().equals(userDto.getRepeatPassword())){
+            throw new IllegalArgumentException("passwords not match");
         }
 
-        user.getCredentials().setEmail(userDto.getEmail());
+        user.getCredentials().setPassword(userDto.getNewPassword());
         return user;
-    }
-
-    private void comparePasswords(String firstPassword,String secondPassword){
-        if (!firstPassword.equals(secondPassword)){
-            throw new IllegalArgumentException();
-        }
     }
 
 }

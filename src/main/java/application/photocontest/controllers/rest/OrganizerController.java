@@ -6,11 +6,10 @@ import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.OrganizerMapper;
 import application.photocontest.models.Organizer;
-import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.models.dto.UpdateUserDto;
-import application.photocontest.service.contracts.OrganizeService;
+import application.photocontest.service.contracts.OrganizerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,16 +24,17 @@ import java.util.List;
 public class OrganizerController {
 
 
-    private final OrganizeService organizeService;
+    private final OrganizerService organizeService;
     private final AuthenticationHelper authenticationHelper;
     private final OrganizerMapper organizerMapper;
 
     @Autowired
-    public OrganizerController(OrganizeService organizeService, AuthenticationHelper authenticationHelper, OrganizerMapper organizerMapper) {
-        this.organizeService = organizeService;
+    public OrganizerController(OrganizerService organizerService, AuthenticationHelper authenticationHelper, OrganizerMapper organizerMapper) {
+        this.organizeService = organizerService;
         this.authenticationHelper = authenticationHelper;
         this.organizerMapper = organizerMapper;
     }
+
 
     @GetMapping
     public List<Organizer> getAll(@RequestHeader HttpHeaders headers) {
@@ -57,13 +57,13 @@ public class OrganizerController {
     }
 
     @PostMapping
-    public Organizer create(@RequestHeader HttpHeaders headers,@Valid @RequestBody RegisterDto dto) {
+    public Organizer create(@RequestHeader HttpHeaders headers, @Valid @RequestBody RegisterDto dto) {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
         Organizer organizer = organizerMapper.fromDto(dto);
 
         try {
-            return organizeService.create(userCredentials,organizer);
+            return organizeService.create(userCredentials, organizer);
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }

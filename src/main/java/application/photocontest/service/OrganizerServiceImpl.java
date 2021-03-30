@@ -49,7 +49,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 
         verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
 
-        return organizeRepository.create(organizer);
+        return organizerRepository.create(organizer);
     }
 
     @Override

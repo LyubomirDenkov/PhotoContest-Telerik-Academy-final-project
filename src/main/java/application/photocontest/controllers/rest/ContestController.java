@@ -8,6 +8,7 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
 
 import application.photocontest.models.Contest;
+import application.photocontest.models.Organizer;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;

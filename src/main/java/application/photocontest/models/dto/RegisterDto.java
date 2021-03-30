@@ -1,6 +1,5 @@
 package application.photocontest.models.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,10 +16,6 @@ public class RegisterDto {
     private String userName;
 
     @NotNull
-    @Email
-    private String email;
-
-    @NotNull
     private String password;
 
     @NotNull
@@ -34,19 +29,18 @@ public class RegisterDto {
     @Size(min = 2, max = 20, message = LAST_NAME_ERROR_MESSAGE)
     private String lastName;
 
+
     public RegisterDto() {
     }
 
     public RegisterDto(String userName,
-                       String email,
                        String password,
                        String repeatPassword,
                        String firstName,
                        String lastName) {
 
         this.userName = userName;
-        this.email = email;
-        this.password = password;
+                this.password = password;
         this.repeatPassword = repeatPassword;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,14 +52,6 @@ public class RegisterDto {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {

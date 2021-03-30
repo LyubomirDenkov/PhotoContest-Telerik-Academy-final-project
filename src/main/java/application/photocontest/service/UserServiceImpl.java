@@ -9,11 +9,9 @@ import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static application.photocontest.enums.UserRanks.*;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.*;
 
@@ -55,12 +53,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByUserName(userName);
     }
 
-    @Override
-    public User getByEmail(String email) {
-        User user = userRepository.getByEmail(email);
-     //   calculateUserRank(user);
-        return user;
-    }
 
 //  private void calculateUserRank(User user) {
 
@@ -104,6 +96,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
 
+        boolean isUserNameExist = true;
+
+        try{
+            userRepository.getByUserName(user.getCredentials().getUserName());
+        }catch (EntityNotFoundException e){
+            isUserNameExist = false;
+        }
+
+        if (isUserNameExist){
+            throw new DuplicateEntityException("");
+        }
+
         User newRegisteredUser = userRepository.create(user);
 
         addRoleToRegisteredUser(newRegisteredUser);
@@ -120,18 +124,12 @@ public class UserServiceImpl implements UserService {
         userRepository.update(user);
     }
 
-    public void addRoleToUser(User user) {
-        Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getCredentials().getRoles();
-        roles.add(role);
-        user.getCredentials().setRoles(roles);
-        userRepository.update(user);
-    }
+
 
     @Override
     public User update(UserCredentials userCredentials, User userToUpdate) {
 
-        boolean isEmailExist = true;
+        boolean isUserNameExist = true;
 
         verifyUserHasRoles(userCredentials,UserRoles.USER);
         verifyIsUserOwnAccount(userCredentials,userToUpdate,"something");
@@ -139,10 +137,10 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.getByUserName(userToUpdate.getCredentials().getUserName());
         }catch (EntityNotFoundException e){
-            isEmailExist = false;
+            isUserNameExist = false;
         }
 
-        if (isEmailExist){
+        if (isUserNameExist){
             throw new DuplicateEntityException("User","username",userToUpdate.getCredentials().getUserName());
         }
 
