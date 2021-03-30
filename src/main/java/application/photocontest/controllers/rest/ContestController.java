@@ -73,12 +73,12 @@ public class ContestController {
     @ApiOperation(value = "Create contest")
     @PostMapping
     public Contest create(@RequestHeader HttpHeaders headers,
-                           @Valid @RequestBody ContestDto contestDto) {
+                          @Valid @RequestBody ContestDto contestDto) {
 
         Organizer organizer = authenticationHelper.tryGetOrganizer(headers);
 
         try {
-            Contest contest = contestMapper.fromDto(contestDto,organizer);
+            Contest contest = contestMapper.fromDto(contestDto, organizer);
             return contestService.create(organizer, contest);
 
         } catch (UnauthorizedOperationException e) {
@@ -88,6 +88,7 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
+
     @ApiOperation(value = "Update contest")
     @PutMapping("/{id}")
     public Contest update(@RequestHeader HttpHeaders headers, @PathVariable int id,
@@ -96,8 +97,8 @@ public class ContestController {
         Organizer organizer = authenticationHelper.tryGetOrganizer(headers);
 
         try {
-            Contest contestToUpdate = contestMapper.fromDto(id,contestDto);
-            return contestService.update(organizer,contestToUpdate);
+            Contest contestToUpdate = contestMapper.fromDto(id, contestDto);
+            return contestService.update(organizer, contestToUpdate);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -107,4 +108,21 @@ public class ContestController {
         }
     }
 
+    @ApiOperation(value = "Add user to contest")
+    @PutMapping("/{contestId}/user/{userId}")
+    public void addUser(@RequestHeader HttpHeaders headers, @PathVariable int contestId, @PathVariable int userId) {
+        UserCredentials user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            contestService.addUserToContest(user, contestId, userId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalArgumentException | DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+
+
+    }
 }
