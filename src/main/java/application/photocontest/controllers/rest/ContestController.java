@@ -74,6 +74,7 @@ public class ContestController {
 
 
         try {
+
             Contest contest = contestMapper.fromDto(contestDto,user);
             return contestService.create(user, contest);
 

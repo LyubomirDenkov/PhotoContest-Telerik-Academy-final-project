@@ -47,11 +47,11 @@ public class UserMapper {
 
         User user = userRepository.getById(id);
 
-    /*    if (!user.getPassword().equals(userDto.getPassword())) {
+        if (!user.getCredentials().getPassword().equals(userDto.getPassword())) {
             throw new IllegalArgumentException("something");
         }
 
-        user.setEmail(userDto.getEmail());*/
+        user.getCredentials().setEmail(userDto.getEmail());
         return user;
     }
 
@@ -61,23 +61,4 @@ public class UserMapper {
         }
     }
 
-    /*private void dtoToObject(UserDto userDto, User user) {
-
-        City city = cityService.getById(userDto.getAddress().getCityId());
-
-        Address address = new Address();
-
-        address.setStreetName(userDto.getAddress().getStreetName());
-
-        address.setCity(city);
-
-        user.setFirstName(userDto.getFirstName());
-
-        user.setLastName(userDto.getLastName());
-
-        user.setEmail(userDto.getEmail());
-
-        user.setAddress(address);
-
-    }*/
 }

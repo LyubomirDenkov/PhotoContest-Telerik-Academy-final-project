@@ -45,15 +45,15 @@ public class OrganizerServiceImpl implements OrganizeService {
     }
 
     @Override
-    public Organizer create(UserCredentials userCredentials, Organizer type) {
+    public Organizer create(UserCredentials userCredentials, Organizer organizer) {
 
         verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
 
-        return null;
+        return organizeRepository.create(organizer);
     }
 
     @Override
-    public Organizer update(UserCredentials userCredentials, Organizer type) {
+    public Organizer update(UserCredentials userCredentials, Organizer organizer) {
 
         verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
         return null;
