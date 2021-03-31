@@ -14,6 +14,11 @@ import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +40,40 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<Contest> getAll(UserCredentials userCredentials) {
 
-        return contestRepository.getAll();
+        List<Contest> contests = contestRepository.getAll();
+
+
+        for (int i = 0; i < contests.size(); i++) {
+
+            if(contests.get(i).getPhase().getName().equals("finished")){
+                continue;
+            }
+
+
+            LocalDateTime dateNow = LocalDateTime.now();
+            LocalDateTime contestStartingDate = contests.get(i).getStartingDate();
+            int phaseOneDays = contests.get(i).getPhaseOne();
+            int phaseTwoHours = contests.get(i).getPhaseTwo();
+
+            if (dateNow.isBefore(contestStartingDate)){
+                continue;
+            }
+
+            if (dateNow.isAfter(contestStartingDate) &&
+                    dateNow.plusDays(phaseOneDays).isBefore(contestStartingDate.plusDays(phaseOneDays))){
+                contests.get(i).setPhase(contestRepository.getByPhase(1));
+                continue;
+            }
+
+            dateNow = dateNow.plusDays(phaseOneDays);
+            contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
+
+            System.out.println();
+
+        }
+
+
+        return contests;
     }
 
     @Override

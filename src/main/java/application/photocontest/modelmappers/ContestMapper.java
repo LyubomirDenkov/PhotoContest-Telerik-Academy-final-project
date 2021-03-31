@@ -32,7 +32,7 @@ public class ContestMapper {
     public Contest fromDto(ContestDto contestDto, Organizer organizer) {
 
         Contest contest = new Contest();
-        dtoToObject(contestDto, contest,organizer);
+        dtoToObject(contestDto, contest, organizer);
 
         return contest;
     }
@@ -49,7 +49,7 @@ public class ContestMapper {
         contestToUpdate.setPhase(contestRepository.getByPhase(contestDto.getPhaseId()));
 
 
-        setContestJuryAndParticipants(contestDto,contestToUpdate);
+        setContestJuryAndParticipants(contestDto, contestToUpdate);
 
         return contestToUpdate;
     }
@@ -69,32 +69,35 @@ public class ContestMapper {
         organizersJury.addAll(organizerRepository.getAll());
         contest.setOrganizersJury(organizersJury);
 
-        setContestJuryAndParticipants(contestDto,contest);
+        setContestJuryAndParticipants(contestDto, contest);
 
 
         return contest;
     }
 
-    private void setContestJuryAndParticipants(ContestDto contestDto, Contest contest){
+    private void setContestJuryAndParticipants(ContestDto contestDto, Contest contest) {
 
         Set<User> jury = new HashSet<>();
 
-        for (Integer userId : contestDto.getJury()) {
-            User userToAdd = userRepository.getById(userId);
-            if (userToAdd.getPoints() > 150) {
-                jury.add(userToAdd);
+
+            for (Integer userId : contestDto.getJury()) {
+                User userToAdd = userRepository.getById(userId);
+                if (userToAdd.getPoints() > 150) {
+                    jury.add(userToAdd);
+                }
             }
-        }
+
 
         Set<User> participants = new HashSet<>();
 
-        for (Integer userId : contestDto.getParticipants()) {
-            User userToAdd = userRepository.getById(userId);
-            if (jury.contains(userToAdd)) {
-                continue;
+
+            for (Integer userId : contestDto.getParticipants()) {
+                User userToAdd = userRepository.getById(userId);
+                if (jury.contains(userToAdd)) {
+                    continue;
+                }
+                participants.add(userToAdd);
             }
-            participants.add(userToAdd);
-        }
 
         contest.setJury(jury);
         contest.setParticipants(participants);

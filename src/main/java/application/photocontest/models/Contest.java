@@ -2,6 +2,7 @@ package application.photocontest.models;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class Contest {
     private Category category;
 
     @Column(name = "starting_date")
-    private Date startingDate;
+    private LocalDateTime startingDate;
 
     @Column(name = "phase1_days")
     private int phaseOne;
@@ -77,8 +78,9 @@ public class Contest {
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, Date startingDate, int phaseOne, int phaseTwo,
-                   Organizer organizer, Type type, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images,Set<Organizer> organizersJury) {
+    public Contest(int id, String title, Category category, LocalDateTime startingDate, int phaseOne, int phaseTwo,
+                   Organizer organizer, Type type, Phase phase, Set<User> participants, Set<User> jury,
+                   Set<Image> images,Set<Organizer> organizersJury) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -118,11 +120,11 @@ public class Contest {
         this.category = category;
     }
 
-    public Date getStartingDate() {
+    public LocalDateTime getStartingDate() {
         return startingDate;
     }
 
-    public void setStartingDate(Date startingDate) {
+    public void setStartingDate(LocalDateTime startingDate) {
         this.startingDate = startingDate;
     }
 

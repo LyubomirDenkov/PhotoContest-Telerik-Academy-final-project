@@ -9,6 +9,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -24,7 +25,7 @@ public class ContestDto {
     @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
 
-    private Timestamp startingDate;
+    private LocalDateTime startingDate;
 
     @Positive
     private int phaseOne;
@@ -47,7 +48,7 @@ public class ContestDto {
     public ContestDto() {
     }
 
-    public ContestDto(String title,  int categoryId, Timestamp startingDate,  int phaseOne,
+    public ContestDto(String title,  int categoryId, LocalDateTime startingDate,  int phaseOne,
                       int phaseTwo,  int typeId,  int phaseId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
@@ -85,11 +86,11 @@ public class ContestDto {
         this.categoryId = categoryId;
     }
 
-    public Timestamp getStartingDate() {
+    public LocalDateTime getStartingDate() {
         return startingDate;
     }
 
-    public void setStartingDate(Timestamp startingDate) {
+    public void setStartingDate(LocalDateTime startingDate) {
         this.startingDate = startingDate;
     }
 

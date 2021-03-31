@@ -40,9 +40,12 @@ public class OrganizerController {
     public List<Organizer> getAll(@RequestHeader HttpHeaders headers) {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
-
-        return organizeService.getAll(userCredentials);
-    }
+        try {
+            return organizeService.getAll(userCredentials);
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
+        }
+        }
 
     @GetMapping("/{id}")
     public Organizer getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
@@ -53,6 +56,8 @@ public class OrganizerController {
             return organizeService.getById(userCredentials, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -60,11 +65,11 @@ public class OrganizerController {
     public Organizer create(@RequestHeader HttpHeaders headers, @Valid @RequestBody RegisterDto dto) {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
-        Organizer organizer = organizerMapper.fromDto(dto);
 
         try {
+            Organizer organizer = organizerMapper.fromDto(dto);
             return organizeService.create(userCredentials, organizer);
-        } catch (DuplicateEntityException e) {
+        } catch (IllegalArgumentException | DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
