@@ -1,9 +1,6 @@
-DROP
-DATABASE IF EXISTS `photo-contest`;
-CREATE
-DATABASE IF NOT EXISTS `photo-contest`;
-USE
-`photo-contest`;
+DROP DATABASE IF EXISTS `photo-contest`;
+CREATE DATABASE IF NOT EXISTS `photo-contest`;
+USE `photo-contest`;
 
 create or replace table category
 (
@@ -93,16 +90,17 @@ create or replace table organizers
 
 create or replace table contest
 (
-    contest_id    int auto_increment
+    contest_id      int auto_increment
         primary key,
-    title         varchar(50)                           not null,
-    category_id   int                                   not null,
-    starting_date timestamp default current_timestamp() not null on update current_timestamp(),
-    phase1_days   int                                   not null,
-    phase2_hours  int                                   not null,
-    organizer     int                                   not null,
-    type_id       int                                   not null,
-    phase_id      int                                   not null,
+    title           varchar(50)                           not null,
+    category_id     int                                   not null,
+    starting_date   timestamp default current_timestamp() not null on update current_timestamp(),
+    phase1_days     int                                   not null,
+    phase2_hours    int                                   not null,
+    organizer       int                                   not null,
+    type_id         int                                   not null,
+    phase_id        int                                   not null,
+    isPointsAwarded tinyint(1)                            not null,
     constraint contest_category_fk
         foreign key (category_id) references category (category_id),
     constraint contest_organizers_fk
@@ -121,6 +119,16 @@ create or replace table contest_image
         foreign key (contest_id) references contest (contest_id),
     constraint contest_photos_images_fk
         foreign key (image_id) references images (image_id)
+);
+
+create or replace table contest_jury_organizers
+(
+    contest_id   int not null,
+    organizer_id int not null,
+    constraint contest_jury_organizers_contest_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_jury_organizers_fk
+        foreign key (organizer_id) references organizers (organizer_id)
 );
 
 create or replace table users
@@ -146,16 +154,6 @@ create or replace table contest_jury
         foreign key (contest_id) references contest (contest_id),
     constraint contest_jury_users_fk
         foreign key (user_id) references users (user_id)
-);
-
-create or replace table contest_jury_organizers
-(
-    contest_id int not null,
-    organizer_id    int not null,
-    constraint contest_jury_organizers_contest_fk
-        foreign key (contest_id) references contest (contest_id),
-    constraint contest_jury_organizers_fk
-        foreign key (organizer_id) references organizers (organizer_id)
 );
 
 create or replace table contest_participants
@@ -187,5 +185,7 @@ create or replace table users_roles
     constraint users_roles_user_credentials_fk
         foreign key (user_credentials) references user_credentials (user_name)
 );
+
+
 
 
