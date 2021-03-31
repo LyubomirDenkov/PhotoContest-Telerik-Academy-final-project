@@ -175,20 +175,23 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points) {
+
         boolean isOrganizer = true;
 
 
         Contest contest = contestRepository.getById(contestId);
-        ImageRating imageRating = imageRepository.getImageRatingById(imageId);
-        Set<UserCredentials> jury = imageRating.getUserCredentials();
+        ImageRating imageRating = new ImageRating();
+        Set<User> usersJury = contest.getJury();
+        Set<Organizer> organizersJury = contest.getOrganizersJury();
 
 
         Organizer organizer;
         try {
             organizer = organizerRepository.getByUserName(userCredentials.getUserName());
-            if (jury.contains(userCredentials)) {
+            if (organizersJury.contains(organizer)) {
                 throw new UnauthorizedOperationException("You cannot rate image twice.");
             }
+            organizersJury.add(organizer);
         } catch (EntityNotFoundException e) {
             isOrganizer = false;
         }
@@ -198,20 +201,21 @@ public class ContestServiceImpl implements ContestService {
 
         if (!isOrganizer) {
             user = userRepository.getUserByUserName(userCredentials.getUserName());
-            if (jury.contains(userCredentials)) {
+            if (usersJury.contains(user)) {
                 throw new UnauthorizedOperationException("You cannot rate image twice.");
             }
             if (!contest.getJury().contains(user)) {
                 throw new UnauthorizedOperationException("Only jury can rate images.");
 
             }
+            usersJury.add(user);
         }
 
 
+        imageRating.setUserCredentials(userCredentials);
+        imageRating.setImageId(imageId);
         imageRating.setPoints(points);
-        jury.add(userCredentials);
-        imageRating.setUserCredentials(jury);
-        imageRepository.jurorRateImage(imageRating);
+        imageRepository.createJurorRateEntity(imageRating);
 
     }
 
