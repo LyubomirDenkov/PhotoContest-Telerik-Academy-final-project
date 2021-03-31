@@ -72,9 +72,6 @@ public class ContestServiceImpl implements ContestService {
                 contests.get(i).setPhase(contestRepository.getByPhase(3));
             }
 
-
-            System.out.println();
-
         }
 
 

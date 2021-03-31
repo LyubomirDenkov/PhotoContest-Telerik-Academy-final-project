@@ -32,12 +32,12 @@ create or replace table contest_type
 
 create or replace table images
 (
-    image_id  int auto_increment
+    image_id int auto_increment
         primary key,
-    title     varchar(50) not null,
-    story     text        not null,
-    ImagePath text        not null,
-    points    int         not null
+    title    varchar(50) not null,
+    story    text        not null,
+    image    longblob    not null,
+    points   int         not null
 );
 
 create or replace table images_comments

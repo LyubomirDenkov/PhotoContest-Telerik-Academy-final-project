@@ -44,22 +44,21 @@ public class ImageController {
                         @RequestParam(name = "story") String story) throws IOException {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
-        String dir = System.getProperty("user.dir");
+
+        /*String dir = System.getProperty("user.dir");
         dir += "\\imagesDir\\";
         byte[] bytes = file.get().getBytes();
         Path path = Paths.get(dir + file.get().getOriginalFilename());
-        Files.write(path,bytes);
+        Files.write(path,bytes);*/
 
-        if (file.isPresent()) {
+
 
             String encodedImage = Base64.getEncoder().encodeToString(file.get().getBytes());
 
-            Image image = imageMapper.toModel(title,story,dir);
+            Image image = imageMapper.toModel(title,story,encodedImage);
 
             return imageService.create(userCredentials,image);
-        }else {
-            throw new EOFException();
-        }
+
 
     }
 

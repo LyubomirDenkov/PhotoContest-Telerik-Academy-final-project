@@ -21,8 +21,8 @@ public class Image {
     private String story;
 
     @JsonIgnore
-    @Column(name = "ImagePath")
-    private String imagePath;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "points")
     private int points;
@@ -69,12 +69,12 @@ public class Image {
         this.story = story;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImage() {
+        return image;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getPoints() {
