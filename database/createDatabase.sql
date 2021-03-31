@@ -148,6 +148,16 @@ create or replace table contest_jury
         foreign key (user_id) references users (user_id)
 );
 
+create or replace table contest_jury_organizers
+(
+    contest_id int not null,
+    organizer_id    int not null,
+    constraint contest_jury_organizers_contest_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_jury_organizers_fk
+        foreign key (organizer_id) references organizers (organizer_id)
+);
+
 create or replace table contest_participants
 (
     contest_id int not null,

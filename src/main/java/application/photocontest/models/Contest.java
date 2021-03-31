@@ -66,11 +66,19 @@ public class Contest {
     private Set<Image> images;
 
 
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "contest_jury_organizers",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "organizer_id"))
+    private Set<Organizer> organizersJury;
+
     public Contest() {
     }
 
     public Contest(int id, String title, Category category, Date startingDate, int phaseOne, int phaseTwo,
-                   Organizer organizer, Type type, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images) {
+                   Organizer organizer, Type type, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images,Set<Organizer> organizersJury) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -83,14 +91,7 @@ public class Contest {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-    }
-
-    public Phase getPhase() {
-        return phase;
-    }
-
-    public void setPhase(Phase phase) {
-        this.phase = phase;
+        this.organizersJury = organizersJury;
     }
 
     public int getId() {
@@ -157,6 +158,14 @@ public class Contest {
         this.type = type;
     }
 
+    public Phase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(Phase phase) {
+        this.phase = phase;
+    }
+
     public Set<User> getParticipants() {
         return participants;
     }
@@ -179,5 +188,13 @@ public class Contest {
 
     public void setImages(Set<Image> images) {
         this.images = images;
+    }
+
+    public Set<Organizer> getOrganizersJury() {
+        return organizersJury;
+    }
+
+    public void setOrganizersJury(Set<Organizer> organizersJury) {
+        this.organizersJury = organizersJury;
     }
 }
