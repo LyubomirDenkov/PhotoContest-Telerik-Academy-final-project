@@ -52,6 +52,8 @@ public class ImageController {
 
         if (file.isPresent()) {
 
+            String encodedImage = Base64.getEncoder().encodeToString(file.get().getBytes());
+
             Image image = imageMapper.toModel(title,story,dir);
 
             return imageService.create(userCredentials,image);

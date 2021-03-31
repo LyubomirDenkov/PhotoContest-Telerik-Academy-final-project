@@ -22,17 +22,6 @@ public class ImageRepositoryImpl implements ImageRepository {
         this.sessionFactory = sessionFactory;
     }
 
-
-    @Override
-    public List<Image> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-
-            Query<Image> query = session.createQuery("from Image ", Image.class);
-
-            return query.list();
-        }
-    }
-
     @Override
     public Image getById(int id) {
         try(Session session = sessionFactory.openSession()){
@@ -55,19 +44,6 @@ public class ImageRepositoryImpl implements ImageRepository {
 
             return getById(image.getId());
         }
-    }
-
-    @Override
-    public Image update(Image image) {
-        try (Session session = sessionFactory.openSession()) {
-
-            session.beginTransaction();
-
-            session.update(image);
-
-            session.getTransaction().commit();
-        }
-        return image;
     }
 
     @Override

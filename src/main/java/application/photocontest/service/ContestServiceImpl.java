@@ -42,6 +42,7 @@ public class ContestServiceImpl implements ContestService {
 
         List<Contest> contests = contestRepository.getAll();
 
+        //TODO award points if is finished but pointsAward are false
 
         for (int i = 0; i < contests.size(); i++) {
 
