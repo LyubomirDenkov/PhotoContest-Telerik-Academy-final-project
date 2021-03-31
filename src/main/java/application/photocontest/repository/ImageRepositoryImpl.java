@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ImageRepositoryImpl implements ImageRepository {
             return image;
         }
     }
-
+    @Transactional
     @Override
     public Image create(Image image) {
 
@@ -46,6 +47,20 @@ public class ImageRepositoryImpl implements ImageRepository {
         }
     }
 
+    @Transactional
+    @Override
+    public Image update(Image image) {
+        try (Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            session.update(image);
+
+            session.getTransaction().commit();
+        }
+        return image;
+    }
+    @Transactional
     @Override
     public void delete(int id) {
 

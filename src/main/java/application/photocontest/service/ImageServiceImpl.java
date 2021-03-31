@@ -47,6 +47,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public Image update(UserCredentials userCredentials, Image image) {
+        return imageRepository.update(image);
+    }
+
+    @Override
     public void delete(UserCredentials userCredentials, int id) {
         imageRepository.delete(id);
     }

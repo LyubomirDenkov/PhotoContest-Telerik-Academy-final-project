@@ -20,6 +20,7 @@ public class Image {
     @Column(name = "story")
     private String story;
 
+
     @JsonIgnore
     @Column(name = "image")
     private String image;

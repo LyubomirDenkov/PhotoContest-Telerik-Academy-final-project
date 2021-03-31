@@ -3,21 +3,14 @@ package application.photocontest.controllers.rest;
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
-import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.ImageService;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -37,6 +30,15 @@ public class ImageController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    @GetMapping("/{id}")
+    public Image getById(@RequestHeader HttpHeaders headers, @PathVariable int id){
+
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+
+        return imageService.getById(userCredentials,id);
+
+    }
+
     @PostMapping
     public Image create(@RequestHeader HttpHeaders headers, @RequestParam(name = "file", required = false) Optional<MultipartFile> file,
                         @RequestParam(name = "url", required = false) Optional<String> url,
@@ -45,21 +47,19 @@ public class ImageController {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
-        /*String dir = System.getProperty("user.dir");
-        dir += "\\imagesDir\\";
-        byte[] bytes = file.get().getBytes();
-        Path path = Paths.get(dir + file.get().getOriginalFilename());
-        Files.write(path,bytes);*/
-
-
-
             String encodedImage = Base64.getEncoder().encodeToString(file.get().getBytes());
 
             Image image = imageMapper.toModel(title,story,encodedImage);
 
             return imageService.create(userCredentials,image);
 
-
     }
 
+    @DeleteMapping("{id}")
+    public void delete(@RequestHeader HttpHeaders headers,@PathVariable int id){
+
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+
+        imageService.delete(userCredentials,id);
+    }
 }
