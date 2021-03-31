@@ -7,9 +7,8 @@ public interface ImageRepository extends CudRepositoryOperations<Image>{
 
     Image getById(int id);
 
-    ImageRating getImageRatingById(int id);
 
-    void jurorRateImage(ImageRating imageRating);
+    void createJurorRateEntity(ImageRating imageRating);
 
 
 }

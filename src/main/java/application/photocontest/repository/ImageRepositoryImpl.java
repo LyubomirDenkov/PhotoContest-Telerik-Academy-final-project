@@ -37,16 +37,15 @@ public class ImageRepositoryImpl implements ImageRepository {
         }
     }
 
+
+    @Transactional
     @Override
-    public ImageRating getImageRatingById(int id) {
-        try(Session session = sessionFactory.openSession()){
+    public void createJurorRateEntity(ImageRating imageRating) {
 
-            ImageRating imageRating = session.get(ImageRating.class,id);
-
-            if (imageRating == null){
-                throw new EntityNotFoundException("ImageRating",id);
-            }
-            return imageRating;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(imageRating);
+            session.getTransaction().commit();
         }
     }
 
@@ -59,17 +58,6 @@ public class ImageRepositoryImpl implements ImageRepository {
             session.save(image);
 
             return getById(image.getId());
-        }
-    }
-
-    @Transactional
-    @Override
-    public void jurorRateImage(ImageRating imageRating) {
-
-        try (Session session = sessionFactory.openSession()) {
-
-            session.save(imageRating);
-
         }
     }
 
