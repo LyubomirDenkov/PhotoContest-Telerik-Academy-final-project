@@ -15,24 +15,22 @@ public class ImageRating {
     @Column(name = "imageRating_id")
     private int id;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "jury_rated_images",
-            joinColumns = @JoinColumn(name = "user_credentials"),
-            inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private Set<UserCredentials> userCredentials;
 
-    @Positive
+    @JoinColumn(name = "user_credentials")
+    private UserCredentials userCredentials;
+
+
     @Column(name = "image_id")
     private int imageId;
 
-    @Positive
+
     @Column(name = "points")
     private int points;
 
     public ImageRating() {
     }
 
-    public ImageRating(int id, Set<UserCredentials> userCredentials, int imageId, int points) {
+    public ImageRating(int id, UserCredentials userCredentials, int imageId, int points) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.imageId = imageId;
@@ -47,12 +45,12 @@ public class ImageRating {
         this.id = id;
     }
 
-    public Set<UserCredentials> getUserCredentials() {
+    public UserCredentials getUserCredentials() {
         return userCredentials;
     }
 
-    public void setUserCredentials(Set<UserCredentials> userName) {
-        this.userCredentials = userName;
+    public void setUserCredentials(UserCredentials userCredentials) {
+        this.userCredentials = userCredentials;
     }
 
     public int getImageId() {
