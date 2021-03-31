@@ -25,8 +25,6 @@ public class Image {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "points")
-    private int points;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "images_comments",
@@ -34,17 +32,27 @@ public class Image {
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private Set<Comment> comments;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "jury_rated_images",
+            joinColumns = @JoinColumn(name = "user_credentials"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<UserCredentials> jurorAwardedRating;
+
+
     public Image() {
 
     }
 
-    public Image(int id, String title, String story, int points, Set<Comment> comments) {
+    public Image(int id, String title, String story, String image,
+                 Set<Comment> comments, Set<UserCredentials> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
-        this.points = points;
+        this.image = image;
         this.comments = comments;
+        this.jurorAwardedRating = jurorAwardedRating;
     }
+
 
     public int getId() {
         return id;
@@ -78,19 +86,19 @@ public class Image {
         this.image = image;
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
     public Set<Comment> getComments() {
         return comments;
     }
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<UserCredentials> getJurorAwardedRating() {
+        return jurorAwardedRating;
+    }
+
+    public void setJurorAwardedRating(Set<UserCredentials> jurorAwardedRating) {
+        this.jurorAwardedRating = jurorAwardedRating;
     }
 }

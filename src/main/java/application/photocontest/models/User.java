@@ -33,24 +33,18 @@ public class User {
     @Column(name = "points")
     private int points;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_images",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private Set<Image> images;
 
     public User() {
     }
 
-    public User(int id, UserCredentials userCredentials, String firstName, String lastName, Rank rank, int points, Set<Image> images) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName, Rank rank, int points) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
         this.rank = rank;
         this.points = points;
-        this.images = images;
+
     }
 
     public int getId() {
@@ -102,24 +96,17 @@ public class User {
         this.points = points;
     }
 
-    public Set<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(Set<Image> images) {
-        this.images = images;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getPoints() == user.getPoints() && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getRank().equals(user.getRank()) && getImages().equals(user.getImages());
+        return getId() == user.getId() && getPoints() == user.getPoints() && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getRank().equals(user.getRank());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getRank(), getPoints(), getImages());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getRank(), getPoints());
     }
 }

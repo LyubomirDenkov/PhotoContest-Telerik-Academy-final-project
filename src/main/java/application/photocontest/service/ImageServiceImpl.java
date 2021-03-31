@@ -36,16 +36,16 @@ public class ImageServiceImpl implements ImageService {
 
         Image imageToCreate = imageRepository.create(image);
         User user =  userRepository.getUserByUserName(userCredentials.getUserName());
-        addImageToUserImages(user,image);
+    //    addImageToUserImages(user,image);
         return imageToCreate;
     }
 
-    public void addImageToUserImages(User user,Image image){
-        Set<Image> images = user.getImages();
-        images.add(image);
-        userRepository.update(user);
-    }
-
+ //   public void addImageToUserImages(UserCredentials user,Image image){
+ //       Set<Image> images = user.getImages();
+ //       images.add(image);
+ //       userRepository.update(user);
+ //   }
+//
     @Override
     public Image update(UserCredentials userCredentials, Image image) {
         return imageRepository.update(image);

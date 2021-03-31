@@ -12,6 +12,8 @@ import application.photocontest.models.Organizer;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
+import application.photocontest.models.dto.ImageDto;
+import application.photocontest.models.dto.RateImageDto;
 import application.photocontest.service.contracts.ContestService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +100,7 @@ public class ContestController {
 
         try {
             Contest contestToUpdate = contestMapper.fromDto(id, contestDto);
-            return contestService.update(organizer, contestToUpdate);
+            return contestService.update(organizer, contestToUpdate,contestDto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -124,5 +126,23 @@ public class ContestController {
         }
 
 
+    }
+
+    @ApiOperation(value = "Rate image")
+    @PutMapping("/{contestId}/image/{imageId}")
+    public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+                          @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto) {
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+
+        try {
+            int points = rateImageDto.getPoints();
+             contestService.rateImage(userCredentials,contestId, imageId,points);
+        }  catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalArgumentException | DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 }

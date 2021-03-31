@@ -2,6 +2,7 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Image;
+import application.photocontest.models.ImageRating;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ImageRepository;
 import org.hibernate.Session;
@@ -35,6 +36,20 @@ public class ImageRepositoryImpl implements ImageRepository {
             return image;
         }
     }
+
+    @Override
+    public ImageRating getImageRatingById(int id) {
+        try(Session session = sessionFactory.openSession()){
+
+            ImageRating imageRating = session.get(ImageRating.class,id);
+
+            if (imageRating == null){
+                throw new EntityNotFoundException("ImageRating",id);
+            }
+            return imageRating;
+        }
+    }
+
     @Transactional
     @Override
     public Image create(Image image) {
@@ -46,6 +61,18 @@ public class ImageRepositoryImpl implements ImageRepository {
             return getById(image.getId());
         }
     }
+
+    @Transactional
+    @Override
+    public void jurorRateImage(ImageRating imageRating) {
+
+        try (Session session = sessionFactory.openSession()) {
+
+            session.save(imageRating);
+
+        }
+    }
+
 
     @Transactional
     @Override

@@ -4,21 +4,18 @@ import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
-import application.photocontest.models.Contest;
-import application.photocontest.models.Organizer;
-import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
+import application.photocontest.models.*;
+import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.repository.contracts.ImageRepository;
+import application.photocontest.repository.contracts.OrganizerRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,10 +28,15 @@ public class ContestServiceImpl implements ContestService {
     public static final String USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS = "User cannot add other users in contests.";
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
+    private final OrganizerRepository organizerRepository;
+    private final ImageRepository imageRepository;
+
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, OrganizerRepository organizerRepository, ImageRepository imageRepository) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
+        this.organizerRepository = organizerRepository;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ContestServiceImpl implements ContestService {
 
         for (int i = 0; i < contests.size(); i++) {
 
-            if(contests.get(i).getPhase().getName().equals("finished")){
+            if (contests.get(i).getPhase().getName().equals("finished")) {
                 continue;
             }
 
@@ -55,12 +57,12 @@ public class ContestServiceImpl implements ContestService {
             int phaseOneDays = contests.get(i).getPhaseOne();
             int phaseTwoHours = contests.get(i).getPhaseTwo();
 
-            if (dateNow.isBefore(contestStartingDate)){
+            if (dateNow.isBefore(contestStartingDate)) {
                 continue;
             }
 
             if (dateNow.isAfter(contestStartingDate) &&
-                    dateNow.plusDays(phaseOneDays).isBefore(contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours))){
+                    dateNow.plusDays(phaseOneDays).isBefore(contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours))) {
                 contests.get(i).setPhase(contestRepository.getByPhase(2));
                 continue;
             }
@@ -68,7 +70,7 @@ public class ContestServiceImpl implements ContestService {
             dateNow = dateNow.plusDays(phaseOneDays).plusHours(phaseTwoHours);
             contestStartingDate = contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours);
 
-            if (dateNow.isAfter(contestStartingDate)){
+            if (dateNow.isAfter(contestStartingDate)) {
                 contests.get(i).setPhase(contestRepository.getByPhase(3));
             }
 
@@ -104,22 +106,35 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest update(Organizer organizer, Contest contest) {
+    public Contest update(Organizer organizer, Contest contest, ContestDto contestDto) {
 
 
-     if (!organizer.getCredentials().getUserName().equals(contest.getOrganizer().getCredentials().getUserName())) {
+        if (!organizer.getCredentials().getUserName().equals(contest.getOrganizer().getCredentials().getUserName())) {
             throw new UnauthorizedOperationException("something");
         }
 
-        Contest contestToUpdate = contestRepository.update(contest);
-
         Set<User> participants = contest.getParticipants();
-        contest.setParticipants(participants);
+
+
+        Set<User> newParticipants = new HashSet<>();
+
+        for (Integer participant : contestDto.getParticipants()) {
+            User participantToAdd = userRepository.getById(participant);
+            if (participants.contains(participantToAdd)) continue;
+
+            participantToAdd.setPoints(participantToAdd.getPoints() + 3);
+            newParticipants.add(participantToAdd);
+            participants.addAll(newParticipants);
+            userRepository.update(participantToAdd);
+
+        }
+
+
+        contest.setParticipants(newParticipants);
         contestRepository.update(contest);
-        return contestToUpdate;
+        return contest;
 
     }
-
 
 
     @Override
@@ -130,19 +145,19 @@ public class ContestServiceImpl implements ContestService {
     public void addUserToContest(UserCredentials userCredentials, int contestId, int userId) {
         verifyUserHasRoles(userCredentials, UserRoles.USER);
 
-                Contest contest = contestRepository.getById(contestId);
-                User user = userRepository.getById(userId);
+        Contest contest = contestRepository.getById(contestId);
+        User user = userRepository.getById(userId);
 
-                if (!user.getCredentials().getUserName().equals(userCredentials.getUserName())){
-                    throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
-                }
-                if (contest.getType().getName().equalsIgnoreCase("open")) {
-                    if (!contest.getPhase().getName().equalsIgnoreCase("phase |")){
-                        throw new UnauthorizedOperationException("You cannot join in a contest which is not in phase |.");
-                    }
-                } else {
-                    throw new UnauthorizedOperationException("You cannot join in an invitational contest.");
-                }
+        if (!user.getCredentials().getUserName().equals(userCredentials.getUserName())) {
+            throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
+        }
+        if (contest.getType().getName().equalsIgnoreCase("open")) {
+            if (!contest.getPhase().getName().equalsIgnoreCase("phase |")) {
+                throw new UnauthorizedOperationException("You cannot join in a contest which is not in phase |.");
+            }
+        } else {
+            throw new UnauthorizedOperationException("You cannot join in an invitational contest.");
+        }
 
         Set<User> participants = contest.getParticipants();
         if (participants.contains(user)) {
@@ -150,12 +165,53 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-
         participants.add(user);
         contest.setParticipants(participants);
         user.setPoints(user.getPoints() + 1);
         userRepository.update(user);
         contestRepository.update(contest);
+
+    }
+
+    @Override
+    public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points) {
+        boolean isOrganizer = true;
+
+
+        Contest contest = contestRepository.getById(contestId);
+        ImageRating imageRating = imageRepository.getImageRatingById(imageId);
+        Set<UserCredentials> jury = imageRating.getUserCredentials();
+
+
+        Organizer organizer;
+        try {
+            organizer = organizerRepository.getByUserName(userCredentials.getUserName());
+            if (jury.contains(userCredentials)) {
+                throw new UnauthorizedOperationException("You cannot rate image twice.");
+            }
+        } catch (EntityNotFoundException e) {
+            isOrganizer = false;
+        }
+
+
+        User user;
+
+        if (!isOrganizer) {
+            user = userRepository.getUserByUserName(userCredentials.getUserName());
+            if (jury.contains(userCredentials)) {
+                throw new UnauthorizedOperationException("You cannot rate image twice.");
+            }
+            if (!contest.getJury().contains(user)) {
+                throw new UnauthorizedOperationException("Only jury can rate images.");
+
+            }
+        }
+
+
+        imageRating.setPoints(points);
+        jury.add(userCredentials);
+        imageRating.setUserCredentials(jury);
+        imageRepository.jurorRateImage(imageRating);
 
     }
 

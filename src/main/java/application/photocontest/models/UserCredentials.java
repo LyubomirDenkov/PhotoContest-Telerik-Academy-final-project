@@ -25,14 +25,25 @@ public class UserCredentials {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_images",
+            joinColumns = @JoinColumn(name = "user_credentials"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<Image> images;
+
+
+
     public UserCredentials() {
     }
 
-    public UserCredentials(String userName, String password, Set<Role> roles) {
+    public UserCredentials(String userName, String password, Set<Role> roles, Set<Image> images) {
         this.userName = userName;
-                this.password = password;
+        this.password = password;
         this.roles = roles;
+        this.images = images;
     }
+
 
     public String getUserName() {
         return userName;
@@ -56,6 +67,14 @@ public class UserCredentials {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 
     @JsonIgnore

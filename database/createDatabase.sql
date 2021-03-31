@@ -1,13 +1,11 @@
 DROP DATABASE IF EXISTS `photo-contest`;
 CREATE DATABASE IF NOT EXISTS `photo-contest`;
-USE `photo-contest`;
-
-create or replace table category
-(
-    category_id int auto_increment
-        primary key,
-    name        varchar(30) not null
-);
+USE `photo-contest`;create or replace table category
+                    (
+                        category_id int auto_increment
+                            primary key,
+                        name        varchar(30) not null
+                    );
 
 create or replace table comments
 (
@@ -36,8 +34,7 @@ create or replace table images
         primary key,
     title    varchar(50) not null,
     story    text        not null,
-    image    longblob    not null,
-    points   int         not null
+    image    longblob    not null
 );
 
 create or replace table images_comments
@@ -76,6 +73,20 @@ create or replace table user_credentials
 
 alter table user_credentials
     add primary key (user_name);
+
+create or replace table jury_rated_images
+(
+    imageRating_id int auto_increment
+        primary key,
+
+user_credentials varchar(30) not null,
+    image_id         int         not null,
+    points int not null,
+    constraint users_images_jury_rated_images_fk
+        foreign key (user_credentials) references user_credentials (user_name),
+    constraint users_images_rated_fk
+        foreign key (image_id) references images (image_id)
+);
 
 create or replace table organizers
 (
@@ -168,12 +179,12 @@ create or replace table contest_participants
 
 create or replace table users_images
 (
-    user_id  int not null,
-    image_id int not null,
-    constraint users_images__fk
-        foreign key (user_id) references users (user_id),
+    user_credentials varchar(30) not null,
+    image_id         int         not null,
     constraint users_images_images_fk
-        foreign key (image_id) references images (image_id)
+        foreign key (image_id) references images (image_id),
+    constraint users_images_user_credentials_fk
+        foreign key (user_credentials) references user_credentials (user_name)
 );
 
 create or replace table users_roles
@@ -185,7 +196,4 @@ create or replace table users_roles
     constraint users_roles_user_credentials_fk
         foreign key (user_credentials) references user_credentials (user_name)
 );
-
-
-
 
