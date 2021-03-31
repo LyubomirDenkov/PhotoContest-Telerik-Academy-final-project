@@ -49,7 +49,6 @@ public class ContestServiceImpl implements ContestService {
                 continue;
             }
 
-
             LocalDateTime dateNow = LocalDateTime.now();
             LocalDateTime contestStartingDate = contests.get(i).getStartingDate();
             int phaseOneDays = contests.get(i).getPhaseOne();
@@ -60,13 +59,18 @@ public class ContestServiceImpl implements ContestService {
             }
 
             if (dateNow.isAfter(contestStartingDate) &&
-                    dateNow.plusDays(phaseOneDays).isBefore(contestStartingDate.plusDays(phaseOneDays))){
-                contests.get(i).setPhase(contestRepository.getByPhase(1));
+                    dateNow.plusDays(phaseOneDays).isBefore(contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours))){
+                contests.get(i).setPhase(contestRepository.getByPhase(2));
                 continue;
             }
 
-            dateNow = dateNow.plusDays(phaseOneDays);
-            contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
+            dateNow = dateNow.plusDays(phaseOneDays).plusHours(phaseTwoHours);
+            contestStartingDate = contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours);
+
+            if (dateNow.isAfter(contestStartingDate)){
+                contests.get(i).setPhase(contestRepository.getByPhase(3));
+            }
+
 
             System.out.println();
 

@@ -64,6 +64,7 @@ public class ContestMapper {
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setType(contestRepository.getByType(contestDto.getTypeId()));
         contest.setPhase(contestRepository.getByPhase(contestDto.getPhaseId()));
+        contest.setPointsAwarded(false);
 
         Set<Organizer> organizersJury = new HashSet<>();
         organizersJury.addAll(organizerRepository.getAll());

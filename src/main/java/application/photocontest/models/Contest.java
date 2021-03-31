@@ -45,6 +45,9 @@ public class Contest {
     private Phase phase;
 
 
+    @Column(name = "isPointsAwarded")
+    private boolean isPointsAwarded;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_participants",
@@ -79,7 +82,7 @@ public class Contest {
     }
 
     public Contest(int id, String title, Category category, LocalDateTime startingDate, int phaseOne, int phaseTwo,
-                   Organizer organizer, Type type, Phase phase, Set<User> participants, Set<User> jury,
+                   Organizer organizer, Type type, Phase phase,Boolean isPointsAwarded, Set<User> participants, Set<User> jury,
                    Set<Image> images,Set<Organizer> organizersJury) {
         this.id = id;
         this.title = title;
@@ -90,6 +93,7 @@ public class Contest {
         this.organizer = organizer;
         this.type = type;
         this.phase = phase;
+        this.isPointsAwarded = isPointsAwarded;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
@@ -166,6 +170,15 @@ public class Contest {
 
     public void setPhase(Phase phase) {
         this.phase = phase;
+    }
+
+
+    public boolean isPointsAwarded() {
+        return isPointsAwarded;
+    }
+
+    public void setPointsAwarded(boolean pointsAwarded) {
+        isPointsAwarded = pointsAwarded;
     }
 
     public Set<User> getParticipants() {
