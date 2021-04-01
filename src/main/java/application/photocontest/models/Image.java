@@ -24,18 +24,11 @@ public class Image {
 
     @JsonIgnore
     @Column(name = "image")
-    private String image;
-
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "images_comments",
-            joinColumns = @JoinColumn(name = "image_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private Set<Comment> comments;
+    private String url;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "jury_rated_images",
-            joinColumns = @JoinColumn(name = "user_name"),
+            joinColumns = @JoinColumn(name = "user_credentials"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<UserCredentials> jurorAwardedRating;
 
@@ -44,13 +37,12 @@ public class Image {
 
     }
 
-    public Image(int id, String title, String story, String image,
-                 Set<Comment> comments, Set<UserCredentials> jurorAwardedRating) {
+    public Image(int id, String title, String story, String url,
+                 Set<UserCredentials> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
-        this.image = image;
-        this.comments = comments;
+        this.url = url;
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
@@ -79,20 +71,12 @@ public class Image {
         this.story = story;
     }
 
-    public String getImage() {
-        return image;
+    public String getUrl() {
+        return url;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
+    public void setUrl(String image) {
+        this.url = image;
     }
 
     public Set<UserCredentials> getJurorAwardedRating() {
@@ -106,13 +90,13 @@ public class Image {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Image)) return false;
-        Image image1 = (Image) o;
-        return getId() == image1.getId() && getTitle().equals(image1.getTitle()) && getStory().equals(image1.getStory()) && getImage().equals(image1.getImage()) && getComments().equals(image1.getComments()) && getJurorAwardedRating().equals(image1.getJurorAwardedRating());
+        if (o == null || getClass() != o.getClass()) return false;
+        Image image = (Image) o;
+        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getImage(), getComments(), getJurorAwardedRating());
+        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getJurorAwardedRating());
     }
 }

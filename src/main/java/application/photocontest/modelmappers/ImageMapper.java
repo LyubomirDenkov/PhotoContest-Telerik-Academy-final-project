@@ -22,7 +22,7 @@ public class ImageMapper {
 
         image.setTitle(title);
         image.setStory(story);
-        image.setImage(imagePath);
+        image.setUrl(imagePath);
 
         return image;
     }
