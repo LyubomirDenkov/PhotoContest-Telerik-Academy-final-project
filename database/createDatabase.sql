@@ -1,11 +1,12 @@
 DROP DATABASE IF EXISTS `photo-contest`;
 CREATE DATABASE IF NOT EXISTS `photo-contest`;
-USE `photo-contest`;create or replace table category
-                    (
-                        category_id int auto_increment
-                            primary key,
-                        name        varchar(30) not null
-                    );
+USE `photo-contest`;
+create or replace table category
+(
+    category_id int auto_increment
+        primary key,
+    name        varchar(30) not null
+);
 
 create or replace table comments
 (
@@ -76,16 +77,15 @@ alter table user_credentials
 
 create or replace table jury_rated_images
 (
-    imageRating_id int auto_increment
+    rated_image_id int auto_increment
         primary key,
-
-user_credentials varchar(30) not null,
-    image_id         int         not null,
-    points int not null,
-    constraint users_images_jury_rated_images_fk
-        foreign key (user_credentials) references user_credentials (user_name),
-    constraint users_images_rated_fk
-        foreign key (image_id) references images (image_id)
+    user_name      varchar(30) not null,
+    image_id       int         not null,
+    points         int         not null,
+    constraint jury_rated_images_images_fk
+        foreign key (image_id) references images (image_id),
+    constraint jury_rated_images_user_credentials_fk
+        foreign key (user_name) references user_credentials (user_name)
 );
 
 create or replace table organizers

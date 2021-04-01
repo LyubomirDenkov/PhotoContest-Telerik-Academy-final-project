@@ -1,7 +1,8 @@
 package application.photocontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
 import java.util.Set;
 
 
@@ -12,11 +13,12 @@ public class ImageRating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "imageRating_id")
+    @Column(name = "rated_image_id")
     private int id;
 
 
-    @JoinColumn(name = "user_credentials")
+    @OneToOne
+    @JoinColumn(name = "user_name")
     private UserCredentials userCredentials;
 
 

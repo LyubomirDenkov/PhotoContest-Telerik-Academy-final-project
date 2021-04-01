@@ -3,6 +3,7 @@ package application.photocontest.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -34,7 +35,7 @@ public class Image {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "jury_rated_images",
-            joinColumns = @JoinColumn(name = "user_credentials"),
+            joinColumns = @JoinColumn(name = "user_name"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<UserCredentials> jurorAwardedRating;
 
@@ -100,5 +101,18 @@ public class Image {
 
     public void setJurorAwardedRating(Set<UserCredentials> jurorAwardedRating) {
         this.jurorAwardedRating = jurorAwardedRating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Image)) return false;
+        Image image1 = (Image) o;
+        return getId() == image1.getId() && getTitle().equals(image1.getTitle()) && getStory().equals(image1.getStory()) && getImage().equals(image1.getImage()) && getComments().equals(image1.getComments()) && getJurorAwardedRating().equals(image1.getJurorAwardedRating());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getStory(), getImage(), getComments(), getJurorAwardedRating());
     }
 }

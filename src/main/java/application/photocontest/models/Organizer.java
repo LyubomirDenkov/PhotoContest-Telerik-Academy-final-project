@@ -3,6 +3,7 @@ package application.photocontest.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "organizers")
@@ -64,5 +65,20 @@ public class Organizer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Organizer)) return false;
+        Organizer organizer = (Organizer) o;
+        return getId() == organizer.getId() && userCredentials.equals(organizer.userCredentials) &&
+                getFirstName().equals(organizer.getFirstName()) && getLastName().equals(organizer.getLastName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), userCredentials, getFirstName(), getLastName());
     }
 }

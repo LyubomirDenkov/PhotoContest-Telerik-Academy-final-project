@@ -129,7 +129,7 @@ public class ContestController {
     }
 
     @ApiOperation(value = "Rate image")
-    @PutMapping("/{contestId}/image/{imageId}")
+    @PostMapping("/{contestId}/image/{imageId}")
     public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                           @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto) {
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);

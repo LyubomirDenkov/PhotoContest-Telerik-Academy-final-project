@@ -132,6 +132,7 @@ public class ContestServiceImpl implements ContestService {
 
         contest.setParticipants(newParticipants);
         contestRepository.update(contest);
+
         return contest;
 
     }
@@ -180,18 +181,28 @@ public class ContestServiceImpl implements ContestService {
 
 
         Contest contest = contestRepository.getById(contestId);
+
+        Image currentImage = imageRepository.getById(imageId);
+        if (!contest.getImages().contains(currentImage)) {
+            throw new EntityNotFoundException("Image",imageId);
+        }
+
+    //    List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
+//
+    //  for (ImageRating imageRating : imageRatings) {
+    //      if (imageRating.getImageId() == imageId) {
+    //          throw new UnauthorizedOperationException("You cannot rate twice.");
+    //      }
+    //  }
+
         ImageRating imageRating = new ImageRating();
-        Set<User> usersJury = contest.getJury();
-        Set<Organizer> organizersJury = contest.getOrganizersJury();
+
 
 
         Organizer organizer;
         try {
             organizer = organizerRepository.getByUserName(userCredentials.getUserName());
-            if (organizersJury.contains(organizer)) {
-                throw new UnauthorizedOperationException("You cannot rate image twice.");
-            }
-            organizersJury.add(organizer);
+
         } catch (EntityNotFoundException e) {
             isOrganizer = false;
         }
@@ -201,21 +212,21 @@ public class ContestServiceImpl implements ContestService {
 
         if (!isOrganizer) {
             user = userRepository.getUserByUserName(userCredentials.getUserName());
-            if (usersJury.contains(user)) {
-                throw new UnauthorizedOperationException("You cannot rate image twice.");
-            }
+
             if (!contest.getJury().contains(user)) {
                 throw new UnauthorizedOperationException("Only jury can rate images.");
 
             }
-            usersJury.add(user);
         }
+
+
 
 
         imageRating.setUserCredentials(userCredentials);
         imageRating.setImageId(imageId);
         imageRating.setPoints(points);
         imageRepository.createJurorRateEntity(imageRating);
+
 
     }
 

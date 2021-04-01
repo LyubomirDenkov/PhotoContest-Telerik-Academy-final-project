@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -211,5 +212,21 @@ public class Contest {
 
     public void setOrganizersJury(Set<Organizer> organizersJury) {
         this.organizersJury = organizersJury;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Contest)) return false;
+        Contest contest = (Contest) o;
+        return getId() == contest.getId() && getPhaseOne() == contest.getPhaseOne() && getPhaseTwo() == contest.getPhaseTwo()
+                && isPointsAwarded() == contest.isPointsAwarded() && getTitle().equals(contest.getTitle()) &&
+                getCategory().equals(contest.getCategory()) && getStartingDate().equals(contest.getStartingDate()) && getOrganizer().equals(contest.getOrganizer()) && getType().equals(contest.getType()) && getPhase().equals(contest.getPhase()) && getParticipants().equals(contest.getParticipants()) && getJury().equals(contest.getJury()) && getImages().equals(contest.getImages()) && getOrganizersJury().equals(contest.getOrganizersJury());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getCategory(), getStartingDate(), getPhaseOne(), getPhaseTwo(),
+                getOrganizer(), getType(), getPhase(), isPointsAwarded(), getParticipants(), getJury(), getImages(), getOrganizersJury());
     }
 }

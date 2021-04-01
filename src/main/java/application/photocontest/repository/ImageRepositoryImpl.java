@@ -1,6 +1,7 @@
 package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.models.Contest;
 import application.photocontest.models.Image;
 import application.photocontest.models.ImageRating;
 import application.photocontest.models.User;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ImageRepositoryImpl implements ImageRepository {
@@ -43,9 +45,16 @@ public class ImageRepositoryImpl implements ImageRepository {
     public void createJurorRateEntity(ImageRating imageRating) {
 
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
             session.save(imageRating);
-            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public List<ImageRating> getImageRatingsByUsername(String userName) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from ImageRating where userCredentials.userName = :userName ",
+                    ImageRating.class).setParameter("userName", userName).list();
+
         }
     }
 
