@@ -34,12 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(UserCredentials user, int id) {
+    public User getById(UserCredentials userCredentials, int id) {
 
-        verifyUserHasRoles(user,UserRoles.ORGANIZER);
+        verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
 
         return userRepository.getById(id);
-
     }
 
 
@@ -54,57 +53,18 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//  private void calculateUserRank(User user) {
-
-//      verifyUserIsNotOrganizer(user);
-
-//      if (user.getRanks().contains(userRepository.getRankByName(DICTATOR.toString()))) {
-//          return;
-//      }
-
-//      if (user.getRanks().contains(userRepository.getRankByName(JUNKIE.toString()))) {
-//          if (isUserHavePointsToUpgradeRank(user, JUNKIE_CEILING_POINTS)) {
-//              setNewUserRank(user, ENTHUSIAST.toString());
-//          }
-//      }
-//      if (user.getRanks().contains(userRepository.getRankByName(ENTHUSIAST.toString()))) {
-//          if (isUserHavePointsToUpgradeRank(user, ENTHUSIAST_CEILING_POINTS)) {
-//              setNewUserRank(user, MASTER.toString());
-//          }
-//      }
-//      if (user.getRanks().contains(userRepository.getRankByName(MASTER.toString()))) {
-//          if (isUserHavePointsToUpgradeRank(user, MASTER_CEILING_POINTS)) {
-//              setNewUserRank(user, DICTATOR.toString());
-//          }
-//      }
-//  }
-
-//  private boolean isUserHavePointsToUpgradeRank(User user, int points) {
-//      return user.getPoints() > points;
-//  }
-
-//  private void setNewUserRank(User user, String rankName) {
-//      Rank newRank = userRepository.getRankByName(rankName);
-//      Set<Rank> rankSet = user.getRanks();
-//      rankSet.clear();
-//      rankSet.add(newRank);
-//      user.setRanks(rankSet);
-//      userRepository.update(user);
-//  }
-
-
     @Override
     public User create(User user) {
 
         boolean isUserNameExist = true;
 
-        try{
+        try {
             userRepository.getByUserName(user.getUserCredentials().getUserName());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             isUserNameExist = false;
         }
 
-        if (isUserNameExist){
+        if (isUserNameExist) {
             throw new DuplicateEntityException("");
         }
 
@@ -125,23 +85,22 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public User update(UserCredentials userCredentials, User userToUpdate) {
 
         boolean isUserNameExist = true;
 
-        verifyUserHasRoles(userCredentials,UserRoles.USER);
-        verifyIsUserOwnAccount(userCredentials,userToUpdate,"something");
+        verifyUserHasRoles(userCredentials, UserRoles.USER);
+        verifyIsUserOwnAccount(userCredentials, userToUpdate, "something");
 
         try {
             userRepository.getByUserName(userToUpdate.getUserCredentials().getUserName());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             isUserNameExist = false;
         }
 
-        if (isUserNameExist){
-            throw new DuplicateEntityException("User","username",userToUpdate.getUserCredentials().getUserName());
+        if (isUserNameExist) {
+            throw new DuplicateEntityException("User", "username", userToUpdate.getUserCredentials().getUserName());
         }
 
         return userRepository.update(userToUpdate);
@@ -152,9 +111,9 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.getById(id);
 
-        verifyUserHasRoles(userCredentials,UserRoles.USER);
+        verifyUserHasRoles(userCredentials, UserRoles.USER);
 
-        verifyIsUserOwnAccount(userCredentials,user,"something");
+        verifyIsUserOwnAccount(userCredentials, user, "something");
 
         userRepository.delete(id);
     }

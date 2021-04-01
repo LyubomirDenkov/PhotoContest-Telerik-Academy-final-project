@@ -24,8 +24,6 @@ public class ImageServiceImpl implements ImageService {
         this.userRepository = userRepository;
     }
 
-    //TODO - who can delete ||| update
-
     @Override
     public Image getById(UserCredentials userCredentials, int id) {
         return imageRepository.getById(id);
@@ -34,21 +32,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image create(UserCredentials userCredentials, Image image) {
 
-        Image imageToCreate = imageRepository.create(image);
-        User user =  userRepository.getUserByUserName(userCredentials.getUserName());
-    //    addImageToUserImages(user,image);
-        return imageToCreate;
-    }
+        return imageRepository.create(image);
 
- //   public void addImageToUserImages(UserCredentials user,Image image){
- //       Set<Image> images = user.getImages();
- //       images.add(image);
- //       userRepository.update(user);
- //   }
-//
-    @Override
-    public Image update(UserCredentials userCredentials, Image image) {
-        return imageRepository.update(image);
     }
 
     @Override

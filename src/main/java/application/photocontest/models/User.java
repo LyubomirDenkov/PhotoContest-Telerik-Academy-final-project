@@ -30,6 +30,7 @@ public class User {
     private int points;
 
 
+
     public User() {
     }
 
