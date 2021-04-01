@@ -30,14 +30,29 @@ public class ImageRating {
     @Column(name = "points")
     private int points;
 
+    @Column(name = "comment")
+private String comment;
+
+
+
+
     public ImageRating() {
     }
 
-    public ImageRating(int id, UserCredentials userCredentials, int imageId, int points) {
+    public ImageRating(int id, UserCredentials userCredentials, int imageId, int points, String comment) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.imageId = imageId;
         this.points = points;
+        this.comment = comment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getId() {

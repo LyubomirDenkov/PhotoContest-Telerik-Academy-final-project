@@ -4,8 +4,8 @@ INSERT INTO ranks(name)
 VALUES ('junkie'),('enthusiast'),('master'),('dictator');
 
 INSERT INTO contest_phase(name)
-VALUES ('phase |'),
-       ('phase ||'),
+VALUES ('phaseOne'),
+       ('phaseTwo'),
        ('finished');
 
 INSERT INTO roles(name)

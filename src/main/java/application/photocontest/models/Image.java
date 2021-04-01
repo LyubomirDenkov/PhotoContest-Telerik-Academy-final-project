@@ -28,7 +28,7 @@ public class Image {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "jury_rated_images",
-            joinColumns = @JoinColumn(name = "user_credentials"),
+            joinColumns = @JoinColumn(name = "user_name"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<UserCredentials> jurorAwardedRating;
 

@@ -1,18 +1,10 @@
 DROP DATABASE IF EXISTS `photo-contest`;
 CREATE DATABASE IF NOT EXISTS `photo-contest`;
-USE `photo-contest`;
-create or replace table category
+USE `photo-contest`;create or replace table category
 (
     category_id int auto_increment
         primary key,
     name        varchar(30) not null
-);
-
-create or replace table comments
-(
-    comment_id int auto_increment
-        primary key,
-    comment    varchar(100) not null
 );
 
 create or replace table contest_phase
@@ -36,16 +28,6 @@ create or replace table images
     title    varchar(50) not null,
     story    text        not null,
     image    longblob    not null
-);
-
-create or replace table images_comments
-(
-    image_id   int not null,
-    comment_id int null,
-    constraint images_comments_comments_fk
-        foreign key (comment_id) references comments (comment_id),
-    constraint images_comments_images_fk
-        foreign key (image_id) references images (image_id)
 );
 
 create or replace table ranks
@@ -82,6 +64,7 @@ create or replace table jury_rated_images
     user_name      varchar(30) not null,
     image_id       int         not null,
     points         int         not null,
+    comment        longtext    not null,
     constraint jury_rated_images_images_fk
         foreign key (image_id) references images (image_id),
     constraint jury_rated_images_user_credentials_fk

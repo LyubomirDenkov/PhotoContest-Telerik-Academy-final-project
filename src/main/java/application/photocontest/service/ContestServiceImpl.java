@@ -175,28 +175,52 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points) {
+    public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points, String comment) {
 
-        boolean isOrganizer = true;
-
-
-        Contest contest = contestRepository.getById(contestId);
-
-        Image currentImage = imageRepository.getById(imageId);
-        if (!contest.getImages().contains(currentImage)) {
-            throw new EntityNotFoundException("Image",imageId);
-        }
-
-   List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
-
- for (ImageRating imageRating : imageRatings) {
-     if (imageRating.getImageId() == imageId) {
-         throw new UnauthorizedOperationException("You cannot rate twice.");
-     }
- }
+        checkIfUserIsInJury(userCredentials,imageId,contestId,points);
 
         ImageRating imageRating = new ImageRating();
 
+        imageRating.setUserCredentials(userCredentials);
+        imageRating.setImageId(imageId);
+        imageRating.setPoints(points);
+        imageRating.setComment(comment);
+        imageRepository.createJurorRateEntity(imageRating);
+
+
+    }
+
+    private Contest checkPointsContestAndImage(int points, int contestId, int imageId) {
+
+        if (points < 1 || points > 10) {
+            throw new IllegalArgumentException("You can only give points between 1 and 10.");
+        }
+
+        Contest contest = contestRepository.getById(contestId);
+
+        if (!contest.getPhase().getName().equalsIgnoreCase("phaseTwo")) {
+            throw new UnauthorizedOperationException("You can only rate images in second phase.");
+        }
+
+        Image currentImage = imageRepository.getById(imageId);
+        if (!contest.getImages().contains(currentImage)) {
+            throw new EntityNotFoundException("Image", imageId);
+        }
+        return contest;
+    }
+
+    private void checkIfUserIsInJury(UserCredentials userCredentials, int imageId, int contestId,int points) {
+
+        Contest contest = checkPointsContestAndImage(points,contestId,points);
+
+        boolean isOrganizer = true;
+        List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
+
+        for (ImageRating imageRating : imageRatings) {
+            if (imageRating.getImageId() == imageId) {
+                throw new UnauthorizedOperationException("You cannot rate twice.");
+            }
+        }
 
 
         Organizer organizer;
@@ -206,6 +230,7 @@ public class ContestServiceImpl implements ContestService {
         } catch (EntityNotFoundException e) {
             isOrganizer = false;
         }
+
 
 
         User user;
@@ -218,16 +243,6 @@ public class ContestServiceImpl implements ContestService {
 
             }
         }
-
-
-
-
-        imageRating.setUserCredentials(userCredentials);
-        imageRating.setImageId(imageId);
-        imageRating.setPoints(points);
-        imageRepository.createJurorRateEntity(imageRating);
-
-
     }
 
 
@@ -240,5 +255,6 @@ public class ContestServiceImpl implements ContestService {
         contest.setParticipants(participants);
         contestRepository.update(contest);
     }
+
 
 }

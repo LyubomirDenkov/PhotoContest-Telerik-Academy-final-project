@@ -17,5 +17,5 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     void addUserToContest(UserCredentials user, int contestId, int userId);
 
-    void rateImage(UserCredentials user, int contestId, int imageId,int points);
+    void rateImage(UserCredentials user, int contestId, int imageId, int points, String comment);
 }

@@ -136,7 +136,8 @@ public class ContestController {
 
         try {
             int points = rateImageDto.getPoints();
-             contestService.rateImage(userCredentials,contestId, imageId,points);
+            String comment = rateImageDto.getComment();
+             contestService.rateImage(userCredentials,contestId, imageId,points, comment);
         }  catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
