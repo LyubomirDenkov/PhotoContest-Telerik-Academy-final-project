@@ -10,8 +10,10 @@ import okhttp3.RequestBody;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
 import java.util.*;
@@ -22,6 +24,9 @@ import java.util.*;
 public class ImageController {
 
 
+    private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
+    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
+    private static final String IMGUR_AUTHORIZATION = "Authorization";
     private final ImageService imageService;
     private final ImageMapper imageMapper;
     private final AuthenticationHelper authenticationHelper;
@@ -51,28 +56,44 @@ public class ImageController {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
-        String imageF = Base64.getEncoder().encodeToString(file.get().getBytes());
+        if ((file.isEmpty() && url.isEmpty()) || (file.isPresent() && url.isPresent())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"something");
+        }
+
+        String imageLink = "";
+
+        if (file.isPresent()){
+            String inputImage = Base64.getEncoder().encodeToString(file.get().getBytes());
+            imageLink = uploadImageToImgurAndReturnUrl(inputImage);
+        }
+        if (url.isPresent()){
+            imageLink = uploadImageToImgurAndReturnUrl(url.get());
+        }
+
+
+        Image image = imageMapper.toModel(title, story, imageLink);
+
+        return imageService.create(userCredentials, image);
+    }
+
+    private String uploadImageToImgurAndReturnUrl(String image) throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("image", imageF)
+                .addFormDataPart("image", image)
                 .build();
         Request request = new Request.Builder()
-                .url("https://api.imgur.com/3/image")
+                .url(IMGUR_IMAGE_UPLOAD_URL)
                 .method("POST", body)
-                .addHeader("Authorization", "Client-ID 442f5d37036bc37")
+                .addHeader(IMGUR_AUTHORIZATION, IMGUR_CLIENT_ID)
                 .build();
 
         Response response = client.newCall(request).execute();
 
         JSONObject jsonObject = new JSONObject(response.body().string());
-        JSONObject jsonObjectOne = jsonObject.getJSONObject("data");
-        String link = jsonObjectOne.getString("link");
-
-        Image image = imageMapper.toModel(title, story, link);
-
-        return imageService.create(userCredentials, image);
+        JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+        return jsonObjectData.getString("link");
     }
 
     @DeleteMapping("{id}")
