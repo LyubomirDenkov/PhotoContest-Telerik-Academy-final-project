@@ -187,13 +187,13 @@ public class ContestServiceImpl implements ContestService {
             throw new EntityNotFoundException("Image",imageId);
         }
 
-    //    List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
-//
-    //  for (ImageRating imageRating : imageRatings) {
-    //      if (imageRating.getImageId() == imageId) {
-    //          throw new UnauthorizedOperationException("You cannot rate twice.");
-    //      }
-    //  }
+   List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
+
+ for (ImageRating imageRating : imageRatings) {
+     if (imageRating.getImageId() == imageId) {
+         throw new UnauthorizedOperationException("You cannot rate twice.");
+     }
+ }
 
         ImageRating imageRating = new ImageRating();
 
