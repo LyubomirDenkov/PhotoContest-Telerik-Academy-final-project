@@ -26,10 +26,6 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToOne
-    @JoinColumn(name = "rank_id")
-    private Rank rank;
-
     @Column(name = "points")
     private int points;
 
@@ -37,15 +33,14 @@ public class User {
     public User() {
     }
 
-    public User(int id, UserCredentials userCredentials, String firstName, String lastName, Rank rank, int points) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName, int points) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.rank = rank;
         this.points = points;
-
     }
+
 
     public int getId() {
         return id;
@@ -55,12 +50,11 @@ public class User {
         this.id = id;
     }
 
-    @JsonIgnore
-    public UserCredentials getCredentials() {
+    public UserCredentials getUserCredentials() {
         return userCredentials;
     }
 
-    public void setCredentials(UserCredentials userCredentials) {
+    public void setUserCredentials(UserCredentials userCredentials) {
         this.userCredentials = userCredentials;
     }
 
@@ -80,14 +74,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Rank getRank() {
-        return rank;
-    }
-
-    public void setRank(Rank rank) {
-        this.rank = rank;
-    }
-
     public int getPoints() {
         return points;
     }
@@ -96,17 +82,16 @@ public class User {
         this.points = points;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getPoints() == user.getPoints() && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getRank().equals(user.getRank());
+        return getId() == user.getId() && getPoints() == user.getPoints() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getRank(), getPoints());
+        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getPoints());
     }
 }

@@ -1,6 +1,5 @@
 package application.photocontest.modelmappers;
 
-import application.photocontest.models.Rank;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
@@ -25,8 +24,6 @@ public class UserMapper {
 
     public User fromDto(RegisterDto registerDto) {
 
-        Rank baseRank = userRepository.getRankByName(JUNKIE.toString());
-
         UserCredentials userCredentials = new UserCredentials();
         userCredentials.setUserName(registerDto.getUserName());
         userCredentials.setPassword(registerDto.getPassword());
@@ -34,9 +31,8 @@ public class UserMapper {
         User user = new User();
         user.setFirstName(registerDto.getFirstName());
         user.setLastName(registerDto.getLastName());
-        user.setCredentials(userCredentials);
+        user.setUserCredentials(userCredentials);
 
-        user.setRank(baseRank);
 
         return user;
     }
@@ -46,14 +42,14 @@ public class UserMapper {
 
         User user = userRepository.getById(id);
 
-        if (!userDto.getOldPassword().equals(user.getCredentials().getPassword())){
+        if (!userDto.getOldPassword().equals(user.getUserCredentials().getPassword())){
             throw new IllegalArgumentException("Old password not match");
         }
         if (!userDto.getNewPassword().equals(userDto.getRepeatPassword())){
             throw new IllegalArgumentException("passwords not match");
         }
 
-        user.getCredentials().setPassword(userDto.getNewPassword());
+        user.getUserCredentials().setPassword(userDto.getNewPassword());
         return user;
     }
 

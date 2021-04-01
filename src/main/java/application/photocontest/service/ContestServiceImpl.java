@@ -139,7 +139,19 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public void delete(Organizer organizer, int id) {
+    public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points, String comment) {
+
+        checkIfUserIsInJury(userCredentials,imageId,contestId,points);
+
+        ImageRating imageRating = new ImageRating();
+
+        imageRating.setUserCredentials(userCredentials);
+        imageRating.setImageId(imageId);
+        imageRating.setPoints(points);
+        imageRating.setComment(comment);
+        imageRepository.createJurorRateEntity(imageRating);
+
+
     }
 
     @Override
@@ -149,7 +161,7 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
         User user = userRepository.getById(userId);
 
-        if (!user.getCredentials().getUserName().equals(userCredentials.getUserName())) {
+        if (!user.getUserCredentials().getUserName().equals(userCredentials.getUserName())) {
             throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
         }
         if (contest.getType().getName().equalsIgnoreCase("open")) {
@@ -175,19 +187,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points, String comment) {
-
-        checkIfUserIsInJury(userCredentials,imageId,contestId,points);
-
-        ImageRating imageRating = new ImageRating();
-
-        imageRating.setUserCredentials(userCredentials);
-        imageRating.setImageId(imageId);
-        imageRating.setPoints(points);
-        imageRating.setComment(comment);
-        imageRepository.createJurorRateEntity(imageRating);
-
-
+    public void delete(Organizer organizer, int id) {
     }
 
     private Contest checkPointsContestAndImage(int points, int contestId, int imageId) {

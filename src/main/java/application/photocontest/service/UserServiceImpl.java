@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         boolean isUserNameExist = true;
 
         try{
-            userRepository.getByUserName(user.getCredentials().getUserName());
+            userRepository.getByUserName(user.getUserCredentials().getUserName());
         }catch (EntityNotFoundException e){
             isUserNameExist = false;
         }
@@ -118,9 +118,9 @@ public class UserServiceImpl implements UserService {
 
     public void addRoleToRegisteredUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getCredentials().getRoles();
+        Set<Role> roles = user.getUserCredentials().getRoles();
         roles.add(role);
-        user.getCredentials().setRoles(roles);
+        user.getUserCredentials().setRoles(roles);
         userRepository.update(user);
     }
 
@@ -135,13 +135,13 @@ public class UserServiceImpl implements UserService {
         verifyIsUserOwnAccount(userCredentials,userToUpdate,"something");
 
         try {
-            userRepository.getByUserName(userToUpdate.getCredentials().getUserName());
+            userRepository.getByUserName(userToUpdate.getUserCredentials().getUserName());
         }catch (EntityNotFoundException e){
             isUserNameExist = false;
         }
 
         if (isUserNameExist){
-            throw new DuplicateEntityException("User","username",userToUpdate.getCredentials().getUserName());
+            throw new DuplicateEntityException("User","username",userToUpdate.getUserCredentials().getUserName());
         }
 
         return userRepository.update(userToUpdate);

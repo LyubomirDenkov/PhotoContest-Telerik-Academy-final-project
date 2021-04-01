@@ -90,26 +90,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
 
-    @Override
-    public Rank getRankByName(String name) {
-
-        try (Session session = sessionFactory.openSession()) {
-
-            Query<Rank> query = session.createQuery("from Rank " +
-                    "where name = :name ", Rank.class);
-
-            query.setParameter("name", name);
-
-            List<Rank> result = query.list();
-
-            if (result.isEmpty()) {
-
-                throw new EntityNotFoundException("Rank", "name", name);
-
-            }
-            return result.get(0);
-        }
-    }
 
     @Override
     public Role getRoleByName(String name) {
@@ -137,7 +117,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
-            session.save(user.getCredentials());
+            session.save(user.getUserCredentials());
             session.save(user);
 
             return getById(user.getId());
@@ -152,7 +132,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             session.beginTransaction();
 
-            session.update(user.getCredentials());
+            session.update(user.getUserCredentials());
             session.update(user);
 
             session.getTransaction().commit();

@@ -22,7 +22,6 @@ public class Image {
     private String story;
 
 
-    @JsonIgnore
     @Column(name = "image")
     private String url;
 

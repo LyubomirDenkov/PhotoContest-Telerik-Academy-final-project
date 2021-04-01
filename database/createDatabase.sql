@@ -30,15 +30,6 @@ create or replace table images
     image    longblob    not null
 );
 
-create or replace table ranks
-(
-    rank_id int auto_increment
-        primary key,
-    name    varchar(50) not null,
-    constraint ranks_name_uindex
-        unique (name)
-);
-
 create or replace table roles
 (
     role_id int auto_increment
@@ -132,10 +123,7 @@ create or replace table users
     user_credentials varchar(30) not null,
     first_name       varchar(20) not null,
     last_name        varchar(20) not null,
-    rank_id          int         not null,
     points           int         not null,
-    constraint users_ranks_id_fk
-        foreign key (rank_id) references ranks (rank_id),
     constraint users_user_credentials_fk
         foreign key (user_credentials) references user_credentials (user_name)
 );

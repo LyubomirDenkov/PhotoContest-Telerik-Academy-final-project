@@ -5,10 +5,8 @@ import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.ImageService;
-import com.mysql.cj.xdevapi.JsonArray;
 import okhttp3.*;
 import okhttp3.RequestBody;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -52,12 +50,13 @@ public class ImageController {
                         @RequestParam(name = "story") String story) throws IOException {
 
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
-        String imageF  = Base64.getEncoder().encodeToString(file.get().getBytes());
+
+        String imageF = Base64.getEncoder().encodeToString(file.get().getBytes());
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("image",imageF)
+                .addFormDataPart("image", imageF)
                 .build();
         Request request = new Request.Builder()
                 .url("https://api.imgur.com/3/image")
@@ -67,11 +66,13 @@ public class ImageController {
 
         Response response = client.newCall(request).execute();
 
+        JSONObject jsonObject = new JSONObject(response.body().string());
+        JSONObject jsonObjectOne = jsonObject.getJSONObject("data");
+        String link = jsonObjectOne.getString("link");
 
-        Image image = imageMapper.toModel(title, story, file.get().toString());
+        Image image = imageMapper.toModel(title, story, link);
 
         return imageService.create(userCredentials, image);
-
     }
 
     @DeleteMapping("{id}")

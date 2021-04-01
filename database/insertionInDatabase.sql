@@ -1,8 +1,5 @@
 use `photo-contest`;
 
-INSERT INTO ranks(name)
-VALUES ('junkie'),('enthusiast'),('master'),('dictator');
-
 INSERT INTO contest_phase(name)
 VALUES ('phaseOne'),
        ('phaseTwo'),
@@ -32,17 +29,17 @@ VALUES ('nikolay9','12345678'),
        ('koki123','12345678');
 
 INSERT INTO users( user_credentials,first_name, last_name, rank_id, points)
-VALUES ('toshkata',  'Todor', 'Andonov',  2, 200),
-       ('vladi',  'Vladimir', 'Venkov',  1, 1),
-       ('nikolaicho', 'Nikolay', 'Georgiev',  1, 1),
-       ('Peshkata',  'Petar', 'Raykov',  1, 1),
-       ('vankata123',  'Ivancho', 'Ivanov', 1, 9),
-       ('gero99',  'Gero', 'Ivanov', 1, 10),
-       ('pesho_loshiq',  'Petar', 'Petrov', 1, 11),
-       ('lerso1',  'Lerso', 'Kaloqnov',  1, 2),
-       ('kalincho',  'Kalin', 'Kirov',  1, 4),
-       ('ioan123',  'Ioan', 'Naumov',  1, 1),
-       ('koki123',  'Kaloqn', 'Terziev', 1, 1);
+VALUES ('toshkata',  'Todor', 'Andonov',  200),
+       ('vladi',  'Vladimir', 'Venkov',   1),
+       ('nikolaicho', 'Nikolay', 'Georgiev',   1),
+       ('Peshkata',  'Petar', 'Raykov',  1),
+       ('vankata123',  'Ivancho', 'Ivanov',  9),
+       ('gero99',  'Gero', 'Ivanov',  10),
+       ('pesho_loshiq',  'Petar', 'Petrov',  11),
+       ('lerso1',  'Lerso', 'Kaloqnov', 2),
+       ('kalincho',  'Kalin', 'Kirov',  4),
+       ('ioan123',  'Ioan', 'Naumov',  1),
+       ('koki123',  'Kaloqn', 'Terziev',  1);
 
 INSERT INTO organizers(user_credentials, first_name, last_name)
 VALUES ('nikolay9', 'Nikolay', 'Georgiev'),

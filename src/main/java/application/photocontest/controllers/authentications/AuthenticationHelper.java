@@ -65,7 +65,7 @@ public class AuthenticationHelper {
     public User verifyAuthentication(String email, String password) {
         try {
             User user = userService.getUserByUserName(email);
-            if (!user.getCredentials().getPassword().equals(password)) {
+            if (!user.getUserCredentials().getPassword().equals(password)) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }
             return user;

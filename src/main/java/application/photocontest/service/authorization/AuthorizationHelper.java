@@ -35,7 +35,7 @@ public class AuthorizationHelper {
 
     public static void verifyIsUserOwnAccount(UserCredentials userCredentials, User user, String message){
 
-        if (!userCredentials.getUserName().equals(user.getCredentials().getUserName())){
+        if (!userCredentials.getUserName().equals(user.getUserCredentials().getUserName())){
             throw new UnauthorizedOperationException(message);
         }
 

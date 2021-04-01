@@ -8,8 +8,6 @@ public interface UserRepository extends GetRepositoryOperations<User>, CudReposi
 
     User getUserByUserName(String userName);
 
-    Rank getRankByName(String name);
-
     Role getRoleByName(String name);
 
 }
