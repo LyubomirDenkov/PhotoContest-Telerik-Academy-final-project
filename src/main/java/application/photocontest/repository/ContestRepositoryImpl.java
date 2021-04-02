@@ -101,15 +101,13 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
-    @Override
-    public Type getByType(int id) {
+    public Type getTypeById(int id) {
         try (Session session = sessionFactory.openSession()) {
+
             Type type = session.get(Type.class, id);
 
             if (type == null) {
-
                 throw new EntityNotFoundException("Type", id);
-
             }
             return type;
 
@@ -117,17 +115,19 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
-    public Phase getPhaseById(int id) {
+    public Phase getPhaseByName(String phaseName) {
+
         try (Session session = sessionFactory.openSession()) {
 
-            Phase phase = session.get(Phase.class, id);
+            Query<Phase> query = session.createQuery("from Phase where name = :name ",Phase.class);
+            query.setParameter("name",phaseName);
 
-            if (phase == null) {
+            List<Phase> phases = query.list();
 
-                throw new EntityNotFoundException("Phase", id);
-
+            if (phases.isEmpty()) {
+                throw new EntityNotFoundException("Phase","name",phaseName);
             }
-            return phase;
+            return phases.get(0);
         }
 
     }

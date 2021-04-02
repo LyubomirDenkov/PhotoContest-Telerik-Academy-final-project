@@ -44,7 +44,7 @@ public class ContestMapper {
         contestToUpdate.setStartingDate(contestDto.getStartingDate());
         contestToUpdate.setPhaseOne(contestDto.getPhaseOne());
         contestToUpdate.setPhaseTwo(contestDto.getPhaseTwo());
-        contestToUpdate.setType(contestRepository.getByType(contestDto.getTypeId()));
+        contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
 
         setContestJuryAndParticipants(contestDto, contestToUpdate);
 
@@ -59,7 +59,7 @@ public class ContestMapper {
         contest.setOrganizer(organizer);
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
-        contest.setType(contestRepository.getByType(contestDto.getTypeId()));
+        contest.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contest.setPointsAwarded(false);
 
         Set<Organizer> organizersJury = new HashSet<>();

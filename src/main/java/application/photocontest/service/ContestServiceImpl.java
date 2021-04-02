@@ -24,12 +24,15 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 @Service
 public class ContestServiceImpl implements ContestService {
 
-    private static final int CONTEST_PHASE_PREPARING = 1;
-    private static final int CONTEST_PHASE_ONE = 2;
-    private static final int CONTEST_PHASE_TWO = 3;
-    private static final int CONTEST_PHASE_FINISHED = 4;
+    private static final String CONTEST_PHASE_PREPARING = "preparing";
+    private static final String CONTEST_PHASE_ONE = "phaseOne";
+    private static final String CONTEST_PHASE_TWO = "phaseTwo";
+    private static final String CONTEST_PHASE_FINISHED = "finished";
     private static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
     private static final String USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS = "User cannot add other users in contests.";
+    private static final int POINTS_REWARD_WHEN_INVITED_TO_CONTEST = 3;
+    private static final int POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST = 1;
+    private static final int OPEN = 1;
 
 
     private final ContestRepository contestRepository;
@@ -52,19 +55,20 @@ public class ContestServiceImpl implements ContestService {
 
         //TODO award points if is finished but pointsAward are false
 
-        for (int i = 0; i < contests.size(); i++) {
 
-            if (contests.get(i).getPhase().getName().equals("finished")) {
+        for (Contest contest : contests) {
 
-                if (contests.get(i).isPointsAwarded()) {
+            setContestPhase(contest);
+
+            if (contest.getPhase().getName().equals("finished")) {
+
+                if (contest.isPointsAwarded()) {
                     continue;
                 }
 
-                List<User> participants = userRepository.getParticipantsFromContest(contests.get(i).getId());
+                //List<User> participants = userRepository.getParticipantsFromContest(contest.getId());
 
             }
-
-            setContestPhase(contests.get(i));
 
         }
 
@@ -79,12 +83,12 @@ public class ContestServiceImpl implements ContestService {
         int phaseOneDays = contest.getPhaseOne();
         int phaseTwoHours = contest.getPhaseTwo();
         if (dateNow.isBefore(contestStartingDate)) {
-            contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_PREPARING));
+            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
             return;
         }
 
         if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusDays(phaseOneDays))) {
-            contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_ONE));
+            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_ONE));
             return;
         }
 
@@ -92,11 +96,11 @@ public class ContestServiceImpl implements ContestService {
         contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
 
         if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
-            contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_TWO));
+            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_TWO));
             return;
         }
 
-        contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_FINISHED));
+        contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_FINISHED));
 
     }
 
@@ -142,20 +146,20 @@ public class ContestServiceImpl implements ContestService {
 
         Set<User> participants = contest.getParticipants();
 
-
         Set<User> newParticipants = new HashSet<>();
 
         for (Integer participant : contestDto.getParticipants()) {
             User participantToAdd = userRepository.getById(participant);
             if (participants.contains(participantToAdd)) continue;
 
-            participantToAdd.setPoints(participantToAdd.getPoints() + 3);
+            participantToAdd.setPoints(participantToAdd.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
             newParticipants.add(participantToAdd);
             participants.addAll(newParticipants);
             userRepository.update(participantToAdd);
 
         }
 
+        setContestPhase(contest);
 
         contest.setParticipants(newParticipants);
         contestRepository.update(contest);
@@ -183,6 +187,7 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public void addUserToContest(UserCredentials userCredentials, int contestId, int userId) {
+
         verifyUserHasRoles(userCredentials, UserRoles.USER);
 
         Contest contest = contestRepository.getById(contestId);
@@ -191,12 +196,15 @@ public class ContestServiceImpl implements ContestService {
         if (!user.getUserCredentials().getUserName().equals(userCredentials.getUserName())) {
             throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
         }
-        if (contest.getType().getName().equalsIgnoreCase("open")) {
-            if (!contest.getPhase().getName().equalsIgnoreCase("phase |")) {
-                throw new UnauthorizedOperationException("You cannot join in a contest which is not in phase |.");
-            }
-        } else {
-            throw new UnauthorizedOperationException("You cannot join in an invitational contest.");
+
+        Phase contestPhase = contestRepository.getPhaseByName(CONTEST_PHASE_ONE);
+        Type contestType = contestRepository.getTypeById(OPEN);
+
+        if (!contest.getPhase().equals(contestPhase)){
+            throw new UnauthorizedOperationException("You cannot join in a contest which is not in phase one.");
+        }
+        if (contest.getType().equals(contestType)){
+            throw new UnauthorizedOperationException("Content is invitational only");
         }
 
         Set<User> participants = contest.getParticipants();
@@ -204,11 +212,11 @@ public class ContestServiceImpl implements ContestService {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
 
+        user.setPoints(user.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST);
+        userRepository.update(user);
 
         participants.add(user);
         contest.setParticipants(participants);
-        user.setPoints(user.getPoints() + 1);
-        userRepository.update(user);
         contestRepository.update(contest);
 
     }
