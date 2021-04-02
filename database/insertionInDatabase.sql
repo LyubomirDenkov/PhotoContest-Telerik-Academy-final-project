@@ -1,7 +1,8 @@
 use `photo-contest`;
 
 INSERT INTO contest_phase(name)
-VALUES ('phaseOne'),
+VALUES ('preparing'),
+       ('phaseOne'),
        ('phaseTwo'),
        ('finished');
 
