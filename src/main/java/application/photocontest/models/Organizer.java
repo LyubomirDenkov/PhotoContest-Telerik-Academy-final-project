@@ -43,6 +43,7 @@ public class Organizer {
         this.id = id;
     }
 
+    @JsonIgnore
     public UserCredentials getCredentials() {
         return userCredentials;
     }

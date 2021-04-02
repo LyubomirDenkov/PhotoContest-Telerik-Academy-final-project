@@ -117,8 +117,9 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
-    public Phase getByPhase(int id) {
+    public Phase getPhaseById(int id) {
         try (Session session = sessionFactory.openSession()) {
+
             Phase phase = session.get(Phase.class, id);
 
             if (phase == null) {

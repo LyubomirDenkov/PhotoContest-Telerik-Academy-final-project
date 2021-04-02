@@ -24,8 +24,14 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 @Service
 public class ContestServiceImpl implements ContestService {
 
-    public static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
-    public static final String USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS = "User cannot add other users in contests.";
+    private static final int CONTEST_PHASE_PREPARING = 1;
+    private static final int CONTEST_PHASE_ONE = 2;
+    private static final int CONTEST_PHASE_TWO = 3;
+    private static final int CONTEST_PHASE_FINISHED = 4;
+    private static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
+    private static final String USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS = "User cannot add other users in contests.";
+
+
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
     private final OrganizerRepository organizerRepository;
@@ -49,30 +55,16 @@ public class ContestServiceImpl implements ContestService {
         for (int i = 0; i < contests.size(); i++) {
 
             if (contests.get(i).getPhase().getName().equals("finished")) {
-                continue;
+
+                if (contests.get(i).isPointsAwarded()) {
+                    continue;
+                }
+
+                List<User> participants = userRepository.getParticipantsFromContest(contests.get(i).getId());
+
             }
 
-            LocalDateTime dateNow = LocalDateTime.now();
-            LocalDateTime contestStartingDate = contests.get(i).getStartingDate();
-            int phaseOneDays = contests.get(i).getPhaseOne();
-            int phaseTwoHours = contests.get(i).getPhaseTwo();
-
-            if (dateNow.isBefore(contestStartingDate)) {
-                continue;
-            }
-
-            if (dateNow.isAfter(contestStartingDate) &&
-                    dateNow.plusDays(phaseOneDays).isBefore(contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours))) {
-                contests.get(i).setPhase(contestRepository.getByPhase(2));
-                continue;
-            }
-
-            dateNow = dateNow.plusDays(phaseOneDays).plusHours(phaseTwoHours);
-            contestStartingDate = contestStartingDate.plusDays(phaseOneDays).plusHours(phaseTwoHours);
-
-            if (dateNow.isAfter(contestStartingDate)) {
-                contests.get(i).setPhase(contestRepository.getByPhase(3));
-            }
+            setContestPhase(contests.get(i));
 
         }
 
@@ -80,13 +72,46 @@ public class ContestServiceImpl implements ContestService {
         return contests;
     }
 
+    private void setContestPhase(Contest contest){
+
+        LocalDateTime dateNow = LocalDateTime.now();
+        LocalDateTime contestStartingDate = contest.getStartingDate();
+        int phaseOneDays = contest.getPhaseOne();
+        int phaseTwoHours = contest.getPhaseTwo();
+        if (dateNow.isBefore(contestStartingDate)) {
+            contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_PREPARING));
+            return;
+        }
+
+        if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusDays(phaseOneDays))) {
+            contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_ONE));
+            return;
+        }
+
+        dateNow = dateNow.plusDays(phaseOneDays);
+        contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
+
+        if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
+            contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_TWO));
+            return;
+        }
+
+        contest.setPhase(contestRepository.getPhaseById(CONTEST_PHASE_FINISHED));
+
+    }
+
     @Override
-    public Contest getById(UserCredentials organizer, int id) {
+    public Contest getById(UserCredentials userCredentials, int id) {
+
+        verifyUserHasRoles(userCredentials,UserRoles.USER,UserRoles.ORGANIZER);
+
         return contestRepository.getById(id);
     }
 
     @Override
     public Contest create(Organizer organizer, Contest contest) {
+
+
 
         boolean ifContestTitleExist = true;
 
@@ -98,6 +123,8 @@ public class ContestServiceImpl implements ContestService {
         if (ifContestTitleExist) {
             throw new DuplicateEntityException("Contest", "title", contest.getTitle());
         }
+
+        setContestPhase(contest);
 
         Contest contestToCreate = contestRepository.create(contest);
         addParticipantsToContestAndPoints(contestToCreate);
@@ -141,7 +168,7 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points, String comment) {
 
-        checkIfUserIsInJury(userCredentials,imageId,contestId,points);
+        checkIfUserIsInJury(userCredentials, imageId, contestId, points);
 
         ImageRating imageRating = new ImageRating();
 
@@ -209,9 +236,9 @@ public class ContestServiceImpl implements ContestService {
         return contest;
     }
 
-    private void checkIfUserIsInJury(UserCredentials userCredentials, int imageId, int contestId,int points) {
+    private void checkIfUserIsInJury(UserCredentials userCredentials, int imageId, int contestId, int points) {
 
-        Contest contest = checkPointsContestAndImage(points,contestId,points);
+        Contest contest = checkPointsContestAndImage(points, contestId, points);
 
         boolean isOrganizer = true;
         List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
@@ -230,7 +257,6 @@ public class ContestServiceImpl implements ContestService {
         } catch (EntityNotFoundException e) {
             isOrganizer = false;
         }
-
 
 
         User user;

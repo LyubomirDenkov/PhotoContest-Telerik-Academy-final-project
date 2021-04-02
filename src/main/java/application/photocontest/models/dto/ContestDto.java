@@ -36,9 +36,6 @@ public class ContestDto {
     @Positive
     private int typeId;
 
-    @Positive
-    private int phaseId;
-
     private Set<Integer> participants;
 
     private Set<Integer> jury;
@@ -49,25 +46,16 @@ public class ContestDto {
     }
 
     public ContestDto(String title,  int categoryId, LocalDateTime startingDate,  int phaseOne,
-                      int phaseTwo,  int typeId,  int phaseId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
+                      int phaseTwo,  int typeId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
         this.startingDate = startingDate;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.typeId = typeId;
-        this.phaseId = phaseId;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-    }
-
-    public int getPhaseId() {
-        return phaseId;
-    }
-
-    public void setPhaseId(int phaseId) {
-        this.phaseId = phaseId;
     }
 
     public String getTitle() {

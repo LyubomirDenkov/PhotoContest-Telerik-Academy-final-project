@@ -1,6 +1,5 @@
 package application.photocontest.modelmappers;
 
-import application.photocontest.enums.UserRoles;
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
@@ -46,8 +45,6 @@ public class ContestMapper {
         contestToUpdate.setPhaseOne(contestDto.getPhaseOne());
         contestToUpdate.setPhaseTwo(contestDto.getPhaseTwo());
         contestToUpdate.setType(contestRepository.getByType(contestDto.getTypeId()));
-        contestToUpdate.setPhase(contestRepository.getByPhase(contestDto.getPhaseId()));
-
 
         setContestJuryAndParticipants(contestDto, contestToUpdate);
 
@@ -63,7 +60,6 @@ public class ContestMapper {
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setType(contestRepository.getByType(contestDto.getTypeId()));
-        contest.setPhase(contestRepository.getByPhase(contestDto.getPhaseId()));
         contest.setPointsAwarded(false);
 
         Set<Organizer> organizersJury = new HashSet<>();

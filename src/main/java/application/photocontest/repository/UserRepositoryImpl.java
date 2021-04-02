@@ -46,6 +46,20 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    public List<User> getParticipantsFromContest(int id){
+
+        try(Session session = sessionFactory.openSession()){
+
+            Query<User> query = session.createQuery("select u from Contest c " +
+                    "join c.participants as u " +
+                    "where c.id = :id " +
+                    "order by u.points desc ", User.class);
+
+            query.setParameter("id",id);
+            return query.list();
+        }
+    }
+
     @Override
     public UserCredentials getByUserName(String userName) {
         try (Session session = sessionFactory.openSession()) {
@@ -85,8 +99,6 @@ public class UserRepositoryImpl implements UserRepository {
             }
             return result.get(0);
         }
-
-
     }
 
 
