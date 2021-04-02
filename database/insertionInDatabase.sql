@@ -28,7 +28,7 @@ VALUES ('nikolay9','12345678'),
        ('ioan123','12345678'),
        ('koki123','12345678');
 
-INSERT INTO users( user_credentials,first_name, last_name, rank_id, points)
+INSERT INTO users( user_credentials,first_name, last_name, points)
 VALUES ('toshkata',  'Todor', 'Andonov',  200),
        ('vladi',  'Vladimir', 'Venkov',   1),
        ('nikolaicho', 'Nikolay', 'Georgiev',   1),
