@@ -92,7 +92,7 @@ public class ContestServiceImpl implements ContestService {
             return;
         }
 
-        dateNow = dateNow.plusDays(phaseOneDays);
+
         contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
 
         if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
