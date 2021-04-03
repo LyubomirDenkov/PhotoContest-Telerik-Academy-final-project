@@ -13,6 +13,7 @@ public interface ImageRepository extends CudRepositoryOperations<Image>{
 
     void createJurorRateEntity(ImageRating imageRating);
 
+    Long getImagePointsById(int id);
 
     List<ImageRating> getImageRatingsByUsername(String userName);
 
