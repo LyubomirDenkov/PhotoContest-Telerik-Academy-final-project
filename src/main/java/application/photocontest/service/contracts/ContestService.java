@@ -9,7 +9,7 @@ import application.photocontest.models.dto.ContestDto;
 
 public interface ContestService extends GetServiceOperations<Contest> {
 
-    Contest create(Organizer organizer, Contest contest);
+    Contest create(Organizer organizer, Contest contest, ContestDto contestDto);
 
     Contest update(Organizer organizer, Contest contest, ContestDto contestDto);
 

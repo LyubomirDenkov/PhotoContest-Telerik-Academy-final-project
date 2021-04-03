@@ -76,7 +76,7 @@ public class ContestServiceImpl implements ContestService {
         return contests;
     }
 
-    private void setContestPhase(Contest contest){
+    private void setContestPhase(Contest contest) {
 
         LocalDateTime dateNow = LocalDateTime.now();
         LocalDateTime contestStartingDate = contest.getStartingDate();
@@ -107,14 +107,13 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public Contest getById(UserCredentials userCredentials, int id) {
 
-        verifyUserHasRoles(userCredentials,UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(userCredentials, UserRoles.USER, UserRoles.ORGANIZER);
 
         return contestRepository.getById(id);
     }
 
     @Override
-    public Contest create(Organizer organizer, Contest contest) {
-
+    public Contest create(Organizer organizer, Contest contest, ContestDto contestDto) {
 
 
         boolean ifContestTitleExist = true;
@@ -129,9 +128,10 @@ public class ContestServiceImpl implements ContestService {
         }
 
         setContestPhase(contest);
+        setContestJury(contestDto, contest);
 
         Contest contestToCreate = contestRepository.create(contest);
-        addParticipantsToContestAndPoints(contestToCreate);
+        addParticipantsToContestAndPoints(contestToCreate, contestDto);
         return contestToCreate;
 
     }
@@ -143,29 +143,39 @@ public class ContestServiceImpl implements ContestService {
         if (!organizer.getCredentials().getUserName().equals(contest.getOrganizer().getCredentials().getUserName())) {
             throw new UnauthorizedOperationException("something");
         }
-
-        Set<User> participants = contest.getParticipants();
-
-        Set<User> newParticipants = new HashSet<>();
-
-        for (Integer participant : contestDto.getParticipants()) {
-            User participantToAdd = userRepository.getById(participant);
-            if (participants.contains(participantToAdd)) continue;
-
-            participantToAdd.setPoints(participantToAdd.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
-            newParticipants.add(participantToAdd);
-            participants.addAll(newParticipants);
-            userRepository.update(participantToAdd);
-
-        }
-
+        setContestJury(contestDto, contest);
+        updateParticipants(contest, contestDto);
         setContestPhase(contest);
 
-        contest.setParticipants(newParticipants);
         contestRepository.update(contest);
 
         return contest;
 
+    }
+
+    private void updateParticipants(Contest contest, ContestDto contestDto) {
+        Set<User> oldParticipants = contest.getParticipants();
+
+        Set<Integer> dtoParticipants = contestDto.getParticipants();
+
+        Set<User> jury = contest.getJury();
+
+        Set<User> participants = new HashSet<>();
+
+        for (Integer participant : dtoParticipants) {
+            User participantToAdd = userRepository.getById(participant);
+            if (oldParticipants.contains(participantToAdd)){
+                participants.add(participantToAdd);
+                continue;
+            }
+            if (jury.contains(participantToAdd)) continue;
+
+            participantToAdd.setPoints(participantToAdd.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
+            participants.add(participantToAdd);
+            userRepository.update(participantToAdd);
+
+        }
+        contest.setParticipants(participants);
     }
 
 
@@ -200,10 +210,10 @@ public class ContestServiceImpl implements ContestService {
         Phase contestPhase = contestRepository.getPhaseByName(CONTEST_PHASE_ONE);
         Type contestType = contestRepository.getTypeById(OPEN);
 
-        if (!contest.getPhase().equals(contestPhase)){
+        if (!contest.getPhase().equals(contestPhase)) {
             throw new UnauthorizedOperationException("You cannot join in a contest which is not in phase one.");
         }
-        if (contest.getType().equals(contestType)){
+        if (contest.getType().equals(contestType)) {
             throw new UnauthorizedOperationException("Content is invitational only");
         }
 
@@ -280,15 +290,32 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-    private void addParticipantsToContestAndPoints(Contest contest) {
-        Set<User> participants = contest.getParticipants();
-        for (User participant : participants) {
-            participant.setPoints(participant.getPoints() + 3);
-            userRepository.update(participant);
+    private void addParticipantsToContestAndPoints(Contest contest, ContestDto contestDto) {
+        Set<User> jury = contest.getJury();
+        Set<Integer> participants = contestDto.getParticipants();
+        User user;
+        Set<User> usersToAdd = new HashSet<>();
+        for (Integer participant : participants) {
+            user = userRepository.getById(participant);
+            if (jury.contains(user)) continue;
+            user.setPoints(user.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
+            userRepository.update(user);
+            usersToAdd.add(user);
         }
-        contest.setParticipants(participants);
+        contest.setParticipants(usersToAdd);
         contestRepository.update(contest);
     }
 
+    private void setContestJury(ContestDto contestDto, Contest contest) {
+        Set<User> jury = new HashSet<>();
+
+        for (Integer userId : contestDto.getJury()) {
+            User userToAdd = userRepository.getById(userId);
+            if (userToAdd.getPoints() > 150) {
+                jury.add(userToAdd);
+            }
+        }
+        contest.setJury(jury);
+    }
 
 }

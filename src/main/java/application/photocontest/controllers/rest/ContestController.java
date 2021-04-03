@@ -81,7 +81,7 @@ public class ContestController {
 
         try {
             Contest contest = contestMapper.fromDto(contestDto, organizer);
-            return contestService.create(organizer, contest);
+            return contestService.create(organizer, contest,contestDto);
 
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

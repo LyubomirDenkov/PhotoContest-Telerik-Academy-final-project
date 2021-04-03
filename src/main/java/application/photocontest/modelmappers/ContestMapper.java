@@ -45,11 +45,15 @@ public class ContestMapper {
         contestToUpdate.setPhaseOne(contestDto.getPhaseOne());
         contestToUpdate.setPhaseTwo(contestDto.getPhaseTwo());
         contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
+        contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
 
-        setContestJuryAndParticipants(contestDto, contestToUpdate);
+
 
         return contestToUpdate;
+
     }
+
+
 
     public Contest dtoToObject(ContestDto contestDto, Contest contest, Organizer organizer) {
 
@@ -61,44 +65,18 @@ public class ContestMapper {
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contest.setPointsAwarded(false);
+        contest.setBackgroundImage(contestDto.getBackgroundImage());
+
+
 
         Set<Organizer> organizersJury = new HashSet<>();
         organizersJury.addAll(organizerRepository.getAll());
         contest.setOrganizersJury(organizersJury);
 
-        setContestJuryAndParticipants(contestDto, contest);
+
 
 
         return contest;
-    }
-
-    private void setContestJuryAndParticipants(ContestDto contestDto, Contest contest) {
-
-        Set<User> jury = new HashSet<>();
-
-
-            for (Integer userId : contestDto.getJury()) {
-                User userToAdd = userRepository.getById(userId);
-                if (userToAdd.getPoints() > 150) {
-                    jury.add(userToAdd);
-                }
-            }
-
-
-        Set<User> participants = new HashSet<>();
-
-
-            for (Integer userId : contestDto.getParticipants()) {
-                User userToAdd = userRepository.getById(userId);
-                if (jury.contains(userToAdd)) {
-                    continue;
-                }
-                participants.add(userToAdd);
-            }
-
-        contest.setJury(jury);
-        contest.setParticipants(participants);
-
     }
 
 

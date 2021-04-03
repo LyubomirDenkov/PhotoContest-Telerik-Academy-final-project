@@ -84,6 +84,7 @@ create or replace table contest
     phase2_hours    int                                   not null,
     organizer       int                                   not null,
     type_id         int                                   not null,
+image_url text not null,
     phase_id        int                                   not null,
     isPointsAwarded tinyint(1)                            not null,
     constraint contest_category_fk
