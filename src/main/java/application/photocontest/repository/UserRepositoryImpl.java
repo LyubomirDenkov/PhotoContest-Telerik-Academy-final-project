@@ -46,6 +46,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
     public List<User> getParticipantsFromContest(int id){
 
         try(Session session = sessionFactory.openSession()){
@@ -59,6 +60,17 @@ public class UserRepositoryImpl implements UserRepository {
             return query.list();
         }
     }
+
+    @Override
+    public User getUserByPictureId(int id){
+
+        try(Session session = sessionFactory.openSession()){
+            return session.createQuery("select u from User u " +
+                    "join u.userCredentials.images as images " +
+                    "where images.id = :id", User.class).setParameter("id",id).uniqueResult();
+        }
+    }
+
 
     @Override
     public UserCredentials getByUserName(String userName) {
