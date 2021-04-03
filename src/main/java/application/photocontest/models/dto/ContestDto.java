@@ -2,8 +2,8 @@ package application.photocontest.models.dto;
 
 
 import application.photocontest.models.Image;
-import application.photocontest.models.User;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -36,6 +36,9 @@ public class ContestDto {
     @Positive
     private int typeId;
 
+    @NotEmpty
+    private String backgroundImage;
+
     private Set<Integer> participants;
 
     private Set<Integer> jury;
@@ -46,7 +49,7 @@ public class ContestDto {
     }
 
     public ContestDto(String title,  int categoryId, LocalDateTime startingDate,  int phaseOne,
-                      int phaseTwo,  int typeId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
+                      int phaseTwo,  int typeId,String backgroundImage, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
         this.startingDate = startingDate;
@@ -56,6 +59,7 @@ public class ContestDto {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
+        this.backgroundImage = backgroundImage;
     }
 
     public String getTitle() {
@@ -105,6 +109,14 @@ public class ContestDto {
 
     public void setTypeId(int typeId) {
         this.typeId = typeId;
+    }
+
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 
     public Set<Integer> getParticipants() {

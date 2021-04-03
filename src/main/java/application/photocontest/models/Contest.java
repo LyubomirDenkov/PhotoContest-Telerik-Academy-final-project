@@ -3,7 +3,6 @@ package application.photocontest.models;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -45,9 +44,11 @@ public class Contest {
     @JoinColumn(name = "phase_id")
     private Phase phase;
 
-
     @Column(name = "isPointsAwarded")
     private boolean isPointsAwarded;
+
+    @Column(name = "image_url")
+    private String backgroundImage;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -82,9 +83,13 @@ public class Contest {
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, LocalDateTime startingDate, int phaseOne, int phaseTwo,
-                   Organizer organizer, Type type, Phase phase,Boolean isPointsAwarded, Set<User> participants, Set<User> jury,
-                   Set<Image> images,Set<Organizer> organizersJury) {
+    public Contest(int id, String title, Category category,
+                   LocalDateTime startingDate, int phaseOne,
+                   int phaseTwo, Organizer organizer, Type type,
+                   Phase phase, boolean isPointsAwarded, String backgroundImage,
+                   Set<User> participants, Set<User> jury,
+                   Set<Image> images, Set<Organizer> organizersJury) {
+
         this.id = id;
         this.title = title;
         this.category = category;
@@ -95,6 +100,7 @@ public class Contest {
         this.type = type;
         this.phase = phase;
         this.isPointsAwarded = isPointsAwarded;
+        this.backgroundImage = backgroundImage;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
@@ -173,13 +179,20 @@ public class Contest {
         this.phase = phase;
     }
 
-
     public boolean isPointsAwarded() {
         return isPointsAwarded;
     }
 
     public void setPointsAwarded(boolean pointsAwarded) {
         isPointsAwarded = pointsAwarded;
+    }
+
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(String imageUrl) {
+        this.backgroundImage = imageUrl;
     }
 
     public Set<User> getParticipants() {
