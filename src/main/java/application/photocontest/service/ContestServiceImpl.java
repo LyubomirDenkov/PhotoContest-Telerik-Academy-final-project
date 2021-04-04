@@ -25,8 +25,7 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 public class ContestServiceImpl implements ContestService {
 
     private static final String CONTEST_PHASE_PREPARING = "preparing";
-    private static final String CONTEST_PHASE_ONE = "phaseOne";
-    private static final String CONTEST_PHASE_TWO = "phaseTwo";
+    private static final String CONTEST_PHASE_VOTING = "voting";
     private static final String CONTEST_PHASE_FINISHED = "finished";
     private static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
     private static final String USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS = "User cannot add other users in contests.";
@@ -88,7 +87,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusDays(phaseOneDays))) {
-            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_ONE));
+            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
             return;
         }
 
@@ -96,7 +95,7 @@ public class ContestServiceImpl implements ContestService {
         contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
 
         if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
-            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_TWO));
+            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_VOTING));
             return;
         }
 
@@ -199,7 +198,7 @@ public class ContestServiceImpl implements ContestService {
     public void addImage(UserCredentials userCredentials, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
-        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_ONE)) {
+        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
             throw new UnauthorizedOperationException("You can add photos only in phase one.");
         }
         if (!contest.getParticipants().contains(userRepository.getUserByUserName(userCredentials.getUserName()))) {
@@ -226,7 +225,7 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
         }
 
-        Phase contestPhase = contestRepository.getPhaseByName(CONTEST_PHASE_ONE);
+        Phase contestPhase = contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING);
         Type contestType = contestRepository.getTypeById(OPEN);
 
         if (!contest.getPhase().equals(contestPhase)) {
