@@ -205,6 +205,7 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException("Only a participant can upload photo.");
         }
 
+
         Image image = imageRepository.getById(imageId);
         Set<Image> addImage = new HashSet<>();
         addImage.add(image);
@@ -212,6 +213,8 @@ public class ContestServiceImpl implements ContestService {
         contest.setImages(addImage);
         contestRepository.update(contest);
     }
+
+
 
     @Override
     public void addUserToContest(UserCredentials userCredentials, int contestId, int userId) {

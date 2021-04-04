@@ -161,4 +161,5 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
 }

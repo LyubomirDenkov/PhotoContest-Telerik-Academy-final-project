@@ -9,7 +9,6 @@ import application.photocontest.service.contracts.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -17,6 +16,8 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
+
+
 
     @Autowired
     public ImageServiceImpl(ImageRepository imageRepository, UserRepository userRepository) {
@@ -31,11 +32,18 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image create(UserCredentials userCredentials, Image image) {
+                Image imageToCreate = imageRepository.create(image);
+        User user = userRepository.getUserByUserName(userCredentials.getUserName());
+        Set<Image> images = user.getUserCredentials().getImages();
+        images.add(imageToCreate);
+        userCredentials.setImages(images);
 
+                userRepository.update(user);
 
-        return imageRepository.create(image);
+                return imageToCreate;
 
     }
+
 
     @Override
     public void delete(UserCredentials userCredentials, int id) {

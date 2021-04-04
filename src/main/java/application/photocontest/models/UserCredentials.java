@@ -25,6 +25,7 @@ public class UserCredentials {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_images",

@@ -132,4 +132,14 @@ public class ContestRepositoryImpl implements ContestRepository {
 
     }
 
+    @Override
+    public Contest getFinishedContest(int id) {
+    //   try (Session session = sessionFactory.openSession()) {
+    //       Query<Contest> query = session.createQuery("from Contest where id: ",Contest.class);
+    //       query.setParameter("id",id);
+       // }
+
+        return null;
+    }
+
 }
