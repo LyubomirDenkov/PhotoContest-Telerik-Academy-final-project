@@ -47,7 +47,7 @@ public class ImageController {
 
     }
 
-    @PostMapping
+    @PostMapping("/upload")
     public Image create(@RequestHeader HttpHeaders headers,
                         @RequestParam(name = "file", required = false) Optional<MultipartFile> file,
                         @RequestParam(name = "url", required = false) Optional<String> url,
