@@ -196,6 +196,25 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public void addImage(UserCredentials userCredentials, int contestId, int imageId) {
+
+        Contest contest = contestRepository.getById(contestId);
+        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_ONE)) {
+            throw new UnauthorizedOperationException("You can add photos only in phase one.");
+        }
+        if (!contest.getParticipants().contains(userRepository.getUserByUserName(userCredentials.getUserName()))) {
+            throw new UnauthorizedOperationException("Only a participant can upload photo.");
+        }
+
+        Image image = imageRepository.getById(imageId);
+        Set<Image> addImage = new HashSet<>();
+        addImage.add(image);
+
+        contest.setImages(addImage);
+        contestRepository.update(contest);
+    }
+
+    @Override
     public void addUserToContest(UserCredentials userCredentials, int contestId, int userId) {
 
         verifyUserHasRoles(userCredentials, UserRoles.USER);
@@ -222,11 +241,14 @@ public class ContestServiceImpl implements ContestService {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
 
+
         user.setPoints(user.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST);
         userRepository.update(user);
 
         participants.add(user);
         contest.setParticipants(participants);
+
+
         contestRepository.update(contest);
 
     }

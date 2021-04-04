@@ -112,7 +112,8 @@ public class ContestController {
 
     @ApiOperation(value = "Add user to contest")
     @PutMapping("/{contestId}/user/{userId}")
-    public void addUser(@RequestHeader HttpHeaders headers, @PathVariable int contestId, @PathVariable int userId) {
+    public void addUser(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+                        @PathVariable int userId) {
         UserCredentials user = authenticationHelper.tryGetUser(headers);
 
         try {
@@ -124,12 +125,26 @@ public class ContestController {
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
+    @ApiOperation(value = "Add image to contest")
+    @PostMapping("/{contestId}/image/{imageId}")
+    public void addImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+                         @PathVariable int imageId) {
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
-
+        try {
+            contestService.addImage(userCredentials, contestId, imageId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalArgumentException | DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @ApiOperation(value = "Rate image")
-    @PostMapping("/{contestId}/image/{imageId}")
+    @PostMapping("/{contestId}/rating/{imageId}")
     public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                           @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto) {
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
