@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "jury_rated_images")
+@Table(name = "rated_images")
 public class ImageRating {
 
 

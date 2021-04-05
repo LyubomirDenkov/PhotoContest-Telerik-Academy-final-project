@@ -26,7 +26,7 @@ public class Image {
     private String url;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "jury_rated_images",
+    @JoinTable(name = "rated_images",
             joinColumns = @JoinColumn(name = "user_name"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<UserCredentials> jurorAwardedRating;

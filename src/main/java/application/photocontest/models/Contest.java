@@ -59,7 +59,7 @@ public class Contest {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "contest_jury",
+            name = "jury_users",
             joinColumns = @JoinColumn(name = "contest_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> jury;
@@ -75,7 +75,7 @@ public class Contest {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "contest_jury_organizers",
+            name = "jury_organizers",
             joinColumns = @JoinColumn(name = "contest_id"),
             inverseJoinColumns = @JoinColumn(name = "organizer_id"))
     private Set<Organizer> organizersJury;

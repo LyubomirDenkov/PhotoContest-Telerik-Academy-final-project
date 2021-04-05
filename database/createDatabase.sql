@@ -48,7 +48,7 @@ create or replace table user_credentials
 alter table user_credentials
     add primary key (user_name);
 
-create or replace table jury_rated_images
+create or replace table rated_images
 (
     rated_image_id int auto_increment
         primary key,
@@ -56,9 +56,9 @@ create or replace table jury_rated_images
     image_id       int         not null,
     points         int         not null,
     comment        longtext    not null,
-    constraint jury_rated_images_images_fk
+    constraint rated_images_images_fk
         foreign key (image_id) references images (image_id),
-    constraint jury_rated_images_user_credentials_fk
+    constraint rated_images_user_credentials_fk
         foreign key (user_name) references user_credentials (user_name)
 );
 
@@ -107,13 +107,13 @@ create or replace table contest_image
         foreign key (image_id) references images (image_id)
 );
 
-create or replace table contest_jury_organizers
+create or replace table jury_organizers
 (
     contest_id   int not null,
     organizer_id int not null,
-    constraint contest_jury_organizers_contest_fk
+    constraint jury_organizers_contest_fk
         foreign key (contest_id) references contest (contest_id),
-    constraint contest_jury_organizers_fk
+    constraint jury_organizers_fk
         foreign key (organizer_id) references organizers (organizer_id)
 );
 
@@ -129,13 +129,13 @@ create or replace table users
         foreign key (user_credentials) references user_credentials (user_name)
 );
 
-create or replace table contest_jury
+create or replace table jury_users
 (
     contest_id int not null,
     user_id    int not null,
-    constraint contest_jury_contest_fk
+    constraint jury_users_contest_fk
         foreign key (contest_id) references contest (contest_id),
-    constraint contest_jury_users_fk
+    constraint jury_users_users_fk
         foreign key (user_id) references users (user_id)
 );
 

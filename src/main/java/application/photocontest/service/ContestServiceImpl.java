@@ -289,7 +289,7 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(contestId);
 
-        if (!contest.getPhase().getName().equalsIgnoreCase("phaseTwo")) {
+        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_VOTING)) {
             throw new UnauthorizedOperationException(PHASE_RATING_ERROR_MESSAGE);
         }
 
