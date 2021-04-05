@@ -46,7 +46,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 
         verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
 
-        return null;
+        return organizerRepository.getById(id);
     }
 
     @Override
