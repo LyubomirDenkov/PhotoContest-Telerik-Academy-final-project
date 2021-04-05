@@ -8,7 +8,7 @@ public class LoginDto {
     private static final String PASSWORD_ERROR_MESSAGE = "Password cant be empty";
 
     @NotNull(message = USER_NAME_OR_EMAIL_ERROR_MESSAGE)
-    private String userNameOrEmail;
+    private String userName;
 
     @NotNull(message = PASSWORD_ERROR_MESSAGE)
     private String password;
@@ -16,17 +16,17 @@ public class LoginDto {
     public LoginDto() {
     }
 
-    public LoginDto(String userNameOrEmail, String password) {
-        this.userNameOrEmail = userNameOrEmail;
+    public LoginDto(String userName, String password) {
+        this.userName = userName;
         this.password = password;
     }
 
-    public String getUserNameOrEmail() {
-        return userNameOrEmail;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserNameOrEmail(String userNameOrEmail) {
-        this.userNameOrEmail = userNameOrEmail;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
