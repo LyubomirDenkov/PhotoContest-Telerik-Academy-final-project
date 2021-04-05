@@ -2,9 +2,11 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
+import application.photocontest.models.Contest;
 import application.photocontest.repository.contracts.CategoryRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -49,6 +51,26 @@ public class CategoryRepositoryImpl implements CategoryRepository {
                 throw new EntityNotFoundException("Category", id);
             }
             return category;
+        }
+
+    }
+    @Override
+    public Category getByName(String name) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<Category> query = session.createQuery("from Category " +
+                    "where name = :name ", Category.class);
+
+            query.setParameter("name", name);
+
+            List<Category> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("Category", "name", name);
+
+            }
+            return result.get(0);
         }
     }
 }
