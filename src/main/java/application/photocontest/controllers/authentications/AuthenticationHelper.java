@@ -52,20 +52,20 @@ public class AuthenticationHelper {
         }
     }
 
-    public User tryGetUser(HttpSession session) {
-        String currentUserEmail = (String) session.getAttribute("currentUser");
+    public UserCredentials tryGetUser(HttpSession session) {
+        String currentUserName = (String) session.getAttribute("currentUser");
 
-        if (currentUserEmail == null) {
+        if (currentUserName == null) {
             throw new UnauthorizedOperationException("No user logged in.");
         }
 
-        return userService.getUserByUserName(currentUserEmail);
+        return userService.getByUserName(currentUserName);
     }
 
-    public User verifyAuthentication(String email, String password) {
+    public UserCredentials verifyAuthentication(String userName, String password) {
         try {
-            User user = userService.getUserByUserName(email);
-            if (!user.getUserCredentials().getPassword().equals(password)) {
+            UserCredentials user = userService.getByUserName(userName);
+            if (!user.getPassword().equals(password)) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }
             return user;

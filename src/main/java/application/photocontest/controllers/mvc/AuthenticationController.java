@@ -6,6 +6,7 @@ import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.LoginDto;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.service.contracts.UserService;
@@ -28,6 +29,7 @@ public class AuthenticationController {
     private final UserMapper userMapper;
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
+
 
 
     public AuthenticationController(UserMapper userMapper, AuthenticationHelper authenticationHelper, UserService userService) {
@@ -55,7 +57,7 @@ public class AuthenticationController {
         try {
             authenticationHelper.verifyAuthentication(login.getUserName(), login.getPassword());
             session.setAttribute("currentUser", login.getUserName());
-            User currentUser = authenticationHelper.tryGetUser(session);
+            UserCredentials currentUser = authenticationHelper.tryGetUser(session);
             model.addAttribute("currentUser", currentUser);
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
