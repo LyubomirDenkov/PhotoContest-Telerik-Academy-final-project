@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class CategoryDto {
 
-    public static final String CATEGORY_ERROR_MESSAGE = "Category name must be between 3 and 30 symbols.";
+    private static final String CATEGORY_ERROR_MESSAGE = "Category name must be between 3 and 30 symbols.";
 
 
     @NotNull

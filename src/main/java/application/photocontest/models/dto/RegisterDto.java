@@ -9,6 +9,7 @@ public class RegisterDto {
     private static final String USER_NAME_ERROR_MESSAGE = "Username must be between 3 and 30 symbols.";
     private static final String FIRST_NAME_ERROR_MESSAGE = "First name must be between 2 and 30 symbols.";
     private static final String LAST_NAME_ERROR_MESSAGE = "Last name must be between 2 and 30 symbols.";
+    private static final String PASSWORD_ERROR_MESSAGE = "Password must be at least 4 symbols.";
 
 
     @NotNull
@@ -16,9 +17,11 @@ public class RegisterDto {
     private String userName;
 
     @NotNull
+    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
     private String password;
 
     @NotNull
+    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
     private String repeatPassword;
 
     @NotNull

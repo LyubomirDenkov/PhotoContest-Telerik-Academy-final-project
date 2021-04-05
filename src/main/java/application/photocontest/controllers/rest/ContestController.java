@@ -9,7 +9,6 @@ import application.photocontest.modelmappers.ContestMapper;
 
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
-import application.photocontest.models.dto.ImageDto;
 import application.photocontest.models.dto.RateImageDto;
 import application.photocontest.service.contracts.ContestService;
 import io.swagger.annotations.ApiOperation;
@@ -21,8 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
-
-import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 
 @RestController
 @RequestMapping("/api/contests")

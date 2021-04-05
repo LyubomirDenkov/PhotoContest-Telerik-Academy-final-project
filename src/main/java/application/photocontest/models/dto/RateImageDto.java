@@ -6,10 +6,13 @@ import javax.validation.constraints.Positive;
 
 public class RateImageDto {
 
-    @Positive
+    private static final String POINTS_MUST_BE_POSITIVE = "Points must be positive.";
+    private static final String COMMENT_MUST_NOT_BE_NULL = "Comment must no be null.";
+
+    @Positive(message = POINTS_MUST_BE_POSITIVE)
     private int points;
 
-    @NotNull
+    @NotNull(message = COMMENT_MUST_NOT_BE_NULL)
     private String comment;
 
     public RateImageDto() {
