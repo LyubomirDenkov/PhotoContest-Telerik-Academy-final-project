@@ -71,7 +71,7 @@ public class ImageController {
         }
 
 
-        Image image = imageMapper.toModel(title, story, imageLink);
+        Image image = imageMapper.fromDto(userCredentials,title, story, imageLink);
 
         return imageService.create(userCredentials, image);
     }

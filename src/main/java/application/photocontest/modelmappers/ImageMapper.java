@@ -1,7 +1,10 @@
 package application.photocontest.modelmappers;
 
 import application.photocontest.models.Image;
+import application.photocontest.models.User;
+import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.ImageRepository;
+import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +19,7 @@ public class ImageMapper {
     }
 
 
-    public Image toModel(String title,String story,String imagePath) {
+    public Image fromDto(UserCredentials userCredentials, String title, String story, String imagePath) {
 
         Image image = new Image();
 

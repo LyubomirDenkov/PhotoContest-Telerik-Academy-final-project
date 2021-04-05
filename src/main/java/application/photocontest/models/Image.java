@@ -25,6 +25,10 @@ public class Image {
     @Column(name = "image")
     private String url;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User uploadedBy;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rated_images",
             joinColumns = @JoinColumn(name = "user_name"),
@@ -36,15 +40,15 @@ public class Image {
 
     }
 
-    public Image(int id, String title, String story, String url,
-                 Set<UserCredentials> jurorAwardedRating) {
+
+    public Image(int id, String title, String story, String url, User uploadedBy, Set<UserCredentials> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
         this.url = url;
+        this.uploadedBy = uploadedBy;
         this.jurorAwardedRating = jurorAwardedRating;
     }
-
 
     public int getId() {
         return id;
@@ -74,8 +78,16 @@ public class Image {
         return url;
     }
 
-    public void setUrl(String image) {
-        this.url = image;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public User getUploadedBy() {
+        return uploadedBy;
+    }
+
+    public void setUploadedBy(User uploadedBy) {
+        this.uploadedBy = uploadedBy;
     }
 
     public Set<UserCredentials> getJurorAwardedRating() {
@@ -89,13 +101,14 @@ public class Image {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Image)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
+        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getUploadedBy().equals(image.getUploadedBy()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getJurorAwardedRating());
+        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getUploadedBy(), getJurorAwardedRating());
     }
+
 }
