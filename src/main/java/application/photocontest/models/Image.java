@@ -29,6 +29,9 @@ public class Image {
     @JoinColumn(name = "user_id")
     private User uploadedBy;
 
+    @Column(name = "points")
+    private int points;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rated_images",
             joinColumns = @JoinColumn(name = "user_name"),
@@ -41,12 +44,13 @@ public class Image {
     }
 
 
-    public Image(int id, String title, String story, String url, User uploadedBy, Set<UserCredentials> jurorAwardedRating) {
+    public Image(int id, String title, String story, String url, User uploadedBy,int points ,Set<UserCredentials> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
         this.url = url;
         this.uploadedBy = uploadedBy;
+        this.points = points;
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
@@ -90,6 +94,14 @@ public class Image {
         this.uploadedBy = uploadedBy;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     public Set<UserCredentials> getJurorAwardedRating() {
         return jurorAwardedRating;
     }
@@ -103,12 +115,13 @@ public class Image {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getUploadedBy().equals(image.getUploadedBy()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
+        return getId() == image.getId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getUploadedBy().equals(image.getUploadedBy()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getUploadedBy(), getJurorAwardedRating());
+        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getUploadedBy(), getPoints(), getJurorAwardedRating());
     }
+
 
 }

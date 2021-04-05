@@ -9,7 +9,7 @@
 # General
 --------------------------------------------------------------*/
 body {
-  background: #fff;
+  background: #222831;
   color: #2f3138;
   font-family: "Open Sans", sans-serif;
 }
@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
   margin: 0 0 20px 0;
   padding: 0;
-  color: #0e1b4d;
+  color: #f82249;
 }
 
 .main-page {

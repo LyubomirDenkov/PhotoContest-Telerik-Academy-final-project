@@ -10,6 +10,7 @@ import application.photocontest.service.contracts.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
@@ -55,5 +56,10 @@ public class ImageServiceImpl implements ImageService {
     public void delete(UserCredentials userCredentials, int id) {
 
         imageRepository.delete(id);
+    }
+
+    @Override
+    public List<Image> getTopEightRatedPictures() {
+        return imageRepository.getTopEightRatedPictures();
     }
 }

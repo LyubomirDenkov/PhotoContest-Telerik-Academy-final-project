@@ -3,6 +3,8 @@ package application.photocontest.service.contracts;
 import application.photocontest.models.Image;
 import application.photocontest.models.UserCredentials;
 
+import java.util.List;
+
 public interface ImageService {
 
     Image getById(UserCredentials userCredentials, int id);
@@ -10,5 +12,7 @@ public interface ImageService {
     Image create(UserCredentials userCredentials, Image image);
 
     void delete(UserCredentials userCredentials,int id);
+
+    List<Image> getTopEightRatedPictures();
 
 }
