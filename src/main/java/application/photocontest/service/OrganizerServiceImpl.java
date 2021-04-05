@@ -23,6 +23,7 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 public class OrganizerServiceImpl implements OrganizerService {
 
 
+    public static final String UPDATE_PROFILE_ERROR_MESSAGE = "Organizer can update his profile only by himself.";
     private final OrganizerRepository organizerRepository;
     private final UserRepository userRepository;
 
@@ -80,7 +81,7 @@ public class OrganizerServiceImpl implements OrganizerService {
         verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
 
         if (!userCredentials.getUserName().equalsIgnoreCase(organizer.getCredentials().getUserName())){
-            throw new UnauthorizedOperationException("Organizer can update his profile only by himself.");
+            throw new UnauthorizedOperationException(UPDATE_PROFILE_ERROR_MESSAGE);
         }
         return organizerRepository.update(organizer);
 
