@@ -89,6 +89,10 @@ public class ContestServiceImpl implements ContestService {
         return contests;
     }
 
+    public List<Contest> getOngoingContests(){
+       return contestRepository.getOngoingContests();
+    }
+
     private void setContestPhase(Contest contest) {
 
         LocalDateTime dateNow = LocalDateTime.now();
@@ -205,6 +209,9 @@ public class ContestServiceImpl implements ContestService {
         imageRating.setComment(comment);
         imageRepository.createJurorRateEntity(imageRating);
 
+        Image image = imageRepository.getById(imageId);
+        image.setPoints(image.getPoints() + points);
+        imageRepository.update(image);
 
     }
 

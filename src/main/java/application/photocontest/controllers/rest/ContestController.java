@@ -50,6 +50,11 @@ public class ContestController {
         }
     }
 
+    @GetMapping("/ongoing")
+    public List<Contest> getOngoingContests(){
+        return contestService.getOngoingContests();
+    }
+
 
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")

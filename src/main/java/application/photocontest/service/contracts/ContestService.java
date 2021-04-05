@@ -7,6 +7,8 @@ import application.photocontest.models.Organizer;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
 
+import java.util.List;
+
 
 public interface ContestService extends GetServiceOperations<Contest> {
 
@@ -22,4 +24,5 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     Image addImage(UserCredentials userCredentials, int contestId, int imageId);
 
+    List<Contest> getOngoingContests();
 }

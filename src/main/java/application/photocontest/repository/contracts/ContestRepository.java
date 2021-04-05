@@ -18,4 +18,5 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>,CudR
 
     Phase getPhaseByName(String phaseName);
 
+    List<Contest> getOngoingContests();
 }

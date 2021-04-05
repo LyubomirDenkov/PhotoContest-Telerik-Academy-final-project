@@ -68,7 +68,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     public List<Image> getTopEightRatedPictures(){
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Image order by points desc ",Image.class).list().subList(0,7);
+            return session.createQuery("from Image order by points desc ",Image.class).list().subList(0,6);
         }
     }
 

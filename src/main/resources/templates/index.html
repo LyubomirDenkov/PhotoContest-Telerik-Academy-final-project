@@ -132,7 +132,7 @@
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
                                  alt="Speaker 1" class="img-fluid">
                             <div class="contest-type">
-                                <h6 th:text="*{contest.getType().getName()}">open</h6>
+                                        <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">Open</div>
                             </div>
                             <div class="details">
                                 <h3><a href="speaker-details.html" th:text="*{contest.getCategory().getName()}" >Brenden Legros</a></h3>
@@ -152,36 +152,22 @@
     <!-- ======= Venue Section ======= -->
     <section id="venue">
         <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
+            <div class="section-header">
+                <br>
+                <h2>Top 6 rated pictures</h2>
+                <p>Here are some of our speakers</p>
+                <br>
+            </div>
             <div class="row g-0">
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-4" th:each="image : ${topImages}">
                     <div class="venue-gallery">
-                        <a href="/assets/img/venue-gallery/1.jpg" class="glightbox" data-gall="venue-gallery">
-                            <img src="/assets/img/venue-gallery/1.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
+                        <div>
+                                <i class="bi bi-star-fill image-points-icon"></i>
+                                <div class="image-points-count" th:text="*{image.getPoints()}"></div>
 
-                <div class="col-lg-3 col-md-4">
-                    <div class="venue-gallery">
-                        <a href="/assets/img/venue-gallery/2.jpg" class="glightbox" data-gall="venue-gallery">
-                            <img src="/assets/img/venue-gallery/2.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
+                                <img th:src="*{image.getUrl()}" src="/assets/img/venue-gallery/1.jpg" alt="" class="img-fluid">
+                        </div>
 
-                <div class="col-lg-3 col-md-4">
-                    <div class="venue-gallery">
-                        <a href="/assets/img/venue-gallery/3.jpg" class="glightbox" data-gall="venue-gallery">
-                            <img src="/assets/img/venue-gallery/3.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="venue-gallery">
-                        <a href="/assets/img/venue-gallery/4.jpg" class="glightbox" data-gall="venue-gallery">
-                            <img src="/assets/img/venue-gallery/4.jpg" alt="" class="img-fluid">
-                        </a>
                     </div>
                 </div>
             </div>
