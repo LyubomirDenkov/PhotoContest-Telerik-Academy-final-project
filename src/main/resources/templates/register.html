@@ -8,5 +8,72 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#" th:href="@{/}" ><img src="../static/assets/img/navbar-logo.svg" th:src="@{/assets/img/navbar-logo.svg}" alt="navbarlogo"  /></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars ml-1"></i>
+        </button>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Register</h5>
+                    <form class="form-signin" action="#" th:action="@{/auth/register}" th:object="${register}"
+                          method="post">
+                        <div class="form-label-group">
+                            <input type="text" th:field="*{firstName}" id="inputFirstName" class="form-control"
+                                   placeholder="First name" required autofocus>
+                            <label for="inputFirstName">First name</label>
+                            <p class="error-custom" th:errors="*{firstName}">First name error.</p>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" th:field="*{lastName}" id="inputLastName" class="form-control"
+                                   placeholder="Last name" required autofocus>
+                            <label for="inputLastName">Last name</label>
+                            <p class="error-custom" th:errors="*{lastName}">Last name error.</p>
+
+                        </div>
+
+                        <hr>
+
+                        <div class="form-label-group">
+                            <input type="text" th:field="*{userName}" id="inputEmail" class="form-control"
+                                   placeholder="User name" required>
+                            <label for="inputEmail">User Name</label>
+                            <p class="error-custom" th:errors="*{userName}">First name error.</p>
+
+                        </div>
+
+
+                        <div class="form-label-group">
+                            <input type="password" th:field="*{password}" id="inputPassword" class="form-control"
+                                   placeholder="Password" required>
+                            <label for="inputPassword">Password</label>
+                            <p class="error-custom" th:errors="*{password}">First name error.</p>
+
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" th:field="*{repeatPassword}" id="inputConfirmPassword"
+                                   class="form-control" placeholder="Password" required>
+                            <label for="inputConfirmPassword">Confirm password</label>
+                            <p class="error-custom" th:errors="*{repeatPassword}">First name error.</p>
+                        </div>
+
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+                        <a class="d-block text-center mt-2 small" href="#" th:href="@{/auth/login}">Sign In</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
