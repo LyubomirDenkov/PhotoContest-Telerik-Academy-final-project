@@ -3,6 +3,12 @@ package application.photocontest.service.contracts;
 import application.photocontest.models.Category;
 import application.photocontest.models.UserCredentials;
 
-public interface CategoryService extends GetServiceOperations<Category> {
+import java.util.List;
+
+public interface CategoryService {
     Category create(UserCredentials user, Category category);
+    List<Category> getAll();
+
+    Category getById(UserCredentials userCredentials, int id);
+
 }

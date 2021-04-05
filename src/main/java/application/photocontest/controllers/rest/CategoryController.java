@@ -39,9 +39,8 @@ public class CategoryController {
 
     @ApiOperation(value = "Get all categories")
     @GetMapping
-    public List<Category> getAll(@RequestHeader HttpHeaders headers) {
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
-        return categoryService.getAll(user);
+    public List<Category> getAll() {
+        return categoryService.getAll();
     }
 
     @ApiOperation(value = "Get by id")

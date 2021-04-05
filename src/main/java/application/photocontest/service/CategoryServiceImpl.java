@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAll(UserCredentials userCredentials) {
+    public List<Category> getAll() {
         return categoryRepository.getAll();
     }
 
