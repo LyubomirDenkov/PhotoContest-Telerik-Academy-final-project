@@ -7,10 +7,7 @@ import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
 
-import application.photocontest.models.Contest;
-import application.photocontest.models.Organizer;
-import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
+import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.models.dto.ImageDto;
 import application.photocontest.models.dto.RateImageDto;
@@ -127,13 +124,13 @@ public class ContestController {
         }
     }
     @ApiOperation(value = "Add image to contest")
-    @PostMapping("/{contestId}/image/{imageId}")
-    public void addImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
-                         @PathVariable int imageId) {
+    @PutMapping("/{contestId}/image/{imageId}")
+    public Image addImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+                          @PathVariable int imageId) {
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
         try {
-            contestService.addImage(userCredentials, contestId, imageId);
+           return contestService.addImage(userCredentials, contestId, imageId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

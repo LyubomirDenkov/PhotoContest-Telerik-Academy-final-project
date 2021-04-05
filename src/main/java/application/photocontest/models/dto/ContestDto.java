@@ -25,8 +25,6 @@ public class ContestDto {
     @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
 
-    private LocalDateTime startingDate;
-
     @Positive
     private int phaseOne;
 
@@ -48,11 +46,11 @@ public class ContestDto {
     public ContestDto() {
     }
 
-    public ContestDto(String title,  int categoryId, LocalDateTime startingDate,  int phaseOne,
+    public ContestDto(String title,  int categoryId,  int phaseOne,
                       int phaseTwo,  int typeId,String backgroundImage, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
-        this.startingDate = startingDate;
+
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.typeId = typeId;
@@ -76,14 +74,6 @@ public class ContestDto {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public LocalDateTime getStartingDate() {
-        return startingDate;
-    }
-
-    public void setStartingDate(LocalDateTime startingDate) {
-        this.startingDate = startingDate;
     }
 
     public int getPhaseOne() {

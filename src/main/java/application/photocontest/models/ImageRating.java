@@ -1,10 +1,8 @@
 package application.photocontest.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
-import java.util.Set;
+
+
 
 
 @Entity

@@ -2,6 +2,7 @@ package application.photocontest.service.contracts;
 
 
 import application.photocontest.models.Contest;
+import application.photocontest.models.Image;
 import application.photocontest.models.Organizer;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
@@ -19,6 +20,6 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     void rateImage(UserCredentials user, int contestId, int imageId, int points, String comment);
 
-    void addImage(UserCredentials userCredentials, int contestId, int imageId);
+    Image addImage(UserCredentials userCredentials, int contestId, int imageId);
 
 }

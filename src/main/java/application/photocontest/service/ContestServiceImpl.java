@@ -195,7 +195,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public void addImage(UserCredentials userCredentials, int contestId, int imageId) {
+    public Image addImage(UserCredentials userCredentials, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
@@ -203,6 +203,13 @@ public class ContestServiceImpl implements ContestService {
         }
         if (!contest.getParticipants().contains(userRepository.getUserByUserName(userCredentials.getUserName()))) {
             throw new UnauthorizedOperationException("Only a participant can upload photo.");
+        }
+        if (!userRepository.getUserByPictureId(imageId).getUserCredentials().getUserName().equalsIgnoreCase(userCredentials.getUserName())) {
+            throw new UnauthorizedOperationException("You can add only own photos.");
+        }
+
+        if (contest.getImages().contains(imageRepository.getById(imageId))) {
+            throw new UnauthorizedOperationException("This photo is already in the contest.");
         }
 
 
@@ -212,6 +219,7 @@ public class ContestServiceImpl implements ContestService {
 
         contest.setImages(addImage);
         contestRepository.update(contest);
+        return image;
     }
 
 

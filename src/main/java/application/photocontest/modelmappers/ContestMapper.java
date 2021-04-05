@@ -9,6 +9,7 @@ import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +42,6 @@ public class ContestMapper {
 
         contestToUpdate.setTitle(contestDto.getTitle());
         contestToUpdate.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contestToUpdate.setStartingDate(contestDto.getStartingDate());
         contestToUpdate.setPhaseOne(contestDto.getPhaseOne());
         contestToUpdate.setPhaseTwo(contestDto.getPhaseTwo());
         contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
@@ -59,7 +59,7 @@ public class ContestMapper {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setStartingDate(contestDto.getStartingDate());
+        contest.setStartingDate(LocalDateTime.now());
         contest.setOrganizer(organizer);
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());

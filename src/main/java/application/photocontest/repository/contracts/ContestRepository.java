@@ -18,6 +18,4 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>,CudR
 
     Phase getPhaseByName(String phaseName);
 
-    Contest getFinishedContest(int id);
-
 }

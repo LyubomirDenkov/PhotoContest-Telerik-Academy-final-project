@@ -64,7 +64,7 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> jury;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_image",
             joinColumns = @JoinColumn(name = "contest_id"),
