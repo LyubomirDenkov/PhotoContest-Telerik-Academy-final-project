@@ -73,3 +73,14 @@ VALUES ('nature');
 
 INSERT INTO contest_type(name)
 VALUES ('open');
+
+INSERT INTO images (title, story, image, user_id, points) VALUES
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1,50),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',2,34),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',2,82),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',3,80),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1,59),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',4,90),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1,30),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',2,70),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1,60);
