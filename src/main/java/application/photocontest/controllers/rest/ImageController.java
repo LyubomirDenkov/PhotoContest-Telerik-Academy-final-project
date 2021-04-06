@@ -25,7 +25,7 @@ public class ImageController {
 
 
     private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
-    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
+    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37HAWK";
     private static final String IMGUR_AUTHORIZATION = "Authorization";
     private final ImageService imageService;
     private final ImageMapper imageMapper;
@@ -40,9 +40,7 @@ public class ImageController {
 
     @GetMapping("/{id}")
     public Image getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
-
         return imageService.getById(userCredentials, id);
 
     }
@@ -57,22 +55,20 @@ public class ImageController {
         UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
         if ((file.isEmpty() && url.isEmpty()) || (file.isPresent() && url.isPresent())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"something");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "something");
         }
 
         String imageLink = "";
 
-        if (file.isPresent()){
+        if (file.isPresent()) {
             String inputImage = Base64.getEncoder().encodeToString(file.get().getBytes());
             imageLink = uploadImageToImgurAndReturnUrl(inputImage);
         }
-        if (url.isPresent()){
+        if (url.isPresent()) {
             imageLink = uploadImageToImgurAndReturnUrl(url.get());
         }
 
-
-        Image image = imageMapper.fromDto(userCredentials,title, story, imageLink);
-
+        Image image = imageMapper.fromDto(userCredentials, title, story, imageLink);
         return imageService.create(userCredentials, image);
     }
 
@@ -90,7 +86,6 @@ public class ImageController {
                 .build();
 
         Response response = client.newCall(request).execute();
-
         JSONObject jsonObject = new JSONObject(response.body().string());
         JSONObject jsonObjectData = jsonObject.getJSONObject("data");
         return jsonObjectData.getString("link");
