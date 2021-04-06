@@ -114,13 +114,11 @@
                             </div>
                             <div class="details">
                                 <h3><a href="speaker-details.html" th:text="*{contest.getCategory().getName()}" >Brenden Legros</a></h3>
-                                <p th:text="*{contest.getStartingDate()}" >Quas alias incidunt</p>
-                                <p th:text="*{contest.}" >Quas alias incidunt</p>
+                                <p th:text="*{#temporals.format(contest.getStartingDate(),'yyyy-MM-dd HH:mm')}" >Quas alias incidunt</p>
+                                <p th:text="*{contest.getPhase().getName().toUpperCase()}" >Quas alias incidunt</p>
                                 <div class="social">
-                                    <a href=""><i class="bi bi-twitter"></i></a>
-                                    <a href=""><i class="bi bi-facebook"></i></a>
-                                    <a href=""><i class="bi bi-instagram"></i></a>
-                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                    <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/register}" href="#buy-tickets">Enroll</a>
+                                    <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/contests/{id}(id=${contest.getId()})}" href="#buy-tickets">Enroll</a>
                                 </div>
                             </div>
                         </div>

@@ -764,7 +764,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #speakers .speaker:hover .details {
-  bottom: 0;
+  bottom: 0px;
 }
 
 #speakers-details {

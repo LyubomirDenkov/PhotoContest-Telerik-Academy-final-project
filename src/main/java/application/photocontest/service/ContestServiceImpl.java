@@ -24,7 +24,7 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 @Service
 public class ContestServiceImpl implements ContestService {
 
-    private static final String CONTEST_PHASE_PREPARING = "preparing";
+    private static final String CONTEST_PHASE_PREPARING = "ongoing";
     private static final String CONTEST_PHASE_VOTING = "voting";
     private static final String CONTEST_PHASE_FINISHED = "finished";
     private static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
@@ -90,7 +90,13 @@ public class ContestServiceImpl implements ContestService {
     }
 
     public List<Contest> getOngoingContests(){
-       return contestRepository.getOngoingContests();
+
+       List<Contest> contests = contestRepository.getOngoingContests();
+
+        for (Contest contest : contests) {
+            setContestPhase(contest);
+        }
+        return contests;
     }
 
     private void setContestPhase(Contest contest) {
