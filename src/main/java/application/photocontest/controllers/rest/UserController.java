@@ -36,18 +36,18 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll(@RequestHeader HttpHeaders headers) {
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
-        return userService.getAll(userCredentials);
+        return userService.getAll(user);
     }
 
     @GetMapping("/{id}")
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return userService.getById(userCredentials, id);
+            return userService.getById(user, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -68,10 +68,10 @@ public class UserController {
     @PutMapping("/{id}")
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto) {
 
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
         try {
             User userToUpdate = userMapper.fromDto(id, userDto);
-            return userService.update(userCredentials, userToUpdate);
+            return userService.update(user, userToUpdate);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -84,10 +84,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            userService.delete(userCredentials, id);
+            userService.delete(user, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

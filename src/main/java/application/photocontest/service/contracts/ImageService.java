@@ -1,17 +1,18 @@
 package application.photocontest.service.contracts;
 
 import application.photocontest.models.Image;
+import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 
 import java.util.List;
 
 public interface ImageService {
 
-    Image getById(UserCredentials userCredentials, int id);
+    Image getById(User user, int id);
 
-    Image create(UserCredentials userCredentials, Image image);
+    Image create(User user, Image image);
 
-    void delete(UserCredentials userCredentials,int id);
+    void delete(User user, int id);
 
     List<Image> getTopEightRatedPictures();
 

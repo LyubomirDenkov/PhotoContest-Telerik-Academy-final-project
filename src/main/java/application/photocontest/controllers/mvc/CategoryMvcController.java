@@ -5,6 +5,7 @@ import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.CategoryMapper;
 import application.photocontest.models.Category;
+import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.CategoryDto;
 import application.photocontest.service.contracts.CategoryService;
@@ -52,7 +53,7 @@ public class CategoryMvcController {
                          BindingResult errors) {
 
         try {
-            UserCredentials user = authenticationHelper.tryGetUser(session);
+            User user = authenticationHelper.tryGetUser(session);
             if (errors.hasErrors()) {
                 return "category-new";
             }
@@ -73,7 +74,7 @@ public class CategoryMvcController {
     public String showNewCategoryPage(Model model, HttpSession session) {
 
         try {
-            UserCredentials currentUser = authenticationHelper.tryGetUser(session);
+            User currentUser = authenticationHelper.tryGetUser(session);
 
             isOrganizer(currentUser);
 
@@ -85,7 +86,7 @@ public class CategoryMvcController {
             return "not-found";
         }
     }
-    private void isOrganizer(UserCredentials currentUser) {
+    private void isOrganizer(User currentUser) {
         if (!currentUser.isOrganizer()) {
             throw new UnauthorizedOperationException("Not authorized");
         }

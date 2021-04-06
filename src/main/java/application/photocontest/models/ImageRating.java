@@ -17,8 +17,8 @@ public class ImageRating {
 
 
     @OneToOne
-    @JoinColumn(name = "user_name")
-    private UserCredentials userCredentials;
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
     @Column(name = "image_id")
@@ -29,7 +29,7 @@ public class ImageRating {
     private int points;
 
     @Column(name = "comment")
-private String comment;
+    private String comment;
 
 
 
@@ -37,9 +37,8 @@ private String comment;
     public ImageRating() {
     }
 
-    public ImageRating(int id, UserCredentials userCredentials, int imageId, int points, String comment) {
+    public ImageRating(int id, int imageId, int points, String comment) {
         this.id = id;
-        this.userCredentials = userCredentials;
         this.imageId = imageId;
         this.points = points;
         this.comment = comment;
@@ -61,12 +60,12 @@ private String comment;
         this.id = id;
     }
 
-    public UserCredentials getUserCredentials() {
-        return userCredentials;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserCredentials(UserCredentials userCredentials) {
-        this.userCredentials = userCredentials;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getImageId() {

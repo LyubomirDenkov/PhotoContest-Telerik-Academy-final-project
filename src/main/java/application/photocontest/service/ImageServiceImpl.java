@@ -29,23 +29,23 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getById(UserCredentials userCredentials, int id) {
+    public Image getById(User userCredentials, int id) {
         return imageRepository.getById(id);
     }
 
     @Override
-    public Image create(UserCredentials userCredentials, Image image) {
+    public Image create(User user, Image image) {
 
-        verifyUserHasRoles(userCredentials, UserRoles.USER);
-        User user = userRepository.getUserByUserName(userCredentials.getUserName());
-        image.setUploadedBy(user);
+        verifyUserHasRoles(user, UserRoles.USER);
+        User userUploader = userRepository.getUserByUserName(user.getUserCredentials().getUserName());
+        //image.setUploadedBy(userUploader);
 
         Image imageToCreate = imageRepository.create(image);
 
-        Set<Image> images = user.getUserCredentials().getImages();
+        Set<Image> images = userUploader.getImages();
         images.add(imageToCreate);
-        userCredentials.setImages(images);
-        userRepository.update(user);
+        userUploader.setImages(images);
+        userRepository.update(userUploader);
 
         return imageToCreate;
 
@@ -53,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public void delete(UserCredentials userCredentials, int id) {
+    public void delete(User userCredentials, int id) {
 
         imageRepository.delete(id);
     }

@@ -57,7 +57,7 @@ public class AuthenticationController {
         try {
             authenticationHelper.verifyAuthentication(login.getUserName(), login.getPassword());
             session.setAttribute("currentUser", login.getUserName());
-            UserCredentials currentUser = authenticationHelper.tryGetUser(session);
+            User currentUser = authenticationHelper.tryGetUser(session);
             model.addAttribute("currentUser", currentUser);
             return "redirect:/";
         } catch (AuthenticationFailureException e) {

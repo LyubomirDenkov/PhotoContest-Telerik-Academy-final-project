@@ -52,7 +52,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     @Override
     public List<ImageRating> getImageRatingsByUsername(String userName) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from ImageRating where userCredentials.userName = :userName ",
+            return session.createQuery("from ImageRating where user.userCredentials.userName = :userName ",
                     ImageRating.class).setParameter("userName", userName).list();
 
         }

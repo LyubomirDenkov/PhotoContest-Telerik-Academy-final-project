@@ -6,6 +6,7 @@ import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
+import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,24 +23,27 @@ public class HomeMvcController {
     private final ContestService contestService;
     private final AuthenticationHelper authenticationHelper;
 
+    private final UserService userService;
 
     @Autowired
-    public HomeMvcController(ImageService imageService, ContestService contestService, AuthenticationHelper authenticationHelper) {
+    public HomeMvcController(ImageService imageService, ContestService contestService,
+                             AuthenticationHelper authenticationHelper, UserService userService) {
         this.imageService = imageService;
         this.contestService = contestService;
         this.authenticationHelper = authenticationHelper;
+        this.userService = userService;
     }
 
 
     @GetMapping
     public String showHomePage(Model model, HttpSession session){
 
-        UserCredentials currentUser = null;
+
         try {
-            currentUser = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", currentUser);
+            User user = authenticationHelper.tryGetUser(session);
+
         } catch (UnauthorizedOperationException e) {
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute("currentUser", null);
         }
 
         model.addAttribute("contests", contestService.getOngoingContests());

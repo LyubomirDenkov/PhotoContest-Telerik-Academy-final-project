@@ -19,7 +19,7 @@ public class ImageMapper {
     }
 
 
-    public Image fromDto(UserCredentials userCredentials, String title, String story, String imagePath) {
+    public Image fromDto(User user, String title, String story, String imagePath) {
 
         Image image = new Image();
 

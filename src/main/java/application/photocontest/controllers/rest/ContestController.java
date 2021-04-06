@@ -39,7 +39,8 @@ public class ContestController {
     @ApiOperation(value = "Get all contests")
     @GetMapping
     public List<Contest> getAll(@RequestHeader HttpHeaders headers) {
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
             return contestService.getAll(user);
@@ -59,7 +60,7 @@ public class ContestController {
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")
     public Contest getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
 
         try {
@@ -76,11 +77,11 @@ public class ContestController {
     public Contest create(@RequestHeader HttpHeaders headers,
                           @Valid @RequestBody ContestDto contestDto) {
 
-        Organizer organizer = authenticationHelper.tryGetOrganizer(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            Contest contest = contestMapper.fromDto(contestDto, organizer);
-            return contestService.create(organizer, contest,contestDto);
+            Contest contest = contestMapper.fromDto(contestDto, user);
+            return contestService.create(user, contest,contestDto);
 
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -95,11 +96,11 @@ public class ContestController {
     public Contest update(@RequestHeader HttpHeaders headers, @PathVariable int id,
                           @Valid @RequestBody ContestDto contestDto) {
 
-        Organizer organizer = authenticationHelper.tryGetOrganizer(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
             Contest contestToUpdate = contestMapper.fromDto(id, contestDto);
-            return contestService.update(organizer, contestToUpdate,contestDto);
+            return contestService.update(user, contestToUpdate,contestDto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -113,7 +114,7 @@ public class ContestController {
     @PutMapping("/{contestId}/user/{userId}")
     public void addUser(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                         @PathVariable int userId) {
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
             contestService.addUserToContest(user, contestId, userId);
@@ -129,10 +130,10 @@ public class ContestController {
     @PutMapping("/{contestId}/image/{imageId}")
     public Image addImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                           @PathVariable int imageId) {
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
-           return contestService.addImage(userCredentials, contestId, imageId);
+           return contestService.addImage(user, contestId, imageId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -146,12 +147,13 @@ public class ContestController {
     @PostMapping("/{contestId}/rating/{imageId}")
     public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                           @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto) {
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
             int points = rateImageDto.getPoints();
             String comment = rateImageDto.getComment();
-             contestService.rateImage(userCredentials,contestId, imageId,points, comment);
+             contestService.rateImage(user,contestId, imageId,points, comment);
         }  catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

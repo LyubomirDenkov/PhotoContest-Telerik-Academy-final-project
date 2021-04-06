@@ -4,7 +4,6 @@ import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
-import application.photocontest.repository.contracts.CredentialsRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +22,21 @@ public class UserServiceImpl implements UserService {
     private static final int ENTHUSIAST_CEILING_POINTS = 150;
     private static final int MASTER_CEILING_POINTS = 1000;
     private final UserRepository userRepository;
-    private final CredentialsRepository credentialsRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CredentialsRepository credentialsRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.credentialsRepository = credentialsRepository;
     }
 
     @Override
-    public List<User> getAll(UserCredentials user) {
+    public List<User> getAll(User user) {
         return userRepository.getAll();
     }
 
     @Override
-    public User getById(UserCredentials userCredentials, int id) {
+    public User getById(User user, int id) {
 
-        verifyUserHasRoles(userCredentials, UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
 
         return userRepository.getById(id);
     }
@@ -56,7 +53,7 @@ public class UserServiceImpl implements UserService {
         boolean isUserNameExist = true;
 
         try {
-            credentialsRepository.getByUsername(user.getUserCredentials().getUserName());
+            userRepository.getUserByUserName(user.getUserCredentials().getUserName());
         } catch (EntityNotFoundException e) {
             isUserNameExist = false;
         }
@@ -67,31 +64,32 @@ public class UserServiceImpl implements UserService {
 
         User newRegisteredUser = userRepository.create(user);
 
-        addRoleToRegisteredUser(newRegisteredUser);
+        /*addRoleToRegisteredUser(newRegisteredUser);*/
 
         return newRegisteredUser;
 
     }
 
-    public void addRoleToRegisteredUser(User user) {
+   /* public void addRoleToRegisteredUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
         Set<Role> roles = user.getUserCredentials().getRoles();
         roles.add(role);
         user.getUserCredentials().setRoles(roles);
         userRepository.update(user);
-    }
+    }*/
 
 
     @Override
-    public User update(UserCredentials userCredentials, User userToUpdate) {
+    public User update(User userCredentials, User userToUpdate) {
 
         boolean isUserNameExist = true;
 
         verifyUserHasRoles(userCredentials, UserRoles.USER);
+
         verifyIsUserOwnAccount(userCredentials, userToUpdate, "something");
 
         try {
-            credentialsRepository.getByUsername(userToUpdate.getUserCredentials().getUserName());
+            userRepository.getUserByUserName(userToUpdate.getUserCredentials().getUserName());
         } catch (EntityNotFoundException e) {
             isUserNameExist = false;
         }
@@ -104,14 +102,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(UserCredentials userCredentials, int id) {
+    public void delete(User user, int id) {
 
-        User user = userRepository.getById(id);
+        User userToDelete = userRepository.getById(id);
 
-        verifyUserHasRoles(userCredentials, UserRoles.USER);
+        verifyUserHasRoles(user, UserRoles.USER);
 
-        verifyIsUserOwnAccount(userCredentials, user, "something");
+        verifyIsUserOwnAccount(userToDelete, user, "something");
 
         userRepository.delete(id);
     }
+
 }

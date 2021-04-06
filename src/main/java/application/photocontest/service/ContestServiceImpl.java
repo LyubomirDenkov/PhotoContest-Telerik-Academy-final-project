@@ -8,7 +8,6 @@ import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
-import application.photocontest.repository.contracts.OrganizerRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,19 +49,17 @@ public class ContestServiceImpl implements ContestService {
 
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
-    private final OrganizerRepository organizerRepository;
     private final ImageRepository imageRepository;
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, OrganizerRepository organizerRepository, ImageRepository imageRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
-        this.organizerRepository = organizerRepository;
         this.imageRepository = imageRepository;
     }
 
     @Override
-    public List<Contest> getAll(UserCredentials userCredentials) {
+    public List<Contest> getAll(User user) {
 
         List<Contest> contests = contestRepository.getAll();
 
@@ -88,6 +85,7 @@ public class ContestServiceImpl implements ContestService {
 
         return contests;
     }
+
 
     public List<Contest> getOngoingContests(){
 
@@ -128,15 +126,15 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest getById(UserCredentials userCredentials, int id) {
+    public Contest getById(User user, int id) {
 
-        verifyUserHasRoles(userCredentials, UserRoles.USER, UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         return contestRepository.getById(id);
     }
 
     @Override
-    public Contest create(Organizer organizer, Contest contest, ContestDto contestDto) {
+    public Contest create(User user, Contest contest, ContestDto contestDto) {
 
 
         boolean ifContestTitleExist = true;
@@ -151,19 +149,20 @@ public class ContestServiceImpl implements ContestService {
         }
 
         setContestPhase(contest);
-        setContestJury(contestDto, contest);
+       // setContestJury(contestDto, contest);
+
 
         Contest contestToCreate = contestRepository.create(contest);
-        addParticipantsToContestAndPoints(contestToCreate, contestDto);
+        //addParticipantsToContestAndPoints(contestToCreate, contestDto);
         return contestToCreate;
 
     }
 
     @Override
-    public Contest update(Organizer organizer, Contest contest, ContestDto contestDto) {
+    public Contest update(User user, Contest contest, ContestDto contestDto) {
 
 
-        if (!organizer.getCredentials().getUserName().equals(contest.getOrganizer().getCredentials().getUserName())) {
+        if (!user.getUserCredentials().getUserName().equals(contest.getUser().getUserCredentials().getUserName())) {
             throw new UnauthorizedOperationException(UPDATING_CONTEST_ERROR_MESSAGE);
         }
         setContestJury(contestDto, contest);
@@ -185,7 +184,7 @@ public class ContestServiceImpl implements ContestService {
 
         Set<User> participants = new HashSet<>();
 
-        for (Integer participant : dtoParticipants) {
+        /*for (Integer participant : dtoParticipants) {
             User participantToAdd = userRepository.getById(participant);
             if (oldParticipants.contains(participantToAdd)){
                 participants.add(participantToAdd);
@@ -197,41 +196,41 @@ public class ContestServiceImpl implements ContestService {
             participants.add(participantToAdd);
             userRepository.update(participantToAdd);
 
-        }
+        }*/
         contest.setParticipants(participants);
     }
 
 
     @Override
-    public void rateImage(UserCredentials userCredentials, int contestId, int imageId, int points, String comment) {
+    public void rateImage(User user, int contestId, int imageId, int points, String comment) {
 
-        checkIfUserIsInJury(userCredentials, imageId, contestId, points);
+        checkIfUserIsInJury(user, imageId, contestId, points);
 
         ImageRating imageRating = new ImageRating();
 
-        imageRating.setUserCredentials(userCredentials);
+    /*    imageRating.setUserCredentials(user.getUserCredentials());*/
         imageRating.setImageId(imageId);
         imageRating.setPoints(points);
         imageRating.setComment(comment);
         imageRepository.createJurorRateEntity(imageRating);
 
         Image image = imageRepository.getById(imageId);
-        image.setPoints(image.getPoints() + points);
+        //image.setPoints(image.getPoints() + points);
         imageRepository.update(image);
 
     }
 
     @Override
-    public Image addImage(UserCredentials userCredentials, int contestId, int imageId) {
+    public Image addImage(User user, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         }
-        if (!contest.getParticipants().contains(userRepository.getUserByUserName(userCredentials.getUserName()))) {
+        if (!contest.getParticipants().contains(userRepository.getUserByUserName(user.getUserCredentials().getUserName()))) {
             throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
         }
-        if (!userRepository.getUserByPictureId(imageId).getUserCredentials().getUserName().equalsIgnoreCase(userCredentials.getUserName())) {
+        if (!userRepository.getUserByPictureId(imageId).getUserCredentials().getUserName().equalsIgnoreCase(user.getUserCredentials().getUserName())) {
             throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
         }
 
@@ -252,14 +251,14 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public void addUserToContest(UserCredentials userCredentials, int contestId, int userId) {
+    public void addUserToContest(User user, int contestId, int userId) {
 
-        verifyUserHasRoles(userCredentials, UserRoles.USER);
+        verifyUserHasRoles(user, UserRoles.USER);
 
         Contest contest = contestRepository.getById(contestId);
-        User user = userRepository.getById(userId);
+        User userToJoinInContest = userRepository.getById(userId);
 
-        if (!user.getUserCredentials().getUserName().equals(userCredentials.getUserName())) {
+        if (!userToJoinInContest.getUserCredentials().getUserName().equals(user.getUserCredentials().getUserName())) {
             throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
         }
 
@@ -274,16 +273,16 @@ public class ContestServiceImpl implements ContestService {
         }
 
         Set<User> participants = contest.getParticipants();
-        if (participants.contains(user)) {
+        if (participants.contains(userToJoinInContest)) {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
 
 
-        user.setPoints(user.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST);
-        userRepository.update(user);
+       /* userToJoinInContest.setPoints(userToJoinInContest.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST);
+        userRepository.update(userToJoinInContest);
 
-        participants.add(user);
-        contest.setParticipants(participants);
+        participants.add(userToJoinInContest);
+        contest.setParticipants(participants);*/
 
 
         contestRepository.update(contest);
@@ -291,7 +290,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public void delete(Organizer organizer, int id) {
+    public void delete(User user, int id) {
     }
 
     private Contest checkPointsContestAndImage(int points, int contestId, int imageId) {
@@ -313,12 +312,12 @@ public class ContestServiceImpl implements ContestService {
         return contest;
     }
 
-    private void checkIfUserIsInJury(UserCredentials userCredentials, int imageId, int contestId, int points) {
+    private void checkIfUserIsInJury(User user, int imageId, int contestId, int points) {
 
         Contest contest = checkPointsContestAndImage(points, contestId, points);
 
         boolean isOrganizer = true;
-        List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(userCredentials.getUserName());
+        List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
 
         for (ImageRating imageRating : imageRatings) {
             if (imageRating.getImageId() == imageId) {
@@ -327,25 +326,8 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-        Organizer organizer;
-        try {
-            organizer = organizerRepository.getByUserName(userCredentials.getUserName());
+        User userToCheck;
 
-        } catch (EntityNotFoundException e) {
-            isOrganizer = false;
-        }
-
-
-        User user;
-
-        if (!isOrganizer) {
-            user = userRepository.getUserByUserName(userCredentials.getUserName());
-
-            if (!contest.getJury().contains(user)) {
-                throw new UnauthorizedOperationException(RATING_ERROR_MESSAGE);
-
-            }
-        }
     }
 
 
@@ -354,13 +336,13 @@ public class ContestServiceImpl implements ContestService {
         Set<Integer> participants = contestDto.getParticipants();
         User user;
         Set<User> usersToAdd = new HashSet<>();
-        for (Integer participant : participants) {
+        /*for (Integer participant : participants) {
             user = userRepository.getById(participant);
             if (jury.contains(user)) continue;
             user.setPoints(user.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
             userRepository.update(user);
             usersToAdd.add(user);
-        }
+        }*/
         contest.setParticipants(usersToAdd);
         contestRepository.update(contest);
     }
@@ -368,12 +350,12 @@ public class ContestServiceImpl implements ContestService {
     private void setContestJury(ContestDto contestDto, Contest contest) {
         Set<User> jury = new HashSet<>();
 
-        for (Integer userId : contestDto.getJury()) {
+       /* for (Integer userId : contestDto.getJury()) {
             User userToAdd = userRepository.getById(userId);
             if (userToAdd.getPoints() > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
             }
-        }
+        }*/
         contest.setJury(jury);
     }
 

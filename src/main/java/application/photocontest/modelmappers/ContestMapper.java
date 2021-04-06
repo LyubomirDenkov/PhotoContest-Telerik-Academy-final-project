@@ -4,7 +4,6 @@ import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.OrganizerRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,20 +18,18 @@ public class ContestMapper {
     private final ContestRepository contestRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final OrganizerRepository organizerRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, OrganizerRepository organizerRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.organizerRepository = organizerRepository;
     }
 
-    public Contest fromDto(ContestDto contestDto, Organizer organizer) {
+    public Contest fromDto(ContestDto contestDto, User user) {
 
         Contest contest = new Contest();
-        dtoToObject(contestDto, contest, organizer);
+        dtoToObject(contestDto, contest, user);
 
         return contest;
     }
@@ -47,34 +44,26 @@ public class ContestMapper {
         contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
 
-
-
         return contestToUpdate;
 
     }
 
 
 
-    public Contest dtoToObject(ContestDto contestDto, Contest contest, Organizer organizer) {
+    public Contest dtoToObject(ContestDto contestDto, Contest contest, User user) {
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
         contest.setStartingDate(LocalDateTime.now());
-        contest.setOrganizer(organizer);
+        contest.setUser(user);
         contest.setPhaseOne(contestDto.getPhaseOne());
         contest.setPhaseTwo(contestDto.getPhaseTwo());
         contest.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contest.setPointsAwarded(false);
         contest.setBackgroundImage(contestDto.getBackgroundImage());
 
-
-
-        Set<Organizer> organizersJury = new HashSet<>();
-        organizersJury.addAll(organizerRepository.getAll());
-        contest.setOrganizersJury(organizersJury);
-
-
-
+        Set<Image> images = new HashSet<>();
+        contest.setImages(images);
 
         return contest;
     }

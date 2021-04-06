@@ -25,18 +25,11 @@ public class Image {
     @Column(name = "image")
     private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User uploadedBy;
-
-    @Column(name = "points")
-    private int points;
-
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rated_images",
-            joinColumns = @JoinColumn(name = "user_name"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private Set<UserCredentials> jurorAwardedRating;
+    private Set<User> jurorAwardedRating;
 
 
     public Image() {
@@ -44,13 +37,11 @@ public class Image {
     }
 
 
-    public Image(int id, String title, String story, String url, User uploadedBy,int points ,Set<UserCredentials> jurorAwardedRating) {
+    public Image(int id, String title, String story, String url,Set<User> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
         this.url = url;
-        this.uploadedBy = uploadedBy;
-        this.points = points;
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
@@ -86,41 +77,12 @@ public class Image {
         this.url = url;
     }
 
-    public User getUploadedBy() {
-        return uploadedBy;
-    }
-
-    public void setUploadedBy(User uploadedBy) {
-        this.uploadedBy = uploadedBy;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public Set<UserCredentials> getJurorAwardedRating() {
+    public Set<User> getJurorAwardedRating() {
         return jurorAwardedRating;
     }
 
-    public void setJurorAwardedRating(Set<UserCredentials> jurorAwardedRating) {
+    public void setJurorAwardedRating(Set<User> jurorAwardedRating) {
         this.jurorAwardedRating = jurorAwardedRating;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
-        return getId() == image.getId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getUploadedBy().equals(image.getUploadedBy()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getUploadedBy(), getPoints(), getJurorAwardedRating());
     }
 
 

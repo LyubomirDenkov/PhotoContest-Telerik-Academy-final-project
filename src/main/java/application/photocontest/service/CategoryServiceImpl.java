@@ -4,6 +4,7 @@ import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
+import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.service.contracts.CategoryService;
@@ -28,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category create(UserCredentials user, Category category) {
+    public Category create(User user, Category category) {
         verifyUserHasRoles(user, UserRoles.ORGANIZER);
         boolean ifCategoryExists = true;
         try {
@@ -49,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getById(UserCredentials userCredentials, int id) {
+    public Category getById(User user, int id) {
 
         try {
             return categoryRepository.getById(id);

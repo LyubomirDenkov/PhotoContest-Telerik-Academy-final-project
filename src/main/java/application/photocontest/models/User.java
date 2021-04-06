@@ -1,5 +1,6 @@
 package application.photocontest.models;
 
+import application.photocontest.enums.UserRoles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -26,20 +27,29 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "points")
-    private int points;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_images",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<Image> images;
 
     public User() {
     }
 
-    public User(int id, UserCredentials userCredentials, String firstName, String lastName, int points) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.points = points;
     }
 
 
@@ -76,24 +86,34 @@ public class User {
         this.lastName = lastName;
     }
 
-    public int getPoints() {
-        return points;
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return getId() == user.getId() && getPoints() == user.getPoints() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName());
+    public Set<Image> getImages() {
+        return images;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getPoints());
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
+
+    @JsonIgnore
+    public boolean isOrganizer() {
+
+        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.ORGANIZER.toString()));
+
+    }
+    @JsonIgnore
+    public boolean isUser() {
+
+        return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.USER.toString()));
+
+    }
+
 }

@@ -3,6 +3,7 @@ package application.photocontest.controllers.rest;
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
+import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.ImageService;
 import okhttp3.*;
@@ -40,8 +41,8 @@ public class ImageController {
 
     @GetMapping("/{id}")
     public Image getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
-        return imageService.getById(userCredentials, id);
+        User user = authenticationHelper.tryGetUser(headers);
+        return imageService.getById(user, id);
 
     }
 
@@ -52,7 +53,7 @@ public class ImageController {
                         @RequestParam(name = "title") String title,
                         @RequestParam(name = "story") String story) throws IOException {
 
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         if ((file.isEmpty() && url.isEmpty()) || (file.isPresent() && url.isPresent())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "something");
@@ -68,8 +69,8 @@ public class ImageController {
             imageLink = uploadImageToImgurAndReturnUrl(url.get());
         }
 
-        Image image = imageMapper.fromDto(userCredentials, title, story, imageLink);
-        return imageService.create(userCredentials, image);
+        Image image = imageMapper.fromDto(user, title, story, imageLink);
+        return imageService.create(user, image);
     }
 
     private String uploadImageToImgurAndReturnUrl(String image) throws IOException {
@@ -94,8 +95,8 @@ public class ImageController {
     @DeleteMapping("{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
-        imageService.delete(userCredentials, id);
+        imageService.delete(user, id);
     }
 }

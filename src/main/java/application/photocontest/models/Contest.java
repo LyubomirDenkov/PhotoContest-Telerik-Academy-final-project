@@ -33,12 +33,15 @@ public class Contest {
     private int phaseTwo;
 
     @ManyToOne
-    @JoinColumn(name = "organizer")
-    private Organizer organizer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
     private Type type;
+
+    @Column(name = "image_url")
+    private String backgroundImage;
 
     @ManyToOne
     @JoinColumn(name = "phase_id")
@@ -47,8 +50,6 @@ public class Contest {
     @Column(name = "isPointsAwarded")
     private boolean isPointsAwarded;
 
-    @Column(name = "image_url")
-    private String backgroundImage;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -72,23 +73,15 @@ public class Contest {
     private Set<Image> images;
 
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "jury_organizers",
-            joinColumns = @JoinColumn(name = "contest_id"),
-            inverseJoinColumns = @JoinColumn(name = "organizer_id"))
-    private Set<Organizer> organizersJury;
-
     public Contest() {
     }
 
     public Contest(int id, String title, Category category,
                    LocalDateTime startingDate, int phaseOne,
-                   int phaseTwo, Organizer organizer, Type type,
+                   int phaseTwo, User user, Type type,
                    Phase phase, boolean isPointsAwarded, String backgroundImage,
                    Set<User> participants, Set<User> jury,
-                   Set<Image> images, Set<Organizer> organizersJury) {
+                   Set<Image> images) {
 
         this.id = id;
         this.title = title;
@@ -96,7 +89,7 @@ public class Contest {
         this.startingDate = startingDate;
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
-        this.organizer = organizer;
+        this.user = user;
         this.type = type;
         this.phase = phase;
         this.isPointsAwarded = isPointsAwarded;
@@ -104,7 +97,6 @@ public class Contest {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-        this.organizersJury = organizersJury;
     }
 
     public int getId() {
@@ -155,12 +147,12 @@ public class Contest {
         this.phaseTwo = phaseTwo;
     }
 
-    public Organizer getOrganizer() {
-        return organizer;
+    public User getUser() {
+        return user;
     }
 
-    public void setOrganizer(Organizer organizer) {
-        this.organizer = organizer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Type getType() {
@@ -219,27 +211,4 @@ public class Contest {
         this.images = images;
     }
 
-    public Set<Organizer> getOrganizersJury() {
-        return organizersJury;
-    }
-
-    public void setOrganizersJury(Set<Organizer> organizersJury) {
-        this.organizersJury = organizersJury;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Contest)) return false;
-        Contest contest = (Contest) o;
-        return getId() == contest.getId() && getPhaseOne() == contest.getPhaseOne() && getPhaseTwo() == contest.getPhaseTwo()
-                && isPointsAwarded() == contest.isPointsAwarded() && getTitle().equals(contest.getTitle()) &&
-                getCategory().equals(contest.getCategory()) && getStartingDate().equals(contest.getStartingDate()) && getOrganizer().equals(contest.getOrganizer()) && getType().equals(contest.getType()) && getPhase().equals(contest.getPhase()) && getParticipants().equals(contest.getParticipants()) && getJury().equals(contest.getJury()) && getImages().equals(contest.getImages()) && getOrganizersJury().equals(contest.getOrganizersJury());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getCategory(), getStartingDate(), getPhaseOne(), getPhaseTwo(),
-                getOrganizer(), getType(), getPhase(), isPointsAwarded(), getParticipants(), getJury(), getImages(), getOrganizersJury());
-    }
 }

@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
           rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}" href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
@@ -40,9 +41,68 @@
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
-        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/login}" href="#">Login</a>
 
     </div>
 </header><!-- End Header -->
+<div class="container" id="container-custom">
+    <div class="main-body">
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="../static/assets/img/user-circle.svg" th:src="@{/assets/img/user-circle.svg}"  alt="Admin" class="rounded-circle" width="150">
+                            <div class="mt-3 mb-0-profile">
+                                <h6 class="mb-0-profile" th:text="*{currentUser.firstName + ' ' + currentUser.lastName}" >John Doe</h6>
+                                <hr>
+                                <!--<button class="btn btn-primary">Follow</button>-->
+                                <hr>
+                                <div><a class="btn btn-outline-primary " id="delete-button-own-color" href="#" th:href="@{/users/{id}/delete(id=${currentUser.getId()})}">Delete profile</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0-profile">First name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="*{currentUser.firstName}">
+                                Kenneth
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0-profile">Last name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="*{currentUser.lastName}">
+                                Valdez
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0-profile">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="*{currentUser}">
+                                Kenneth
+                            </div>
+                        </div>
+                        <hr>
+
+                        <a class="btn btn-outline-primary" href="#" th:href="@{/users/{id}/password(id=${currentUser.getId()})}">Change password</a>
+                        <a class="btn btn-outline-primary" href="#" th:href="@{/users/{id}/address(id=${currentUser.getId()})}">Change address</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

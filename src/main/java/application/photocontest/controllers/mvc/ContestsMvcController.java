@@ -5,6 +5,7 @@ import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Category;
 import application.photocontest.models.Contest;
+import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ public class ContestsMvcController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model, HttpSession session) {
-        UserCredentials userCredentials = authenticationHelper.tryGetUser(session);
+        User userCredentials = authenticationHelper.tryGetUser(session);
         Contest contest = contestService.getById(userCredentials, id);
         model.addAttribute("contest", contest);
         return "contest";
@@ -44,7 +45,7 @@ public class ContestsMvcController {
     public String getAllCategories(Model model, HttpSession session) {
         try {
 
-            UserCredentials currentUser = authenticationHelper.tryGetUser(session);
+            User currentUser = authenticationHelper.tryGetUser(session);
 
             model.addAttribute("contests", contestService.getAll(currentUser));
             model.addAttribute("currentUser", currentUser);

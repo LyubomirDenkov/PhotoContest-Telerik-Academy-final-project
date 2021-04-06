@@ -46,7 +46,7 @@ public class CategoryController {
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")
     public Category getById(@RequestHeader HttpHeaders headers,@PathVariable int id) {
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
         return categoryService.getById(user, id);
     }
 
@@ -56,7 +56,7 @@ public class CategoryController {
     public Category create(@RequestHeader HttpHeaders headers,
                            @Valid @RequestBody CategoryDto categoryDto) {
 
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
             Category category = categoryMapper.fromDto(categoryDto);

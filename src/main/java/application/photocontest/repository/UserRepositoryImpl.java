@@ -53,8 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             Query<User> query = session.createQuery("select u from Contest c " +
                     "join c.participants as u " +
-                    "where c.id = :id " +
-                    "order by u.points desc ", User.class);
+                    "where c.id = :id ", User.class);
 
             query.setParameter("id",id);
             return query.list();
@@ -66,7 +65,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         try(Session session = sessionFactory.openSession()){
             return session.createQuery("select u from User u " +
-                    "join u.userCredentials.images as images " +
+                    "join u.images as images " +
                     "where images.id = :id", User.class).setParameter("id",id).uniqueResult();
         }
     }
