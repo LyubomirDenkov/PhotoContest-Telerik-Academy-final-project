@@ -20,8 +20,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
+
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryMvcController {
 
     private final CategoryService categoryService;
@@ -35,15 +36,14 @@ public class CategoryMvcController {
         this.categoryMapper = categoryMapper;
     }
 
-
     @ModelAttribute("categories")
-    public List<Category> getAll() {
+    public List<Category> getAllCategories() {
         return categoryService.getAll();
     }
 
 
     @GetMapping
-    public String getAll(Model model, HttpSession session) {
+    public String getAll() {
         return "categories";
     }
 

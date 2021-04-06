@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Category New</title>
+    <title>Category-New</title>
     <link rel="icon" type="image/png" href="../static/assets/img/navbar-logo.svg" th:href="@{/assets/img/navbar-logo.svg}"/>
     <link href="../static/css/style.css" th:href="@{/style.css}" rel="stylesheet"/>
 </head>
@@ -25,8 +25,7 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Create new category</h5>
-                    <form class="form-signin" action="#" th:action="@{/category/new}" th:object="${category}"
-                          method="post">
+                    <form action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${category}" method="post">
                         <div class="form-label-group">
                             <input type="text" th:field="*{name}" id="inputFirstName" class="form-control"
                                    placeholder="Category name" required autofocus>
