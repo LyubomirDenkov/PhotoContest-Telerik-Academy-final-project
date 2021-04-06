@@ -54,4 +54,6 @@ public class ContestsMvcController {
             return "not-found";
         }
     }
+
+
 }

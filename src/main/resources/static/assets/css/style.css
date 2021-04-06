@@ -125,7 +125,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-with-bg {
-  background-color: #f6f7fd;
+  background-color: #2f3138;
 }
 
 /*--------------------------------------------------------------
@@ -720,6 +720,9 @@ h1, h2, h3, h4, h5, h6 {
 .image-points-count{
   color: yellow;
 }
+.categories-color {
+  color: #f82249;
+}
 
 #speakers .speaker .details {
   background: rgba(6, 12, 34, 0.76);
@@ -1011,7 +1014,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #hotels .hotel {
   border: 1px solid #e0e5fa;
-  background: #fff;
+  background: #fafafa;
   margin-bottom: 30px;
 }
 
