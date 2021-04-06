@@ -68,10 +68,10 @@ public class UserController {
     @PutMapping("/{id}")
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto) {
 
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
         try {
             User userToUpdate = userMapper.fromDto(id, userDto);
-            return userService.update(user, userToUpdate);
+            return userService.update(userCredentials, userToUpdate);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -84,10 +84,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
-        UserCredentials user = authenticationHelper.tryGetUser(headers);
+        UserCredentials userCredentials = authenticationHelper.tryGetUser(headers);
 
         try {
-            userService.delete(user, id);
+            userService.delete(userCredentials, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

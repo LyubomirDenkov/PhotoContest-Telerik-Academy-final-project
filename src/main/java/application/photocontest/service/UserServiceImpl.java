@@ -4,6 +4,7 @@ import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
+import application.photocontest.repository.contracts.CredentialsRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ public class UserServiceImpl implements UserService {
     private static final int ENTHUSIAST_CEILING_POINTS = 150;
     private static final int MASTER_CEILING_POINTS = 1000;
     private final UserRepository userRepository;
+    private final CredentialsRepository credentialsRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, CredentialsRepository credentialsRepository) {
         this.userRepository = userRepository;
+        this.credentialsRepository = credentialsRepository;
     }
 
     @Override
@@ -41,12 +44,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getById(id);
     }
 
-
-    @Override
-    public UserCredentials getByUserName(String userName) {
-        return userRepository.getByUserName(userName);
-    }
-
     @Override
     public User getUserByUserName(String userName) {
         return userRepository.getUserByUserName(userName);
@@ -59,7 +56,7 @@ public class UserServiceImpl implements UserService {
         boolean isUserNameExist = true;
 
         try {
-            userRepository.getByUserName(user.getUserCredentials().getUserName());
+            credentialsRepository.getByUsername(user.getUserCredentials().getUserName());
         } catch (EntityNotFoundException e) {
             isUserNameExist = false;
         }
@@ -94,7 +91,7 @@ public class UserServiceImpl implements UserService {
         verifyIsUserOwnAccount(userCredentials, userToUpdate, "something");
 
         try {
-            userRepository.getByUserName(userToUpdate.getUserCredentials().getUserName());
+            credentialsRepository.getByUsername(userToUpdate.getUserCredentials().getUserName());
         } catch (EntityNotFoundException e) {
             isUserNameExist = false;
         }

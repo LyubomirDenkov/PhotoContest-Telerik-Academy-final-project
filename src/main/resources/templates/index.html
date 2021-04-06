@@ -44,7 +44,7 @@
         <div id="logo" class="me-auto">
             <!-- Uncomment below if you prefer to use a text logo -->
             <!-- <h1><a href="index.html">The<span>Event</span></a></h1>-->
-            <a href="index.html" class="scrollto"><img src="assets/img/logo.png" alt="" title=""></a>
+            <a href="" th:href="@{/}" class="scrollto"><img src="assets/img/logo.png" alt="" title=""></a>
         </div>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
@@ -164,7 +164,7 @@
 
             <div class="row" data-aos="fade-up" data-aos-delay="100">
 
-                <div class="col-lg-4 col-md-4" th:each="image : ${topImages}">
+                <div class="col-lg-3 col-md-3" th:each="image : ${topImages}">
                     <div class="hotel">
                         <div class="hotel-img">
                             <img th:src="*{image.getUrl()}" src="/assets/img/hotels/1.jpg" alt="Hotel 1" class="img-fluid">

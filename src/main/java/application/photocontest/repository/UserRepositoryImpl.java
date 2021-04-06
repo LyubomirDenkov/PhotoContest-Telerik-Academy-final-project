@@ -73,26 +73,6 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public UserCredentials getByUserName(String userName) {
-        try (Session session = sessionFactory.openSession()) {
-
-            Query<UserCredentials> query = session.createQuery("from UserCredentials " +
-                    "where userName = :userName ", UserCredentials.class);
-
-            query.setParameter("userName", userName);
-
-            List<UserCredentials> result = query.list();
-
-            if (result.isEmpty()) {
-
-                throw new EntityNotFoundException("User/Organizer", "userName", userName);
-
-            }
-            return result.get(0);
-        }
-    }
-
-    @Override
     public User getUserByUserName(String userName) {
 
         try (Session session = sessionFactory.openSession()) {

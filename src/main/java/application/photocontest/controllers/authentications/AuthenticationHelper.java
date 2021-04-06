@@ -4,10 +4,9 @@ import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Organizer;
-import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
+import application.photocontest.service.contracts.CredentialsService;
 import application.photocontest.service.contracts.OrganizerService;
-import application.photocontest.service.contracts.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -23,12 +22,12 @@ public class AuthenticationHelper {
 
     public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong email or password.";
 
-    private final UserService userService;
+    private final CredentialsService credentialsService;
     private final OrganizerService organizerService;
 
 
-    public AuthenticationHelper(UserService userService, OrganizerService organizerService) {
-        this.userService = userService;
+    public AuthenticationHelper(CredentialsService credentialsService, OrganizerService organizerService) {
+        this.credentialsService = credentialsService;
         this.organizerService = organizerService;
     }
 
@@ -36,7 +35,7 @@ public class AuthenticationHelper {
         unauthorizedException(headers);
         try {
             String userName = headers.getFirst(AUTHORIZATION_HEADER_NAME);
-            return userService.getByUserName(userName);
+            return credentialsService.getByUserName(userName);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, INVALID_EMAIL_ERROR_MESSAGE);
         }
@@ -59,12 +58,12 @@ public class AuthenticationHelper {
             throw new UnauthorizedOperationException("No user logged in.");
         }
 
-        return userService.getByUserName(currentUserName);
+        return credentialsService.getByUserName(currentUserName);
     }
 
     public UserCredentials verifyAuthentication(String userName, String password) {
         try {
-            UserCredentials user = userService.getByUserName(userName);
+            UserCredentials user = credentialsService.getByUserName(userName);
             if (!user.getPassword().equals(password)) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }

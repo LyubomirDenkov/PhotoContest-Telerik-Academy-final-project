@@ -4,7 +4,6 @@ import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 
 public interface UserService extends GetServiceOperations<User> {
-    UserCredentials getByUserName(String userName);
 
     User getUserByUserName(String userName);
 
