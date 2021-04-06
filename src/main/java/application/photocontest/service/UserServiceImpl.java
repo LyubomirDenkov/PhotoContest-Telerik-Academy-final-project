@@ -3,6 +3,7 @@ package application.photocontest.service;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
+import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
@@ -18,9 +19,7 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final int JUNKIE_CEILING_POINTS = 50;
-    private static final int ENTHUSIAST_CEILING_POINTS = 150;
-    private static final int MASTER_CEILING_POINTS = 1000;
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -36,7 +35,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(User user, int id) {
 
-        verifyUserHasRoles(user, UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
+
+       if (!user.isOrganizer()){
+           verifyIsUserOwnAccount(user.getId(),id,"something");
+       }
 
         return userRepository.getById(id);
     }
@@ -64,29 +67,29 @@ public class UserServiceImpl implements UserService {
 
         User newRegisteredUser = userRepository.create(user);
 
-        /*addRoleToRegisteredUser(newRegisteredUser);*/
+        addRoleToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
 
     }
 
-   /* public void addRoleToRegisteredUser(User user) {
+    public void addRoleToRegisteredUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getUserCredentials().getRoles();
+        Set<Role> roles = user.getRoles();
         roles.add(role);
-        user.getUserCredentials().setRoles(roles);
+        user.setRoles(roles);
         userRepository.update(user);
-    }*/
+    }
 
 
     @Override
-    public User update(User userCredentials, User userToUpdate) {
+    public User update(User user, User userToUpdate) {
 
         boolean isUserNameExist = true;
 
-        verifyUserHasRoles(userCredentials, UserRoles.USER);
+        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
 
-        verifyIsUserOwnAccount(userCredentials, userToUpdate, "something");
+        verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), "something");
 
         try {
             userRepository.getUserByUserName(userToUpdate.getUserCredentials().getUserName());
@@ -104,11 +107,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user, int id) {
 
-        User userToDelete = userRepository.getById(id);
 
-        verifyUserHasRoles(user, UserRoles.USER);
+        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
 
-        verifyIsUserOwnAccount(userToDelete, user, "something");
+        verifyIsUserOwnAccount(user.getId(), id, "something");
 
         userRepository.delete(id);
     }

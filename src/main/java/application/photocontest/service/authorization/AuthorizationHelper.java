@@ -33,9 +33,9 @@ public class AuthorizationHelper {
     }
 
 
-    public static void verifyIsUserOwnAccount(User userToDelete, User user, String message){
+    public static void verifyIsUserOwnAccount(int userId, int userToDeleteId, String message){
 
-        if (!userToDelete.getUserCredentials().getUserName().equals(user.getUserCredentials().getUserName())){
+        if (userId != userToDeleteId){
             throw new UnauthorizedOperationException(message);
         }
 
