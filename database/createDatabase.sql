@@ -60,10 +60,10 @@ create or replace table users
 (
     user_id          int auto_increment
         primary key,
-    user_credentials varchar(30) not null,
-    first_name       varchar(20) not null,
-    last_name        varchar(20) not null,
-    profileImage     text        null,
+    user_credentials varchar(30)                                    not null,
+    first_name       varchar(20)                                    not null,
+    last_name        varchar(20)                                    not null,
+    profileImage     text default 'https://i.imgur.com/0fRs86a.jpg' null,
     constraint users_user_credentials_fk
         foreign key (user_credentials) references user_credentials (user_name)
 );
@@ -136,6 +136,16 @@ create or replace table rated_images
         foreign key (user_id) references users (user_id)
 );
 
+create or replace table user_points
+(
+    user_id   int not null,
+    points_id int not null,
+    constraint user_points_points_fk
+        foreign key (points_id) references points (points_id),
+    constraint user_points_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
 create or replace table users_images
 (
     user_id  int not null,
@@ -156,12 +166,3 @@ create or replace table users_roles
         foreign key (user_id) references users (user_id)
 );
 
-create or replace table user_points
-(
-user_id int not null,
-    points_id int not null,
-    constraint user_points_users_fk
-        foreign key (user_id) references users (user_id),
-    constraint user_points_points_fk
-        foreign key (points_id) references points (points_id)
-);
