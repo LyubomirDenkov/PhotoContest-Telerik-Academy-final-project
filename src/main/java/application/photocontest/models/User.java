@@ -42,16 +42,25 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> images;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_points",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "points_id"))
+    private Set<Points> points;
+
     public User() {
     }
 
-    public User(int id, UserCredentials userCredentials, String firstName, String lastName) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName, Set<Role> roles, Set<Image> images, Set<Points> points) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.roles = roles;
+        this.images = images;
+        this.points = points;
     }
-
 
     public int getId() {
         return id;
@@ -101,6 +110,14 @@ public class User {
 
     public void setImages(Set<Image> images) {
         this.images = images;
+    }
+
+    public Set<Points> getPoints() {
+        return points;
+    }
+
+    public void setPoints(Set<Points> points) {
+        this.points = points;
     }
 
     @JsonIgnore

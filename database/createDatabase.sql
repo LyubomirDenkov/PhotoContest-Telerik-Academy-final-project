@@ -33,7 +33,8 @@ create or replace table images
 
 create or replace table points
 (
-    points_id int not null,
+    points_id int auto_increment
+        primary key,
     points    int not null
 );
 
@@ -155,5 +156,12 @@ create or replace table users_roles
         foreign key (user_id) references users (user_id)
 );
 
-
-
+create or replace table user_points
+(
+user_id int not null,
+    points_id int not null,
+    constraint user_points_users_fk
+        foreign key (user_id) references users (user_id),
+    constraint user_points_points_fk
+        foreign key (points_id) references points (points_id)
+);

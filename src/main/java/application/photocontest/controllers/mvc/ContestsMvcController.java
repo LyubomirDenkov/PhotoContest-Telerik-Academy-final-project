@@ -7,6 +7,7 @@ import application.photocontest.models.Category;
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
+import application.photocontest.models.dto.ContestDto;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +43,7 @@ public class ContestsMvcController {
 
 
     @GetMapping
-    public String getAllCategories(Model model, HttpSession session) {
+    public String getAllContests(Model model, HttpSession session) {
         try {
 
             User currentUser = authenticationHelper.tryGetUser(session);
@@ -56,5 +57,29 @@ public class ContestsMvcController {
         }
     }
 
+
+    @GetMapping("/new")
+    public String showNewContestPage(Model model, HttpSession session) {
+
+
+        try {
+            UserCredentials currentUser = authenticationHelper.tryGetUser(session);
+
+            isOrganizer(currentUser);
+
+            model.addAttribute("contest", new ContestDto());
+
+            return "contest-new";
+
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+            return "not-found";
+        }
+    }
+
+    private void isOrganizer(UserCredentials currentUser) {
+        if (!currentUser.isOrganizer()) {
+            throw new UnauthorizedOperationException("Not authorized");
+        }
+    }
 
 }

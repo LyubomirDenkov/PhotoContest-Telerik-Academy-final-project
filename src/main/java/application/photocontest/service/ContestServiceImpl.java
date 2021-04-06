@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -149,11 +150,11 @@ public class ContestServiceImpl implements ContestService {
         }
 
         setContestPhase(contest);
-       // setContestJury(contestDto, contest);
+        setContestJury(contestDto, contest);
 
 
         Contest contestToCreate = contestRepository.create(contest);
-        //addParticipantsToContestAndPoints(contestToCreate, contestDto);
+        addParticipantsToContestAndPoints(contestToCreate, contestDto);
         return contestToCreate;
 
     }
@@ -335,14 +336,26 @@ public class ContestServiceImpl implements ContestService {
         Set<User> jury = contest.getJury();
         Set<Integer> participants = contestDto.getParticipants();
         User user;
+        Set<Points> userPointsSet = new HashSet<>();
+
+        Points newPoints = new Points();
+
         Set<User> usersToAdd = new HashSet<>();
-        /*for (Integer participant : participants) {
+        for (Integer participant : participants) {
             user = userRepository.getById(participant);
             if (jury.contains(user)) continue;
-            user.setPoints(user.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
+            for (Points point : user.getPoints()) {
+                newPoints = point;
+            }
+           int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+            userPointsSet = user.getPoints();
+            userPointsSet.clear();
+            newPoints.setPoints(pointsToIncrease);
+            userPointsSet.add(newPoints);
+            user.setPoints(userPointsSet);
             userRepository.update(user);
             usersToAdd.add(user);
-        }*/
+        }
         contest.setParticipants(usersToAdd);
         contestRepository.update(contest);
     }
@@ -350,12 +363,16 @@ public class ContestServiceImpl implements ContestService {
     private void setContestJury(ContestDto contestDto, Contest contest) {
         Set<User> jury = new HashSet<>();
 
-       /* for (Integer userId : contestDto.getJury()) {
+        int userToCheckPoints = 0;
+        for (Integer userId : contestDto.getJury()) {
             User userToAdd = userRepository.getById(userId);
-            if (userToAdd.getPoints() > NEEDED_POINTS_TO_BE_JURY) {
+            for (Points point : userToAdd.getPoints()) {
+                userToCheckPoints= point.getPoints();
+            }
+            if (userToCheckPoints > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
             }
-        }*/
+        }
         contest.setJury(jury);
     }
 
