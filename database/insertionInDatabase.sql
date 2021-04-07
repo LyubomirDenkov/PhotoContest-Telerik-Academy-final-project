@@ -64,13 +64,13 @@ VALUES ('nature');
 INSERT INTO contest_type(name)
 VALUES ('open');
 
-INSERT INTO images (title, story, image) VALUES
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png'),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png');
+INSERT INTO images (title, story, image,points) VALUES
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
+('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1);
