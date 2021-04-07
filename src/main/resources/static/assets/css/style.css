@@ -58,6 +58,15 @@ h1, h2, h3, h4, h5, h6 {
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
+
+.something{
+  display: block;
+  margin-top: 200px;
+  margin-left: 0;
+  margin-right: auto;
+  width: 50%;
+}
+
 .back-to-top {
   position: fixed;
   visibility: hidden;
@@ -993,8 +1002,9 @@ h1, h2, h3, h4, h5, h6 {
 
 #venue .venue-gallery {
   overflow: hidden;
-  border-right: 3px solid #fff;
-  border-bottom: 3px solid #fff;
+/*  border-right: 3px solid #fff;
+  border-bottom: 3px solid #fff;*/
+ /* border-radius: 20%;*/
 }
 
 #venue .venue-gallery img {

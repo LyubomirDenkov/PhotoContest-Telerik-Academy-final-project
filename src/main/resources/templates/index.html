@@ -11,7 +11,8 @@
 
     <!-- Favicons -->
     <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+          rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
@@ -19,10 +20,14 @@
 
     <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}" href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
+          href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
+          href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
+          href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
+          href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
@@ -53,7 +58,9 @@
                 <li><a class="nav-link scrollto" href="#about">About</a></li>
                 <li><a class="nav-link scrollto" href="#speakers">Speakers</a></li>
 
-                <li th:if="${currentUser != null}" ><a class="nav-link" href="#" th:href="@{/user/{id}/profile(id=${currentUser.getId()})}" >Profile</a></li>
+                <li th:if="${currentUser != null}"><a class="nav-link" href="#"
+                                                      th:href="@{/user/{id}/profile(id=${currentUser.getId()})}">Profile</a>
+                </li>
 
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
@@ -108,22 +115,31 @@
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
-                        <div class="speaker" data-aos="fade-up" data-aos-delay="100">
-                            <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
-                                 alt="Speaker 1" class="img-fluid">
-                            <div class="contest-type">
-                                        <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">Open</div>
-                            </div>
-                            <div class="details">
-                                <h3><a href="speaker-details.html" th:text="*{contest.getCategory().getName()}" >Brenden Legros</a></h3>
-                                <p th:text="*{#temporals.format(contest.getStartingDate(),'yyyy-MM-dd HH:mm')}" >Quas alias incidunt</p>
-                                <p th:text="*{contest.getPhase().getName().toUpperCase()}" >Quas alias incidunt</p>
-                                <div class="social">
-                                    <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/register}" href="#buy-tickets">Enroll</a>
-                                    <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/contests/{id}(id=${contest.getId()})}" href="#buy-tickets">Enroll</a>
-                                </div>
+                    <div class="speaker" data-aos="fade-up" data-aos-delay="100">
+                        <img th:src="*{contest.getBackgroundImage()}" src="../static/assets/img/speakers/1.jpg"
+                             alt="Speaker 1" class="img-fluid">
+                        <div class="contest-type">
+                            <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">Open
                             </div>
                         </div>
+
+                        <div class="details">
+                            <h3><a href="speaker-details.html" th:text="*{contest.getCategory().getName()}">Brenden
+                                Legros</a></h3>
+
+                            <div>Registration closes in <span id="time"></span> minutes!</div>
+
+                            <p th:text="*{#temporals.format(contest.getStartingDate(),'yyyy-MM-dd HH:mm')}">Quas alias
+                                incidunt</p>
+                            <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
+                            <div class="social">
+                                <a class="buy-tickets scrollto" th:if="${currentUser == null}"
+                                   th:href="@{/auth/register}" href="#buy-tickets">Enroll</a>
+                                <a class="buy-tickets scrollto" th:if="${currentUser != null}"
+                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#buy-tickets">Enroll</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,12 +158,8 @@
                 <div class="col-lg-4 col-md-4" th:each="image : ${topImages}">
                     <div class="venue-gallery">
                         <div>
-                                <i class="bi bi-star-fill image-points-icon"></i>
-                                <div class="image-points-count" th:text="*{image.getPoints()}"></div>
-
-                                <img th:src="*{image.getUrl()}" src="/assets/img/venue-gallery/1.jpg" alt="" class="img-fluid">
+                                <img th:src="*{image.getUrl()}" src="../static/assets/img/venue-gallery/1.jpg" alt="" class="img-fluid">
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -155,133 +167,6 @@
 
     </section><!-- End Venue Section -->
 
-    <!-- ======= Hotels Section ======= -->
-    <section id="hotels" class="section-with-bg">
-
-        <div class="container" data-aos="fade-up">
-            <div class="section-header">
-                <h2>Hotels</h2>
-                <p>Her are some nearby hotels</p>
-            </div>
-
-            <div class="row" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="col-lg-3 col-md-3" th:each="image : ${topImages}">
-                    <div class="hotel">
-                        <div class="hotel-img">
-                            <img th:src="*{image.getUrl()}" src="/assets/img/hotels/1.jpg" alt="Hotel 1" class="img-fluid">
-                        </div>
-                        <h3 th:text="*{image.getTitle()}" >Title</h3>
-                        <div class="stars">
-                            <i class="bi bi-star-fill image-points-icon"></i>
-                            <div class="image-points-count" th:text="*{image.getPoints()}"></div>
-                        </div>
-                        <p th:text="*{image.getStory()}" >Description</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </section><!-- End Hotels Section -->
-
-    <!-- ======= Gallery Section ======= -->
-    <section id="gallery">
-
-        <div class="container" data-aos="fade-up">
-            <div class="section-header">
-                <h2>Gallery</h2>
-                <p>Check our gallery from the recent events</p>
-            </div>
-        </div>
-
-        <div class="gallery-slider swiper-container">
-            <div class="swiper-wrapper align-items-center">
-                <div class="swiper-slide"><a href="assets/img/gallery/1.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/1.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/2.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/2.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/3.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/3.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/4.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/4.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/5.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/5.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/6.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/6.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/7.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/7.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a href="assets/img/gallery/8.jpg" class="gallery-lightbox"><img
-                        src="assets/img/gallery/8.jpg" class="img-fluid" alt=""></a></div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-
-    </section><!-- End Gallery Section -->
-
-    <!-- ======= Supporters Section ======= -->
-    <section id="supporters" class="section-with-bg">
-
-        <div class="container" data-aos="fade-up">
-            <div class="section-header">
-                <h2>Sponsors</h2>
-            </div>
-
-            <div class="row no-gutters supporters-wrap clearfix" data-aos="zoom-in" data-aos-delay="100">
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/1.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/2.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/3.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/4.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/5.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/6.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/7.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="supporter-logo">
-                        <img src="../static/assets/img/supporters/8.png" class="img-fluid" alt="">
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section><!-- End Sponsors Section -->
 
     <!-- =======  F.A.Q Section ======= -->
     <section id="faq">
@@ -418,29 +303,25 @@
         <div class="container" data-aos="fade-up">
 
             <div class="section-header">
-                <h2>Buy Tickets</h2>
-                <p>Velit consequatur consequatur inventore iste fugit unde omnis eum aut.</p>
+                <h2>RANK'S</h2>
             </div>
 
             <div class="row">
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
                     <div class="card mb-5 mb-lg-0">
                         <div class="card-body">
-                            <h5 class="card-title text-muted text-uppercase text-center">Standard Access</h5>
-                            <h6 class="card-price text-center">$150</h6>
+                            <br>
+                            <h6 class="card-price text-center">Junkie</h6>
+                            <br>
                             <hr>
                             <ul class="fa-ul">
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Badge</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Community
-                                    Access
-                                </li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Workshop
-                                    Access
-                                </li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>After Party
-                                </li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Photo Junkie</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>0 - 50 POINTS</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Can't be jury</li>
+                                <br>
                             </ul>
                             <hr>
                             <div class="text-center">
@@ -451,24 +332,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
                     <div class="card mb-5 mb-lg-0">
                         <div class="card-body">
-                            <h5 class="card-title text-muted text-uppercase text-center">Standard Access</h5>
-                            <h6 class="card-price text-center">$150</h6>
+                            <br>
+                            <h6 class="card-price text-center">Enthusiast</h6>
+                            <br>
                             <hr>
                             <ul class="fa-ul">
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Badge</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Community
-                                    Access
-                                </li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Workshop
-                                    Access
-                                </li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>After Party
-                                </li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Photo Enthusiast</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>51 - 150 POINTS</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Can't be jury</li>
+                                <br>
                             </ul>
                             <hr>
                             <div class="text-center">
@@ -479,22 +357,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-3" data-aos="fade-up" data-aos-delay="200">
                     <div class="card mb-5 mb-lg-0">
                         <div class="card-body">
-                            <h5 class="card-title text-muted text-uppercase text-center">Pro Access</h5>
-                            <h6 class="card-price text-center">$250</h6>
+                            <br>
+                            <h6 class="card-price text-center">Master</h6>
+                            <br>
                             <hr>
                             <ul class="fa-ul">
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Badge</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Community Access</li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Workshop
-                                    Access
-                                </li>
-                                <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>After Party
-                                </li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Photo Master</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>151 - 1000 POINTS</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Can be jury</li>
+                                <br>
                             </ul>
                             <hr>
                             <div class="text-center">
@@ -506,19 +383,21 @@
                     </div>
                 </div>
                 <!-- Pro Tier -->
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-lg-3" data-aos="fade-up" data-aos-delay="300">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-muted text-uppercase text-center">Premium Access</h5>
-                            <h6 class="card-price text-center">$350</h6>
+                            <br>
+                            <h6 class="card-price text-center">Dictator</h6>
+                            <br>
                             <hr>
                             <ul class="fa-ul">
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Badge</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Community Access</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Workshop Access</li>
-                                <li><span class="fa-li"><i class="fa fa-check"></i></span>After Party</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Photo Dictator</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>1000+ POINTS</li>
+                                <br>
+                                <li><span class="fa-li"><i class="fa fa-check"></i></span>Can be jury</li>
+                                <br>
                             </ul>
                             <hr>
                             <div class="text-center">
@@ -531,7 +410,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Modal Order Form -->

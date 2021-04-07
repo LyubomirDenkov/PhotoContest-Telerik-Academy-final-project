@@ -35,8 +35,9 @@ public class ContestsMvcController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model, HttpSession session) {
-        User userCredentials = authenticationHelper.tryGetUser(session);
-        Contest contest = contestService.getById(userCredentials, id);
+        User user = authenticationHelper.tryGetUser(session);
+        Contest contest = contestService.getById(user, id);
+        model.addAttribute("currentUser",user);
         model.addAttribute("contest", contest);
         return "contest";
     }
@@ -76,8 +77,8 @@ public class ContestsMvcController {
         }
     }
 
-    private void isOrganizer(User currentUser) {
-        if (!currentUser.isOrganizer()) {
+    private void isOrganizer(User user) {
+        if (!user.isOrganizer()) {
             throw new UnauthorizedOperationException("Not authorized");
         }
     }

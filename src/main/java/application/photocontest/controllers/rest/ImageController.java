@@ -26,7 +26,7 @@ public class ImageController {
 
 
     private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
-    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37HAWK";
+    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
     private static final String IMGUR_AUTHORIZATION = "Authorization";
     private final ImageService imageService;
     private final ImageMapper imageMapper;
