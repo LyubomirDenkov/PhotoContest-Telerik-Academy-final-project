@@ -87,9 +87,9 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-    public List<Contest> getOngoingContests(){
+    public List<Contest> getOngoingContests() {
 
-       List<Contest> contests = contestRepository.getOngoingContests();
+        List<Contest> contests = contestRepository.getOngoingContests();
 
         for (Contest contest : contests) {
             setContestPhase(contest);
@@ -208,7 +208,7 @@ public class ContestServiceImpl implements ContestService {
 
         ImageRating imageRating = new ImageRating();
 
-    /*    imageRating.setUserCredentials(user.getUserCredentials());*/
+        /*    imageRating.setUserCredentials(user.getUserCredentials());*/
         imageRating.setImageId(imageId);
         imageRating.setPoints(points);
         imageRating.setComment(comment);
@@ -247,7 +247,6 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
         return image;
     }
-
 
 
     @Override
@@ -345,7 +344,7 @@ public class ContestServiceImpl implements ContestService {
             for (Points point : user.getPoints()) {
                 newPoints = point;
             }
-           int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             newPoints.setPoints(pointsToIncrease);
             userRepository.updatePoints(newPoints);
             usersToAdd.add(user);
@@ -357,11 +356,15 @@ public class ContestServiceImpl implements ContestService {
     private void setContestJury(ContestDto contestDto, Contest contest) {
         Set<User> jury = new HashSet<>();
 
+        jury.addAll(userRepository.getOrganizers());
+
         int userToCheckPoints = 0;
+
         for (Integer userId : contestDto.getJury()) {
             User userToAdd = userRepository.getById(userId);
+            if (!userToAdd.isUser() || jury.contains(userToAdd)) continue;
             for (Points point : userToAdd.getPoints()) {
-                userToCheckPoints= point.getPoints();
+                userToCheckPoints = point.getPoints();
             }
             if (userToCheckPoints > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);

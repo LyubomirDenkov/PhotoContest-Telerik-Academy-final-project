@@ -17,4 +17,6 @@ public interface UserRepository extends GetRepositoryOperations<User>, CudReposi
     void createPoints(Points points);
 
     void updatePoints(Points points);
+
+    List<User> getOrganizers();
 }
