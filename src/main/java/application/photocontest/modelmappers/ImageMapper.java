@@ -26,6 +26,7 @@ public class ImageMapper {
         image.setTitle(title);
         image.setStory(story);
         image.setUrl(imagePath);
+        image.setUploader(user);
 
         return image;
     }

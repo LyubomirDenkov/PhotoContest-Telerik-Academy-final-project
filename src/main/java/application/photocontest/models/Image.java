@@ -1,7 +1,6 @@
 package application.photocontest.models;
 
 
-
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -21,8 +20,9 @@ public class Image {
     @Column(name = "story")
     private String story;
 
-    @Column(name = "user_id")
-    private int uploaderId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User uploader;
 
     @Column(name = "image")
     private String url;
@@ -43,22 +43,22 @@ public class Image {
     }
 
 
-    public Image(int id, String title, String story, int uploaderId, String url, int points, Set<User> jurorAwardedRating) {
+    public Image(int id, String title, String story, User uploader, String url, int points, Set<User> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
-        this.uploaderId = uploaderId;
+        this.uploader = uploader;
         this.url = url;
         this.points = points;
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
-    public int getUploaderId() {
-        return uploaderId;
+    public User getUploader() {
+        return uploader;
     }
 
-    public void setUploaderId(int uploaderId) {
-        this.uploaderId = uploaderId;
+    public void setUploader(User uploader) {
+        this.uploader = uploader;
     }
 
     public int getId() {
@@ -114,11 +114,11 @@ public class Image {
         if (this == o) return true;
         if (!(o instanceof Image)) return false;
         Image image = (Image) o;
-        return getId() == image.getId() && getUploaderId() == image.getUploaderId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
+        return getId() == image.getId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getUploaderId(), getUrl(), getPoints(), getJurorAwardedRating());
+        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getPoints(), getJurorAwardedRating());
     }
 }
