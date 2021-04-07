@@ -59,6 +59,11 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<Image> getTopRatedPictures() {
-        return imageRepository.getTopRatedPictures();
+        List<Image> images = imageRepository.getTopRatedPictures();
+
+        if (images.size() > 6){
+            return images.subList(0,6);
+        }
+        return images;
     }
 }
