@@ -27,6 +27,9 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "profileImage")
+    private String profileImage;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -95,6 +98,13 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public Set<Role> getRoles() {
         return roles;

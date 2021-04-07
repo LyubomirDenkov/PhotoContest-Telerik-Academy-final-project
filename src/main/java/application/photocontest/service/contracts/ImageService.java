@@ -14,6 +14,6 @@ public interface ImageService {
 
     void delete(User user, int id);
 
-    List<Image> getTopEightRatedPictures();
+    List<Image> getTopRatedPictures();
 
 }

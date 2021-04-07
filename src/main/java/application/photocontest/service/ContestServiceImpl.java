@@ -91,9 +91,10 @@ public class ContestServiceImpl implements ContestService {
 
         List<Contest> contests = contestRepository.getOngoingContests();
 
-        for (Contest contest : contests) {
-            setContestPhase(contest);
+        if (contests.size() > 6){
+            return contests.subList(0,6);
         }
+
         return contests;
     }
 

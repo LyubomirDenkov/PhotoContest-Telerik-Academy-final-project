@@ -17,6 +17,6 @@ public interface ImageRepository extends CudRepositoryOperations<Image>{
 
     List<ImageRating> getImageRatingsByUsername(String userName);
 
-    List<Image> getTopEightRatedPictures();
+    List<Image> getTopRatedPictures();
 
 }

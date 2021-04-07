@@ -3,7 +3,6 @@ package application.photocontest.service;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImageService;
@@ -36,7 +35,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image create(User user, Image image) {
 
-        verifyUserHasRoles(user, UserRoles.USER);
+        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
         User userUploader = userRepository.getUserByUserName(user.getUserCredentials().getUserName());
         //image.setUploadedBy(userUploader);
 
@@ -59,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<Image> getTopEightRatedPictures() {
-        return imageRepository.getTopEightRatedPictures();
+    public List<Image> getTopRatedPictures() {
+        return imageRepository.getTopRatedPictures();
     }
 }
