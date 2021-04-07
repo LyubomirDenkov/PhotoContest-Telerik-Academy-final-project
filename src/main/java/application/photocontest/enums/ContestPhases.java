@@ -1,7 +1,7 @@
 package application.photocontest.enums;
 
 public enum ContestPhases {
-    PREPARING, VOTING, FINISHED;
+    ONGOING, VOTING, FINISHED;
 
     @Override
     public String toString() {

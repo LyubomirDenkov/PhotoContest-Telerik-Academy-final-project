@@ -1,6 +1,7 @@
 package application.photocontest.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user_credentials")
@@ -39,4 +40,16 @@ public class UserCredentials {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserCredentials)) return false;
+        UserCredentials that = (UserCredentials) o;
+        return getUserName().equals(that.getUserName()) && getPassword().equals(that.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserName(), getPassword());
+    }
 }

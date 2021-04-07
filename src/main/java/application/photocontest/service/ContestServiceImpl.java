@@ -206,19 +206,6 @@ public class ContestServiceImpl implements ContestService {
 
         }
         contest.setParticipants(participants);
-
-
-     //  Set<User> usersToAdd = new HashSet<>();
-     //  for (Integer participant : participants) {
-     //      user = userRepository.getById(participant);
-     //      if (jury.contains(user) || user.isOrganizer()) continue;
-     //      for (Points point : user.getPoints()) {
-     //          newPoints = point;
-     //      }
-     //      int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
-     //      newPoints.setPoints(pointsToIncrease);
-     //      userRepository.updatePoints(newPoints);
-     //      usersToAdd.add(user);
     }
 
 
@@ -229,14 +216,14 @@ public class ContestServiceImpl implements ContestService {
 
         ImageRating imageRating = new ImageRating();
 
-        /*    imageRating.setUserCredentials(user.getUserCredentials());*/
+        imageRating.setUser(user);
         imageRating.setImageId(imageId);
         imageRating.setPoints(points);
         imageRating.setComment(comment);
         imageRepository.createJurorRateEntity(imageRating);
 
         Image image = imageRepository.getById(imageId);
-        //image.setPoints(image.getPoints() + points);
+        image.setPoints(image.getPoints() + points);
         imageRepository.update(image);
 
     }
@@ -298,11 +285,19 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-       /* userToJoinInContest.setPoints(userToJoinInContest.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST);
-        userRepository.update(userToJoinInContest);
+        Points newPoints = new Points();
+
+            for (Points point : userToJoinInContest.getPoints()) {
+                newPoints = point;
+            }
+            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
+            newPoints.setPoints(pointsToIncrease);
+            userRepository.updatePoints(newPoints);
+
+            userRepository.update(userToJoinInContest);
 
         participants.add(userToJoinInContest);
-        contest.setParticipants(participants);*/
+        contest.setParticipants(participants);
 
 
         contestRepository.update(contest);
