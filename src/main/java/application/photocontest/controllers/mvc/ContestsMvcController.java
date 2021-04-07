@@ -63,7 +63,7 @@ public class ContestsMvcController {
 
 
         try {
-            UserCredentials currentUser = authenticationHelper.tryGetUser(session);
+            User currentUser = authenticationHelper.tryGetUser(session);
 
             isOrganizer(currentUser);
 
@@ -76,7 +76,7 @@ public class ContestsMvcController {
         }
     }
 
-    private void isOrganizer(UserCredentials currentUser) {
+    private void isOrganizer(User currentUser) {
         if (!currentUser.isOrganizer()) {
             throw new UnauthorizedOperationException("Not authorized");
         }

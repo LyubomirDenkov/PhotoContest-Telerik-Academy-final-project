@@ -25,6 +25,10 @@ public class Image {
     @Column(name = "image")
     private String url;
 
+    @Column(name = "points")
+    private int points;
+
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rated_images",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -37,11 +41,12 @@ public class Image {
     }
 
 
-    public Image(int id, String title, String story, String url,Set<User> jurorAwardedRating) {
+    public Image(int id, String title, String story, String url, int points, Set<User> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
         this.url = url;
+        this.points = points;
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
@@ -75,6 +80,14 @@ public class Image {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public Set<User> getJurorAwardedRating() {

@@ -28,7 +28,9 @@ create or replace table images
         primary key,
     title    varchar(50) not null,
     story    text        not null,
-    image    text        not null
+    image    text        not null,
+points int not null
+
 );
 
 create or replace table points
