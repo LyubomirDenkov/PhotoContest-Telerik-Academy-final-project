@@ -72,16 +72,8 @@ VALUES ('open');
 INSERT INTO points (points) VALUES
 (20),(160),(25),(190);
 
-INSERT INTO images (title, story, image,points) VALUES
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
-('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1);
+INSERT INTO images (title, story, image,user_id ,points) VALUES
+('how are you doing ','how are you doing '1,'https://i.imgur.com/JD4Auj5.png',1);
 
 INSERT INTO user_points(user_id, points_id) VALUES
 (5,1),

@@ -21,6 +21,8 @@ public class Image {
     @Column(name = "story")
     private String story;
 
+    @Column(name = "user_id")
+    private int uploaderId;
 
     @Column(name = "image")
     private String url;
@@ -41,13 +43,22 @@ public class Image {
     }
 
 
-    public Image(int id, String title, String story, String url, int points, Set<User> jurorAwardedRating) {
+    public Image(int id, String title, String story, int uploaderId, String url, int points, Set<User> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
+        this.uploaderId = uploaderId;
         this.url = url;
         this.points = points;
         this.jurorAwardedRating = jurorAwardedRating;
+    }
+
+    public int getUploaderId() {
+        return uploaderId;
+    }
+
+    public void setUploaderId(int uploaderId) {
+        this.uploaderId = uploaderId;
     }
 
     public int getId() {
@@ -98,5 +109,16 @@ public class Image {
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Image)) return false;
+        Image image = (Image) o;
+        return getId() == image.getId() && getUploaderId() == image.getUploaderId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getStory(), getUploaderId(), getUrl(), getPoints(), getJurorAwardedRating());
+    }
 }

@@ -239,7 +239,8 @@ public class ContestServiceImpl implements ContestService {
         if (!contest.getParticipants().contains(userRepository.getUserByUserName(user.getUserCredentials().getUserName()))) {
             throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
         }
-        if (!userRepository.getUserByPictureId(imageId).getUserCredentials().getUserName().equalsIgnoreCase(user.getUserCredentials().getUserName())) {
+
+        if (imageRepository.getById(imageId).getUploaderId() != user.getId()) {
             throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
         }
 

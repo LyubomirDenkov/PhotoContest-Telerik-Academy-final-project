@@ -22,16 +22,6 @@ create or replace table contest_type
     name    varchar(20) not null
 );
 
-create or replace table images
-(
-    image_id int auto_increment
-        primary key,
-    title    varchar(50) not null,
-    story    text        not null,
-    image    text        not null,
-points int not null
-
-);
 
 create or replace table points
 (
@@ -70,6 +60,19 @@ create or replace table users
         foreign key (user_credentials) references user_credentials (user_name)
 );
 
+create or replace table images
+(
+    image_id int auto_increment
+        primary key,
+    title    varchar(50) not null,
+    story    text        not null,
+    image    text        not null,
+    user_id int not null,
+    points int not null,
+        constraint images_users_fk
+        foreign key (user_id) references users (user_id)
+
+);
 create or replace table contest
 (
     contest_id      int auto_increment
