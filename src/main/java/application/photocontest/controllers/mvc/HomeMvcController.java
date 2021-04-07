@@ -21,6 +21,7 @@ public class HomeMvcController {
     private final ImageService imageService;
     private final ContestService contestService;
     private final AuthenticationHelper authenticationHelper;
+
     private final UserService userService;
 
     @Autowired
@@ -48,5 +49,7 @@ public class HomeMvcController {
         model.addAttribute("topImages",imageService.getTopRatedPictures());
         return "index";
     }
+
+
 
 }

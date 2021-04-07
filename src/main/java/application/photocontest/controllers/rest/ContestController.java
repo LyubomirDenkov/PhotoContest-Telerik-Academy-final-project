@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/contests")
@@ -81,7 +82,9 @@ public class ContestController {
 
         try {
             Contest contest = contestMapper.fromDto(contestDto, user);
-            return contestService.create(user, contest,contestDto);
+            Set<Integer> jurySet = contestDto.getJury();
+            Set<Integer> participantsSet = contestDto.getParticipants();
+            return contestService.create(user, contest,jurySet,participantsSet);
 
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -100,7 +103,9 @@ public class ContestController {
 
         try {
             Contest contestToUpdate = contestMapper.fromDto(id, contestDto);
-            return contestService.update(user, contestToUpdate,contestDto);
+            Set<Integer> jurySet = contestDto.getJury();
+            Set<Integer> participantsSet = contestDto.getParticipants();
+            return contestService.update(user, contestToUpdate,jurySet,participantsSet);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

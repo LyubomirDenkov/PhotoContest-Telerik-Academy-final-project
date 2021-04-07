@@ -5,15 +5,16 @@ import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 
 import java.util.List;
+import java.util.Set;
 
 
-public interface ContestService extends GetServiceOperations<Contest>{
+public interface ContestService extends GetServiceOperations<Contest> {
 
-    Contest create(User user, Contest contest, ContestDto contestDto);
+    Contest create(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantSet);
 
-    Contest update(User user, Contest contest, ContestDto contestDto);
+    Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet);
 
-    void delete(User user,int id);
+    void delete(User user, int id);
 
     void addUserToContest(User user, int contestId, int userId);
 

@@ -91,8 +91,8 @@ public class ContestServiceImpl implements ContestService {
 
         List<Contest> contests = contestRepository.getOngoingContests();
 
-        if (contests.size() > 6){
-            return contests.subList(0,6);
+        if (contests.size() > 6) {
+            return contests.subList(0, 6);
         }
 
         return contests;
@@ -135,7 +135,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest create(User user, Contest contest, ContestDto contestDto) {
+    public Contest create(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantSet) {
 
 
         boolean ifContestTitleExist = true;
@@ -150,24 +150,24 @@ public class ContestServiceImpl implements ContestService {
         }
 
         setContestPhase(contest);
-        setContestJury(contestDto, contest);
+        setContestJury(jurySet, contest);
 
 
         Contest contestToCreate = contestRepository.create(contest);
-        addParticipantsToContestAndPoints(contestToCreate, contestDto);
+        addParticipantsToContestAndPoints(contestToCreate, jurySet, participantSet);
         return contestToCreate;
 
     }
 
     @Override
-    public Contest update(User user, Contest contest, ContestDto contestDto) {
+    public Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet) {
 
 
         if (!user.getUserCredentials().getUserName().equals(contest.getUser().getUserCredentials().getUserName())) {
             throw new UnauthorizedOperationException(UPDATING_CONTEST_ERROR_MESSAGE);
         }
-        setContestJury(contestDto, contest);
-        updateParticipants(contest, contestDto);
+        setContestJury(jurySet, contest);
+        updateParticipants(contest,participantsSet);
         setContestPhase(contest);
 
         contestRepository.update(contest);
@@ -176,10 +176,10 @@ public class ContestServiceImpl implements ContestService {
 
     }
 
-    private void updateParticipants(Contest contest, ContestDto contestDto) {
+    private void updateParticipants(Contest contest,Set<Integer> participantsSet) {
         Set<User> oldParticipants = contest.getParticipants();
 
-        Set<Integer> dtoParticipants = contestDto.getParticipants();
+        Set<Integer> dtoParticipants = participantsSet;
 
         Set<User> jury = contest.getJury();
 
@@ -190,7 +190,7 @@ public class ContestServiceImpl implements ContestService {
 
         for (Integer participant : dtoParticipants) {
             User participantToAdd = userRepository.getById(participant);
-            if (oldParticipants.contains(participantToAdd)){
+            if (oldParticipants.contains(participantToAdd)) {
                 participants.add(participantToAdd);
                 continue;
             }
@@ -289,14 +289,14 @@ public class ContestServiceImpl implements ContestService {
 
         Points newPoints = new Points();
 
-            for (Points point : userToJoinInContest.getPoints()) {
-                newPoints = point;
-            }
-            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
-            newPoints.setPoints(pointsToIncrease);
-            userRepository.updatePoints(newPoints);
+        for (Points point : userToJoinInContest.getPoints()) {
+            newPoints = point;
+        }
+        int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
+        newPoints.setPoints(pointsToIncrease);
+        userRepository.updatePoints(newPoints);
 
-            userRepository.update(userToJoinInContest);
+        userRepository.update(userToJoinInContest);
 
         participants.add(userToJoinInContest);
         contest.setParticipants(participants);
@@ -348,17 +348,15 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-    private void addParticipantsToContestAndPoints(Contest contest, ContestDto contestDto) {
-        Set<User> jury = contest.getJury();
-        Set<Integer> participants = contestDto.getParticipants();
+    private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> jurySet, Set<Integer> participantSet) {
         User user;
 
         Points newPoints = new Points();
 
         Set<User> usersToAdd = new HashSet<>();
-        for (Integer participant : participants) {
+        for (Integer participant : participantSet) {
             user = userRepository.getById(participant);
-            if (jury.contains(user) || user.isOrganizer()) continue;
+            if (jurySet.contains(participant) || user.isOrganizer()) continue;
             for (Points point : user.getPoints()) {
                 newPoints = point;
             }
@@ -371,14 +369,14 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
     }
 
-    private void setContestJury(ContestDto contestDto, Contest contest) {
+    private void setContestJury(Set<Integer> jurySet, Contest contest) {
         Set<User> jury = new HashSet<>();
 
         jury.addAll(userRepository.getOrganizers());
 
         int userToCheckPoints = 0;
 
-        for (Integer userId : contestDto.getJury()) {
+        for (Integer userId : jurySet) {
             User userToAdd = userRepository.getById(userId);
             if (!userToAdd.isUser() || jury.contains(userToAdd)) continue;
             for (Points point : userToAdd.getPoints()) {
