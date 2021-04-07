@@ -31,7 +31,8 @@ VALUES ('nikolay9','12345678'),
 INSERT INTO users( user_credentials,first_name, last_name)
 VALUES ('toshkata',  'Todor', 'Andonov'),
        ('vladi',  'Vladimir', 'Venkov'),
-       ('nikolaicho', 'Nikolay', 'Georgiev'),
+       ('nikolay9', 'Nikolay', 'Georgiev'),
+       ('lybo270', 'Lyubomir', 'Denkov'),
        ('Peshkata',  'Petar', 'Raykov'),
        ('vankata123',  'Ivancho', 'Ivanov'),
        ('gero99',  'Gero', 'Ivanov'),
@@ -45,10 +46,14 @@ INSERT INTO users_roles(user_id, role_id)
 VALUES
 (1,2),
 (2,2),
-(3,1),
-(4,1),
+(3,2),
+(4,2),
 (5,1),
-(6,1);
+(6,1),
+(7,1),
+(8,1),
+(9,1),
+(10,1);
 
 INSERT INTO category(name)
 VALUES ('Nature'),
@@ -64,6 +69,9 @@ VALUES ('nature');
 INSERT INTO contest_type(name)
 VALUES ('open');
 
+INSERT INTO points (points) VALUES
+(20),(160),(25),(190);
+
 INSERT INTO images (title, story, image,points) VALUES
 ('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
 ('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
@@ -74,3 +82,9 @@ INSERT INTO images (title, story, image,points) VALUES
 ('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
 ('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1),
 ('how are you doing ','how are you doing ','https://i.imgur.com/JD4Auj5.png',1);
+
+INSERT INTO user_points(user_id, points_id) VALUES
+(5,1),
+(6,2),
+(7,3),
+(8,4);

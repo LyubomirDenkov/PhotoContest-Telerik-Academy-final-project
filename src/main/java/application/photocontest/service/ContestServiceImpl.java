@@ -184,20 +184,41 @@ public class ContestServiceImpl implements ContestService {
 
         Set<User> participants = new HashSet<>();
 
-        /*for (Integer participant : dtoParticipants) {
+        Points newPoints = new Points();
+
+
+        for (Integer participant : dtoParticipants) {
             User participantToAdd = userRepository.getById(participant);
             if (oldParticipants.contains(participantToAdd)){
                 participants.add(participantToAdd);
                 continue;
             }
-            if (jury.contains(participantToAdd)) continue;
+            if (jury.contains(participantToAdd) || participantToAdd.isOrganizer()) continue;
 
-            participantToAdd.setPoints(participantToAdd.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST);
+            for (Points point : participantToAdd.getPoints()) {
+                newPoints = point;
+            }
+            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+            newPoints.setPoints(pointsToIncrease);
+            userRepository.updatePoints(newPoints);
             participants.add(participantToAdd);
             userRepository.update(participantToAdd);
 
-        }*/
+        }
         contest.setParticipants(participants);
+
+
+     //  Set<User> usersToAdd = new HashSet<>();
+     //  for (Integer participant : participants) {
+     //      user = userRepository.getById(participant);
+     //      if (jury.contains(user) || user.isOrganizer()) continue;
+     //      for (Points point : user.getPoints()) {
+     //          newPoints = point;
+     //      }
+     //      int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+     //      newPoints.setPoints(pointsToIncrease);
+     //      userRepository.updatePoints(newPoints);
+     //      usersToAdd.add(user);
     }
 
 

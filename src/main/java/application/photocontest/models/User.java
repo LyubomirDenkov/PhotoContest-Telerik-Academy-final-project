@@ -133,4 +133,16 @@ public class User {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getRoles().equals(user.getRoles()) && getImages().equals(user.getImages()) && getPoints().equals(user.getPoints());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getRoles(), getImages(), getPoints());
+    }
 }
