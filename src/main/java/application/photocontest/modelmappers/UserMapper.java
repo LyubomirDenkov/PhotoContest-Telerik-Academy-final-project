@@ -1,5 +1,6 @@
 package application.photocontest.modelmappers;
 
+import application.photocontest.models.Points;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
@@ -7,6 +8,10 @@ import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.JUNKIE;
 
@@ -32,7 +37,6 @@ public class UserMapper {
         user.setFirstName(registerDto.getFirstName());
         user.setLastName(registerDto.getLastName());
         user.setUserCredentials(userCredentials);
-
 
         return user;
     }

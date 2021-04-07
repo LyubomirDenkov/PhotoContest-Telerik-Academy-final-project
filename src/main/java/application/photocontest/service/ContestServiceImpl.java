@@ -335,24 +335,19 @@ public class ContestServiceImpl implements ContestService {
         Set<User> jury = contest.getJury();
         Set<Integer> participants = contestDto.getParticipants();
         User user;
-        Set<Points> userPointsSet = new HashSet<>();
 
         Points newPoints = new Points();
 
         Set<User> usersToAdd = new HashSet<>();
         for (Integer participant : participants) {
             user = userRepository.getById(participant);
-            if (jury.contains(user)) continue;
+            if (jury.contains(user) || user.isOrganizer()) continue;
             for (Points point : user.getPoints()) {
                 newPoints = point;
             }
            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
-            userPointsSet = user.getPoints();
-            userPointsSet.clear();
             newPoints.setPoints(pointsToIncrease);
-            userPointsSet.add(newPoints);
-            user.setPoints(userPointsSet);
-            userRepository.update(user);
+            userRepository.updatePoints(newPoints);
             usersToAdd.add(user);
         }
         contest.setParticipants(usersToAdd);

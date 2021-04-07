@@ -70,6 +70,27 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public void createPoints(Points points) {
+        try (Session session = sessionFactory.openSession()) {
+
+            session.save(points);
+
+        }
+    }
+
+    @Override
+    public void updatePoints(Points points) {
+        try (Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+            session.update(points);
+            session.getTransaction().commit();
+        }
+
+
+    }
+
 
     @Override
     public User getUserByUserName(String userName) {

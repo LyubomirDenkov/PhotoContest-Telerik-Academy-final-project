@@ -3,13 +3,13 @@ package application.photocontest.service;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,17 +67,23 @@ public class UserServiceImpl implements UserService {
 
         User newRegisteredUser = userRepository.create(user);
 
-        addRoleToRegisteredUser(newRegisteredUser);
+        addRoleAndPointsToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
 
     }
 
-    public void addRoleToRegisteredUser(User user) {
+    public void addRoleAndPointsToRegisteredUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
         Set<Role> roles = user.getRoles();
         roles.add(role);
         user.setRoles(roles);
+        Points points = new Points();
+        Set<Points> startingPoints = new HashSet<>();
+        startingPoints.add(points);
+        userRepository.createPoints(points);
+        user.setPoints(startingPoints);
+
         userRepository.update(user);
     }
 
