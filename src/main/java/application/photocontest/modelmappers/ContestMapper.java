@@ -36,13 +36,19 @@ public class ContestMapper {
 
     public Contest fromDto(int id, ContestDto contestDto) {
         Contest contestToUpdate = contestRepository.getById(id);
+        LocalDateTime localDateTime = LocalDateTime.now();
+
 
         contestToUpdate.setTitle(contestDto.getTitle());
         contestToUpdate.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contestToUpdate.setPhaseOne(contestDto.getPhaseOne());
-        contestToUpdate.setPhaseTwo(contestDto.getPhaseTwo());
+        contestToUpdate.setTimeTillVoting(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne())));
+        contestToUpdate.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne()).
+                plusHours(contestDto.getPhaseTwo())));
         contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
+        contestToUpdate.setPhase(contestRepository.getPhaseByName("ongoing"));
+
+
 
         return contestToUpdate;
 
@@ -51,16 +57,17 @@ public class ContestMapper {
 
 
     public Contest dtoToObject(ContestDto contestDto, Contest contest, User user) {
+        LocalDateTime localDateTime = LocalDateTime.now();
 
         contest.setTitle(contestDto.getTitle());
         contest.setCategory(categoryRepository.getById(contestDto.getCategoryId()));
-        contest.setStartingDate(LocalDateTime.now());
         contest.setUser(user);
-        contest.setPhaseOne(contestDto.getPhaseOne());
-        contest.setPhaseTwo(contestDto.getPhaseTwo());
+        contest.setTimeTillVoting(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne())));
+        contest.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne()).
+                plusHours(contestDto.getPhaseTwo())));
         contest.setType(contestRepository.getTypeById(contestDto.getTypeId()));
-        contest.setPointsAwarded(false);
         contest.setBackgroundImage(contestDto.getBackgroundImage());
+        contest.setPhase(contestRepository.getPhaseByName("ongoing"));
 
         Set<Image> images = new HashSet<>();
         contest.setImages(images);
