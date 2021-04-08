@@ -148,4 +148,13 @@ public class ContestRepositoryImpl implements ContestRepository {
 
         }
     }
+
+    @Override
+    public List<Contest> getFinishedContests() {
+        try (Session session = sessionFactory.openSession()) {
+
+            return session.createQuery("from Contest where phase.id = 3 ",Contest.class).list();
+
+        }
+    }
 }

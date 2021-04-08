@@ -23,4 +23,6 @@ public interface ContestService extends GetServiceOperations<Contest> {
     Image addImage(User user, int contestId, int imageId);
 
     List<Contest> getOngoingContests();
+
+    List<Contest> getFinishedContests();
 }
