@@ -13,13 +13,13 @@ import application.photocontest.service.contracts.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/auth")
@@ -82,7 +82,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto register,
-                                 BindingResult bindingResult) {
+                                 BindingResult bindingResult,
+                                 @RequestParam(name = "file")Optional<MultipartFile> file,
+                                 @RequestParam(name = "url") Optional<String> url) {
         if (bindingResult.hasErrors()) {
             return "register";
         }
@@ -94,10 +96,10 @@ public class AuthenticationController {
 
         try {
             User user = userMapper.fromDto(register);
-            userService.create(user);
+            userService.create(user,file,url);
             return "redirect:/";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("email", "email_error", e.getMessage());
+        } catch (DuplicateEntityException | IOException e) {
+            bindingResult.rejectValue("username", "username_error", e.getMessage());
             return "register";
         }
     }

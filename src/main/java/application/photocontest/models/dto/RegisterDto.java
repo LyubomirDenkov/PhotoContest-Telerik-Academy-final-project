@@ -43,7 +43,7 @@ public class RegisterDto {
                        String lastName) {
 
         this.userName = userName;
-                this.password = password;
+        this.password = password;
         this.repeatPassword = repeatPassword;
         this.firstName = firstName;
         this.lastName = lastName;

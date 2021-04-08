@@ -24,10 +24,6 @@ import java.util.*;
 @RequestMapping("/api/images")
 public class ImageController {
 
-
-    private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
-    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
-    private static final String IMGUR_AUTHORIZATION = "Authorization";
     private final ImageService imageService;
     private final ImageMapper imageMapper;
     private final AuthenticationHelper authenticationHelper;
@@ -63,34 +59,16 @@ public class ImageController {
 
         if (file.isPresent()) {
             String inputImage = Base64.getEncoder().encodeToString(file.get().getBytes());
-            imageLink = uploadImageToImgurAndReturnUrl(inputImage);
+           // imageLink = uploadImageToImgurAndReturnUrl(inputImage);
         }
         if (url.isPresent()) {
-            imageLink = uploadImageToImgurAndReturnUrl(url.get());
+          //  imageLink = uploadImageToImgurAndReturnUrl(url.get());
         }
 
         Image image = imageMapper.fromDto(user, title, story, imageLink);
         return imageService.create(user, image);
     }
 
-    private String uploadImageToImgurAndReturnUrl(String image) throws IOException {
-
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("image", image)
-                .build();
-        Request request = new Request.Builder()
-                .url(IMGUR_IMAGE_UPLOAD_URL)
-                .method("POST", body)
-                .addHeader(IMGUR_AUTHORIZATION, IMGUR_CLIENT_ID)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        JSONObject jsonObject = new JSONObject(response.body().string());
-        JSONObject jsonObjectData = jsonObject.getJSONObject("data");
-        return jsonObjectData.getString("link");
-    }
 
     @DeleteMapping("{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {

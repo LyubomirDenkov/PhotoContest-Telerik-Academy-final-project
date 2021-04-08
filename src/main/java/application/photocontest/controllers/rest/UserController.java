@@ -13,11 +13,15 @@ import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -53,14 +57,16 @@ public class UserController {
         }
     }
 
-    @PostMapping
-    public User create(@Valid @RequestBody RegisterDto dto) {
+    @PostMapping(consumes ={ "multipart/form-data", "application/json"})
+    public User create(@RequestPart(value = "dto") RegisterDto dto,
+                       @RequestParam(name = "file")Optional<MultipartFile> file,
+                       @RequestParam(name = "url") Optional<String> url) {
 
         User user = userMapper.fromDto(dto);
 
         try {
-            return userService.create(user);
-        } catch (DuplicateEntityException e) {
+            return userService.create(user,file,url);
+        } catch (DuplicateEntityException | IOException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

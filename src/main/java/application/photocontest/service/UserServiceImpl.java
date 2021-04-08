@@ -5,13 +5,14 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.UserRepository;
+import application.photocontest.service.contracts.ImgurService;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.*;
@@ -21,10 +22,12 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+    private final ImgurService imgurService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService) {
         this.userRepository = userRepository;
+        this.imgurService = imgurService;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User create(User user) {
+    public User create(User user, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
         boolean isUserNameExist = true;
 
@@ -62,15 +65,26 @@ public class UserServiceImpl implements UserService {
         }
 
         if (isUserNameExist) {
-            throw new DuplicateEntityException("");
+            throw new DuplicateEntityException("USERNAME EXIST");
         }
 
+        if ((file.isPresent() && url.isPresent()) || (file.isEmpty() && url.isEmpty())){
+            throw new UnsupportedOperationException();
+        }
+        String encodedImage = "";
+        if (file.isPresent()){
+            encodedImage = Base64.getEncoder().encodeToString(file.get().getBytes());
+        }else {
+            encodedImage += url;
+        }
+        String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(encodedImage);
+
+        user.setProfileImage(profileImageUrl);
         User newRegisteredUser = userRepository.create(user);
 
         addRoleAndPointsToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
-
     }
 
     public void addRoleAndPointsToRegisteredUser(User user) {
@@ -83,7 +97,6 @@ public class UserServiceImpl implements UserService {
         startingPoints.add(points);
         userRepository.createPoints(points);
         user.setPoints(startingPoints);
-
         userRepository.update(user);
     }
 
