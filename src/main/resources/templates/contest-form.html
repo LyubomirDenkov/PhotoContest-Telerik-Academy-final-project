@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Contest Form</title>
 </head>
 <body>
+
+
+
+<form th:fragment="contest-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${contest}"
+      method="post">
+    <label class="text-label-own" th:text="#{contest.label.title}">Title</label>
+    <br/>
+    <input class="input-custom-field" type="text" th:field="*{title}"/>
+    <br>
+    <label class="error error-custom" th:errors="*{title}">Name error placeholder</label>
+    <br/><br/>
+
+    <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
+    <br>
+    <select class="select-button" th:field="*{categoryId}">
+        <option th:each="category : ${categories}"
+                th:value="${category.getId()}"
+                th:text="${category.getName()}">
+            Category
+        </option>
+    </select>
+    <label class="error error-custom" th:errors="*{categoryId}">Category error placeholder</label>
+    <br/><br/>
+
+    <label class="text-label-own" th:text="#{contest.label.days}">Days</label>
+    <br/>
+    <input class="input-custom-field" type="number" th:field="*{phaseOne}"/>
+    <br>
+    <label class="error error-custom" th:errors="*{phase1_days}">Name error placeholder</label>
+    <br/><br/>
+
+
+    <label class="text-label-own" th:text="#{contest.label.hours}">Hours</label>
+    <br/>
+    <input class="input-custom-field" type="number" th:field="*{phaseTwo}"/>
+    <br>
+    <label class="error error-custom" th:errors="*{phase2_hours}">Name error placeholder</label>
+    <br/><br/>
+
+
+    <label class="text-label-own" th:text="#{type.label.name}">Type Name</label>
+    <br>
+    <select class="select-button" th:field="*{typeId}">
+        <option th:each="type : ${types}"
+                th:value="${type.getId()}"
+                th:text="${type.getName()}">
+            Type
+        </option>
+    </select>
+    <label class="error error-custom" th:errors="*{typeId}">type error placeholder</label>
+    <br/><br/>
+
+    <label class="text-label-own" th:text="#{contest.label.image}">Image</label>
+    <br/>
+    <input class="input-custom-field" type="text" th:field="*{backgroundImage}"/>
+    <br>
+    <label class="error error-custom" th:errors="*{image_url}">Name error placeholder</label>
+    <br/><br/>
+
+    <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
+    <br>
+    <select class="select-toggle" multiple="multiple" th:field="*{participants}">
+        <option th:each="user : ${users}"
+                th:value="${user.getId()}"
+                th:text="${user.getCredentials().getUserName()}">
+            Participant
+        </option>
+    </select>
+    <label class="error error-custom" th:errors="*{userId}">participant error placeholder</label>
+    <br/><br/>
+
+
+    <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
+    <br>
+    <select class="select-toggle" multiple="multiple" th:field="*{jury}">
+        <option th:each="user : ${users}"
+                th:value="${user.getId()}"
+                th:text="${user.getCredentials().getUserName()}">
+            Participant
+        </option>
+    </select>
+    <label class="error error-custom" th:errors="*{userId}">participant error placeholder</label>
+    <br/><br/>
+
+
+    <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
+</form>
+
 
 </body>
 </html>

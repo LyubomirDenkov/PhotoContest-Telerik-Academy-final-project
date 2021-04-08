@@ -44,7 +44,7 @@ public class ContestController {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return contestService.getAll(user);
+            return contestService.getAll();
         } catch (
                 UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

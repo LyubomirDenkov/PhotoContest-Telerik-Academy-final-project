@@ -14,6 +14,8 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>,CudR
 
     List<User> getContestJury();
 
+    List<Type> getAllTypes();
+
     Type getTypeById(int id);
 
     Phase getPhaseByName(String phaseName);
