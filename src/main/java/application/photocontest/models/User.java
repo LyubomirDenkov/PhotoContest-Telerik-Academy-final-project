@@ -52,17 +52,36 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "points_id"))
     private Set<Points> points;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "contest_participants",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<Contest> contests;
+
+
     public User() {
     }
 
-    public User(int id, UserCredentials userCredentials, String firstName, String lastName, Set<Role> roles, Set<Image> images, Set<Points> points) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName,
+                String profileImage, Set<Role> roles, Set<Image> images, Set<Points> points, Set<Contest> contests) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.profileImage = profileImage;
         this.roles = roles;
         this.images = images;
         this.points = points;
+        this.contests = contests;
+    }
+
+    public Set<Contest> getContests() {
+        return contests;
+    }
+
+    public void setContests(Set<Contest> contests) {
+        this.contests = contests;
     }
 
     public int getId() {
@@ -148,11 +167,11 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getRoles().equals(user.getRoles()) && getImages().equals(user.getImages()) && getPoints().equals(user.getPoints());
+        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getProfileImage().equals(user.getProfileImage()) && getRoles().equals(user.getRoles()) && getImages().equals(user.getImages()) && getPoints().equals(user.getPoints()) && getContests().equals(user.getContests());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getRoles(), getImages(), getPoints());
+        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getProfileImage(), getRoles(), getImages(), getPoints(), getContests());
     }
 }

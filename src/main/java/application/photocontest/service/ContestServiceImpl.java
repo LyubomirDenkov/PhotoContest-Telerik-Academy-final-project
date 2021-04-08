@@ -5,7 +5,6 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
-import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -91,6 +89,17 @@ public class ContestServiceImpl implements ContestService {
     public List<Contest> getOngoingContests() {
 
         List<Contest> contests = contestRepository.getOngoingContests();
+
+        if (contests.size() > 6) {
+            return contests.subList(0, 6);
+        }
+
+        return contests;
+    }
+
+    public List<Contest> getFinishedContests() {
+
+        List<Contest> contests = contestRepository.getFinishedContests();
 
         if (contests.size() > 6) {
             return contests.subList(0, 6);

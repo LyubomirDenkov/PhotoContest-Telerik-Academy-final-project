@@ -58,6 +58,22 @@ public class ContestsMvcController {
         }
     }
 
+    @GetMapping("/finished")
+    public String getFinishedContests(Model model, HttpSession session) {
+        try {
+
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("currentUser", currentUser);
+            return "finished-contests";
+
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+            return "not-found";
+        }
+    }
+
+
 
     @GetMapping("/new")
     public String showNewContestPage(Model model, HttpSession session) {
