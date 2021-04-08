@@ -64,24 +64,6 @@ public class ContestServiceImpl implements ContestService {
 
         //TODO award points if is finished but pointsAward are false
 
-
-        for (Contest contest : contests) {
-
-            setContestPhase(contest);
-
-            if (contest.getPhase().getName().equals("finished")) {
-
-                if (contest.isPointsAwarded()) {
-                    continue;
-                }
-
-                //List<User> participants = userRepository.getParticipantsFromContest(contest.getId());
-
-            }
-
-        }
-
-
         return contests;
     }
 
@@ -115,31 +97,30 @@ public class ContestServiceImpl implements ContestService {
 
     private void setContestPhase(Contest contest) {
 
+        //TODO ---> ASYNCRHONIC CALL
+        //  LocalDateTime dateNow = LocalDateTime.now();
+    //  LocalDateTime contestStartingDate = contest.getStartingDate();
+    //  int phaseOneDays = contest.getPhaseOne();
+    //  int phaseTwoHours = contest.getPhaseTwo();
+    //  if (dateNow.isBefore(contestStartingDate)) {
+    //      contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
+    //      return;
+    //  }
+
+    //  if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusDays(phaseOneDays))) {
+    //      contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
+    //      return;
+    //  }
 
 
-        LocalDateTime dateNow = LocalDateTime.now();
-        LocalDateTime contestStartingDate = contest.getStartingDate();
-        int phaseOneDays = contest.getPhaseOne();
-        int phaseTwoHours = contest.getPhaseTwo();
-        if (dateNow.isBefore(contestStartingDate)) {
-            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
-            return;
-        }
+    //  contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
 
-        if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusDays(phaseOneDays))) {
-            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
-            return;
-        }
+    //  if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
+    //      contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_VOTING));
+    //      return;
+    //  }
 
-
-        contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
-
-        if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
-            contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_VOTING));
-            return;
-        }
-
-        contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_FINISHED));
+    //  contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_FINISHED));
 
     }
 
@@ -166,7 +147,7 @@ public class ContestServiceImpl implements ContestService {
             throw new DuplicateEntityException("Contest", "title", contest.getTitle());
         }
 
-        setContestPhase(contest);
+
         setContestJury(jurySet, contest);
 
 
@@ -185,7 +166,7 @@ public class ContestServiceImpl implements ContestService {
         }
         setContestJury(jurySet, contest);
         updateParticipants(contest,participantsSet);
-        setContestPhase(contest);
+
 
         contestRepository.update(contest);
 

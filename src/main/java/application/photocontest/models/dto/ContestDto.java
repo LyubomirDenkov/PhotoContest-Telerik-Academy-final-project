@@ -15,10 +15,10 @@ import java.util.Set;
 
 public class ContestDto {
 
+    public static final String PHASE_ONE_ERROR_MSG = "Phase one can be between 1 and 30 days.";
+    public static final String PHASE_TWO_ERROR_MSG = "Phase one can be between 1 and 24 hours.";
     private static final String CATEGORY_ID_ERROR_MESSAGE = "Category Id must be positive.";
     private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
-    public static final String PHASE_ONE_SHOULD_BE_POSITIVE = "Phase one should be positive.";
-    private static final String PHASE_TWO_SHOULD_BE_POSITIVE = "Phase two should be positive.";
     private static final String TYPE_ID_SHOULD_BE_POSITIVE = "Type Id should be positive.";
     private static final String BACKGROUND_IMAGE_MUST_NOT_BE_NULL = "Background image must not be null.";
 
@@ -29,10 +29,12 @@ public class ContestDto {
     @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
 
-    @Positive(message = PHASE_ONE_SHOULD_BE_POSITIVE)
+
+    @NotNull
     private int phaseOne;
 
-    @Positive(message = PHASE_TWO_SHOULD_BE_POSITIVE)
+
+    @NotNull
     private int phaseTwo;
 
     @Positive(message = TYPE_ID_SHOULD_BE_POSITIVE)

@@ -25,10 +25,10 @@ public class Contest {
     private Category category;
 
     @Column(name = "first_phase")
-    private LocalDateTime timeTillVoting;
+    private Date timeTillVoting;
 
     @Column(name = "second_phase")
-    private LocalDateTime timeTillFinished;
+    private Date timeTillFinished;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -84,9 +84,7 @@ public class Contest {
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, LocalDateTime timeTillVoting, LocalDateTime timeTillFinished,
-                   User user, Type type, String backgroundImage, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images,
-                   boolean isPointsAwarded, boolean isJury, boolean isParticipant, boolean hasImageUploaded) {
+    public Contest(int id, String title, Category category, Date timeTillVoting, Date timeTillFinished, User user, Type type, String backgroundImage, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images, boolean isPointsAwarded, boolean isJury, boolean isParticipant, boolean hasImageUploaded) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -129,19 +127,19 @@ public class Contest {
         this.category = category;
     }
 
-    public LocalDateTime getTimeTillVoting() {
+    public Date getTimeTillVoting() {
         return timeTillVoting;
     }
 
-    public void setTimeTillVoting(LocalDateTime timeTillVoting) {
+    public void setTimeTillVoting(Date timeTillVoting) {
         this.timeTillVoting = timeTillVoting;
     }
 
-    public LocalDateTime getTimeTillFinished() {
+    public Date getTimeTillFinished() {
         return timeTillFinished;
     }
 
-    public void setTimeTillFinished(LocalDateTime timeTillFinished) {
+    public void setTimeTillFinished(Date timeTillFinished) {
         this.timeTillFinished = timeTillFinished;
     }
 
@@ -236,13 +234,13 @@ public class Contest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Contest)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Contest contest = (Contest) o;
-        return getId() == contest.getId() && isPointsAwarded() == contest.isPointsAwarded() && getTitle().equals(contest.getTitle()) && getCategory().equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished().equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) && getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) && getPhase().equals(contest.getPhase()) && getParticipants().equals(contest.getParticipants()) && isJury().equals(contest.isJury()) && getImages().equals(contest.getImages());
+        return getId() == contest.getId() && getTitle().equals(contest.getTitle()) && getCategory().equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished().equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) && getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) && getPhase().equals(contest.getPhase()) && getParticipants().equals(contest.getParticipants()) && getImages().equals(contest.getImages());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(), getType(), getBackgroundImage(), getPhase(), getParticipants(), isJury(), getImages(), isPointsAwarded());
+        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(), getType(), getBackgroundImage(), getPhase(), getParticipants(), isJury(), getImages());
     }
 }
