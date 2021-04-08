@@ -6,7 +6,7 @@ import application.photocontest.models.UserCredentials;
 import java.util.List;
 
 public interface GetServiceOperations<T> {
-    List<T> getAll(User user);
+    List<T> getAll();
 
     T getById(User user, int id);
 }

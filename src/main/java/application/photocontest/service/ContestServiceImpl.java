@@ -58,7 +58,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<Contest> getAll(User user) {
+    public List<Contest> getAll() {
 
         List<Contest> contests = contestRepository.getAll();
 
@@ -95,6 +95,11 @@ public class ContestServiceImpl implements ContestService {
         }
 
         return contests;
+    }
+
+    @Override
+    public List<Type> getAllTypes() {
+        return contestRepository.getAllTypes();
     }
 
     public List<Contest> getFinishedContests() {

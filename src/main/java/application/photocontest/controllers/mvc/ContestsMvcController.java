@@ -3,21 +3,23 @@ package application.photocontest.controllers.mvc;
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
+import application.photocontest.modelmappers.ContestMapper;
 import application.photocontest.models.Category;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Type;
 import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.ContestDto;
+import application.photocontest.service.contracts.CategoryService;
 import application.photocontest.service.contracts.ContestService;
+import application.photocontest.service.contracts.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/contests")
@@ -26,12 +28,33 @@ public class ContestsMvcController {
 
     private final AuthenticationHelper authenticationHelper;
     private final ContestService contestService;
+    private final CategoryService categoryService;
+    private final UserService userService;
+    private final ContestMapper contestMapper;
 
-    public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService) {
+    public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService, CategoryService categoryService, UserService userService, ContestMapper contestMapper) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
+        this.categoryService = categoryService;
+        this.userService = userService;
+        this.contestMapper = contestMapper;
     }
 
+
+    @ModelAttribute("categories")
+    public List<Category> getAllCategories() {
+        return categoryService.getAll();
+    }
+
+    @ModelAttribute("users")
+    public List<User> getAllUsers() {
+        return userService.getAll();
+    }
+
+    @ModelAttribute("types")
+    public List<Type> getAllTypes() {
+        return contestService.getAllTypes();
+    }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model, HttpSession session) {
@@ -49,7 +72,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", contestService.getAll());
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -64,7 +87,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", contestService.getAll());
             model.addAttribute("currentUser", currentUser);
             return "finished-contests";
 
@@ -85,8 +108,28 @@ public class ContestsMvcController {
             isOrganizer(currentUser);
 
             model.addAttribute("contest", new ContestDto());
-
             return "contest-new";
+
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+            return "not-found";
+        }
+    }
+
+    @PostMapping("/new")
+    public String handleNewContestPage(@Valid @ModelAttribute("contest") ContestDto contestDto, HttpSession session) {
+
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            isOrganizer(currentUser);
+
+            Contest contest = contestMapper.fromDto(contestDto,currentUser);
+            Set<Integer> jurySet = contestDto.getJury();
+            Set<Integer> participantsSet = contestDto.getParticipants();
+            contestService.create(currentUser,contest,jurySet,participantsSet);
+
+            return "redirect:/contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "not-found";
