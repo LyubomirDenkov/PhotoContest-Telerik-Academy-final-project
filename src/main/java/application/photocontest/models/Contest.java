@@ -51,6 +51,7 @@ public class Contest {
     private boolean isPointsAwarded;
 
 
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_participants",

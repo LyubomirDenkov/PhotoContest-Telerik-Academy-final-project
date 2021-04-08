@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static application.photocontest.enums.UserRanks.JUNKIE;
@@ -43,6 +45,9 @@ public class UserMapper {
 
     public User fromDto(int id, UpdateUserDto userDto) {
 
+        Map<String, String> map = new HashMap<>();
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setFirstName(map.get("userName"));
 
         User user = userRepository.getById(id);
 

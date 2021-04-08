@@ -27,6 +27,7 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -54,7 +55,6 @@
                             <label for="inputEmail">userName</label>
                             <p class="error-custom" th:errors="*{userName}">First name error.</p>
                         </div>
-
                         <div class="form-label-group">
                             <input type="password" id="inputPassword" th:field="*{password}" class="form-control" placeholder="Password" required>
                             <label for="inputPassword">Password</label>
@@ -69,14 +69,11 @@
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
                         <hr class="my-4">
                         <a class="btn btn-lg btn-primary btn-block text-uppercase" href="#" th:href="@{/auth/register}">Register</a>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 </body>
 </html>
