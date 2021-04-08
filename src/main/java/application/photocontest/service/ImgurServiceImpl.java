@@ -4,8 +4,13 @@ import application.photocontest.service.contracts.ImgurService;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Base64;
+import java.util.Optional;
 
 @Service
 public class ImgurServiceImpl implements ImgurService {
@@ -18,7 +23,30 @@ public class ImgurServiceImpl implements ImgurService {
     public ImgurServiceImpl() {
     }
 
-    public String uploadImageToImgurAndReturnUrl(String image) throws IOException {
+    public String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file,Optional<String> url) throws IOException {
+
+
+        if ((file.isPresent() && url.isPresent()) || (file.isEmpty() && url.isEmpty())){
+            throw new UnsupportedOperationException("Only local file or url");
+        }
+        String image = "";
+        if (file.isPresent()){
+            image = Base64.getEncoder().encodeToString(file.get().getBytes());
+        }else {
+
+            URL testUrl = new URL(url.get());
+            HttpURLConnection huc = (HttpURLConnection) testUrl.openConnection();
+
+            int responseCode = huc.getResponseCode();
+
+            if (responseCode != 200){
+                throw new UnsupportedOperationException("Url is not valid image");
+            }
+
+            image = url.get();
+
+        }
+
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();

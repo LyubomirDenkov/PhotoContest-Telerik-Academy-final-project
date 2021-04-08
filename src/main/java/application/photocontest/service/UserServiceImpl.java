@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
@@ -68,16 +70,7 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("USERNAME EXIST");
         }
 
-        if ((file.isPresent() && url.isPresent()) || (file.isEmpty() && url.isEmpty())){
-            throw new UnsupportedOperationException();
-        }
-        String encodedImage = "";
-        if (file.isPresent()){
-            encodedImage = Base64.getEncoder().encodeToString(file.get().getBytes());
-        }else {
-            encodedImage += url;
-        }
-        String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(encodedImage);
+        String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file,url);
 
         user.setProfileImage(profileImageUrl);
         User newRegisteredUser = userRepository.create(user);

@@ -57,16 +57,18 @@ public class UserController {
         }
     }
 
-    @PostMapping(consumes ={ "multipart/form-data", "application/json"})
+    @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public User create(@RequestPart(value = "dto") RegisterDto dto,
-                       @RequestParam(name = "file")Optional<MultipartFile> file,
+                       @RequestParam(name = "file") Optional<MultipartFile> file,
                        @RequestParam(name = "url") Optional<String> url) {
 
         User user = userMapper.fromDto(dto);
 
         try {
-            return userService.create(user,file,url);
-        } catch (DuplicateEntityException | IOException e) {
+            return userService.create(user, file, url);
+        } catch (DuplicateEntityException | IOException | UnsupportedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

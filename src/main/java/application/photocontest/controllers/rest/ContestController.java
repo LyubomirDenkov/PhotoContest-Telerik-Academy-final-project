@@ -79,7 +79,6 @@ public class ContestController {
                           @Valid @RequestBody ContestDto contestDto) {
 
         User user = authenticationHelper.tryGetUser(headers);
-
         try {
             Contest contest = contestMapper.fromDto(contestDto, user);
             Set<Integer> jurySet = contestDto.getJury();
