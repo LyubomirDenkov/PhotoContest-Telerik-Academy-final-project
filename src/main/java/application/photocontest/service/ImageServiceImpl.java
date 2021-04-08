@@ -6,10 +6,14 @@ import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImageService;
+import application.photocontest.service.contracts.ImgurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
@@ -19,12 +23,14 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
+    private final ImgurService imgurService;
 
 
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository, UserRepository userRepository) {
+    public ImageServiceImpl(ImageRepository imageRepository, UserRepository userRepository, ImgurService imgurService) {
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
+        this.imgurService = imgurService;
     }
 
     @Override
@@ -33,11 +39,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image create(User user, Image image) {
+    public Image create(User user, Image image, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
         verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
         User userUploader = userRepository.getUserByUserName(user.getUserCredentials().getUserName());
-        //image.setUploadedBy(userUploader);
+        image.setUploader(userUploader);
+
+        String imageUrl =  imgurService.uploadImageToImgurAndReturnUrl(file,url);
+        image.setUrl(imageUrl);
 
         Image imageToCreate = imageRepository.create(image);
 

@@ -19,13 +19,12 @@ public class ImageMapper {
     }
 
 
-    public Image fromDto(User user, String title, String story, String imagePath) {
+    public Image fromDto(User user, String title, String story) {
 
         Image image = new Image();
 
         image.setTitle(title);
         image.setStory(story);
-        image.setUrl(imagePath);
         image.setUploader(user);
 
         return image;

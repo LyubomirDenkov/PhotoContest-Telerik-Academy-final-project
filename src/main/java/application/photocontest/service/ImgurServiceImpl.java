@@ -15,9 +15,10 @@ import java.util.Optional;
 @Service
 public class ImgurServiceImpl implements ImgurService {
 
-    private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
-    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
+    private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/upload";
+    private static final String IMGUR_CLIENT_ID = "Client-ID 99j294849382r4i";
     private static final String IMGUR_AUTHORIZATION = "Authorization";
+    private static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
 
 
     public ImgurServiceImpl() {
@@ -29,6 +30,7 @@ public class ImgurServiceImpl implements ImgurService {
         if ((file.isPresent() && url.isPresent()) || (file.isEmpty() && url.isEmpty())){
             throw new UnsupportedOperationException("Only local file or url");
         }
+
         String image = "";
         if (file.isPresent()){
             image = Base64.getEncoder().encodeToString(file.get().getBytes());
@@ -40,7 +42,7 @@ public class ImgurServiceImpl implements ImgurService {
             int responseCode = huc.getResponseCode();
 
             if (responseCode != 200){
-                throw new UnsupportedOperationException("Url is not valid image");
+                throw new UnsupportedOperationException(URL_IS_NOT_VALID_ERROR_MESSAGE);
             }
 
             image = url.get();

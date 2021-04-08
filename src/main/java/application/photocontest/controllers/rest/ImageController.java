@@ -51,22 +51,8 @@ public class ImageController {
 
         User user = authenticationHelper.tryGetUser(headers);
 
-        if ((file.isEmpty() && url.isEmpty()) || (file.isPresent() && url.isPresent())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "something");
-        }
-
-        String imageLink = "";
-
-        if (file.isPresent()) {
-            String inputImage = Base64.getEncoder().encodeToString(file.get().getBytes());
-           // imageLink = uploadImageToImgurAndReturnUrl(inputImage);
-        }
-        if (url.isPresent()) {
-          //  imageLink = uploadImageToImgurAndReturnUrl(url.get());
-        }
-
-        Image image = imageMapper.fromDto(user, title, story, imageLink);
-        return imageService.create(user, image);
+        Image image = imageMapper.fromDto(user, title, story);
+        return imageService.create(user, image,file,url);
     }
 
 
