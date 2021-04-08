@@ -3,24 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
     <link rel="icon" type="image/png" href="../static/assets/img/navbar-logo.svg" th:href="@{/assets/img/navbar-logo.svg}"/>
-    <link href="../static/assets/css/style.css" th:href="@{/style.css}" rel="stylesheet"/>
+
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+          rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
+          href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
+          href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
+          href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
+          href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#" th:href="@{/}" ><img src="../static/assets/img/navbar-logo.svg" th:src="@{/assets/img/navbar-logo.svg}" alt="navbarlogo"  /></a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars ml-1"></i>
-        </button>
+<header id="header" class="d-flex align-items-center ">
+    <div class="container-fluid container-xxl d-flex align-items-center">
+
+        <div id="logo" class="me-auto">
+            <!-- Uncomment below if you prefer to use a text logo -->
+            <!--<h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}" src="../static/assets/img/logo.png" alt="" title=""></a>
+        </div>
     </div>
-</nav>
+</header><!-- End Header -->
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto py-5">
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Sign In</h5>

@@ -48,15 +48,18 @@
 
         <div id="logo" class="me-auto">
             <!-- Uncomment below if you prefer to use a text logo -->
-            <!-- <h1><a href="index.html">The<span>Event</span></a></h1>-->
-            <a href="" th:href="@{/}" class="scrollto"><img src="../static/assets/img/logo.png" alt="" title=""></a>
+            <!--<h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}" src="../static/assets/img/logo.png" alt="" title=""></a>
         </div>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
                 <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
                 <li><a class="nav-link scrollto" href="#about">About</a></li>
-                <li><a class="nav-link scrollto" href="#speakers">Speakers</a></li>
+                <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+                <li><a class="nav-link scrollto" href="#venue">Top pictures</a></li>
+                <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+                <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
 
                 <li th:if="${currentUser != null}"><a class="nav-link" href="#"
                                                       th:href="@{/user/{id}/profile(id=${currentUser.getId()})}">Profile</a>
@@ -106,7 +109,6 @@
         </div>
     </section><!-- End About Section -->
 
-    <!-- ======= Speakers Section ======= -->
     <section id="speakers">
         <div class="container" data-aos="fade-up">
             <div class="section-header">
@@ -144,6 +146,8 @@
             </div>
         </div>
     </section><!-- End Speakers Section -->
+
+
     <!-- ======= Venue Section ======= -->
     <section id="venue">
         <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
@@ -277,26 +281,6 @@
         </div>
 
     </section><!-- End  F.A.Q Section -->
-
-    <!-- ======= Subscribe Section ======= -->
-    <section id="subscribe">
-        <div class="container" data-aos="zoom-in">
-            <div class="section-header">
-                <h2>Newsletter</h2>
-                <p>Rerum numquam illum recusandae quia mollitia consequatur.</p>
-            </div>
-
-            <form method="POST" action="#">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6 col-md-10 d-flex">
-                        <input type="text" class="form-control" placeholder="Enter your Email">
-                        <button type="submit" class="ms-2">Subscribe</button>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-    </section><!-- End Subscribe Section -->
 
     <!-- ======= Buy Ticket Section ======= -->
     <section id="buy-tickets" class="section-with-bg">
@@ -537,6 +521,8 @@
 
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
+
+
 
 </body>
 

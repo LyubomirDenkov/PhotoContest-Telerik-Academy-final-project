@@ -2,6 +2,7 @@ package application.photocontest.controllers.mvc;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.exceptions.UnauthorizedOperationException;
+import application.photocontest.models.Contest;
 import application.photocontest.models.User;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
@@ -11,8 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.thymeleaf.util.DateUtils;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -47,6 +52,8 @@ public class HomeMvcController {
 
         model.addAttribute("contests",contestService.getOngoingContests());
         model.addAttribute("topImages",imageService.getTopRatedPictures());
+
+
         return "index";
     }
 
