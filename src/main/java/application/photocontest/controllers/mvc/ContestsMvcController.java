@@ -58,10 +58,13 @@ public class ContestsMvcController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model, HttpSession session) {
+
         User user = authenticationHelper.tryGetUser(session);
         Contest contest = contestService.getById(user, id);
+
         model.addAttribute("currentUser",user);
         model.addAttribute("contest", contest);
+
         return "contest";
     }
 

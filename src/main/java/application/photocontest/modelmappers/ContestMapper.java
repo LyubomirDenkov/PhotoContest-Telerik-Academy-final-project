@@ -1,5 +1,6 @@
 package application.photocontest.modelmappers;
 
+import application.photocontest.enums.ContestPhases;
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
@@ -46,7 +47,7 @@ public class ContestMapper {
                 plusHours(contestDto.getPhaseTwo())));
         contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
-        contestToUpdate.setPhase(contestRepository.getPhaseByName("ongoing"));
+        contestToUpdate.setPhase(contestRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
 
 
@@ -67,7 +68,7 @@ public class ContestMapper {
                 plusHours(contestDto.getPhaseTwo())));
         contest.setType(contestRepository.getTypeById(contestDto.getTypeId()));
         contest.setBackgroundImage(contestDto.getBackgroundImage());
-        contest.setPhase(contestRepository.getPhaseByName("ongoing"));
+        contest.setPhase(contestRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
         Set<Image> images = new HashSet<>();
         contest.setImages(images);
