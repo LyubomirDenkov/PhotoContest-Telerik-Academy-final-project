@@ -1,7 +1,6 @@
 DROP DATABASE IF EXISTS `photo-contest`;
 CREATE DATABASE IF NOT EXISTS `photo-contest`;
-USE `photo-contest`;
-create or replace table category
+USE `photo-contest`;create or replace table category
 (
     category_id int auto_increment
         primary key,
@@ -21,7 +20,6 @@ create or replace table contest_type
         primary key,
     name    varchar(20) not null
 );
-
 
 create or replace table points
 (
@@ -60,33 +58,22 @@ create or replace table users
         foreign key (user_credentials) references user_credentials (user_name)
 );
 
-create or replace table images
-(
-    image_id int auto_increment
-        primary key,
-    title    varchar(50) not null,
-    story    text        not null,
-    image    text        not null,
-    user_id int not null,
-    points int not null,
-        constraint images_users_fk
-        foreign key (user_id) references users (user_id)
-
-);
 create or replace table contest
 (
-    contest_id      int auto_increment
+    contest_id         int auto_increment
         primary key,
-    title           varchar(50)                           not null,
-    category_id     int                                   not null,
-    starting_date   timestamp default current_timestamp() not null on update current_timestamp(),
-    phase1_days     int                                   not null,
-    phase2_hours    int                                   not null,
-    user_id         int                                   not null,
-    type_id         int                                   not null,
-    image_url       text                                  not null,
-    phase_id        int                                   not null,
-    isPointsAwarded tinyint(1)                            not null,
+    title              varchar(50)                            not null,
+    category_id        int                                    not null,
+    first_phase        timestamp  default current_timestamp() not null on update current_timestamp(),
+    second_phase       timestamp  default current_timestamp() not null on update current_timestamp(),
+    user_id            int                                    not null,
+    type_id            int                                    not null,
+    image_url          text                                   not null,
+    phase_id           int                                    not null,
+    is_points_awarded  tinyint(1) default 0                   not null,
+    is_jury            tinyint(1) default 0                   not null,
+    is_participant     tinyint(1) default 0                   not null,
+    has_image_uploaded tinyint(1) default 0                   not null,
     constraint contest_category_fk
         foreign key (category_id) references category (category_id),
     constraint contest_organizers_fk
@@ -97,16 +84,6 @@ create or replace table contest
         foreign key (type_id) references contest_type (type_id)
 );
 
-create or replace table contest_image
-(
-    contest_id int not null,
-    image_id   int null,
-    constraint contest_photos_contests_fk
-        foreign key (contest_id) references contest (contest_id),
-    constraint contest_photos_images_fk
-        foreign key (image_id) references images (image_id)
-);
-
 create or replace table contest_participants
 (
     contest_id int not null,
@@ -115,6 +92,29 @@ create or replace table contest_participants
         foreign key (contest_id) references contest (contest_id),
     constraint contest_users_users_fk
         foreign key (user_id) references users (user_id)
+);
+
+create or replace table images
+(
+    image_id int auto_increment
+        primary key,
+    title    varchar(50) not null,
+    story    text        not null,
+    image    text        not null,
+    user_id  int         not null,
+    points   int         not null,
+    constraint images_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
+create or replace table contest_image
+(
+    contest_id int not null,
+    image_id   int null,
+    constraint contest_photos_contests_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_photos_images_fk
+        foreign key (image_id) references images (image_id)
 );
 
 create or replace table jury_users

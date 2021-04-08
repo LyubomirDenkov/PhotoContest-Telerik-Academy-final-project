@@ -3,6 +3,7 @@ package application.photocontest.models;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,14 +24,11 @@ public class Contest {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "starting_date")
-    private LocalDateTime startingDate;
+    @Column(name = "first_phase")
+    private LocalDateTime timeTillVoting;
 
-    @Column(name = "phase1_days")
-    private int phaseOne;
-
-    @Column(name = "phase2_hours")
-    private int phaseTwo;
+    @Column(name = "second_phase")
+    private LocalDateTime timeTillFinished;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -46,10 +44,6 @@ public class Contest {
     @ManyToOne
     @JoinColumn(name = "phase_id")
     private Phase phase;
-
-    @Column(name = "isPointsAwarded")
-    private boolean isPointsAwarded;
-
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -74,30 +68,41 @@ public class Contest {
     private Set<Image> images;
 
 
+    @Column(name = "is_points_awarded")
+    private boolean isPointsAwarded;
+
+    @Column(name = "is_jury")
+    private boolean isJury;
+
+    @Column(name = "is_participant")
+    private boolean isParticipant;
+
+    @Column(name = "has_image_uploaded")
+    private boolean hasImageUploaded;
+
+
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category,
-                   LocalDateTime startingDate, int phaseOne,
-                   int phaseTwo, User user, Type type,
-                   Phase phase, boolean isPointsAwarded, String backgroundImage,
-                   Set<User> participants, Set<User> jury,
-                   Set<Image> images) {
-
+    public Contest(int id, String title, Category category, LocalDateTime timeTillVoting, LocalDateTime timeTillFinished,
+                   User user, Type type, String backgroundImage, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images,
+                   boolean isPointsAwarded, boolean isJury, boolean isParticipant, boolean hasImageUploaded) {
         this.id = id;
         this.title = title;
         this.category = category;
-        this.startingDate = startingDate;
-        this.phaseOne = phaseOne;
-        this.phaseTwo = phaseTwo;
+        this.timeTillVoting = timeTillVoting;
+        this.timeTillFinished = timeTillFinished;
         this.user = user;
         this.type = type;
-        this.phase = phase;
-        this.isPointsAwarded = isPointsAwarded;
         this.backgroundImage = backgroundImage;
+        this.phase = phase;
         this.participants = participants;
         this.jury = jury;
         this.images = images;
+        this.isPointsAwarded = isPointsAwarded;
+        this.isJury = isJury;
+        this.isParticipant = isParticipant;
+        this.hasImageUploaded = hasImageUploaded;
     }
 
     public int getId() {
@@ -124,28 +129,20 @@ public class Contest {
         this.category = category;
     }
 
-    public LocalDateTime getStartingDate() {
-        return startingDate;
+    public LocalDateTime getTimeTillVoting() {
+        return timeTillVoting;
     }
 
-    public void setStartingDate(LocalDateTime startingDate) {
-        this.startingDate = startingDate;
+    public void setTimeTillVoting(LocalDateTime timeTillVoting) {
+        this.timeTillVoting = timeTillVoting;
     }
 
-    public int getPhaseOne() {
-        return phaseOne;
+    public LocalDateTime getTimeTillFinished() {
+        return timeTillFinished;
     }
 
-    public void setPhaseOne(int phaseOne) {
-        this.phaseOne = phaseOne;
-    }
-
-    public int getPhaseTwo() {
-        return phaseTwo;
-    }
-
-    public void setPhaseTwo(int phaseTwo) {
-        this.phaseTwo = phaseTwo;
+    public void setTimeTillFinished(LocalDateTime timeTillFinished) {
+        this.timeTillFinished = timeTillFinished;
     }
 
     public User getUser() {
@@ -164,28 +161,20 @@ public class Contest {
         this.type = type;
     }
 
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
     public Phase getPhase() {
         return phase;
     }
 
     public void setPhase(Phase phase) {
         this.phase = phase;
-    }
-
-    public boolean isPointsAwarded() {
-        return isPointsAwarded;
-    }
-
-    public void setPointsAwarded(boolean pointsAwarded) {
-        isPointsAwarded = pointsAwarded;
-    }
-
-    public String getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    public void setBackgroundImage(String imageUrl) {
-        this.backgroundImage = imageUrl;
     }
 
     public Set<User> getParticipants() {
@@ -212,4 +201,48 @@ public class Contest {
         this.images = images;
     }
 
+    public boolean isPointsAwarded() {
+        return isPointsAwarded;
+    }
+
+    public void setPointsAwarded(boolean pointsAwarded) {
+        isPointsAwarded = pointsAwarded;
+    }
+
+    public boolean isJury() {
+        return isJury;
+    }
+
+    public void setJury(boolean jury) {
+        isJury = jury;
+    }
+
+    public boolean isParticipant() {
+        return isParticipant;
+    }
+
+    public void setParticipant(boolean participant) {
+        isParticipant = participant;
+    }
+
+    public boolean isHasImageUploaded() {
+        return hasImageUploaded;
+    }
+
+    public void setHasImageUploaded(boolean hasImageUploaded) {
+        this.hasImageUploaded = hasImageUploaded;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Contest)) return false;
+        Contest contest = (Contest) o;
+        return getId() == contest.getId() && isPointsAwarded() == contest.isPointsAwarded() && getTitle().equals(contest.getTitle()) && getCategory().equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished().equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) && getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) && getPhase().equals(contest.getPhase()) && getParticipants().equals(contest.getParticipants()) && isJury().equals(contest.isJury()) && getImages().equals(contest.getImages());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(), getType(), getBackgroundImage(), getPhase(), getParticipants(), isJury(), getImages(), isPointsAwarded());
+    }
 }
