@@ -2,6 +2,7 @@ package application.photocontest.controllers.mvc;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.exceptions.AuthenticationFailureException;
+import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
@@ -186,9 +187,54 @@ public class ContestsMvcController {
         }
     }
 
+    @GetMapping("/{contestId}/user/{userId}")
+    public String addUserToContest(@PathVariable int contestId, @PathVariable int userId, HttpSession session,Model model) {
+
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            isUser(currentUser);
+
+            contestService.addUserToContest(currentUser,contestId,userId);
+
+            return "redirect:/contest/{contestId}";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("not-found",e.getMessage());
+            return "not-found";
+        }
+    }
+
+    @GetMapping("/{contestId}/image/{imageId}")
+    public String rateImages(@PathVariable int contestId, @PathVariable int imageId, HttpSession session,Model model) {
+
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+
+            contestService.addUserToContest(currentUser,contestId,imageId);
+
+            return "redirect:/contest/{contestId}";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("not-found",e.getMessage());
+            return "not-found";
+        }
+    }
+
 
     private void isOrganizer(User user) {
         if (!user.isOrganizer()) {
+            throw new UnauthorizedOperationException("Not authorized");
+        }
+    }
+
+    private void isUser(User currentUser) {
+        if (!currentUser.isUser()) {
             throw new UnauthorizedOperationException("Not authorized");
         }
     }
