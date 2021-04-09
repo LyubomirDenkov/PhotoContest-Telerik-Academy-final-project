@@ -225,7 +225,7 @@ public class ContestServiceImpl implements ContestService {
         return image;
     }
 
-
+     //TODO user
     @Override
     public void addUserToContest(User user, int contestId, int userId) {
 
