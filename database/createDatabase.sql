@@ -143,15 +143,15 @@ or replace table jury_users
 create
 or replace table image_reviews
 (
-    rated_image_id int auto_increment
+    image_review_id int auto_increment
         primary key,
     user_id        int      not null,
     contest_id       int      not null,
     image_id       int      not null,
     points         int      not null,
     comment        longtext not null,
-constraint image_reviews_images_fk
-        foreign key (contest_id) references contests (contest_id),
+constraint image_reviews_contest_fk
+        foreign key (contest_id) references contest (contest_id),
     constraint image_reviews_images_fk
         foreign key (image_id) references images (image_id),
     constraint image_reviews_user_credentials_fk

@@ -18,4 +18,7 @@ public interface UserService extends GetServiceOperations<User> {
 
     User create(User user, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
+    List<User> getAllPotentialJury();
+
+    List<User> getAllUsers();
 }

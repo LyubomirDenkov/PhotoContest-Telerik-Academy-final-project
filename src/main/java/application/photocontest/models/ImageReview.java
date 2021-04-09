@@ -11,7 +11,7 @@ public class ImageReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rated_image_id")
+    @Column(name = "image_review_id")
     private int id;
 
 

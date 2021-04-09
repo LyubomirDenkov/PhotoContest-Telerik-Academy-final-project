@@ -48,9 +48,14 @@ public class ContestsMvcController {
         return categoryService.getAll();
     }
 
-    @ModelAttribute("users")
+    @ModelAttribute("jury")
+    public List<User> getAllPotentialJury() {
+        return userService.getAllPotentialJury();
+    }
+
+    @ModelAttribute("participants")
     public List<User> getAllUsers() {
-        return userService.getAll();
+        return userService.getAllUsers();
     }
 
     @ModelAttribute("types")

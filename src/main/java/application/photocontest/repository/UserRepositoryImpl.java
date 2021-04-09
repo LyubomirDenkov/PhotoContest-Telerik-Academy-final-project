@@ -99,6 +99,22 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public List<User> getAllPotentialJury() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select u from User u join u.points as p " +
+                    "where p.points > 150 ",User.class).list();
+        }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select u from User u join u.roles as r " +
+                    "where r.name != 'organizer' ", User.class).list();
+        }
+    }
+
 
     @Override
     public User getUserByUserName(String userName) {

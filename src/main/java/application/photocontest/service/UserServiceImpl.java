@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
@@ -78,6 +76,16 @@ public class UserServiceImpl implements UserService {
         addRoleAndPointsToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
+    }
+
+    @Override
+    public List<User> getAllPotentialJury() {
+        return userRepository.getAllPotentialJury();
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 
     public void addRoleAndPointsToRegisteredUser(User user) {

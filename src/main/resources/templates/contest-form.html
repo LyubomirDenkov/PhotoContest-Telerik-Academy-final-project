@@ -68,7 +68,7 @@
     <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
     <br>
     <select class="select-toggle" multiple="multiple" th:field="*{participants}">
-        <option th:each="user : ${users}"
+        <option th:each="user : ${participants}"
                 th:value="${user.getId()}"
                 th:text="${user.getUserCredentials().userName}">
             Participant
@@ -81,7 +81,7 @@
     <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
     <br>
     <select class="select-toggle" multiple="multiple" th:field="*{jury}">
-        <option th:each="user : ${users}"
+        <option th:each="user : ${jury}"
                 th:value="${user.getId()}"
                 th:text="${user.getUserCredentials().userName}">
             Participant
