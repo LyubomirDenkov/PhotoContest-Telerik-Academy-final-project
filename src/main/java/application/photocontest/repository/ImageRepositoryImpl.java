@@ -2,7 +2,7 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Image;
-import application.photocontest.models.ImageRating;
+import application.photocontest.models.ImageReview;
 import application.photocontest.repository.contracts.ImageRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,27 +38,35 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Transactional
     @Override
-    public void createJurorRateEntity(ImageRating imageRating) {
+    public void createJurorRateEntity(ImageReview imageReview) {
 
         try (Session session = sessionFactory.openSession()) {
-            session.save(imageRating);
+            session.save(imageReview);
         }
     }
 
     @Override
-    public List<ImageRating> getImageRatingsByUsername(String userName) {
+    public List<ImageReview> getImageRatingsByUsername(String userName) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from ImageRating where user.userCredentials.userName = :userName ",
-                    ImageRating.class).setParameter("userName", userName).list();
+            return session.createQuery("from ImageReview where user.userCredentials.userName = :userName ",
+                    ImageReview.class).setParameter("userName", userName).list();
 
         }
     }
 
     @Override
-    public Long getImagePointsById(int id) {
+    public Long getReviewPointsByImageId(int id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select sum(points) from ImageRating where imageId = :id ",
+            return session.createQuery("select sum(points) from ImageReview where image.id = :id ",
                     Long.class).setParameter("id", id).uniqueResult();
+        }
+    }
+
+    public Long getReviewsCountByContestAndImageId(int contestId,int imageId){
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select count(*) from ImageReview where image.id = :imageId and " +
+                            "contest.id = :contestId ",
+                    Long.class).setParameter("imageId", imageId).setParameter("contestId",contestId).uniqueResult();
         }
     }
 

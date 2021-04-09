@@ -12,7 +12,6 @@ import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -213,15 +212,17 @@ public class ContestServiceImpl implements ContestService {
 
         checkIfUserIsInJury(user, imageId, contestId, points);
 
-        ImageRating imageRating = new ImageRating();
-
-        imageRating.setUser(user);
-        imageRating.setImageId(imageId);
-        imageRating.setPoints(points);
-        imageRating.setComment(comment);
-        imageRepository.createJurorRateEntity(imageRating);
-
+        ImageReview imageReview = new ImageReview();
         Image image = imageRepository.getById(imageId);
+        Contest contest = contestRepository.getById(contestId);
+
+        imageReview.setUser(user);
+        imageReview.setContest(contest);
+        imageReview.setImage(image);
+        imageReview.setPoints(points);
+        imageReview.setComment(comment);
+        imageRepository.createJurorRateEntity(imageReview);
+
         imageRepository.update(image);
 
     }
@@ -331,10 +332,10 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = checkPointsContestAndImage(points, contestId, points);
 
         boolean isOrganizer = true;
-        List<ImageRating> imageRatings = imageRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
+        List<ImageReview> imageReviews = imageRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
 
-        for (ImageRating imageRating : imageRatings) {
-            if (imageRating.getImageId() == imageId) {
+        for (ImageReview imageReview : imageReviews) {
+            if (imageReview.getImage().getId() == imageId) {
                 throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
             }
         }

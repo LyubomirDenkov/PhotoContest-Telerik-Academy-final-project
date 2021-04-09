@@ -1,7 +1,7 @@
 package application.photocontest.repository.contracts;
 
 import application.photocontest.models.Image;
-import application.photocontest.models.ImageRating;
+import application.photocontest.models.ImageReview;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ public interface ImageRepository extends CudRepositoryOperations<Image>{
     Image getById(int id);
 
 
-    void createJurorRateEntity(ImageRating imageRating);
+    void createJurorRateEntity(ImageReview imageReview);
 
-    Long getImagePointsById(int id);
+    Long getReviewPointsByImageId(int id);
 
-    List<ImageRating> getImageRatingsByUsername(String userName);
+    List<ImageReview> getImageRatingsByUsername(String userName);
 
 
 }
