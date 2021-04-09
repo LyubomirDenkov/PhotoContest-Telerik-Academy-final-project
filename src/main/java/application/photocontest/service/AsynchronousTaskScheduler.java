@@ -2,6 +2,7 @@ package application.photocontest.service;
 
 import application.photocontest.enums.ContestPhases;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Image;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,13 @@ public class AsynchronousTaskScheduler implements Runnable {
     }
 
     private void calculateAndRewardPoints(Contest contest){
+
+        int juryCount = contest.getJury().size();
+
+
+
+
+
 
     }
 }

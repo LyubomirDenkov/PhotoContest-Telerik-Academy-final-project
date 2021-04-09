@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = {"multipart/form-data", "application/json"})
-    public User create(@RequestPart(value = "dto") RegisterDto dto,
+    public User create(@Valid @RequestPart(value = "dto") RegisterDto dto,
                        @RequestParam(name = "file") Optional<MultipartFile> file,
                        @RequestParam(name = "url") Optional<String> url) {
 

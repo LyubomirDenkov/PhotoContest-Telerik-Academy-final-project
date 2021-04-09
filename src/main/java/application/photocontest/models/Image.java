@@ -27,10 +27,6 @@ public class Image {
     @Column(name = "image")
     private String url;
 
-    @Column(name = "points")
-    private int points;
-
-
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rated_images",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,13 +39,12 @@ public class Image {
     }
 
 
-    public Image(int id, String title, String story, User uploader, String url, int points, Set<User> jurorAwardedRating) {
+    public Image(int id, String title, String story, User uploader, String url, Set<User> jurorAwardedRating) {
         this.id = id;
         this.title = title;
         this.story = story;
         this.uploader = uploader;
         this.url = url;
-        this.points = points;
         this.jurorAwardedRating = jurorAwardedRating;
     }
 
@@ -93,14 +88,6 @@ public class Image {
         this.url = url;
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
     public Set<User> getJurorAwardedRating() {
         return jurorAwardedRating;
     }
@@ -114,11 +101,11 @@ public class Image {
         if (this == o) return true;
         if (!(o instanceof Image)) return false;
         Image image = (Image) o;
-        return getId() == image.getId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
+        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl()) && getJurorAwardedRating().equals(image.getJurorAwardedRating());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getPoints(), getJurorAwardedRating());
+        return Objects.hash(getId(), getTitle(), getStory(), getUrl(), getJurorAwardedRating());
     }
 }

@@ -2,15 +2,13 @@ DROP
 DATABASE IF EXISTS `photo-contest`;
 CREATE
 DATABASE IF NOT EXISTS `photo-contest`;
-USE
-`photo-contest`;create
-or replace table category
-                    (
-                        category_id int auto_increment
-                            primary key,
-                        name        varchar(30) not null
-                    );
-
+USE `photo-contest`;
+create or replace table category
+(
+    category_id int auto_increment
+        primary key,
+    name        varchar(30) not null
+);
 create
 or replace table contest_phase
 (
@@ -24,7 +22,9 @@ or replace table contest_type
 (
     type_id int auto_increment
         primary key,
-    name    varchar(20) not null
+    name    varchar(20) not null,
+    constraint contest_type_name_uindex
+    unique (name)
 );
 
 create
@@ -114,7 +114,6 @@ or replace table images
     story    text        not null,
     image    text        not null,
     user_id  int         not null,
-    points   int         not null,
     constraint images_users_fk
         foreign key (user_id) references users (user_id)
 );
