@@ -198,7 +198,7 @@ public class ContestsMvcController {
 
             contestService.addUserToContest(currentUser,contestId,userId);
 
-            return "redirect:/contest/{contestId}";
+            return "redirect:/contests/{contestId}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "not-found";
         } catch (DuplicateEntityException e) {

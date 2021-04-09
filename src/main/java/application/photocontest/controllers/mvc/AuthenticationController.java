@@ -90,7 +90,7 @@ public class AuthenticationController {
         }
 
         if (!register.getPassword().equals(register.getRepeatPassword())) {
-            bindingResult.rejectValue("confirmPassword", "password_error", "Password confirmation should match password.");
+            bindingResult.rejectValue("repeatPassword", "password_error", "Password confirmation should match password.");
             return "register";
         }
 

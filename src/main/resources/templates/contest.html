@@ -68,13 +68,6 @@
         </li>
     </ul>
 
-    <ul th:if="${currentUser.isOrganizer}">
-        <li><a class="nav-link" href="#"
-               th:href="@{__${#httpServletRequest.requestURI}__/rating/{id}(id=${contest.getImages()})}">Rate Photos</a>
-        </li>
-    </ul>
-
-
     <div class="section-header">
         <h2 th:text="*{contest.getCategory().getName()}">Event Speakers</h2>
     </div>

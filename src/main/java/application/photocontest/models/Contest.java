@@ -200,7 +200,7 @@ public class Contest {
         return isJury;
     }
 
-    public void setJury(boolean jury) {
+    public void setIsJury(boolean jury) {
         isJury = jury;
     }
 
@@ -208,7 +208,7 @@ public class Contest {
         return isParticipant;
     }
 
-    public void setParticipant(boolean participant) {
+    public void setIsParticipant(boolean participant) {
         isParticipant = participant;
     }
 

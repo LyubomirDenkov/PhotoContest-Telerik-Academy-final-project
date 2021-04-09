@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService {
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
-       if (!user.isOrganizer()){
-           verifyIsUserOwnAccount(user.getId(),id,"something");
-       }
+        if (!user.isOrganizer()) {
+            verifyIsUserOwnAccount(user.getId(), id, "something");
+        }
 
         return userRepository.getById(id);
     }
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public User create(User user, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
         boolean isUserNameExist = true;
-
+        boolean isImageUploaded = true;
         try {
             userRepository.getUserByUserName(user.getUserCredentials().getUserName());
         } catch (EntityNotFoundException e) {
@@ -68,11 +68,17 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("USERNAME EXIST");
         }
 
-        String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file,url);
+        String profileImageUrl = "";
+        try {
+            profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        } catch (UnsupportedOperationException e) {
+            isImageUploaded = false;
+        }
+        if (isImageUploaded) {
+            user.setProfileImage(profileImageUrl);
+        }
 
-        user.setProfileImage(profileImageUrl);
         User newRegisteredUser = userRepository.create(user);
-
         addRoleAndPointsToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
@@ -107,7 +113,7 @@ public class UserServiceImpl implements UserService {
 
         boolean isUserNameExist = true;
 
-        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), "something");
 
@@ -128,7 +134,7 @@ public class UserServiceImpl implements UserService {
     public void delete(User user, int id) {
 
 
-        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         verifyIsUserOwnAccount(user.getId(), id, "something");
 

@@ -93,12 +93,23 @@ public class ContestServiceImpl implements ContestService {
         return contests;
     }
 
+    //TODO boolean for photo
     @Override
     public Contest getById(User user, int id) {
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
-        return contestRepository.getById(id);
+        Contest contest = contestRepository.getById(id);
+
+        if (contest.getJury().contains(user)){
+            contest.setIsJury(true);
+            return contest;
+        }
+        if (contest.getParticipants().contains(user)){
+            contest.setIsParticipant(true);
+
+        }
+        return contest;
     }
 
     @Override
