@@ -2,6 +2,7 @@ package application.photocontest.controllers.mvc;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.exceptions.AuthenticationFailureException;
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
 import application.photocontest.models.Category;
@@ -14,6 +15,7 @@ import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -138,6 +140,47 @@ public class ContestsMvcController {
             return "not-found";
         }
     }
+
+    @GetMapping("/{id}/update")
+    public String showEditContestPage(@PathVariable int id, Model model, HttpSession session) {
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+            isOrganizer(currentUser);
+            Contest contest = contestService.getById(currentUser,id);
+
+            ContestDto contestDto = contestMapper.toDto(contest);
+            model.addAttribute("contestId", id);
+            model.addAttribute("contest", contestDto);
+            return "contest-update";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        }
+    }
+
+    @PostMapping("/{id}/update")
+    public String updateContest(@PathVariable int id,
+                                  @Valid @ModelAttribute("contest") ContestDto contestDto,
+                                  BindingResult errors,
+                                  Model model, HttpSession session) {
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+            isOrganizer(currentUser);
+            if (errors.hasErrors()) {
+                return "contest-update";
+            }
+            Set<Integer> jurySet = contestDto.getJury();
+            Set<Integer> participantsSet = contestDto.getParticipants();
+            Contest contest = contestMapper.fromDto(id, contestDto);
+            contestService.update(currentUser,contest,jurySet,participantsSet);
+
+            return "redirect:/contests";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        }
+    }
+
 
     private void isOrganizer(User user) {
         if (!user.isOrganizer()) {

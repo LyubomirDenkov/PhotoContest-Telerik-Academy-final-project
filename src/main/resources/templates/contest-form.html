@@ -10,6 +10,7 @@
 
 <form th:fragment="contest-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${contest}"
       method="post">
+    <h5 class="card-title text-center">Create new contest</h5>
     <label class="text-label-own" th:text="#{contest.label.title}">Title</label>
     <br/>
     <input class="input-custom-field" type="text" th:field="*{title}"/>
@@ -33,7 +34,7 @@
     <br/>
     <input class="input-custom-field" type="number" th:field="*{phaseOne}"/>
     <br>
-    <label class="error error-custom" th:errors="*{phase1_days}">Name error placeholder</label>
+    <label class="error error-custom" th:errors="*{phaseOne}">Name error placeholder</label>
     <br/><br/>
 
 
@@ -41,7 +42,7 @@
     <br/>
     <input class="input-custom-field" type="number" th:field="*{phaseTwo}"/>
     <br>
-    <label class="error error-custom" th:errors="*{phase2_hours}">Name error placeholder</label>
+    <label class="error error-custom" th:errors="*{phaseTwo}">Name error placeholder</label>
     <br/><br/>
 
 
@@ -61,7 +62,7 @@
     <br/>
     <input class="input-custom-field" type="text" th:field="*{backgroundImage}"/>
     <br>
-    <label class="error error-custom" th:errors="*{image_url}">Name error placeholder</label>
+    <label class="error error-custom" th:errors="*{backgroundImage}">Name error placeholder</label>
     <br/><br/>
 
     <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
@@ -69,11 +70,11 @@
     <select class="select-toggle" multiple="multiple" th:field="*{participants}">
         <option th:each="user : ${users}"
                 th:value="${user.getId()}"
-                th:text="${user.getCredentials().getUserName()}">
+                th:text="${user.getUserCredentials().userName}">
             Participant
         </option>
     </select>
-    <label class="error error-custom" th:errors="*{userId}">participant error placeholder</label>
+    <label class="error error-custom" th:errors="*{participants}">participant error placeholder</label>
     <br/><br/>
 
 
@@ -82,11 +83,11 @@
     <select class="select-toggle" multiple="multiple" th:field="*{jury}">
         <option th:each="user : ${users}"
                 th:value="${user.getId()}"
-                th:text="${user.getCredentials().getUserName()}">
+                th:text="${user.getUserCredentials().userName}">
             Participant
         </option>
     </select>
-    <label class="error error-custom" th:errors="*{userId}">participant error placeholder</label>
+    <label class="error error-custom" th:errors="*{jury}">participant error placeholder</label>
     <br/><br/>
 
 

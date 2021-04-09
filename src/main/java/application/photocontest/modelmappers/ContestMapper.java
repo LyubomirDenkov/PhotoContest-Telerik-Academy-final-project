@@ -76,5 +76,32 @@ public class ContestMapper {
         return contest;
     }
 
+    public ContestDto toDto(Contest contest) {
+        int phaseOne = 0;
+        int phaseTwo = 0;
+
+        ContestDto contestDto = new ContestDto();
+        contestDto.setTitle(contest.getTitle());
+        contestDto.setCategoryId(contest.getCategory().getId());
+        contestDto.setPhaseOne(phaseOne);
+        contestDto.setPhaseTwo(phaseTwo);
+        contestDto.setTypeId(contest.getId());
+        contestDto.setBackgroundImage(contest.getBackgroundImage());
+        Set<Integer> participantsFromContest = new HashSet<>();
+        for (User participant : contest.getParticipants()) {
+            participantsFromContest.add(participant.getId());
+        }
+        contestDto.setParticipants(participantsFromContest);
+
+        Set<Integer> juryFromContest = new HashSet<>();
+        for (User juror : contest.getJury()) {
+            participantsFromContest.add(juror.getId());
+        }
+        contestDto.setJury(juryFromContest);
+
+        contestDto.setImages(contest.getImages());
+        return contestDto;
+    }
+
 
 }
