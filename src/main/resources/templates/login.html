@@ -12,7 +12,7 @@
 
 <div class="parent clearfix">
     <div class="bg-illustration">
-        <img src="https://i.ibb.co/Pcg0Pk1/logo.png" alt="logo">
+        <img th:src="@{/assets/img/logo.png}" src="../static/assets/img/logo.png" alt="logo">
 
         <div class="burger-btn">
             <span></span>
@@ -24,8 +24,8 @@
 
     <div class="login">
         <div class="container">
-            <h1>Login to access to<br />your account</h1>
 
+            <h1>Login</h1>
             <div class="login-form">
                 <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
 

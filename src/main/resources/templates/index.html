@@ -86,10 +86,9 @@
 <!-- ======= Hero Section ======= -->
 <section id="hero">
     <div class="hero-container" data-aos="zoom-in" data-aos-delay="100">
-        <h1 class="mb-4 pb-0">The Annual<br><span>Marketing</span> Conference</h1>
-        <p class="mb-4 pb-0">10-12 December, Downtown Conference Center, New York</p>
+        <h1 class="mb-4 pb-0"><span>i</span>Photo</h1>
         <a href="https://www.youtube.com/watch?v=W9xcCgyTQTk&ab_channel=SiddhantSahu" class="glightbox play-btn mb-4"></a>
-        <a href="#about" class="about-btn scrollto">About The Event</a>
+        <a href="#about" class="about-btn scrollto">About The iPhoto</a>
     </div>
 </section><!-- End Hero Section -->
 
@@ -98,7 +97,7 @@
         <div class="container" data-aos="fade-up">
             <div class="row">
                 <div class="col-lg-6">
-                    <h2>About The Event</h2>
+                    <h2>About The iPhoto</h2>
                     <p>Sed nam ut dolor qui repellendus iusto odit. Possimus inventore eveniet accusamus error amet eius
                         aut
                         accusantium et. Non odit consequatur repudiandae sequi ea odio molestiae. Enim possimus sunt
@@ -121,8 +120,9 @@
     <section id="speakers">
         <div class="container" data-aos="fade-up">
             <div class="section-header">
-                <h2>Event Speakers</h2>
-                <p>Here are some of our speakers</p>
+                <h2>Recent contests</h2>
+                <br>
+                <br>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
@@ -135,16 +135,17 @@
                         </div>
 
                         <div class="details">
-                            <h3><a href="speaker-details.html" th:text="*{contest.getCategory().getName()}">Brenden
-                                Legros</a></h3>
+                            <h3 th:text="*{contest.getCategory().getName()}">Brenden
+                                Legros</h3>
 
+                            <h3 th:text="*{contest.getTimeTillFinished()}">Date</h3>
 
                             <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                             <div class="social">
-                                <a class="buy-tickets scrollto" th:if="${currentUser == null}"
-                                   th:href="@{/auth/register}" href="#buy-tickets">Visit</a>
-                                <a class="buy-tickets scrollto" th:if="${currentUser != null}"
-                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#buy-tickets">Visit</a>
+                                <a class="visit-custom" th:if="${currentUser == null}"
+                                   th:href="@{/auth/login}" href="#">VISIT</a>
+                                <a class="visit-custom" th:if="${currentUser != null}"
+                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#">VISIT</a>
                             </div>
                         </div>
                     </div>
@@ -315,11 +316,6 @@
                                 <br>
                             </ul>
                             <hr>
-                            <div class="text-center">
-                                <button type="button" class="btn" data-bs-toggle="modal"
-                                        data-bs-target="#buy-ticket-modal" data-ticket-type="standard-access">Buy Now
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -340,11 +336,6 @@
                                 <br>
                             </ul>
                             <hr>
-                            <div class="text-center">
-                                <button type="button" class="btn" data-bs-toggle="modal"
-                                        data-bs-target="#buy-ticket-modal" data-ticket-type="standard-access">Buy Now
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -365,11 +356,6 @@
                                 <br>
                             </ul>
                             <hr>
-                            <div class="text-center">
-                                <button type="button" class="btn" data-bs-toggle="modal"
-                                        data-bs-target="#buy-ticket-modal" data-ticket-type="pro-access">Buy Now
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -391,12 +377,6 @@
                                 <br>
                             </ul>
                             <hr>
-                            <div class="text-center">
-                                <button type="button" class="btn" data-bs-toggle="modal"
-                                        data-bs-target="#buy-ticket-modal" data-ticket-type="premium-access">Buy Now
-                                </button>
-                            </div>
-
                         </div>
                     </div>
                 </div>

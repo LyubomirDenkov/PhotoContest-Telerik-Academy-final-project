@@ -312,6 +312,35 @@ SIGN IN
   }
 }
 
+.visit-custom {
+  color: #fff;
+  background: #f82249;
+  padding: 3px 35px;
+  margin: 0 0 0 0px;
+  border-radius: 50px;
+  border: 2px solid #f82249;
+  transition: all ease-in-out 0.3s;
+  font-weight: 500;
+  line-height: 3;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.visit-custom:hover {
+  background: none;
+  color: #fff;
+}
+
+.visit-custom:focus {
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  .visit-custom {
+    margin: 0 15px 0 0;
+  }
+}
+
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
