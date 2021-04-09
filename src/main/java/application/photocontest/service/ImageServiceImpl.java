@@ -66,13 +66,4 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.delete(id);
     }
 
-    @Override
-    public List<Image> getTopRatedPictures() {
-        List<Image> images = imageRepository.getTopRatedPictures();
-
-        if (images.size() > 6){
-            return images.subList(0,6);
-        }
-        return images;
-    }
 }

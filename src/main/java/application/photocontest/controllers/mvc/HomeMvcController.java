@@ -51,7 +51,6 @@ public class HomeMvcController {
         }
 
         model.addAttribute("contests",contestService.getOngoingContests());
-        model.addAttribute("topImages",imageService.getTopRatedPictures());
 
 
         return "index";
