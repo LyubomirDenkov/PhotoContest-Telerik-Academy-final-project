@@ -81,7 +81,6 @@ or replace table contest
     type_id            int                                    not null,
     image_url          text                                   not null,
     phase_id           int                                    not null,
-    is_points_awarded  tinyint(1) default 0                   not null,
     is_jury            tinyint(1) default 0                   not null,
     is_participant     tinyint(1) default 0                   not null,
     has_image_uploaded tinyint(1) default 0                   not null,

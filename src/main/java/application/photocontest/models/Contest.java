@@ -67,10 +67,6 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> images;
 
-
-    @Column(name = "is_points_awarded")
-    private boolean isPointsAwarded;
-
     @Column(name = "is_jury")
     private boolean isJury;
 
@@ -84,7 +80,9 @@ public class Contest {
     public Contest() {
     }
 
-    public Contest(int id, String title, Category category, Date timeTillVoting, Date timeTillFinished, User user, Type type, String backgroundImage, Phase phase, Set<User> participants, Set<User> jury, Set<Image> images, boolean isPointsAwarded, boolean isJury, boolean isParticipant, boolean hasImageUploaded) {
+    public Contest(int id, String title, Category category, Date timeTillVoting, Date timeTillFinished, User user,
+                   Type type, String backgroundImage, Phase phase, Set<User> participants, Set<User> jury, Set<Image>
+                           images, boolean isJury, boolean isParticipant, boolean hasImageUploaded) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -97,7 +95,6 @@ public class Contest {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-        this.isPointsAwarded = isPointsAwarded;
         this.isJury = isJury;
         this.isParticipant = isParticipant;
         this.hasImageUploaded = hasImageUploaded;
@@ -197,14 +194,6 @@ public class Contest {
 
     public void setImages(Set<Image> images) {
         this.images = images;
-    }
-
-    public boolean isPointsAwarded() {
-        return isPointsAwarded;
-    }
-
-    public void setPointsAwarded(boolean pointsAwarded) {
-        isPointsAwarded = pointsAwarded;
     }
 
     public boolean isJury() {
