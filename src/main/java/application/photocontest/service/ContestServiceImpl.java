@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
@@ -61,8 +62,6 @@ public class ContestServiceImpl implements ContestService {
 
         List<Contest> contests = contestRepository.getAll();
 
-        //TODO award points if is finished but pointsAward are false
-
         return contests;
     }
 
@@ -92,35 +91,6 @@ public class ContestServiceImpl implements ContestService {
         }
 
         return contests;
-    }
-
-    private void setContestPhase(Contest contest) {
-
-        //TODO ---> ASYNCRHONIC CALL
-        //  LocalDateTime dateNow = LocalDateTime.now();
-    //  LocalDateTime contestStartingDate = contest.getStartingDate();
-    //  int phaseOneDays = contest.getPhaseOne();
-    //  int phaseTwoHours = contest.getPhaseTwo();
-    //  if (dateNow.isBefore(contestStartingDate)) {
-    //      contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
-    //      return;
-    //  }
-
-    //  if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusDays(phaseOneDays))) {
-    //      contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING));
-    //      return;
-    //  }
-
-
-    //  contestStartingDate = contestStartingDate.plusDays(phaseOneDays);
-
-    //  if (dateNow.isAfter(contestStartingDate) && dateNow.isBefore(contestStartingDate.plusHours(phaseTwoHours))) {
-    //      contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_VOTING));
-    //      return;
-    //  }
-
-    //  contest.setPhase(contestRepository.getPhaseByName(CONTEST_PHASE_FINISHED));
-
     }
 
     @Override
@@ -182,7 +152,7 @@ public class ContestServiceImpl implements ContestService {
 
         Set<User> participants = new HashSet<>();
 
-        Points newPoints = new Points();
+
 
 
         for (Integer participant : dtoParticipants) {
@@ -193,12 +163,11 @@ public class ContestServiceImpl implements ContestService {
             }
             if (jury.contains(participantToAdd) || participantToAdd.isOrganizer()) continue;
 
-            for (Points point : participantToAdd.getPoints()) {
-                newPoints = point;
-            }
-            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
-            newPoints.setPoints(pointsToIncrease);
-            userRepository.updatePoints(newPoints);
+            Optional<Points> points = participantToAdd.getPoints().stream().findFirst();
+
+            int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+            points.get().setPoints(pointsToIncrease);
+            userRepository.updatePoints(points.get());
             participants.add(participantToAdd);
             userRepository.update(participantToAdd);
 
@@ -285,14 +254,11 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-        Points newPoints = new Points();
+        Optional<Points> points = user.getPoints().stream().findFirst();
 
-        for (Points point : userToJoinInContest.getPoints()) {
-            newPoints = point;
-        }
-        int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
-        newPoints.setPoints(pointsToIncrease);
-        userRepository.updatePoints(newPoints);
+        int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
+        points.get().setPoints(pointsToIncrease);
+        userRepository.updatePoints(points.get());
 
         userRepository.update(userToJoinInContest);
 
@@ -331,7 +297,6 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = checkPointsContestAndImage(points, contestId, points);
 
-        boolean isOrganizer = true;
         List<ImageReview> imageReviews = imageRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
 
         for (ImageReview imageReview : imageReviews) {
@@ -339,28 +304,24 @@ public class ContestServiceImpl implements ContestService {
                 throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
             }
         }
-
-
-        User userToCheck;
-
     }
 
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> jurySet, Set<Integer> participantSet) {
         User user;
 
-        Points newPoints = new Points();
+
 
         Set<User> usersToAdd = new HashSet<>();
         for (Integer participant : participantSet) {
             user = userRepository.getById(participant);
             if (jurySet.contains(participant) || user.isOrganizer()) continue;
-            for (Points point : user.getPoints()) {
-                newPoints = point;
-            }
-            int pointsToIncrease = newPoints.getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
-            newPoints.setPoints(pointsToIncrease);
-            userRepository.updatePoints(newPoints);
+
+            Optional<Points> points = user.getPoints().stream().findFirst();
+
+            int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+            points.get().setPoints(pointsToIncrease);
+            userRepository.updatePoints(points.get());
             usersToAdd.add(user);
         }
         contest.setParticipants(usersToAdd);
@@ -372,15 +333,13 @@ public class ContestServiceImpl implements ContestService {
 
         jury.addAll(userRepository.getOrganizers());
 
-        int userToCheckPoints = 0;
-
         for (Integer userId : jurySet) {
             User userToAdd = userRepository.getById(userId);
             if (!userToAdd.isUser() || jury.contains(userToAdd)) continue;
-            for (Points point : userToAdd.getPoints()) {
-                userToCheckPoints = point.getPoints();
-            }
-            if (userToCheckPoints > NEEDED_POINTS_TO_BE_JURY) {
+
+            Optional<Points> points = userToAdd.getPoints().stream().findFirst();
+
+            if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
             }
         }

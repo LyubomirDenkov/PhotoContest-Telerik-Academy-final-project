@@ -15,7 +15,10 @@ public interface ImageRepository extends CudRepositoryOperations<Image>{
 
     Long getReviewPointsByImageId(int id);
 
+    Long getReviewsCountByContestAndImageId(int contestId,int imageId);
+
     List<ImageReview> getImageRatingsByUsername(String userName);
+
 
 
 }

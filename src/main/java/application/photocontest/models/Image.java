@@ -39,6 +39,7 @@ public class Image {
         this.story = story;
         this.uploader = uploader;
         this.url = url;
+        this.jurorAwardedRating = jurorAwardedRating;
     }
 
     public User getUploader() {
