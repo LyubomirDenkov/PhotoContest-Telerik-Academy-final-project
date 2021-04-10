@@ -294,7 +294,7 @@ public class ContestServiceImpl implements ContestService {
     public void delete(User user, int id) {
     }
 
-    private Contest checkPointsContestAndImage(int points, int contestId, int imageId) {
+    private Contest checkPointsContestAndImage(int contestId, int imageId, int points) {
 
         if (points < POINTS_WHEN_PARTICIPANT_ADDED || points > MAX_RATING) {
             throw new IllegalArgumentException(RATING_BETWEEN_1_AND_10);
@@ -306,6 +306,8 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(PHASE_RATING_ERROR_MESSAGE);
         }
 
+
+
         Image currentImage = imageRepository.getById(imageId);
         if (!contest.getImages().contains(currentImage)) {
             throw new EntityNotFoundException("Image", imageId);
@@ -315,7 +317,7 @@ public class ContestServiceImpl implements ContestService {
 
     private void checkIfUserIsInJury(User user, int imageId, int contestId, int points) {
 
-        Contest contest = checkPointsContestAndImage(points, contestId, points);
+        Contest contest = checkPointsContestAndImage(contestId, imageId, points);
 
         List<ImageReview> imageReviews = imageRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
 
@@ -323,6 +325,10 @@ public class ContestServiceImpl implements ContestService {
             if (imageReview.getImage().getId() == imageId) {
                 throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
             }
+        }
+
+        if(!contest.getJury().contains(user)){
+            throw new UnauthorizedOperationException("NE SI JURI WE");
         }
     }
 

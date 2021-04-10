@@ -34,17 +34,18 @@ public class ContestsMvcController {
     private final CategoryService categoryService;
     private final UserService userService;
     private final ContestMapper contestMapper;
-private final ImageService imageService;
+    private final ImageService imageService;
+    private final ImageReviewMapper imageReviewMapper;
 
     public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService,
-                                 CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService) {
+                                 CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService, ImageReviewMapper imageReviewMapper) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.contestMapper = contestMapper;
         this.imageService = imageService;
-
+        this.imageReviewMapper = imageReviewMapper;
     }
 
 
@@ -220,7 +221,7 @@ private final ImageService imageService;
 
             isJury(currentUser, contest);
 
-            model.addAttribute("contest",contest);
+            model.addAttribute("contest", contest);
 
             return "contest-images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
@@ -242,7 +243,7 @@ private final ImageService imageService;
 
             isJury(currentUser, contest);
 
-            Image image = imageService.getById(currentUser,imageId);
+            Image image = imageService.getById(currentUser, imageId);
 
             model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute("image", image);
@@ -256,29 +257,28 @@ private final ImageService imageService;
         }
     }
 
-    @PostMapping("/{contestId}/image/{imageId}")
+    @PostMapping("/{contestId}/images/{imageId}")
     public String rateImage(@PathVariable int contestId,
                             @PathVariable int imageId,
-                            @Valid @RequestBody ImageReviewDto imageReviewDto,
+                            @Valid @ModelAttribute("imageReview") ImageReviewDto imageReviewDto,
                             BindingResult errors, HttpSession session, Model model) {
 
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
-
-            Contest contest = contestService.getById(currentUser, contestId);
-
-            isJury(currentUser, contest);
             if (errors.hasErrors()) {
                 return "contest-images";
             }
 
+            Contest contest = contestService.getById(currentUser,contestId);
+            isJury(currentUser, contest);
+
             int points = imageReviewDto.getPoints();
             String comment = imageReviewDto.getComment();
 
-            contestService.rateImage(currentUser,contestId,imageId,points,comment);
+            contestService.rateImage(currentUser, contestId, imageId, points, comment);
 
-            return "redirect:/contest-images";
+            return "redirect:/contests/{contestId}/images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "not-found";
         } catch (DuplicateEntityException e) {

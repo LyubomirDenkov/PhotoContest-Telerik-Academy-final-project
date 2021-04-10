@@ -28,27 +28,68 @@
 </head>
 <body>
 
+<section id="speakers">
+    <div class="container">
+        <div class="section-header">
+            <h2>Recent contests</h2>
+            <br>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="speaker">
+                    <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
+                         alt="Speaker 1" class="img-fluid">
 
-<form th:fragment="image-review-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${image}"
-      method="post">
-    <h5 class="card-title text-center">Rate Image</h5>
+                    <div class="row contest-text">
+                        <div class="col">Title</div>
+                       <p th:text="*{image.getTitle()}">
+                        Ivan Ivanov
+                    </div>
+
+                    <div class="row contest-text">
+                        <div class="col">Story</div>
+                        <p  th:text="*{image.getStory()}">
+                        Ivan Ivanov
+                    </div>
 
 
-    <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
-    <div class="section-header">
-        <h2 th:text="${image.getTitle()}">Event Speakers</h2>
-    </div>
+                    <div class="row contest-text">
+                        <div class="col">Uploader</div>
+                        <p th:text="*{image.getUploader().getFirstName() + ' ' + image.getUploader().getLastName()}">
+                        Ivan Ivanov
+                    </div>
 
-            <div class="row contest-text">
-                <div class="col">Story</div>
-                <div class="col"
-                     th:text="${image.getStory()}">
-                    Ivan Ivanov
+                    <form th:fragment="image-review-form" action="#"
+                          th:action="@{__${#httpServletRequest.requestURI}__}"
+                          th:object="${imageReview}"
+                          method="post">
+
+                        <label class="text-label-own" th:text="#{review.label.comment}">Title</label>
+                        <br/>
+                        <input class="input-custom-field" type="text" th:field="${imageReview.comment}"/>
+                        <br>
+                        <label class="error error-custom" th:errors="${imageReview.comment}">Name error
+                            placeholder</label>
+                        <br/><br/>
+
+                        <label class="text-label-own" th:text="#{review.label.points}">Title</label>
+                        <br/>
+                        <input class="input-custom-field" type="number" th:field="${imageReview.points}"/>
+                        <br>
+                        <label class="error error-custom" th:errors="${imageReview.points}">Name error
+                            placeholder</label>
+                        <br/><br/>
+
+
+        <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
+                        </form>
                 </div>
             </div>
+
         </div>
     </div>
-    </div>
-</form>
+</section>
+
 </body>
 </html>
