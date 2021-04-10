@@ -61,7 +61,34 @@
                 <div class="card-custom">
                     <div class="card__side card__side--front-1">
                         <div class="card__title card__title--1">
-                            <i class="fas fa-paper-plane"></i>
+                            <h4 class="card__heading" th:text="*{contest.getCategory().getName()}">Basic</h4>
+                        </div>
+
+                        <div class="card__details">
+                            <div class="col-lg-6 col-md-6 card-text-custom">
+                                <p th:text="#{contest.label.type}">INFO</p>
+                                <p th:text="#{contest.label.phase}">INFO</p>
+                                <p th:text="#{contest.label.creator}">INFO</p>
+                                <p th:text="#{contest.label.participants}">INFO</p>
+                                <p th:text="#{contest.label.end}">INFO</p>
+                                <p th:text="#{contest.label.voting}">LONG TEXT</p>
+                        </div>
+                            <div class="col-6 card-text-custom">
+                                <p th:text="*{contest.getType().getName()}">Unmetered Bandwidth</p>
+                                <p th:text="*{contest.getPhase().getName()}">Unmetered Bandwidth</p>
+                                <p th:text="*{contest.getUser().getFirstName() + ' ' + contest.getUser().getLastName()}">50 GB SSD Storage</p>
+                                <p th:text="*{contest.getParticipants().size()}">Participants</p>
+                                <p th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm')}">Unmetered Bandwidth</p>
+                                <p id="timer" th:text="*{contest.getTimeTillVoting()}">Unmetered Bandwidth</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="card-custom">
+                    <div class="card__side card__side--front-2">
+                        <div class="card__title card__title--1">
                             <h4 class="card__heading" th:text="*{contest.getCategory().getName()}">Basic</h4>
                         </div>
 
@@ -72,13 +99,12 @@
                                 <li th:text="*{contest.getUser().getFirstName() + ' ' + contest.getUser().getLastName()}">50 GB SSD Storage</li>
                                 <li th:text="*{contest.getParticipants().size()}">Participants</li>
                                 <li th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm')}">Unmetered Bandwidth</li>
-                                <li id="timer" th:text="*{contest.getTimeTillVoting()}">Unmetered Bandwidth</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 contest-info">
+            <!--<div class="col-lg-4 col-md-4 contest-info">
                 <ul th:if="${currentUser.equals(contest.getUser())}">
                     <li><a class="nav-link" href="#"
                            th:href="@{/contests/{id}/update(id=${contest.getId()})}">Update Contest</a>
@@ -97,25 +123,7 @@
                     </li>
                 </ul>
 
-            </div>
-            <div class="col-lg-4 col-md-4 contest-info">
-                <div class="row contest-text">
-                    <div class="col">Type</div>
-                    <div class="col" th:text="*{contest.getType().getName().toUpperCase()}">Open</div>
-                </div>
-                <div class="row contest-text">
-                    <div class="col">Organizer</div>
-                    <div class="col"
-                         th:text="*{contest.getUser().getFirstName().toUpperCase() + ' ' + contest.getUser().getLastName().toUpperCase()}">
-                        Ivan Ivanov
-                    </div>
-                </div>
-
-                <div class="row contest-text">
-                    <div class="col">Participants</div>
-                    <div class="col" th:text="*{contest.getParticipants().size()}">500</div>
-                </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </section>

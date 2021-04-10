@@ -138,7 +138,7 @@
                             <h3 th:text="*{contest.getCategory().getName()}">Brenden
                                 Legros</h3>
 
-                            <h3 id="timer" th:id="'timer-' + ${iter.index}" th:text="*{contest.getTimeTillFinished()}">Date</h3>
+                            <h3 id="timer" th:id="'timer-' + ${iter.index}" th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm:ss')}">Date</h3>
 
                             <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                             <div class="social">
@@ -156,7 +156,7 @@
 
 
     <!-- ======= Venue Section ======= -->
-    <section id="venue">
+    <!--<section id="venue">
         <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
             <div class="section-header">
                 <br>
@@ -177,8 +177,8 @@
             </div>
         </div>
 
-    </section><!-- End Venue Section -->
-
+    </section>&lt;!&ndash; End Venue Section &ndash;&gt;
+-->
 
     <!-- =======  F.A.Q Section ======= -->
     <section id="faq">
@@ -528,7 +528,6 @@
         }
     }, 1000);
 </script>
-
 </body>
 
 </html>

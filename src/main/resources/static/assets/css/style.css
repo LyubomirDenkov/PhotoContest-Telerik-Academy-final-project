@@ -1884,11 +1884,11 @@ CUSTOM HERO SECTION CONTESTS
 }
 
 .card__side--front-1 {
-  background: linear-gradient(-45deg, #f403d1, #64b5f6);
+  background: linear-gradient(-45deg, #c4213d, #2f3544);
 }
 
 .card__side--front-2 {
-  background: linear-gradient(-45deg, #f321d7, #ffec61);
+  background: linear-gradient(-45deg, #2f3544, #c4213d);
 }
 
 .card__side--front-3 {
@@ -1971,6 +1971,11 @@ CUSTOM HERO SECTION CONTESTS
 
 .card__details {
   padding: 0 2rem 2rem;
+  display: flex;
+}
+
+.card__details p {
+ padding: 10px 30px 10px 30px;
 }
 
 .card__details ul {
@@ -2041,5 +2046,10 @@ CUSTOM HERO SECTION CONTESTS
 
 .row-custom .col-1-of-3 {
   width: calc((100% - 2 * 6rem) / 3);
+}
+
+.card-text-custom{
+  color: white;
+  font-weight: bold;
 }
 
