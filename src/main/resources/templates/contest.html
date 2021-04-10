@@ -68,6 +68,12 @@
         </li>
     </ul>
 
+    <ul th:if="${contest.isJury() && contest.getPhase().getName().equalsIgnoreCase('voting')}">
+        <li><a class="nav-link" href="#"
+               th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">Rate Images</a>
+        </li>
+    </ul>
+
     <div class="section-header">
         <h2 th:text="*{contest.getCategory().getName()}">Event Speakers</h2>
     </div>

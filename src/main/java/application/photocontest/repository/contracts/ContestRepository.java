@@ -1,10 +1,7 @@
 package application.photocontest.repository.contracts;
 
 
-import application.photocontest.models.Contest;
-import application.photocontest.models.Phase;
-import application.photocontest.models.Type;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 
 import java.util.List;
 
@@ -23,4 +20,5 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>,CudR
     List<Contest> getOngoingContests();
 
     List<Contest> getFinishedContests();
+
 }
