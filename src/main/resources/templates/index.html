@@ -125,7 +125,7 @@
                 <br>
             </div>
             <div class="row">
-                <div class="col-lg-6 col-md-6" th:each="contest, iter : ${contests}">
+                <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
                     <div class="speaker" data-aos="fade-up" data-aos-delay="100">
                         <img th:src="*{contest.getBackgroundImage()}" src="../static/assets/img/speakers/1.jpg"
                              alt="Speaker 1" class="img-fluid">
@@ -137,7 +137,7 @@
                         <div class="details">
                             <h3 th:text="*{contest.getCategory().getName()}">Brenden Legros</h3>
 
-                            <p id="timer" th:id="'timer-' + ${iter.index}" th:text="${contest.getTimeTillFinished()}">Date</p>
+                            <p th:text="${contest.getTimeTillFinished()}">Date</p>
 
                             <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                             <div class="social">
@@ -508,25 +508,6 @@
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
 
-<script th:inline="javascript">
-    var x = setInterval(function () {
-        var countDownDate = new Date([[${contest.timeTillFinished}]]).getTime();
-        var index = [[${iter.index}]];
-        console.log(index);
-        var now = new Date().getTime();
-        var distance = countDownDate - now;
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        document.getElementById('timer-' + index).innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById('timer-' + index).innerHTML = "Finished";
-        }
-    }, 1000);
-</script>
 </body>
 
 </html>
