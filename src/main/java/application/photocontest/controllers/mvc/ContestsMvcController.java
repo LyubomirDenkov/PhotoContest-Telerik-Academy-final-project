@@ -188,8 +188,8 @@ private final ImageService imageService;
         }
     }
 
-    @GetMapping("/{contestId}/user/{userId}")
-    public String addUserToContest(@PathVariable int contestId, @PathVariable int userId, HttpSession session, Model model) {
+    @GetMapping("/{id}/user/{userId}")
+    public String addUserToContest(@PathVariable int id, @PathVariable int userId, HttpSession session, Model model) {
 
 
         try {
@@ -197,9 +197,9 @@ private final ImageService imageService;
 
             isUser(currentUser);
 
-            contestService.addUserToContest(currentUser, contestId, userId);
+            contestService.addUserToContest(currentUser, id, userId);
 
-            return "redirect:/contests/{contestId}";
+            return "redirect:/contests/{id}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "error";
         } catch (DuplicateEntityException e) {

@@ -135,10 +135,9 @@
                         </div>
 
                         <div class="details">
-                            <h3 th:text="*{contest.getCategory().getName()}">Brenden
-                                Legros</h3>
+                            <h3 th:text="*{contest.getCategory().getName()}">Brenden Legros</h3>
 
-                            <h3 id="timer" th:id="'timer-' + ${iter.index}" th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm:ss')}">Date</h3>
+                            <p id="timer" th:id="'timer-' + ${iter.index}" th:text="${contest.getTimeTillFinished()}">Date</p>
 
                             <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                             <div class="social">
