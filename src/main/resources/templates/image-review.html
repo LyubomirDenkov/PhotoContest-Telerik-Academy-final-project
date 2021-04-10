@@ -33,19 +33,7 @@
       method="post">
     <h5 class="card-title text-center">Rate Image</h5>
 
-    <label class="text-label-own" th:text="#{contest.label.days}">Poits</label>
-    <br/>
-    <input class="input-custom-field" type="number" th:field="*{points}"/>
-    <br>
-    <label class="error error-custom" th:errors="*{points}">Name error placeholder</label>
-    <br/><br/>
 
-
-    <br/>
-    <input class="input-custom-field" type="text" th:field="*{comment}"/>
-    <br>
-    <label class="error error-custom" th:errors="*{comment}">Name error placeholder</label>
-    <br/><br/>
     <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
     <div class="section-header">
         <h2 th:text="${image.getTitle()}">Event Speakers</h2>
