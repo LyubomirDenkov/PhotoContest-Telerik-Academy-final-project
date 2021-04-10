@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -74,7 +75,7 @@ public class UserMvcController {
             User userToUpdate = userMapper.fromDto(id,dto);
             userService.update(user,userToUpdate,file,url);
             return "redirect:/users/{id}/profile";
-        }catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+        }catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
             return "error";
         }
 

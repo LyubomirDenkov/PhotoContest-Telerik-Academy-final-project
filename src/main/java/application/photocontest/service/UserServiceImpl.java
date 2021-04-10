@@ -103,24 +103,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User update(User user, User userToUpdate, Optional<MultipartFile> file, Optional<String> url) {
+    public User update(User user, User userToUpdate, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
-        boolean isImageUploaded = true;
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), "something");
 
-        String profileImageUrl = "";
-        try {
-            profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
-        } catch (UnsupportedOperationException | IOException e) {
-            isImageUploaded = false;
+        if (file.isPresent() || url.isPresent()) {
+            String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+            userToUpdate.setProfileImage(profileImageUrl);
         }
-        if (isImageUploaded) {
-            user.setProfileImage(profileImageUrl);
-        }
-
 
         return userRepository.update(userToUpdate);
     }
