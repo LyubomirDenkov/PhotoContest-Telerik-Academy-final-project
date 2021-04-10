@@ -55,49 +55,69 @@
 <section id="hero-contest" th:style="|background-image:url(${contest.getBackgroundImage()});|">
 </section>
 <section>
-<div class="container single-contest">
-    <ul th:if="${currentUser.equals(contest.getUser())}">
-        <li><a class="nav-link" href="#"
-               th:href="@{/contests/{id}/update(id=${contest.getId()})}">Update Contest</a>
-        </li>
-    </ul>
+    <div class="container single-contest">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="card-custom">
+                    <div class="card__side card__side--front-1">
+                        <div class="card__title card__title--1">
+                            <i class="fas fa-paper-plane"></i>
+                            <h4 class="card__heading" th:text="*{contest.getCategory().getName()}">Basic</h4>
+                        </div>
 
-    <ul th:if="${!contest.isParticipant() && !currentUser.isOrganizer()}">
-        <li><a class="nav-link" href="#"
-               th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">Enroll</a>
-        </li>
-    </ul>
-
-    <ul th:if="${contest.isJury()}">
-        <li><a class="nav-link" href="#"
-               th:href="@{__${#httpServletRequest.requestURI}__/images}">Rate Images</a>
-        </li>
-    </ul>
-
-    <div class="section-header">
-        <h2 th:text="*{contest.getCategory().getName()}">Event Speakers</h2>
-    </div>
-    <div class="row">
-        <div class="col-lg-4 col-md-4 contest-info">
-            <div class="row contest-text">
-                <div class="col">Type</div>
-                <div class="col" th:text="*{contest.getType().getName().toUpperCase()}">Open</div>
-            </div>
-            <div class="row contest-text">
-                <div class="col">Organizer</div>
-                <div class="col"
-                     th:text="*{contest.getUser().getFirstName().toUpperCase() + ' ' + contest.getUser().getLastName().toUpperCase()}">
-                    Ivan Ivanov
+                        <div class="card__details">
+                            <ul>
+                                <li th:text="*{contest.getType().getName()}">Unmetered Bandwidth</li>
+                                <li th:text="*{contest.getPhase().getName()}">Unmetered Bandwidth</li>
+                                <li th:text="*{contest.getUser().getFirstName() + ' ' + contest.getUser().getLastName()}">50 GB SSD Storage</li>
+                                <li th:text="*{contest.getParticipants().size()}">Participants</li>
+                                <li th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm')}">Unmetered Bandwidth</li>
+                                <li id="timer" th:text="*{contest.getTimeTillVoting()}">Unmetered Bandwidth</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="col-lg-4 col-md-4 contest-info">
+                <ul th:if="${currentUser.equals(contest.getUser())}">
+                    <li><a class="nav-link" href="#"
+                           th:href="@{/contests/{id}/update(id=${contest.getId()})}">Update Contest</a>
+                    </li>
+                </ul>
 
-            <div class="row contest-text">
-                <div class="col">Participants</div>
-                <div class="col" th:text="*{contest.getParticipants().size()}">500</div>
+                <ul th:if="${!contest.isParticipant() && !currentUser.isOrganizer()}">
+                    <li><a class="nav-link" href="#"
+                           th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">Enroll</a>
+                    </li>
+                </ul>
+
+                <ul th:if="${contest.isJury()}">
+                    <li><a class="nav-link" href="#"
+                           th:href="@{__${#httpServletRequest.requestURI}__/images}">Rate Images</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-lg-4 col-md-4 contest-info">
+                <div class="row contest-text">
+                    <div class="col">Type</div>
+                    <div class="col" th:text="*{contest.getType().getName().toUpperCase()}">Open</div>
+                </div>
+                <div class="row contest-text">
+                    <div class="col">Organizer</div>
+                    <div class="col"
+                         th:text="*{contest.getUser().getFirstName().toUpperCase() + ' ' + contest.getUser().getLastName().toUpperCase()}">
+                        Ivan Ivanov
+                    </div>
+                </div>
+
+                <div class="row contest-text">
+                    <div class="col">Participants</div>
+                    <div class="col" th:text="*{contest.getParticipants().size()}">500</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </section>
 
 <!-- Vendor JS Files -->
@@ -108,5 +128,26 @@
 <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
 <script src="assets/js/main.js"></script>
+
+<script th:inline="javascript">
+    var x = setInterval(function () {
+        var countDownDate = new Date([[${contest.timeTillFinished}]]).getTime();
+
+        var now = new Date().getTime();
+
+        var distance = countDownDate - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById('timer').innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById('timer').innerHTML = "Finished";
+        }
+    }, 1000);
+</script>
 </body>
 </html>
