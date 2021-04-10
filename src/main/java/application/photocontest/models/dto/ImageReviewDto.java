@@ -4,7 +4,7 @@ package application.photocontest.models.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-public class RateImageDto {
+public class ImageReviewDto {
 
     private static final String POINTS_MUST_BE_POSITIVE = "Points must be positive.";
     private static final String COMMENT_MUST_NOT_BE_NULL = "Comment must no be null.";
@@ -15,10 +15,10 @@ public class RateImageDto {
     @NotNull(message = COMMENT_MUST_NOT_BE_NULL)
     private String comment;
 
-    public RateImageDto() {
+    public ImageReviewDto() {
     }
 
-    public RateImageDto(@Positive int points, @NotNull String comment) {
+    public ImageReviewDto(@Positive int points, @NotNull String comment) {
         this.points = points;
         this.comment = comment;
     }

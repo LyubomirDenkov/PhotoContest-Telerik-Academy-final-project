@@ -70,7 +70,7 @@
 
     <ul th:if="${contest.isJury()}">
         <li><a class="nav-link" href="#"
-               th:href="@{/images}">Rate Images</a>
+               th:href="@{__${#httpServletRequest.requestURI}__/images}">Rate Images</a>
         </li>
     </ul>
 

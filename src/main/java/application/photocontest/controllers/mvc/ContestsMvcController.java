@@ -6,14 +6,12 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
-import application.photocontest.models.Category;
-import application.photocontest.models.Contest;
-import application.photocontest.models.Type;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
-import application.photocontest.models.dto.RateImageDto;
+import application.photocontest.models.dto.ImageReviewDto;
 import application.photocontest.service.contracts.CategoryService;
 import application.photocontest.service.contracts.ContestService;
+import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,13 +33,16 @@ public class ContestsMvcController {
     private final CategoryService categoryService;
     private final UserService userService;
     private final ContestMapper contestMapper;
+private final ImageService imageService;
 
-    public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService, CategoryService categoryService, UserService userService, ContestMapper contestMapper) {
+
+    public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService, CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.contestMapper = contestMapper;
+        this.imageService = imageService;
     }
 
 
@@ -207,31 +208,6 @@ public class ContestsMvcController {
         }
     }
 
-    @GetMapping("/{contestId}/image/{imageId}")
-    public String rateImage(@PathVariable int contestId, @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto, HttpSession session, Model model) {
-
-
-        try {
-            User currentUser = authenticationHelper.tryGetUser(session);
-
-            Contest contest = contestService.getById(currentUser, contestId);
-
-            isJury(currentUser, contest);
-
-            int points = rateImageDto.getPoints();
-            String comment = rateImageDto.getComment();
-
-            contestService.rateImage(currentUser, contestId, imageId, points, comment);
-
-            return "redirect:/contest/{contestId}";
-        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
-        } catch (DuplicateEntityException e) {
-            model.addAttribute("not-found", e.getMessage());
-            return "not-found";
-        }
-    }
-
     @GetMapping("/{contestId}/images")
     public String showContestImages(@PathVariable int contestId, HttpSession session, Model model) {
 
@@ -243,10 +219,67 @@ public class ContestsMvcController {
 
             isJury(currentUser, contest);
 
+            model.addAttribute("contest",contest);
 
-            contestService.getContestImages(contestId);
+            return "contest-images";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("not-found", e.getMessage());
+            return "not-found";
+        }
+    }
 
-            return "redirect:/contest/{contestId}";
+    @GetMapping("/{contestId}/image/{imageId}")
+    public String showRateImagePage(@PathVariable int contestId, @PathVariable int imageId, HttpSession session, Model model) {
+
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            Contest contest = contestService.getById(currentUser, contestId);
+
+            isJury(currentUser, contest);
+
+
+            Image image = imageService.getById(currentUser,imageId);
+
+
+            model.addAttribute("image-review");
+            model.addAttribute("image", image);
+
+            return "redirect:/contest-images";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("not-found", e.getMessage());
+            return "not-found";
+        }
+    }
+
+    @PostMapping("/{contestId}/image/{imageId}")
+    public String rateImage(@PathVariable int contestId,
+                            @PathVariable int imageId,
+                            @Valid @RequestBody ImageReviewDto imageReviewDto,
+                            BindingResult errors, HttpSession session, Model model) {
+
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            Contest contest = contestService.getById(currentUser, contestId);
+
+            isJury(currentUser, contest);
+            if (errors.hasErrors()) {
+                return "contest-images";
+            }
+
+            int points = imageReviewDto.getPoints();
+            String comment = imageReviewDto.getComment();
+
+            contestService.rateImage(currentUser,contestId,imageId,points,comment);
+
+            return "redirect:/contest-images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "not-found";
         } catch (DuplicateEntityException e) {

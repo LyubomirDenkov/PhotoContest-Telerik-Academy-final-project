@@ -9,7 +9,7 @@ import application.photocontest.modelmappers.ContestMapper;
 
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
-import application.photocontest.models.dto.RateImageDto;
+import application.photocontest.models.dto.ImageReviewDto;
 import application.photocontest.service.contracts.ContestService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,13 +150,13 @@ public class ContestController {
     @ApiOperation(value = "Rate image")
     @PostMapping("/{contestId}/rating/{imageId}")
     public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
-                          @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto) {
+                          @PathVariable int imageId, @Valid @RequestBody ImageReviewDto imageReviewDto) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            int points = rateImageDto.getPoints();
-            String comment = rateImageDto.getComment();
+            int points = imageReviewDto.getPoints();
+            String comment = imageReviewDto.getComment();
              contestService.rateImage(user,contestId, imageId,points, comment);
         }  catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
