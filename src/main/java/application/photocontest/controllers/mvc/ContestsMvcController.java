@@ -6,6 +6,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
+import application.photocontest.modelmappers.ImageReviewMapper;
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.models.dto.ImageReviewDto;
@@ -35,14 +36,15 @@ public class ContestsMvcController {
     private final ContestMapper contestMapper;
 private final ImageService imageService;
 
-
-    public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService, CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService) {
+    public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService,
+                                 CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.contestMapper = contestMapper;
         this.imageService = imageService;
+
     }
 
 
@@ -229,7 +231,7 @@ private final ImageService imageService;
         }
     }
 
-    @GetMapping("/{contestId}/image/{imageId}")
+    @GetMapping("/{contestId}/images/{imageId}")
     public String showRateImagePage(@PathVariable int contestId, @PathVariable int imageId, HttpSession session, Model model) {
 
 
@@ -242,6 +244,7 @@ private final ImageService imageService;
 
             Image image = imageService.getById(currentUser,imageId);
 
+            model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute("image", image);
 
             return "image-review";

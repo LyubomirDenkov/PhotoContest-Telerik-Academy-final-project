@@ -59,7 +59,7 @@
                         <p th:text="*{image.getUploader()}">Quas alias incidunt</p>
                         <div class="social">
                             <a class="buy-tickets scrollto"
-                               th:href="@{__${#httpServletRequest.requestURI}__/image/{id}(id=${image.getId()})}" href="#">Rate</a>
+                               th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${image.getId()})}" href="#">Rate</a>
                         </div>
                     </div>
                 </div>
