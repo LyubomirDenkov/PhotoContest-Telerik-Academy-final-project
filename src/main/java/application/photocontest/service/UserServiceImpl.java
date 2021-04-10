@@ -109,23 +109,24 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User update(User user, User userToUpdate) {
+    public User update(User user, User userToUpdate, Optional<MultipartFile> file, Optional<String> url) {
 
-        boolean isUserNameExist = true;
+        boolean isImageUploaded = true;
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), "something");
 
+        String profileImageUrl = "";
         try {
-            userRepository.getUserByUserName(userToUpdate.getUserCredentials().getUserName());
-        } catch (EntityNotFoundException e) {
-            isUserNameExist = false;
+            profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        } catch (UnsupportedOperationException | IOException e) {
+            isImageUploaded = false;
+        }
+        if (isImageUploaded) {
+            user.setProfileImage(profileImageUrl);
         }
 
-        if (isUserNameExist) {
-            throw new DuplicateEntityException("User", "username", userToUpdate.getUserCredentials().getUserName());
-        }
 
         return userRepository.update(userToUpdate);
     }

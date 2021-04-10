@@ -6,7 +6,6 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.CategoryMapper;
 import application.photocontest.models.Category;
 import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.CategoryDto;
 import application.photocontest.service.contracts.CategoryService;
 import org.springframework.stereotype.Controller;
@@ -64,7 +63,7 @@ public class CategoryMvcController {
             return "redirect:/categories";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
 
 
@@ -83,7 +82,7 @@ public class CategoryMvcController {
             return "category-new";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
     private void isOrganizer(User currentUser) {

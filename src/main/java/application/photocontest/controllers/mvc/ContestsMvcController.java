@@ -90,7 +90,7 @@ private final ImageService imageService;
             return "contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
 
@@ -105,7 +105,7 @@ private final ImageService imageService;
             return "finished-contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
 
@@ -123,7 +123,7 @@ private final ImageService imageService;
             return "contest-new";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
 
@@ -144,7 +144,7 @@ private final ImageService imageService;
             return "redirect:/contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
 
@@ -161,7 +161,7 @@ private final ImageService imageService;
             model.addAttribute("contest", contestDto);
             return "contest-update";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
 
@@ -184,7 +184,7 @@ private final ImageService imageService;
 
             return "redirect:/contests";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         }
     }
 
@@ -201,10 +201,10 @@ private final ImageService imageService;
 
             return "redirect:/contests/{contestId}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         } catch (DuplicateEntityException e) {
             model.addAttribute("not-found", e.getMessage());
-            return "not-found";
+            return "error";
         }
     }
 
@@ -222,10 +222,10 @@ private final ImageService imageService;
 
             return "contest-images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         } catch (DuplicateEntityException e) {
             model.addAttribute("not-found", e.getMessage());
-            return "not-found";
+            return "error";
         }
     }
 

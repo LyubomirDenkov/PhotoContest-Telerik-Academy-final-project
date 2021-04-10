@@ -6,6 +6,7 @@ import application.photocontest.models.Image;
 import application.photocontest.models.Points;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.ImageRankingDto;
+import application.photocontest.models.dto.ImageReviewDto;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Component
 @EnableScheduling
-public class AsynchronousTaskScheduler implements Runnable {
+public class AsynchronousTaskScheduler {
 
     private final int DEFAULT_SCORE = 3;
 
@@ -37,7 +38,6 @@ public class AsynchronousTaskScheduler implements Runnable {
     }
 
 
-    @Override
     @Scheduled(fixedDelay = 60000)
     public void run() {
 

@@ -14,6 +14,10 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+.custom-text-name{
+  color: black;
+}
+
 a {
   color: #f82249;
   text-decoration: none;

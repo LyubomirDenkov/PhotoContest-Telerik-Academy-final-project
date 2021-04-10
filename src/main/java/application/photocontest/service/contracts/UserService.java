@@ -12,7 +12,7 @@ public interface UserService extends GetServiceOperations<User> {
 
     User getUserByUserName(String userName);
 
-    User update(User user,User userToUpdate);
+    User update(User user,User userToUpdate, Optional<MultipartFile> file, Optional<String> url);
 
     void delete(User user,int id);
 

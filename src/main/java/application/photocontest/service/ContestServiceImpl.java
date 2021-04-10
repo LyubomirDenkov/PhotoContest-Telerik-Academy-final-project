@@ -10,6 +10,7 @@ import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

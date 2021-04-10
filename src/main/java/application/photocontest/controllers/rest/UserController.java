@@ -74,18 +74,22 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto) {
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto,
+                       @RequestParam(name = "file") Optional<MultipartFile> file,
+                       @RequestParam(name = "url") Optional<String> url) {
 
         User user = authenticationHelper.tryGetUser(headers);
         try {
             User userToUpdate = userMapper.fromDto(id, userDto);
-            return userService.update(user, userToUpdate);
+            return userService.update(user, userToUpdate,file,url);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
