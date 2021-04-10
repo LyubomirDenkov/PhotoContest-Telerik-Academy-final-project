@@ -93,12 +93,18 @@
                         </div>
 
                         <div class="card__details">
-                            <ul>
-                                <li th:text="*{contest.getType().getName()}">Unmetered Bandwidth</li>
-                                <li th:text="*{contest.getPhase().getName()}">Unmetered Bandwidth</li>
-                                <li th:text="*{contest.getUser().getFirstName() + ' ' + contest.getUser().getLastName()}">50 GB SSD Storage</li>
-                                <li th:text="*{contest.getParticipants().size()}">Participants</li>
-                                <li th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm')}">Unmetered Bandwidth</li>
+                            <ul><li th:if="${currentUser.equals(contest.getUser())}">
+                                <a href="#" th:href="@{/contests/{id}/update(id=${contest.getId()})}">
+                                <button class="glow-on-hover" type="button">UPDATE</button></a></li>
+
+                                <li th:if="${!contest.isParticipant() && !currentUser.isOrganizer()}">
+                                    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
+                                    <button class="glow-on-hover" type="button">JOIN</button></a></li>
+
+                                <li th:if="${contest.isJury()}">
+                                    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/images}">
+                                    <button class="glow-on-hover" type="button">REVIEW PHOTOS</button></a></li>
+
                             </ul>
                         </div>
                     </div>

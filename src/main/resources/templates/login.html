@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Login</title>
 
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
     <link th:href="@{/assets/css/login.css}" href="../static/assets/css/login.css" rel="stylesheet">
 
 </head>
@@ -37,8 +38,9 @@
                         <input type="checkbox">
                         <span>Remember me</span>
                     </div>
-                    <button type="submit">LOG-IN</button>
-
+                    <button class="glow-on-hover" type="submit">LOG-IN</button>
+                    <a href="#" th:href="@{/auth/register}">
+                        <button class="glow-on-hover custom-button" type="button">REGISTER</button></a>
                 </form>
             </div>
 

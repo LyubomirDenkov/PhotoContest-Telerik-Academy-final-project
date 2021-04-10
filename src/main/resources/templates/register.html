@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
-    <link rel="icon" type="image/png" href="../static/assets/img/navbar-logo.svg" th:href="@{/assets/img/navbar-logo.svg}"/>
+
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
     <link th:href="@{/assets/css/login.css}" href="../static/assets/css/login.css" rel="stylesheet">
 </head>
 <body>
@@ -11,7 +12,7 @@
 
 <div class="parent clearfix">
     <div class="bg-illustration">
-        <img src="../static/assets/img/logo.png" alt="logo">
+        <img th:src="@{/assets/img/logo.png}" src="../static/assets/img/logo.png" alt="logo">
 
         <div class="burger-btn">
             <span></span>
