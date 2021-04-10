@@ -25,5 +25,7 @@ public interface ContestService extends GetServiceOperations<Contest> {
     List<Contest> getOngoingContests();
     List<Type> getAllTypes();
 
+    Set<Image> getContestImages(int id);
+
     List<Contest> getFinishedContests();
 }

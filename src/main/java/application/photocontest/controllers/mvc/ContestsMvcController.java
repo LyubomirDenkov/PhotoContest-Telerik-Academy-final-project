@@ -11,6 +11,7 @@ import application.photocontest.models.Contest;
 import application.photocontest.models.Type;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.ContestDto;
+import application.photocontest.models.dto.RateImageDto;
 import application.photocontest.service.contracts.CategoryService;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.UserService;
@@ -70,7 +71,7 @@ public class ContestsMvcController {
         User user = authenticationHelper.tryGetUser(session);
         Contest contest = contestService.getById(user, id);
 
-        model.addAttribute("currentUser",user);
+        model.addAttribute("currentUser", user);
         model.addAttribute("contest", contest);
 
         return "contest";
@@ -108,7 +109,6 @@ public class ContestsMvcController {
     }
 
 
-
     @GetMapping("/new")
     public String showNewContestPage(Model model, HttpSession session) {
 
@@ -135,10 +135,10 @@ public class ContestsMvcController {
 
             isOrganizer(currentUser);
 
-            Contest contest = contestMapper.fromDto(contestDto,currentUser);
+            Contest contest = contestMapper.fromDto(contestDto, currentUser);
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
-            contestService.create(currentUser,contest,jurySet,participantsSet);
+            contestService.create(currentUser, contest, jurySet, participantsSet);
 
             return "redirect:/contests";
 
@@ -153,7 +153,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
             isOrganizer(currentUser);
-            Contest contest = contestService.getById(currentUser,id);
+            Contest contest = contestService.getById(currentUser, id);
 
             ContestDto contestDto = contestMapper.toDto(contest);
             model.addAttribute("contestId", id);
@@ -166,9 +166,9 @@ public class ContestsMvcController {
 
     @PostMapping("/{id}/update")
     public String updateContest(@PathVariable int id,
-                                  @Valid @ModelAttribute("contest") ContestDto contestDto,
-                                  BindingResult errors,
-                                  Model model, HttpSession session) {
+                                @Valid @ModelAttribute("contest") ContestDto contestDto,
+                                BindingResult errors,
+                                Model model, HttpSession session) {
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
@@ -179,7 +179,7 @@ public class ContestsMvcController {
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
             Contest contest = contestMapper.fromDto(id, contestDto);
-            contestService.update(currentUser,contest,jurySet,participantsSet);
+            contestService.update(currentUser, contest, jurySet, participantsSet);
 
             return "redirect:/contests";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
@@ -188,7 +188,7 @@ public class ContestsMvcController {
     }
 
     @GetMapping("/{contestId}/user/{userId}")
-    public String addUserToContest(@PathVariable int contestId, @PathVariable int userId, HttpSession session,Model model) {
+    public String addUserToContest(@PathVariable int contestId, @PathVariable int userId, HttpSession session, Model model) {
 
 
         try {
@@ -196,32 +196,61 @@ public class ContestsMvcController {
 
             isUser(currentUser);
 
-            contestService.addUserToContest(currentUser,contestId,userId);
+            contestService.addUserToContest(currentUser, contestId, userId);
 
             return "redirect:/contests/{contestId}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "not-found";
         } catch (DuplicateEntityException e) {
-            model.addAttribute("not-found",e.getMessage());
+            model.addAttribute("not-found", e.getMessage());
             return "not-found";
         }
     }
 
     @GetMapping("/{contestId}/image/{imageId}")
-    public String rateImages(@PathVariable int contestId, @PathVariable int imageId, HttpSession session,Model model) {
+    public String rateImage(@PathVariable int contestId, @PathVariable int imageId, @Valid @RequestBody RateImageDto rateImageDto, HttpSession session, Model model) {
 
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
+            Contest contest = contestService.getById(currentUser, contestId);
 
-            contestService.addUserToContest(currentUser,contestId,imageId);
+            isJury(currentUser, contest);
+
+            int points = rateImageDto.getPoints();
+            String comment = rateImageDto.getComment();
+
+            contestService.rateImage(currentUser, contestId, imageId, points, comment);
 
             return "redirect:/contest/{contestId}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "not-found";
         } catch (DuplicateEntityException e) {
-            model.addAttribute("not-found",e.getMessage());
+            model.addAttribute("not-found", e.getMessage());
+            return "not-found";
+        }
+    }
+
+    @GetMapping("/{contestId}/images")
+    public String showContestImages(@PathVariable int contestId, HttpSession session, Model model) {
+
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            Contest contest = contestService.getById(currentUser, contestId);
+
+            isJury(currentUser, contest);
+
+
+            contestService.getContestImages(contestId);
+
+            return "redirect:/contest/{contestId}";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+            return "not-found";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("not-found", e.getMessage());
             return "not-found";
         }
     }
@@ -235,6 +264,12 @@ public class ContestsMvcController {
 
     private void isUser(User currentUser) {
         if (!currentUser.isUser()) {
+            throw new UnauthorizedOperationException("Not authorized");
+        }
+    }
+
+    private void isJury(User currentUser, Contest contest) {
+        if (!contest.getJury().contains(currentUser)) {
             throw new UnauthorizedOperationException("Not authorized");
         }
     }

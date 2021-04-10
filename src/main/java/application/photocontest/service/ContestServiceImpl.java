@@ -82,6 +82,14 @@ public class ContestServiceImpl implements ContestService {
         return contestRepository.getAllTypes();
     }
 
+    @Override
+    public Set<Image> getContestImages(int id) {
+        Contest contest = contestRepository.getById(id);
+        Set<Image> images = contest.getImages();
+
+        return images;
+    }
+
     public List<Contest> getFinishedContests() {
 
         List<Contest> contests = contestRepository.getFinishedContests();

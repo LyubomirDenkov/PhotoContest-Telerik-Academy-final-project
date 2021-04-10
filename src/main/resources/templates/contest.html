@@ -68,9 +68,9 @@
         </li>
     </ul>
 
-    <ul th:if="${contest.isJury() && contest.getPhase().getName().equalsIgnoreCase('voting')}">
+    <ul th:if="${contest.isJury()}">
         <li><a class="nav-link" href="#"
-               th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">Rate Images</a>
+               th:href="@{/images}">Rate Images</a>
         </li>
     </ul>
 
