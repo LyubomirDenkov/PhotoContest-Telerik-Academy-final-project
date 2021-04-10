@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image</title>
+
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+          rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
+          href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
+          href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
+          href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
+          href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+
+<form th:fragment="image-review-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${image}"
+      method="post">
+    <h5 class="card-title text-center">Rate Image</h5>
+
+    <label class="text-label-own" th:text="#{contest.label.days}">Poits</label>
+    <br/>
+    <input class="input-custom-field" type="number" th:field="*{points}"/>
+    <br>
+    <label class="error error-custom" th:errors="*{points}">Name error placeholder</label>
+    <br/><br/>
+
+
+    <br/>
+    <input class="input-custom-field" type="text" th:field="*{comment}"/>
+    <br>
+    <label class="error error-custom" th:errors="*{comment}">Name error placeholder</label>
+    <br/><br/>
+    <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
+    <div class="section-header">
+        <h2 th:text="${image.getTitle()}">Event Speakers</h2>
+    </div>
+
+            <div class="row contest-text">
+                <div class="col">Story</div>
+                <div class="col"
+                     th:text="${image.getStory()}">
+                    Ivan Ivanov
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+</body>
+</html>

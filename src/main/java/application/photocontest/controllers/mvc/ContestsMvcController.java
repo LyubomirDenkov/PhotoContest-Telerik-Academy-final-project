@@ -211,7 +211,6 @@ private final ImageService imageService;
     @GetMapping("/{contestId}/images")
     public String showContestImages(@PathVariable int contestId, HttpSession session, Model model) {
 
-
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
@@ -241,14 +240,11 @@ private final ImageService imageService;
 
             isJury(currentUser, contest);
 
-
             Image image = imageService.getById(currentUser,imageId);
 
-
-            model.addAttribute("image-review");
             model.addAttribute("image", image);
 
-            return "redirect:/contest-images";
+            return "image-review";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
             return "not-found";
         } catch (DuplicateEntityException e) {
