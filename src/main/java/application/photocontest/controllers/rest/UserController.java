@@ -73,8 +73,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
-    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UpdateUserDto userDto,
+    @PutMapping(value = "/{id}",consumes = {"multipart/form-data", "application/json"})
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestPart("dto") UpdateUserDto userDto,
                        @RequestParam(name = "file") Optional<MultipartFile> file,
                        @RequestParam(name = "url") Optional<String> url) {
 
@@ -84,7 +84,7 @@ public class UserController {
             return userService.update(user, userToUpdate,file,url);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (IllegalArgumentException | DuplicateEntityException e) {
+        } catch (IllegalArgumentException | DuplicateEntityException | UnsupportedOperationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

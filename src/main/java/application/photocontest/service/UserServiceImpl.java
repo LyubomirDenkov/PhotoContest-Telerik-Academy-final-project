@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public User create(User user, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
         boolean isUserNameExist = true;
-        boolean isImageUploaded = true;
+
         try {
             userRepository.getUserByUserName(user.getUserCredentials().getUserName());
         } catch (EntityNotFoundException e) {
@@ -68,15 +68,9 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("USERNAME EXIST");
         }
 
-        String profileImageUrl = "";
-        try {
-            profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
-        } catch (UnsupportedOperationException e) {
-            isImageUploaded = false;
-        }
-        if (isImageUploaded) {
-            user.setProfileImage(profileImageUrl);
-        }
+        String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        user.setProfileImage(profileImageUrl);
+
 
         User newRegisteredUser = userRepository.create(user);
         addRoleAndPointsToRegisteredUser(newRegisteredUser);

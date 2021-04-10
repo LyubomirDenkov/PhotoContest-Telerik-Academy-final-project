@@ -19,6 +19,7 @@ public class ImgurServiceImpl implements ImgurService {
     private static final String IMGUR_CLIENT_ID = "Client-ID 99j294849382r4i";
     private static final String IMGUR_AUTHORIZATION = "Authorization";
     private static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
+    private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
 
 
     public ImgurServiceImpl() {
@@ -27,8 +28,10 @@ public class ImgurServiceImpl implements ImgurService {
     public String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file,Optional<String> url) throws IOException {
 
 
-        if ((file.isPresent() && url.isPresent()) || (file.isEmpty() && url.isEmpty())){
+        if (file.isPresent() && url.isPresent() ){
             throw new UnsupportedOperationException("Only local file or url");
+        }else if (file.isEmpty() && url.isEmpty()){
+           return INITIAL_PROFILE_IMAGE;
         }
 
         String image = "";
