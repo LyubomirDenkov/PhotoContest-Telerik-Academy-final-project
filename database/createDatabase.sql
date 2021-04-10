@@ -63,7 +63,7 @@ or replace table users
     user_credentials varchar(30)                                    not null,
     first_name       varchar(20)                                    not null,
     last_name        varchar(20)                                    not null,
-    profileImage     text default 'https://i.imgur.com/GdDsxXO.png' null,
+    profileImage     text default 'https://i.imgur.com/GdDsxXO.png' not null,
     constraint users_user_credentials_fk
         foreign key (user_credentials) references user_credentials (user_name)
 );

@@ -40,7 +40,8 @@ public class AsynchronousTaskScheduler {
 
     @Scheduled(fixedDelay = 60000)
     public void run() {
-
+        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
+                " INFO TASK START");
         List<Contest> contests = contestRepository.getAll();
         LocalDateTime localDateTime = LocalDateTime.now();
         Date dateTimeNow = java.sql.Timestamp.valueOf(localDateTime);

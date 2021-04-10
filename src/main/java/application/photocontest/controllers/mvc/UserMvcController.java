@@ -36,6 +36,14 @@ public class UserMvcController {
         this.userMapper = userMapper;
     }
 
+    @GetMapping
+    public String getUsersLeaderboard(Model model, HttpSession session){
+        User user = authenticationHelper.tryGetUser(session);
+        model.addAttribute("currentUser",user);
+        model.addAttribute("users",userService.getAllUsers());
+        return "leaderboard";
+    }
+
     @GetMapping("/{id}/profile")
     public String getProfile(@PathVariable int id, Model model, HttpSession session) {
 

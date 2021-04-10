@@ -16,10 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -74,9 +76,11 @@ public class ContestController {
     }
 
     @ApiOperation(value = "Create contest")
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public Contest create(@RequestHeader HttpHeaders headers,
-                          @Valid @RequestBody ContestDto contestDto) {
+                          @Valid @RequestPart("dto") ContestDto contestDto,
+                          @RequestParam(name = "file") Optional<MultipartFile> file,
+                          @RequestParam(name = "url") Optional<String> url) {
 
         User user = authenticationHelper.tryGetUser(headers);
         try {
