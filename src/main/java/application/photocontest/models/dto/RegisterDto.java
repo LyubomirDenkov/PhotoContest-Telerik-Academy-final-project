@@ -17,11 +17,11 @@ public class RegisterDto {
     private String userName;
 
     @NotNull
-    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
+    @Size(min = 8, message = PASSWORD_ERROR_MESSAGE)
     private String password;
 
     @NotNull
-    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
+    @Size(min = 8, message = PASSWORD_ERROR_MESSAGE)
     private String repeatPassword;
 
     @NotNull

@@ -17,9 +17,9 @@ import javax.servlet.http.HttpSession;
 public class AuthenticationHelper {
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String AUTHORIZATION_ERROR_MESSAGE = "The requested resource requires authentication.";
-    public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid email address.";
+    public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid username.";
 
-    public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong email or password.";
+    public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong username or password.";
 
     private final UserService userService;
 

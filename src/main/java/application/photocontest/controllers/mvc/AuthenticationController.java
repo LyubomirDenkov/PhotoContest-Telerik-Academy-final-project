@@ -31,7 +31,6 @@ public class AuthenticationController {
     private final UserService userService;
 
 
-
     public AuthenticationController(UserMapper userMapper, AuthenticationHelper authenticationHelper, UserService userService) {
         this.userMapper = userMapper;
         this.authenticationHelper = authenticationHelper;
@@ -83,7 +82,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto register,
                                  BindingResult bindingResult,
-                                 @RequestParam(name = "file")Optional<MultipartFile> file,
+                                 @RequestParam(name = "file") Optional<MultipartFile> file,
                                  @RequestParam(name = "url") Optional<String> url) {
         if (bindingResult.hasErrors()) {
             return "register";
@@ -96,12 +95,13 @@ public class AuthenticationController {
 
         try {
             User user = userMapper.fromDto(register);
-            userService.create(user,file,url);
+            userService.create(user, file, url);
             return "redirect:/";
-        } catch (DuplicateEntityException | IOException e) {
-            bindingResult.rejectValue("username", "username_error", e.getMessage());
+        } catch (IOException e) {
+            return "register";
+        } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("userName", "username_error", e.getMessage());
             return "register";
         }
     }
-
 }
