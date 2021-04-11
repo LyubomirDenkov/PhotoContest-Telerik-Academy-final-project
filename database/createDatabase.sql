@@ -114,6 +114,7 @@ create or replace table `photo-contest`.images
     story    text        not null,
     image    text        not null,
     user_id  int         not null,
+    points   int         not null,
     constraint images_users_fk
         foreign key (user_id) references `photo-contest`.users (user_id)
 );
