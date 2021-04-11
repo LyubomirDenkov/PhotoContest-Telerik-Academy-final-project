@@ -42,6 +42,7 @@ public class ContestServiceImpl implements ContestService {
     public static final String ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO = "Only a participant can upload photo.";
     public static final String ADDING_IMAGES_ONLY_IN_PHASE_ONE = "You can add photos only in phase one.";
     public static final String UPDATING_CONTEST_ERROR_MESSAGE = "Only the organizer of the contest can update it.";
+    public static final String ONLY_JURY_CAN_RATE_IMAGES = "Only jury can rate images.";
 
 
     private final ContestRepository contestRepository;
@@ -221,21 +222,8 @@ public class ContestServiceImpl implements ContestService {
     public Image addImage(User user, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
-        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
-            throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
-        }
-        if (!contest.getParticipants().contains(userRepository.getUserByUserName(user.getUserCredentials().getUserName()))) {
-            throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
-        }
 
-        if (imageRepository.getById(imageId).getUploader().getId() != user.getId()) {
-            throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
-        }
-
-        if (contest.getImages().contains(imageRepository.getById(imageId))) {
-            throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
-        }
-
+        checkBeforeAddImage(contest,user,imageId);
 
         Image image = imageRepository.getById(imageId);
         Set<Image> addImage = new HashSet<>();
@@ -247,6 +235,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
      //TODO user
+
     @Override
     public void addUserToContest(User user, int contestId, int userId) {
 
@@ -290,7 +279,6 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
 
     }
-
     @Override
     public void delete(User user, int id) {
     }
@@ -306,7 +294,6 @@ public class ContestServiceImpl implements ContestService {
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_VOTING)) {
             throw new UnauthorizedOperationException(PHASE_RATING_ERROR_MESSAGE);
         }
-
 
 
         Image currentImage = imageRepository.getById(imageId);
@@ -329,7 +316,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         if(!contest.getJury().contains(user)){
-            throw new UnauthorizedOperationException("NE SI JURI WE");
+            throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
         }
     }
 
@@ -373,4 +360,23 @@ public class ContestServiceImpl implements ContestService {
         contest.setJury(jury);
     }
 
+
+    private void checkBeforeAddImage(Contest contest,User user, int imageId){
+        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
+            throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
+        }
+
+        if (!contest.getParticipants().contains(userRepository
+                .getUserByUserName(user.getUserCredentials().getUserName()))) {
+            throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
+        }
+
+        if (imageRepository.getById(imageId).getUploader().getId() != user.getId()) {
+            throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
+        }
+
+        if (contest.getImages().contains(imageRepository.getById(imageId))) {
+            throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
+        }
+    }
 }
