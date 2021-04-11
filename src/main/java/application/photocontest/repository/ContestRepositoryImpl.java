@@ -108,25 +108,7 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
-    @Override
-    public List<Type> getAllTypes() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Type ", Type.class).list();
-        }
-    }
 
-    public Type getTypeById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-
-            Type type = session.get(Type.class, id);
-
-            if (type == null) {
-                throw new EntityNotFoundException("Type", id);
-            }
-            return type;
-
-        }
-    }
 
     @Override
     public Phase getPhaseByName(String phaseName) {

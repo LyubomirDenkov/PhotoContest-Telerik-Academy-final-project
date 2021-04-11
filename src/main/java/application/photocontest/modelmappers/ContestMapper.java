@@ -5,6 +5,7 @@ import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.repository.contracts.TypeRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,14 @@ public class ContestMapper {
     private final ContestRepository contestRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final TypeRepository typeRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, TypeRepository typeRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.typeRepository = typeRepository;
     }
 
     public Contest fromDto(ContestDto contestDto, User user) {
@@ -45,7 +48,7 @@ public class ContestMapper {
         contestToUpdate.setTimeTillVoting(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne())));
         contestToUpdate.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne()).
                 plusHours(contestDto.getPhaseTwo())));
-        contestToUpdate.setType(contestRepository.getTypeById(contestDto.getTypeId()));
+        contestToUpdate.setType(typeRepository.getById(contestDto.getTypeId()));
         contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
         contestToUpdate.setPhase(contestRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
@@ -66,7 +69,7 @@ public class ContestMapper {
         contest.setTimeTillVoting(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne())));
         contest.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne()).
                 plusHours(contestDto.getPhaseTwo())));
-        contest.setType(contestRepository.getTypeById(contestDto.getTypeId()));
+        contest.setType(typeRepository.getById(contestDto.getTypeId()));
         contest.setBackgroundImage(contestDto.getBackgroundImage());
         contest.setPhase(contestRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
