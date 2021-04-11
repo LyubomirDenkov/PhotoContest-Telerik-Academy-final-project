@@ -41,54 +41,83 @@
                     <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
                          alt="Speaker 1" class="img-fluid">
 
-                    <div class="row contest-text">
-                        <div class="col">Title</div>
-                       <p th:text="*{image.getTitle()}">
-                        Ivan Ivanov
+                    <div class="container single-contest">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card-custom">
+                                    <div class="card__side card__side--front-1">
+                                        <div class="card__title card__title--1">
+                                            <h4 class="card__heading" th:text="*{image.getTitle()}">Title</h4>
+                                        </div>
+
+                                        <div class="card__details">
+                                            <div class="col-lg-6 col-md-6 card-text-custom">
+                                                <p th:text="#{image.label.uploader}">uploader</p>
+                                                <p th:text="#{image.label.story}">Story</p>
+                                            </div>
+                                            <div class="col-6 card-text-custom">
+                                                <p th:text="*{image.getUploader().getFirstName() + ' ' + image.getUploader().getLastName()}">
+                                                    Uploader Name</p>
+                                                <p th:text="*{image.getStory()}">Story</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--    <form th:fragment="image-review-form" action="#"
+                                      th:action="@{__${#httpServletRequest.requestURI}__}"
+                                      th:object="${imageReview}"
+                                      method="post">-->
+
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card-custom">
+                                    <div class="card__side card__side--front-2">
+                                        <div class="card__title card__title--1">
+                                            <h4 class="card__heading" th:text="#{image.label.rating}">Rating</h4>
+                                        </div>
+
+                                        <div class="card__details">
+
+                                            <label class="text-label-own"
+                                                   th:text="#{review.label.points}">Points</label>
+                                            <br/>
+                                            <input class="input-custom-field" type="number"
+                                                   th:field="${imageReview.points}"/>
+                                            <br>
+                                            <label class="error error-custom" th:errors="${imageReview.points}">Name
+                                                error
+                                                placeholder</label>
+                                            <br/><br/>
+
+                                            <label class="text-label-own"
+                                                   th:text="#{review.label.comment}">Comment</label>
+                                            <br/>
+                                            <input class="input-custom-field" type="text"
+                                                   th:field="${imageReview.comment}"/>
+                                            <br>
+                                            <label class="error error-custom" th:errors="${imageReview.comment}">Name
+                                                error
+                                                placeholder</label>
+                                            <br/><br/>
+
+
+                                            <li>
+                                                <a>
+                                                    <button class="glow-on-hover" type="button">SUBMIT</button>
+                                                </a></li>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="row contest-text">
-                        <div class="col">Story</div>
-                        <p  th:text="*{image.getStory()}">
-                        Ivan Ivanov
-                    </div>
-
-
-                    <div class="row contest-text">
-                        <div class="col">Uploader</div>
-                        <p th:text="*{image.getUploader().getFirstName() + ' ' + image.getUploader().getLastName()}">
-                        Ivan Ivanov
-                    </div>
-
-                    <form th:fragment="image-review-form" action="#"
-                          th:action="@{__${#httpServletRequest.requestURI}__}"
-                          th:object="${imageReview}"
-                          method="post">
-
-                        <label class="text-label-own" th:text="#{review.label.comment}">Title</label>
-                        <br/>
-                        <input class="input-custom-field" type="text" th:field="${imageReview.comment}"/>
-                        <br>
-                        <label class="error error-custom" th:errors="${imageReview.comment}">Name error
-                            placeholder</label>
-                        <br/><br/>
-
-                        <label class="text-label-own" th:text="#{review.label.points}">Title</label>
-                        <br/>
-                        <input class="input-custom-field" type="number" th:field="${imageReview.points}"/>
-                        <br>
-                        <label class="error error-custom" th:errors="${imageReview.points}">Name error
-                            placeholder</label>
-                        <br/><br/>
-
-
-        <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
-                        </form>
                 </div>
             </div>
-
         </div>
     </div>
+
+
 </section>
 
 </body>
