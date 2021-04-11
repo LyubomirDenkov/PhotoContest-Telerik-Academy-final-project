@@ -20,7 +20,7 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 @Service
 public class ContestServiceImpl implements ContestService {
 
-    private static final String     CONTEST_PHASE_PREPARING = "ongoing";
+    private static final String CONTEST_PHASE_PREPARING = "ongoing";
     private static final String CONTEST_PHASE_VOTING = "voting";
     private static final String CONTEST_PHASE_FINISHED = "finished";
     private static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
@@ -112,11 +112,11 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(id);
 
-        if (contest.getJury().contains(user)){
+        if (contest.getJury().contains(user)) {
             contest.setIsJury(true);
             return contest;
         }
-        if (contest.getParticipants().contains(user)){
+        if (contest.getParticipants().contains(user)) {
             contest.setIsParticipant(true);
         }
 
@@ -156,7 +156,7 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(UPDATING_CONTEST_ERROR_MESSAGE);
         }
         setContestJury(jurySet, contest);
-        updateParticipants(contest,participantsSet);
+        updateParticipants(contest, participantsSet);
 
 
         contestRepository.update(contest);
@@ -165,7 +165,7 @@ public class ContestServiceImpl implements ContestService {
 
     }
 
-    private void updateParticipants(Contest contest,Set<Integer> participantsSet) {
+    private void updateParticipants(Contest contest, Set<Integer> participantsSet) {
         Set<User> oldParticipants = contest.getParticipants();
 
         Set<Integer> dtoParticipants = participantsSet;
@@ -173,8 +173,6 @@ public class ContestServiceImpl implements ContestService {
         Set<User> jury = contest.getJury();
 
         Set<User> participants = new HashSet<>();
-
-
 
 
         for (Integer participant : dtoParticipants) {
@@ -223,7 +221,7 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(contestId);
 
-        checkBeforeAddImage(contest,user,imageId);
+        checkBeforeAddImage(contest, user, imageId);
 
         Image image = imageRepository.getById(imageId);
         Set<Image> addImage = new HashSet<>();
@@ -234,7 +232,7 @@ public class ContestServiceImpl implements ContestService {
         return image;
     }
 
-     //TODO user
+    //TODO user
 
     @Override
     public void addUserToContest(User user, int contestId, int userId) {
@@ -244,25 +242,12 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
         User userToJoinInContest = userRepository.getById(userId);
 
-        if (!userToJoinInContest.getUserCredentials().getUserName().equals(user.getUserCredentials().getUserName())) {
-            throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
-        }
-
-        Phase contestPhase = phaseRepository.getPhaseByName(CONTEST_PHASE_PREPARING);
-        Type contestType = typeRepository.getById(OPEN);
-
-        if (!contest.getPhase().equals(contestPhase)) {
-            throw new UnauthorizedOperationException(CONTEST_PHASE_ERROR_MESSAGE);
-        }
-        if (contest.getType().equals(contestType)) {
-            throw new UnauthorizedOperationException(CONTEST_INVITATIONAL_ONLY);
-        }
+        checkBeforeAddUser(userToJoinInContest, user, contest);
 
         Set<User> participants = contest.getParticipants();
         if (participants.contains(userToJoinInContest)) {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
-
 
         Optional<Points> points = user.getPoints().stream().findFirst();
 
@@ -279,8 +264,11 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
 
     }
+
     @Override
     public void delete(User user, int id) {
+
+
     }
 
     private Contest checkPointsContestAndImage(int contestId, int imageId, int points) {
@@ -315,7 +303,7 @@ public class ContestServiceImpl implements ContestService {
             }
         }
 
-        if(!contest.getJury().contains(user)){
+        if (!contest.getJury().contains(user)) {
             throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
         }
     }
@@ -323,7 +311,6 @@ public class ContestServiceImpl implements ContestService {
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> jurySet, Set<Integer> participantSet) {
         User user;
-
 
 
         Set<User> usersToAdd = new HashSet<>();
@@ -361,22 +348,34 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-    private void checkBeforeAddImage(Contest contest,User user, int imageId){
+    private void checkBeforeAddImage(Contest contest, User user, int imageId) {
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         }
-
         if (!contest.getParticipants().contains(userRepository
                 .getUserByUserName(user.getUserCredentials().getUserName()))) {
             throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
         }
-
         if (imageRepository.getById(imageId).getUploader().getId() != user.getId()) {
             throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
         }
-
         if (contest.getImages().contains(imageRepository.getById(imageId))) {
             throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
         }
     }
+
+    private void checkBeforeAddUser(User userToJoinInContest, User user, Contest contest) {
+
+        if (!userToJoinInContest.getUserCredentials().getUserName().equals(user.getUserCredentials().getUserName())) {
+            throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
+        }
+        if (!contest.getPhase().equals(phaseRepository.getPhaseByName(CONTEST_PHASE_PREPARING))) {
+            throw new UnauthorizedOperationException(CONTEST_PHASE_ERROR_MESSAGE);
+        }
+        if (!contest.getType().equals(typeRepository.getById(OPEN))) {
+            throw new UnauthorizedOperationException(CONTEST_INVITATIONAL_ONLY);
+        }
+
+    }
+
 }
