@@ -312,5 +312,4 @@ public class ContestsMvcController {
             throw new UnauthorizedOperationException("Not authorized");
         }
     }
-
 }

@@ -105,7 +105,6 @@ public class ContestServiceImpl implements ContestService {
         if (contest.getParticipants().contains(user)) {
             contest.setIsParticipant(true);
         }
-
         return contest;
     }
 

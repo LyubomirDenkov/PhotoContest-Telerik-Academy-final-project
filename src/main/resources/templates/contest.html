@@ -109,6 +109,16 @@
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
                                     <button class="glow-on-hover" type="button">JOIN</button></a></li>
 
+                                <li th:if="${!contest.isHasImageUploaded()}">
+                                    <a href="#open-modal">
+                                    <button type="button" class="glow-on-hover" >
+                                       UPLOAD PHOTO
+                                    </button></a></li>
+
+                                <li th:if="${contest.isHasImageUploaded()}">
+
+                                        <p>Image is uploaded, come back on phase 2 to track your image reviews</p></li>
+
                                 <li th:if="${contest.isJury()}">
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/images}">
                                     <button class="glow-on-hover" type="button">REVIEW PHOTOS</button></a></li>
@@ -141,6 +151,29 @@
         </div>
     </div>
 </section>
+
+<div id="open-modal" class="modal-window">
+
+    <div>
+        <a href="#" title="Close" class="modal-close">Close</a>
+        <h1>Title</h1>
+        <input type="text">
+        <hr>
+        <h1>Story</h1>
+        <textarea></textarea>
+        <hr>
+        <h1>Photo Url</h1>
+        <input type="url">
+        <hr>
+        <h1>Or</h1>
+        <input class="file-input" type="file">
+
+        <a href="#" target="_blank">
+            <button type="submit" class="glow-on-hover">UPLOAD</button>
+            </a>
+    </div>
+</div>
+</div>
 
 <!-- Vendor JS Files -->
 <script src="assets/vendor/aos/aos.js"></script>

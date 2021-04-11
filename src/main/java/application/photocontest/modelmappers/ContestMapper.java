@@ -48,8 +48,7 @@ public class ContestMapper {
         contestToUpdate.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne()).
                 plusHours(contestDto.getPhaseTwo())));
         contestToUpdate.setType(typeRepository.getById(contestDto.getTypeId()));
-        contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
-        contestToUpdate.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
+                contestToUpdate.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
 
 
@@ -69,8 +68,7 @@ public class ContestMapper {
         contest.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.plusDays(contestDto.getPhaseOne()).
                 plusHours(contestDto.getPhaseTwo())));
         contest.setType(typeRepository.getById(contestDto.getTypeId()));
-        contest.setBackgroundImage(contestDto.getBackgroundImage());
-        contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
+                contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
         Set<Image> images = new HashSet<>();
         contest.setImages(images);
@@ -88,8 +86,7 @@ public class ContestMapper {
         contestDto.setPhaseOne(phaseOne);
         contestDto.setPhaseTwo(phaseTwo);
         contestDto.setTypeId(contest.getId());
-        contestDto.setBackgroundImage(contest.getBackgroundImage());
-        Set<Integer> participantsFromContest = new HashSet<>();
+                Set<Integer> participantsFromContest = new HashSet<>();
         for (User participant : contest.getParticipants()) {
             participantsFromContest.add(participant.getId());
         }

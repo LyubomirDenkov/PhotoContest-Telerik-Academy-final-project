@@ -20,7 +20,6 @@ public class ContestDto {
     private static final String CATEGORY_ID_ERROR_MESSAGE = "Category Id must be positive.";
     private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
     private static final String TYPE_ID_SHOULD_BE_POSITIVE = "Type Id should be positive.";
-    private static final String BACKGROUND_IMAGE_MUST_NOT_BE_NULL = "Background image must not be null.";
 
     @NotNull
     @Size(min = 5, max = 50, message = TITLE_ERROR_MESSAGE)
@@ -40,9 +39,6 @@ public class ContestDto {
     @Positive(message = TYPE_ID_SHOULD_BE_POSITIVE)
     private int typeId;
 
-    @NotEmpty(message = BACKGROUND_IMAGE_MUST_NOT_BE_NULL)
-    private String backgroundImage;
-
     private Set<Integer> participants;
 
     private Set<Integer> jury;
@@ -53,7 +49,7 @@ public class ContestDto {
     }
 
     public ContestDto(String title, int categoryId, int phaseOne,
-                      int phaseTwo, int typeId, String backgroundImage, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
+                      int phaseTwo, int typeId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
 
@@ -63,7 +59,6 @@ public class ContestDto {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-        this.backgroundImage = backgroundImage;
     }
 
     public String getTitle() {
@@ -105,14 +100,6 @@ public class ContestDto {
 
     public void setTypeId(int typeId) {
         this.typeId = typeId;
-    }
-
-    public String getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    public void setBackgroundImage(String backgroundImage) {
-        this.backgroundImage = backgroundImage;
     }
 
     public Set<Integer> getParticipants() {
