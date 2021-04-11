@@ -5,10 +5,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
-import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.ImageRepository;
-import application.photocontest.repository.contracts.TypeRepository;
-import application.photocontest.repository.contracts.UserRepository;
+import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,13 +48,15 @@ public class ContestServiceImpl implements ContestService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final TypeRepository typeRepository;
+    private final PhaseRepository phaseRepository;
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.typeRepository = typeRepository;
+        this.phaseRepository = phaseRepository;
     }
 
     @Override
@@ -260,7 +259,7 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
         }
 
-        Phase contestPhase = contestRepository.getPhaseByName(CONTEST_PHASE_PREPARING);
+        Phase contestPhase = phaseRepository.getPhaseByName(CONTEST_PHASE_PREPARING);
         Type contestType = typeRepository.getById(OPEN);
 
         if (!contest.getPhase().equals(contestPhase)) {

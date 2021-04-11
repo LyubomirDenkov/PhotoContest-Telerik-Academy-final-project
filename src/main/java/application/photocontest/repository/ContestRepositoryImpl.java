@@ -111,24 +111,6 @@ public class ContestRepositoryImpl implements ContestRepository {
 
 
     @Override
-    public Phase getPhaseByName(String phaseName) {
-
-        try (Session session = sessionFactory.openSession()) {
-
-            Query<Phase> query = session.createQuery("from Phase where name = :name ",Phase.class);
-            query.setParameter("name",phaseName);
-
-            List<Phase> phases = query.list();
-
-            if (phases.isEmpty()) {
-                throw new EntityNotFoundException("Phase","name",phaseName);
-            }
-            return phases.get(0);
-        }
-
-    }
-
-    @Override
     public List<Contest> getOngoingContests() {
 
         try (Session session = sessionFactory.openSession()) {

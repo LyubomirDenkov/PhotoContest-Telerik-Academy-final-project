@@ -3,10 +3,7 @@ package application.photocontest.modelmappers;
 import application.photocontest.enums.ContestPhases;
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
-import application.photocontest.repository.contracts.CategoryRepository;
-import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.TypeRepository;
-import application.photocontest.repository.contracts.UserRepository;
+import application.photocontest.repository.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +18,15 @@ public class ContestMapper {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final TypeRepository typeRepository;
+    private final PhaseRepository phaseRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, TypeRepository typeRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, TypeRepository typeRepository, PhaseRepository phaseRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.typeRepository = typeRepository;
+        this.phaseRepository = phaseRepository;
     }
 
     public Contest fromDto(ContestDto contestDto, User user) {
@@ -50,7 +49,7 @@ public class ContestMapper {
                 plusHours(contestDto.getPhaseTwo())));
         contestToUpdate.setType(typeRepository.getById(contestDto.getTypeId()));
         contestToUpdate.setBackgroundImage(contestDto.getBackgroundImage());
-        contestToUpdate.setPhase(contestRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
+        contestToUpdate.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
 
 
@@ -71,7 +70,7 @@ public class ContestMapper {
                 plusHours(contestDto.getPhaseTwo())));
         contest.setType(typeRepository.getById(contestDto.getTypeId()));
         contest.setBackgroundImage(contestDto.getBackgroundImage());
-        contest.setPhase(contestRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
+        contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
         Set<Image> images = new HashSet<>();
         contest.setImages(images);

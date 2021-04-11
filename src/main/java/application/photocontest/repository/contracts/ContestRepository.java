@@ -11,8 +11,6 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>,CudR
 
     List<User> getContestJury();
 
-    Phase getPhaseByName(String phaseName);
-
     List<Contest> getOngoingContests();
 
     List<Contest> getFinishedContests();

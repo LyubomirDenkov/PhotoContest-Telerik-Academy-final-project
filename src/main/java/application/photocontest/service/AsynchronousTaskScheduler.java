@@ -6,9 +6,9 @@ import application.photocontest.models.Image;
 import application.photocontest.models.Points;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.ImageRankingDto;
-import application.photocontest.models.dto.ImageReviewDto;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
+import application.photocontest.repository.contracts.PhaseRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -28,13 +28,15 @@ public class AsynchronousTaskScheduler {
     private final ContestRepository contestRepository;
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
+    private final PhaseRepository phaseRepository;
 
 
     @Autowired
-    public AsynchronousTaskScheduler(ContestRepository contestRepository, ImageRepository imageRepository, UserRepository userRepository) {
+    public AsynchronousTaskScheduler(ContestRepository contestRepository, ImageRepository imageRepository, UserRepository userRepository, PhaseRepository phaseRepository) {
         this.contestRepository = contestRepository;
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
+        this.phaseRepository = phaseRepository;
     }
 
 
@@ -53,7 +55,7 @@ public class AsynchronousTaskScheduler {
             if (contest.getPhase().getName().equalsIgnoreCase(ContestPhases.ONGOING.toString())){
                 contestFirstPhaseEndDate = contest.getTimeTillVoting();
                 if (dateTimeNow.after(contestFirstPhaseEndDate)){
-                    contest.setPhase(contestRepository.getPhaseByName(ContestPhases.VOTING.toString()));
+                    contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.VOTING.toString()));
                     contestRepository.update(contest);
                 }
                 continue;
@@ -63,7 +65,7 @@ public class AsynchronousTaskScheduler {
 
                 contestSecondPhaseEndDate = contest.getTimeTillFinished();
                 if (dateTimeNow.after(contestSecondPhaseEndDate)){
-                    contest.setPhase(contestRepository.getPhaseByName(ContestPhases.FINISHED.toString()));
+                    contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.FINISHED.toString()));
                     contestRepository.update(contest);
                     //calculateAndRewardPoints(contest);
                 }
