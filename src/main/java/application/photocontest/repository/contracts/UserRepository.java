@@ -2,6 +2,8 @@ package application.photocontest.repository.contracts;
 
 
 import application.photocontest.models.*;
+import application.photocontest.repository.contracts.genericrepository.CudRepositoryOperations;
+import application.photocontest.repository.contracts.genericrepository.GetRepositoryOperations;
 
 import java.util.List;
 

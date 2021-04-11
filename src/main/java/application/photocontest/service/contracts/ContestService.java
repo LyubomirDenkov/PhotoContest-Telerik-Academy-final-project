@@ -2,7 +2,7 @@ package application.photocontest.service.contracts;
 
 
 import application.photocontest.models.*;
-import application.photocontest.models.dto.ContestDto;
+import application.photocontest.service.contracts.genericservice.GetServiceOperations;
 
 import java.util.List;
 import java.util.Set;

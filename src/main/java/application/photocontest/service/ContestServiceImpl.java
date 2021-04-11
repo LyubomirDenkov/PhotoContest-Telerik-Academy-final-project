@@ -50,14 +50,16 @@ public class ContestServiceImpl implements ContestService {
     private final ImageRepository imageRepository;
     private final TypeRepository typeRepository;
     private final PhaseRepository phaseRepository;
+    private final ImageReviewRepository imageReviewRepository;
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository, ImageReviewRepository imageReviewRepository) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.typeRepository = typeRepository;
         this.phaseRepository = phaseRepository;
+        this.imageReviewRepository = imageReviewRepository;
     }
 
     @Override
@@ -295,7 +297,7 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = checkPointsContestAndImage(contestId, imageId, points);
 
-        List<ImageReview> imageReviews = imageRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
+        List<ImageReview> imageReviews = imageReviewRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
 
         for (ImageReview imageReview : imageReviews) {
             if (imageReview.getImage().getId() == imageId) {

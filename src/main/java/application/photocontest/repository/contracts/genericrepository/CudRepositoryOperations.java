@@ -1,4 +1,4 @@
-package application.photocontest.repository.contracts;
+package application.photocontest.repository.contracts.genericrepository;
 
 public interface CudRepositoryOperations<T> {
     T create(T type);

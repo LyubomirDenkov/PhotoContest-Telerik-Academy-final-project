@@ -45,14 +45,6 @@ public class ImageRepositoryImpl implements ImageRepository {
         }
     }
 
-    @Override
-    public List<ImageReview> getImageRatingsByUsername(String userName) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from ImageReview where user.userCredentials.userName = :userName ",
-                    ImageReview.class).setParameter("userName", userName).list();
-
-        }
-    }
 
     @Override
     public Long getReviewPointsByImageId(int id) {

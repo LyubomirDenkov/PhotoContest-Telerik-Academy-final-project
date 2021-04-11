@@ -2,11 +2,10 @@ package application.photocontest.repository.contracts;
 
 import application.photocontest.models.Image;
 import application.photocontest.models.ImageReview;
+import application.photocontest.repository.contracts.genericrepository.CudRepositoryOperations;
 
-import java.util.List;
 
-
-public interface ImageRepository extends CudRepositoryOperations<Image>{
+public interface ImageRepository extends CudRepositoryOperations<Image> {
 
     Image getById(int id);
 
@@ -17,7 +16,7 @@ public interface ImageRepository extends CudRepositoryOperations<Image>{
 
     Long getReviewsCountByContestAndImageId(int contestId,int imageId);
 
-    List<ImageReview> getImageRatingsByUsername(String userName);
+
 
 
 

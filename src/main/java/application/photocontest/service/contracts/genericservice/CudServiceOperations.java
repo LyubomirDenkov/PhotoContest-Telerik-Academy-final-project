@@ -1,4 +1,4 @@
-package application.photocontest.service.contracts;
+package application.photocontest.service.contracts.genericservice;
 
 
 import application.photocontest.models.UserCredentials;
