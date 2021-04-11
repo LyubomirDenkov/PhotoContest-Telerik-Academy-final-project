@@ -79,6 +79,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Transactional
     @Override
     public void updatePoints(Points points) {
         try (Session session = sessionFactory.openSession()) {
