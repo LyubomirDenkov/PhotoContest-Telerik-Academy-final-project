@@ -207,6 +207,8 @@ public class ContestServiceImpl implements ContestService {
         imageReview.setComment(comment);
         imageRepository.createJurorRateEntity(imageReview);
 
+        image.setPoints(image.getPoints() + points);
+
         imageRepository.update(image);
 
     }

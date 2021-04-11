@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImageMapper {
 
-    private final ImageRepository imageRepository;
 
-    @Autowired
-    public ImageMapper(ImageRepository imageRepository) {
-        this.imageRepository = imageRepository;
+
+
+    public ImageMapper() {
+
     }
 
 

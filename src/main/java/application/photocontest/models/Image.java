@@ -26,18 +26,22 @@ public class Image {
     @Column(name = "image")
     private String url;
 
+    @Column(name = "points")
+    private int points;
+
 
     public Image() {
 
     }
 
 
-    public Image(int id, String title, String story, User uploader, String url) {
+    public Image(int id, String title, String story, User uploader, String url, int points) {
         this.id = id;
         this.title = title;
         this.story = story;
         this.uploader = uploader;
         this.url = url;
+        this.points = points;
     }
 
     public User getUploader() {
@@ -80,16 +84,24 @@ public class Image {
         this.url = url;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Image)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUrl().equals(image.getUrl());
+        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUploader().equals(image.getUploader()) && getUrl().equals(image.getUrl()) && getPoints() == image.getPoints();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getStory(), getUrl());
+        return Objects.hash(getId(), getTitle(), getStory(), getUploader(), getUrl(), getPoints());
     }
 }
