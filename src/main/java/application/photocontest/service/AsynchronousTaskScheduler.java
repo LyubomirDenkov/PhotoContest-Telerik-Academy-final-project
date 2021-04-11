@@ -167,22 +167,22 @@ public class AsynchronousTaskScheduler {
         int pointsForPositionTwo = 35;
         int pointsForPositionThree = 20;
 
-        rewardAndUpdateUser(pointsForPositionOne,firstPlace);
-        rewardAndUpdateUser(pointsForPositionTwo,secondPlace);
-        rewardAndUpdateUser(pointsForPositionThree,thirdPlace);
+        rewardAndUpdateUser(pointsForPositionOne,firstPlace,"First");
+        rewardAndUpdateUser(pointsForPositionTwo,secondPlace,"Second");
+        rewardAndUpdateUser(pointsForPositionThree,thirdPlace,"Third");
 
     }
 
-    private void rewardAndUpdateUser(int pointsReward,List<Image> images){
+    private void rewardAndUpdateUser(int pointsReward,List<Image> images,String position){
 
-        int pointsForPositionThree = pointsReward;
+        int pointsRewardByPosition = pointsReward;
         if (images.size() > 1){
-            pointsForPositionThree -= 10;
+            pointsRewardByPosition -= 10;
         }
         for (int i = 0; i < images.size(); i++) {
             User user = userRepository.getUserByPictureId(images.get(i).getId());
             Optional<Points> points = user.getPoints().stream().findFirst();
-            points.get().setPoints(points.get().getPoints() + pointsForPositionThree);
+            points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
             userRepository.updatePoints(points.get());
         }
     }

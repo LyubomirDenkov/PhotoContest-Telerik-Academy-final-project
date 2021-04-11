@@ -52,6 +52,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByUserName(userName);
     }
 
+    @Override
+    public List<User> getLeaderboard(User user) {
+
+        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+
+        List<User> leaderboard = userRepository.getLeaderboard();
+
+        if (leaderboard.size() > 20 ){
+            return leaderboard.subList(0,20);
+        }
+
+        return leaderboard;
+    }
+
 
     @Override
     public User create(User user, Optional<MultipartFile> file, Optional<String> url) throws IOException {

@@ -138,6 +138,15 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public List<User> getLeaderboard() {
+
+        try (Session session = sessionFactory.openSession()) {
+
+            return session.createQuery("select u from User u join u.points as points " +
+                    "order by points.points desc ", User.class).list();
+        }
+    }
 
 
     @Override

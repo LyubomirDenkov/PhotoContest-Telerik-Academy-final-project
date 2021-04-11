@@ -12,6 +12,8 @@ public interface UserService extends GetServiceOperations<User> {
 
     User getUserByUserName(String userName);
 
+    List<User> getLeaderboard(User user);
+
     User update(User user,User userToUpdate, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
     void delete(User user,int id);

@@ -40,7 +40,7 @@ public class UserMvcController {
     public String getUsersLeaderboard(Model model, HttpSession session){
         User user = authenticationHelper.tryGetUser(session);
         model.addAttribute("currentUser",user);
-        model.addAttribute("users",userService.getAllUsers());
+        model.addAttribute("users",userService.getLeaderboard(user));
         return "leaderboard";
     }
 
