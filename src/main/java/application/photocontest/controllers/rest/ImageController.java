@@ -56,7 +56,7 @@ public class ImageController {
     }
 
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
         User user = authenticationHelper.tryGetUser(headers);

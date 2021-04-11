@@ -7,9 +7,13 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
+import application.photocontest.service.contracts.ImgurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,15 +32,17 @@ public class ContestServiceImpl implements ContestService {
     private final TypeRepository typeRepository;
     private final PhaseRepository phaseRepository;
     private final ImageReviewRepository imageReviewRepository;
+    private final ImgurService imgurService;
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository, ImageReviewRepository imageReviewRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository, ImageReviewRepository imageReviewRepository, ImgurService imgurService) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.typeRepository = typeRepository;
         this.phaseRepository = phaseRepository;
         this.imageReviewRepository = imageReviewRepository;
+        this.imgurService = imgurService;
     }
 
     @Override
@@ -91,6 +97,7 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(id);
 
+
         if (contest.getJury().contains(user)) {
             contest.setIsJury(true);
             return contest;
@@ -103,7 +110,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest create(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantSet) {
+    public Contest create(User user, Contest contest, Set<Integer> jurySet,
+                          Set<Integer> participantSet, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
 
         boolean ifContestTitleExist = true;
@@ -120,6 +128,9 @@ public class ContestServiceImpl implements ContestService {
 
         setContestJury(jurySet, contest);
 
+        String contestBackground = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        contest.setBackgroundImage(contestBackground);
+
 
         Contest contestToCreate = contestRepository.create(contest);
         addParticipantsToContestAndPoints(contestToCreate, jurySet, participantSet);
@@ -128,7 +139,8 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet) {
+    public Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet,
+                          Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
 
         if (!user.getUserCredentials().getUserName().equals(contest.getUser().getUserCredentials().getUserName())) {
@@ -137,6 +149,11 @@ public class ContestServiceImpl implements ContestService {
         setContestJury(jurySet, contest);
         updateParticipants(contest, participantsSet);
 
+
+        if (file.isPresent() || url.isPresent()) {
+            String backgroundImage = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+            contest.setBackgroundImage(backgroundImage);
+        }
 
         contestRepository.update(contest);
 
@@ -211,8 +228,6 @@ public class ContestServiceImpl implements ContestService {
         return image;
     }
 
-    //TODO user
-
     @Override
     public void addUserToContest(User user, int contestId, int userId) {
 
@@ -274,7 +289,8 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = checkPointsContestAndImage(contestId, imageId, points);
 
-        List<ImageReview> imageReviews = imageReviewRepository.getImageRatingsByUsername(user.getUserCredentials().getUserName());
+        List<ImageReview> imageReviews = imageReviewRepository
+                .getImageRatingsByUsername(user.getUserCredentials().getUserName());
 
         for (ImageReview imageReview : imageReviews) {
             if (imageReview.getImage().getId() == imageId) {

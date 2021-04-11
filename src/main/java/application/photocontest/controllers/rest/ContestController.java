@@ -55,7 +55,7 @@ public class ContestController {
     }
 
     @GetMapping("/ongoing")
-    public List<Contest> getOngoingContests(){
+    public List<Contest> getOngoingContests() {
         return contestService.getOngoingContests();
     }
 
@@ -87,20 +87,24 @@ public class ContestController {
             Contest contest = contestMapper.fromDto(contestDto, user);
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
-            return contestService.create(user, contest,jurySet,participantsSet);
+            return contestService.create(user, contest, jurySet, participantsSet, file, url);
 
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
 
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
     @ApiOperation(value = "Update contest")
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data", "application/json"})
     public Contest update(@RequestHeader HttpHeaders headers, @PathVariable int id,
-                          @Valid @RequestBody ContestDto contestDto) {
+                          @Valid @RequestPart("dto") ContestDto contestDto,
+                          @RequestParam(name = "file") Optional<MultipartFile> file,
+                          @RequestParam(name = "url") Optional<String> url) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
@@ -108,13 +112,15 @@ public class ContestController {
             Contest contestToUpdate = contestMapper.fromDto(id, contestDto);
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
-            return contestService.update(user, contestToUpdate,jurySet,participantsSet);
+            return contestService.update(user, contestToUpdate, jurySet, participantsSet, file, url);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
@@ -134,6 +140,7 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @ApiOperation(value = "Add image to contest")
     @PutMapping("/{contestId}/image/{imageId}")
     public Image addImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
@@ -141,7 +148,7 @@ public class ContestController {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-           return contestService.addImage(user, contestId, imageId);
+            return contestService.addImage(user, contestId, imageId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -161,8 +168,8 @@ public class ContestController {
         try {
             int points = imageReviewDto.getPoints();
             String comment = imageReviewDto.getComment();
-             contestService.rateImage(user,contestId, imageId,points, comment);
-        }  catch (EntityNotFoundException e) {
+            contestService.rateImage(user, contestId, imageId, points, comment);
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());

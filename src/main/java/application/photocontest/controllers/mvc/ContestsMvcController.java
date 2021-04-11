@@ -18,10 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -131,7 +134,9 @@ public class ContestsMvcController {
     }
 
     @PostMapping("/new")
-    public String handleNewContestPage(@Valid @ModelAttribute("contest") ContestDto contestDto, HttpSession session) {
+    public String handleNewContestPage(@Valid @ModelAttribute("contest") ContestDto contestDto, HttpSession session,
+                                       @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
+                                       @RequestParam(value = "url", required = false) Optional<String> url) {
 
 
         try {
@@ -142,11 +147,11 @@ public class ContestsMvcController {
             Contest contest = contestMapper.fromDto(contestDto, currentUser);
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
-            contestService.create(currentUser, contest, jurySet, participantsSet);
+            contestService.create(currentUser, contest, jurySet, participantsSet,file,url);
 
             return "redirect:/contests";
 
-        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
             return "error";
         }
     }
@@ -172,7 +177,9 @@ public class ContestsMvcController {
     public String updateContest(@PathVariable int id,
                                 @Valid @ModelAttribute("contest") ContestDto contestDto,
                                 BindingResult errors,
-                                Model model, HttpSession session) {
+                                Model model, HttpSession session,
+                                @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
+                                @RequestParam(value = "url", required = false) Optional<String> url) {
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
@@ -183,10 +190,10 @@ public class ContestsMvcController {
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
             Contest contest = contestMapper.fromDto(id, contestDto);
-            contestService.update(currentUser, contest, jurySet, participantsSet);
+            contestService.update(currentUser, contest, jurySet, participantsSet,file,url);
 
             return "redirect:/contests";
-        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException | IOException e) {
             return "error";
         }
     }

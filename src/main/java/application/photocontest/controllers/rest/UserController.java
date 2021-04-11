@@ -68,12 +68,12 @@ public class UserController {
             return userService.create(user, file, url);
         } catch (DuplicateEntityException | IOException | UnsupportedOperationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
-    @PutMapping(value = "/{id}",consumes = {"multipart/form-data", "application/json"})
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data", "application/json"})
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestPart("dto") UpdateUserDto userDto,
                        @RequestParam(name = "file") Optional<MultipartFile> file,
                        @RequestParam(name = "url") Optional<String> url) {
@@ -81,14 +81,14 @@ public class UserController {
         User user = authenticationHelper.tryGetUser(headers);
         try {
             User userToUpdate = userMapper.fromDto(id, userDto);
-            return userService.update(user, userToUpdate,file,url);
+            return userService.update(user, userToUpdate, file, url);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException | UnsupportedOperationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
