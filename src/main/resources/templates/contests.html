@@ -68,19 +68,24 @@
 
 
 <section id="speakers">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="section-header">
             <h2>Your Contests</h2>
         </div>
-
-        <li><a class="nav-link" href="#"
-               th:href="@{/contests/finished}">  <button class="glow-on-hover" type="button">Finished Contests</button></a></li></a>
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+            <li><a class="nav-link"  href="#"
+               th:href="@{/contests/finished}">  <button class="glow-on-hover" type="button" >Finished Contests</button></a></li></a>
         </li>
 
         <ul th:if="${currentUser.isOrganizer()}">
             <li><a class="nav-link" href="#"
 
-                   th:href="@{/contests/voting}">  <button class="glow-on-hover" type="button">Voting Contests</button></a></li></a>
+                   th:href="@{/contests/voting}">  <button class="glow-on-hover" type="button" >Voting Contests</button></a></li></a>
+            </li>
+            <li><a class="nav-link" href="#"
+
+                   th:href="@{/contests/new}">  <button class="glow-on-hover" type="button" >Create New</button></a></li></a>
             </li>
         </ul>
 
@@ -89,15 +94,17 @@
             <li th:if="*{point.getPoints() > 150}"
             ><a class="nav-link" href="#"
 
-                   th:href="@{/contests/voting}">Voting Contests</a>
+                   th:href="@{/contests/voting}"><button class="glow-on-hover" type="button" >Voting Contests</button></a>
             </li>
         </ul>
 
         <ul th:if="${currentUser.isUser()}">
-            <li><a class="nav-link" href="#"
-                   th:href="@{/contests/own}">  <button class="glow-on-hover" type="button">Voting Contests</button></a></li></a>
+            <li><a class="nav-link"  href="#"
+                   th:href="@{/contests/own}">  <button class="glow-on-hover" type="button" >Voting Contests</button></a></li></a>
             </li>
         </ul>
+        </div>
+    </div>
 
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
