@@ -64,13 +64,36 @@
 <section id="speakers">
     <div class="container" data-aos="fade-up">
         <div class="section-header">
-            <h2>Your Contests</h2>
+            <h2>Finished Contests</h2>
         </div>
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/contests/ongoing}">  <button class="glow-on-hover" type="button">Ongoing Contests</button></a></li></a>
+        </li>
+
+        <ul th:if="${currentUser.isOrganizer()}">
+            <li><a class="nav-link" href="#"
+
+
+                   th:href="@{/contests/voting}">  <button class="glow-on-hover" type="button">Voting Contests</button></a></li></a>
+            </li>
+        </ul>
+
+        <ul th:if="${currentUser.isUser()}"
+            th:each="point : ${currentUser.getPoints()}">
+            <li th:if="point.getPoints() > 150"
+            ><a class="nav-link" href="#"
+
+                th:href="@{/contests/voting}">  <button class="glow-on-hover" type="button">Voting Contests</button></a></li></a>
+            </li>
+        </ul>
 
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
-                <ul th:if="${contest.getParticipants().contains(currentUser) && currentUser.isUser()
-                 && contest.getPhase().getName().equalsIgnoreCase('finished')}">
+                <ul th:if="${contest.getParticipants().contains(currentUser)
+                 && contest.getPhase().getName().equalsIgnoreCase('finished')
+                 || contest.getJury().contains(currentUser)
+                   && contest.getPhase().getName().equalsIgnoreCase('finished') }">
                         <div class="speaker" data-aos="fade-up" data-aos-delay="100">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
                                  alt="Speaker 1" class="img-fluid">

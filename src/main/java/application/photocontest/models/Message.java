@@ -1,13 +1,11 @@
 package application.photocontest.models;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "mailbox")
 public class Message {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +23,6 @@ public class Message {
 
     @Column(name = "is_seen")
     private boolean isSeen;
-
 
     public Message() {
     }
@@ -46,14 +43,6 @@ public class Message {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -62,20 +51,28 @@ public class Message {
         this.message = message;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public boolean isSeen() {
         return isSeen;
     }
 
     public void setSeen(boolean seen) {
         isSeen = seen;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override

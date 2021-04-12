@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
+@SuppressWarnings("ALL")
 @Entity
 @Table(name = "users")
 public class User {
@@ -52,6 +53,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "points_id"))
     private Set<Points> points;
 
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_mails",
@@ -62,8 +64,7 @@ public class User {
     public User() {
     }
 
-    public User(int id, UserCredentials userCredentials, String firstName, String lastName,
-                String profileImage, Set<Role> roles, Set<Image> images, Set<Points> points) {
+    public User(int id, UserCredentials userCredentials, String firstName, String lastName, String profileImage, Set<Role> roles, Set<Image> images, Set<Points> points) {
         this.id = id;
         this.userCredentials = userCredentials;
         this.firstName = firstName;
@@ -72,9 +73,7 @@ public class User {
         this.roles = roles;
         this.images = images;
         this.points = points;
-
     }
-
 
     public int getId() {
         return id;
@@ -141,7 +140,7 @@ public class User {
         this.points = points;
     }
 
-    @JsonIgnore
+
     public Set<Message> getMessages() {
         return messages;
     }

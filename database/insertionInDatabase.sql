@@ -206,13 +206,13 @@ VALUES (5,1),
 
 INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
 VALUES
-('Dogs',1,'2021-04-20 18:52:35','2021-04-21 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-12 18:52:35','2021-04-13 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-25 18:52:35','2021-04-16 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1);
+('Dogs',1,'2021-04-20 18:52:35','2021-04-21 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-10 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-11 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1);
 
 INSERT INTO user_points(user_id, points_id)
 VALUES (5, 1),

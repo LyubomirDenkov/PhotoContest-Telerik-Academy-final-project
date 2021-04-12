@@ -73,38 +73,29 @@
             <h2>Your Contests</h2>
         </div>
         <li><a class="nav-link" href="#"
-               th:href="@{/contests/finished}">Finished Contests</a>
+               th:href="@{/contests/finished}">  <button class="glow-on-hover" type="button">Finished Contests</button></a></li></a>
         </li>
 
-        <li><a class="nav-link" href="#"
-               th:href="@{/contests/voting}">Voting Contests</a>
-        </li>
+        <ul th:if="${currentUser.isOrganizer()}">
+            <li><a class="nav-link" href="#"
 
-        <div class="row" >
-            <div class="col-lg-6 col-md-6"  th:each="contest : ${contests}">
-                <ul th:if="${contest.isJury()}">
-                    <ul th:if="${contest.getPhase().getName().equalsIgnoreCase('ongoing')}">
-                        <div class="speaker" data-aos="fade-up" data-aos-delay="100">
-                            <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
-                                 alt="Speaker 1" class="img-fluid">
-                            <div class="contest-type">
-                                <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">
-                                    Open
-                                </div>
-                            </div>
-                            <div class="details">
-                                <h3 th:text="*{contest.getCategory().getName()}"></h3>
-                                <p th:text="*{contest.getTimeTillFinished()}">Quas alias incidunt</p>
-                                <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
-                                <div class="social">
-                                    <a class="buy-tickets scrollto" th:href="@{/contests/{id}(id=${contest.getId()})}"
-                                       href="#">Rate</a>
-                                </div>
-                            </div>
-                        </div>
-                    </ul>
-                </ul>
-                <ul th:if="${!contest.isJury()}">
+                   th:href="@{/contests/voting}">  <button class="glow-on-hover" type="button">Voting Contests</button></a></li></a>
+            </li>
+        </ul>
+
+
+
+        <ul th:if="${currentUser.isUser()}"
+            th:each="point : ${currentUser.getPoints()}">
+            <li th:if="*{point.getPoints() > 150}"
+            ><a class="nav-link" href="#"
+
+                   th:href="@{/contests/voting}">Voting Contests</a>
+            </li>
+        </ul>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
                     <ul th:if="${contest.getPhase().getName().equalsIgnoreCase('ongoing')}">
                         <div class="speaker" data-aos="fade-up" data-aos-delay="100">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
