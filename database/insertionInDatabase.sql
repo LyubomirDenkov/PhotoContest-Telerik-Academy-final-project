@@ -178,7 +178,41 @@ VALUES (20),
        (0);
 
 INSERT INTO images (title, story, image, user_id, points)
-VALUES ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 1, 0);
+VALUES ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 5, 5),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 6, 10),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 7, 15),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 8, 20),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 9, 14),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 10, 17),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 11, 21),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 12, 6),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 13, 3),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 14, 5),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 15, 1);
+
+
+INSERT INTO users_images(user_id, image_id)
+VALUES (5,1),
+       (6,2),
+       (7,3),
+       (8,4),
+       (9,5),
+       (10,6),
+       (11,7),
+       (12,8),
+       (13,9),
+       (14,10),
+       (15,11);
+
+INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
+VALUES
+('Dogs',1,'2021-04-20 18:52:35','2021-04-21 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-12 18:52:35','2021-04-13 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-25 18:52:35','2021-04-16 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Dogs',1,'2021-04-24 18:52:35','2021-04-15 18:52:35',4,1,'https://i.imgur.com/JD4Auj5.png',1);
 
 INSERT INTO user_points(user_id, points_id)
 VALUES (5, 1),

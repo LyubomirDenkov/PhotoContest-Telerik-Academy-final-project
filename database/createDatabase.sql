@@ -30,7 +30,7 @@ create or replace table mailbox
         primary key,
     title      text                 not null,
     message    longtext             not null,
-    date       date                 not null,
+    date       text                 not null,
     is_seen    tinyint(1) default 0 not null
 );
 
