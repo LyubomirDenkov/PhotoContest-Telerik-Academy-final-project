@@ -67,7 +67,7 @@ public class Contest {
     private Set<Image> images;
 
     @Column(name = "is_jury")
-    private boolean userIsJury;
+    private boolean isJury;
 
     @Column(name = "is_participant")
     private boolean isParticipant;
@@ -91,7 +91,7 @@ public class Contest {
                    Set<User> participants,
                    Set<User> jury,
                    Set<Image> images,
-                   boolean userIsJury,
+                   boolean isJury,
                    boolean isParticipant,
                    boolean hasImageUploaded) {
         this.id = id;
@@ -106,7 +106,7 @@ public class Contest {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-        this.userIsJury = userIsJury;
+        this.isJury = isJury;
         this.isParticipant = isParticipant;
         this.hasImageUploaded = hasImageUploaded;
     }
@@ -207,12 +207,12 @@ public class Contest {
         this.images = images;
     }
 
-    public boolean isUserIsJury() {
-        return userIsJury;
+    public boolean isJury() {
+        return isJury;
     }
 
-    public void setUserIsJury(boolean userIsJury) {
-        this.userIsJury = userIsJury;
+    public void setIsJury(boolean userIsJury) {
+        this.isJury = userIsJury;
     }
 
     public boolean isParticipant() {
@@ -236,11 +236,11 @@ public class Contest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contest contest = (Contest) o;
-        return getId() == contest.getId() && isUserIsJury() == contest.isUserIsJury() && isParticipant() == contest.isParticipant() && isHasImageUploaded() == contest.isHasImageUploaded() && getTitle().equals(contest.getTitle()) && getCategory().equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished().equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) && getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) && getPhase().equals(contest.getPhase());
+        return getId() == contest.getId() && isJury() == contest.isJury() && isParticipant() == contest.isParticipant() && isHasImageUploaded() == contest.isHasImageUploaded() && getTitle().equals(contest.getTitle()) && getCategory().equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished().equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) && getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) && getPhase().equals(contest.getPhase());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(), getType(), getBackgroundImage(), getPhase(), isUserIsJury(), isParticipant(), isHasImageUploaded());
+        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(), getType(), getBackgroundImage(), getPhase(), isJury(), isParticipant(), isHasImageUploaded());
     }
 }

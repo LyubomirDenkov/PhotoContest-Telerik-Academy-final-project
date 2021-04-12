@@ -21,6 +21,8 @@ public class ImgurServiceImpl implements ImgurService {
     private static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
     private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
 
+    private static final int SUCCESS_STATUS_CODE = 200;
+
 
     public ImgurServiceImpl() {
     }
@@ -42,11 +44,7 @@ public class ImgurServiceImpl implements ImgurService {
             URL testUrl = new URL(url.get());
             HttpURLConnection huc = (HttpURLConnection) testUrl.openConnection();
 
-            int responseCode = huc.getResponseCode();
-
-            if (responseCode != 200){
-                throw new UnsupportedOperationException(URL_IS_NOT_VALID_ERROR_MESSAGE);
-            }
+            validateUrlIsImage(huc.getResponseCode());
 
             image = url.get();
 
@@ -65,9 +63,18 @@ public class ImgurServiceImpl implements ImgurService {
                 .build();
 
         Response response = client.newCall(request).execute();
+
+        validateUrlIsImage(response.code());
+
         JSONObject jsonObject = new JSONObject(response.body().string());
+
         JSONObject jsonObjectData = jsonObject.getJSONObject("data");
         return jsonObjectData.getString("link");
     }
 
+    private void validateUrlIsImage(int statusCode){
+        if (statusCode != SUCCESS_STATUS_CODE){
+            throw new UnsupportedOperationException(URL_IS_NOT_VALID_ERROR_MESSAGE);
+        }
+    }
 }

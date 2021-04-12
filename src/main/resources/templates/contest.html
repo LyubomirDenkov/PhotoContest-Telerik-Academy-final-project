@@ -109,7 +109,7 @@
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
                                     <button class="glow-on-hover" type="button">JOIN</button></a></li>
 
-                                <li th:if="${!contest.isHasImageUploaded()}">
+                                <li th:if="${!contest.isHasImageUploaded() && !currentUser.isOrganizer()}">
                                     <a href="#open-modal">
                                     <button type="button" class="glow-on-hover" >
                                        UPLOAD PHOTO
@@ -119,7 +119,7 @@
 
                                         <p>Image is uploaded, come back on phase 2 to track your image reviews</p></li>
 
-                                <li th:if="${contest.isJury()}">
+                                <li th:if="${contest.isJury() && contest.getPhase().getId() == 2}">
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/images}">
                                     <button class="glow-on-hover" type="button">REVIEW PHOTOS</button></a></li>
 

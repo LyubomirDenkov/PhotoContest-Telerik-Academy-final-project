@@ -1,6 +1,7 @@
 package application.photocontest.service;
 
 import application.photocontest.enums.ContestPhases;
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Contest;
 import application.photocontest.models.Image;
 import application.photocontest.models.Points;
@@ -21,8 +22,9 @@ import java.util.*;
 
 @Component
 @EnableScheduling
-public class AsynchronousTaskScheduler implements Runnable{
+public class AsynchronousTaskScheduler implements Runnable {
 
+    private static final String FIRST = "first";
     private final int DEFAULT_SCORE = 3;
 
     private final ContestRepository contestRepository;
@@ -48,39 +50,39 @@ public class AsynchronousTaskScheduler implements Runnable{
     public void run() {
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
                 " INFO TASK START");
-        /*List<Contest> contests = contestRepository.getAll();
+        List<Contest> contests = contestRepository.getAll();
 
         for (Contest contest : contests) {
             changeContestPhaseWhenEndPhaseDateIsReached(contest);
-        }*/
+        }
 
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
                 " INFO TASK DONE SUCCESSFULLY!!");
     }
 
-    private void changeContestPhaseWhenEndPhaseDateIsReached(Contest contest){
+    private void changeContestPhaseWhenEndPhaseDateIsReached(Contest contest) {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         Date dateTimeNow = java.sql.Timestamp.valueOf(localDateTime);
         Date contestFirstPhaseEndDate;
         Date contestSecondPhaseEndDate;
 
-        if (contest.getPhase().getName().equalsIgnoreCase(ContestPhases.ONGOING.toString())){
+        if (contest.getPhase().getName().equalsIgnoreCase(ContestPhases.ONGOING.toString())) {
             contestFirstPhaseEndDate = contest.getTimeTillVoting();
-            if (dateTimeNow.after(contestFirstPhaseEndDate)){
+            if (dateTimeNow.after(contestFirstPhaseEndDate)) {
                 contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.VOTING.toString()));
                 contestRepository.update(contest);
             }
             return;
         }
 
-        if(contest.getPhase().getName().equalsIgnoreCase(ContestPhases.VOTING.toString())){
+        if (contest.getPhase().getName().equalsIgnoreCase(ContestPhases.VOTING.toString())) {
 
             contestSecondPhaseEndDate = contest.getTimeTillFinished();
-            if (dateTimeNow.after(contestSecondPhaseEndDate)){
+            if (dateTimeNow.after(contestSecondPhaseEndDate)) {
                 contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.FINISHED.toString()));
                 contestRepository.update(contest);
-                //calculateAndRewardPoints(contest);
+                calculateAndRewardPointsToImages(contest);
             }
         }
     }
@@ -94,10 +96,16 @@ public class AsynchronousTaskScheduler implements Runnable{
 
         List<Image> imageRankingList = new ArrayList<>();
 
-
+        boolean hasReviews = true;
         for (Image image : images) {
 
-            long imageReviewsCount = imageRepository.getReviewsCountByContestAndImageId(contest.getId(), image.getId());
+            long imageReviewsCount = 0;
+
+            try {
+                imageReviewsCount = imageRepository.getReviewsCountByContestAndImageId(contest.getId(), image.getId());
+            } catch (EntityNotFoundException e) {
+                hasReviews = false;
+            }
             long notReviewedCount = 0;
 
             if (imageReviewsCount < juryCount) {
@@ -115,7 +123,7 @@ public class AsynchronousTaskScheduler implements Runnable{
         calculateRewardPointsForFirstThreePlaces(imageRankingList);
     }
 
-    private void calculateRewardPointsForFirstThreePlaces(List<Image> imageRankingList){
+    private void calculateRewardPointsForFirstThreePlaces(List<Image> imageRankingList) {
 
         List<Image> firstPlace = new ArrayList<>();
         List<Image> secondPlace = new ArrayList<>();
@@ -130,35 +138,35 @@ public class AsynchronousTaskScheduler implements Runnable{
 
             if (position > 3) break;
 
-            switch (position){
+            switch (position) {
                 case 1:
 
-                    if (firstPointer > secondPointer){
+                    if (firstPointer > secondPointer) {
 
-                        if (firstPointer >= (secondPointer * 2)){
+                        if (firstPointer >= (secondPointer * 2)) {
                             isFirstWithDoubleScoreThanSecond = true;
                         }
 
                         firstPlace.add(imageRankingList.get(i));
                         position++;
-                    }else {
+                    } else {
                         firstPlace.add(imageRankingList.get(i));
                     }
 
                     break;
                 case 2:
-                    if (firstPointer > secondPointer){
+                    if (firstPointer > secondPointer) {
                         secondPlace.add(imageRankingList.get(i));
                         position++;
-                    }else {
+                    } else {
                         secondPlace.add(imageRankingList.get(i));
                     }
                     break;
                 case 3:
-                    if (firstPointer > secondPointer){
+                    if (firstPointer > secondPointer) {
                         thirdPlace.add(imageRankingList.get(i));
                         position++;
-                    }else {
+                    } else {
                         thirdPlace.add(imageRankingList.get(i));
                     }
                     break;
@@ -166,27 +174,32 @@ public class AsynchronousTaskScheduler implements Runnable{
         }
 
         int pointsForPositionOne = 50;
-        if (isFirstWithDoubleScoreThanSecond){
+        if (isFirstWithDoubleScoreThanSecond) {
             pointsForPositionOne += 25;
         }
         int pointsForPositionTwo = 35;
         int pointsForPositionThree = 20;
 
-        rewardAndUpdateUser(pointsForPositionOne,firstPlace,"First");
-        rewardAndUpdateUser(pointsForPositionTwo,secondPlace,"Second");
-        rewardAndUpdateUser(pointsForPositionThree,thirdPlace,"Third");
+        rewardAndUpdateUser(pointsForPositionOne, firstPlace);
+        rewardAndUpdateUser(pointsForPositionTwo, secondPlace);
+        rewardAndUpdateUser(pointsForPositionThree, thirdPlace);
 
     }
 
-    private void rewardAndUpdateUser(int pointsReward,List<Image> images,String position){
+
+    private void rewardAndUpdateUser(int pointsReward, List<Image> images) {
 
         int pointsRewardByPosition = pointsReward;
-        if (images.size() > 1){
+        if (images.size() > 1) {
             pointsRewardByPosition -= 10;
         }
+
         for (int i = 0; i < images.size(); i++) {
             User user = userRepository.getUserByPictureId(images.get(i).getId());
             Optional<Points> points = user.getPoints().stream().findFirst();
+            if (points.isEmpty()) {
+                continue;
+            }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
             userRepository.updatePoints(points.get());
         }

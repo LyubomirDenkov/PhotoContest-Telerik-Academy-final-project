@@ -50,9 +50,12 @@ public class ImageController {
                         @RequestPart("dto") ImageDto dto) throws IOException {
 
         User user = authenticationHelper.tryGetUser(headers);
-
         Image image = imageMapper.fromDto(user, dto);
-        return imageService.create(user, image,file,url);
+        try {
+            return imageService.create(user, image, file, url);
+        }catch (IOException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage());
+        }
     }
 
 

@@ -68,8 +68,6 @@ public class UserController {
             return userService.create(user, file, url);
         } catch (DuplicateEntityException | IOException | UnsupportedOperationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
@@ -84,12 +82,10 @@ public class UserController {
             return userService.update(user, userToUpdate, file, url);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (IllegalArgumentException | DuplicateEntityException | UnsupportedOperationException e) {
+        } catch (IllegalArgumentException | DuplicateEntityException | UnsupportedOperationException | IOException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 

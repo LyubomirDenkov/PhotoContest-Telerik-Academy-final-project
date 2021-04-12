@@ -148,14 +148,18 @@ public class ContestController {
                                       @PathVariable int contestId,
                                       @RequestPart(value = "dto") ImageDto dto,
                                       @RequestParam(name = "file") Optional<MultipartFile> file,
-                                      @RequestParam(name = "url") Optional<String> url) throws IOException {
+                                      @RequestParam(name = "url") Optional<String> url) {
 
         User user = authenticationHelper.tryGetUser(headers);
         Image image = imageMapper.fromDto(user, dto);
         try {
             return contestService.uploadImageToContest(user, image, contestId, file, url);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (IOException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 

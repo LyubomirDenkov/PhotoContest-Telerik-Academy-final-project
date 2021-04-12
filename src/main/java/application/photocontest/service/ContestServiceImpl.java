@@ -115,13 +115,19 @@ public class ContestServiceImpl implements ContestService {
 
 
         if (contest.getJury().contains(user)) {
-            contest.setUserIsJury(true);
+            contest.setIsJury(true);
             return contest;
         }
         if (contest.getParticipants().contains(user)) {
             contest.setParticipant(true);
         }
 
+        try{
+            contestRepository.getContestByImageUploaderId(user.getId());
+            contest.setHasImageUploaded(true);
+        }catch (EntityNotFoundException e){
+            contest.setHasImageUploaded(false);
+        }
 
         return contest;
     }
