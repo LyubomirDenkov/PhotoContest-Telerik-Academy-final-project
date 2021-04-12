@@ -15,6 +15,8 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     List<Contest> getOngoingContests();
 
+    List<Contest> getVotingContests();
+
     List<Contest> getFinishedContests();
 
 }

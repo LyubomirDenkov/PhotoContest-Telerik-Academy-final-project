@@ -68,29 +68,56 @@
                th:href="@{/contests/finished}">Finished Contests</a>
         </li>
 
+
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
-                <ul th:if="${contest.getParticipants().contains(currentUser) && currentUser.isUser()}">
+                <ul th:if="${contest.isJury()}">
                     <ul th:if="${!contest.getPhase().getName().equalsIgnoreCase('finished')}">
-                <div class="speaker" data-aos="fade-up" data-aos-delay="100">
-                    <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
-                         alt="Speaker 1" class="img-fluid">
-                    <div class="contest-type">
-                        <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">Open</div>
-                    </div>
-                    <div class="details">
-                        <h3 th:text="*{contest.getCategory().getName()}"></h3>
-                        <p th:text="*{contest.getTimeTillFinished()}" >Quas alias incidunt</p>
-                        <p th:text="*{contest.getPhase().getName().toUpperCase()}" >Quas alias incidunt</p>
-                        <div class="social">
-                            <a class="buy-tickets scrollto" th:href="@{/contests/{id}(id=${contest.getId()})}" href="#">Enroll</a>
+                        <div class="speaker" data-aos="fade-up" data-aos-delay="100">
+                            <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
+                                 alt="Speaker 1" class="img-fluid">
+                            <div class="contest-type">
+                                <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">
+                                    Open
+                                </div>
+                            </div>
+                            <div class="details">
+                                <h3 th:text="*{contest.getCategory().getName()}"></h3>
+                                <p th:text="*{contest.getTimeTillFinished()}">Quas alias incidunt</p>
+                                <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
+                                <div class="social">
+                                    <a class="buy-tickets scrollto" th:href="@{/contests/{id}(id=${contest.getId()})}"
+                                       href="#">Rate</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </ul>
+                </ul>
+                <ul th:if="${!contest.isJury()}">
+                    <ul th:if="${!contest.getPhase().getName().equalsIgnoreCase('finished')}">
+                        <div class="speaker" data-aos="fade-up" data-aos-delay="100">
+                            <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
+                                 alt="Speaker 1" class="img-fluid">
+                            <div class="contest-type">
+                                <div class="contest-type-text" th:text="*{contest.getType().getName().toUpperCase()}">
+                                    Open
+                                </div>
+                            </div>
+                            <div class="details">
+                                <h3 th:text="*{contest.getCategory().getName()}"></h3>
+                                <p th:text="*{contest.getTimeTillFinished()}">Quas alias incidunt</p>
+                                <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
+                                <div class="social">
+                                    <a class="buy-tickets scrollto" th:href="@{/contests/{id}(id=${contest.getId()})}"
+                                       href="#">Rate</a>
+                                </div>
+                            </div>
+                        </div>
                     </ul>
                 </ul>
             </div>
         </div>
+
     </div>
 </section>
 

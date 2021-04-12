@@ -78,8 +78,20 @@ public class ContestServiceImpl implements ContestService {
         return images;
     }
 
+    @Override
     public List<Contest> getFinishedContests() {
 
+        List<Contest> contests = contestRepository.getFinishedContests();
+
+        if (contests.size() > 6) {
+            return contests.subList(0, 6);
+        }
+
+        return contests;
+    }
+
+    @Override
+    public List<Contest> getVotingContests() {
         List<Contest> contests = contestRepository.getFinishedContests();
 
         if (contests.size() > 6) {

@@ -79,7 +79,6 @@
                             </div>
                             <div class="details">
                                 <h3 th:text="*{contest.getCategory().getName()}"></h3>
-                                <p th:text="*{#temporals.format(contest.getStartingDate(),'yyyy-MM-dd HH:mm')}" >Quas alias incidunt</p>
                                 <p th:text="*{contest.getPhase().getName().toUpperCase()}" >Quas alias incidunt</p>
                                 <div class="social">
                                     <a class="buy-tickets scrollto" th:href="@{/contests/{id}(id=${contest.getId()})}" href="#">Enroll</a>
