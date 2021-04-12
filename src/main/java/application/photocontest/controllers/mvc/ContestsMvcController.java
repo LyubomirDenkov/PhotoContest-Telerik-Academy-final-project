@@ -115,6 +115,36 @@ public class ContestsMvcController {
         }
     }
 
+    @GetMapping("/voting")
+    public String getVotingContests(Model model, HttpSession session) {
+        try {
+
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("currentUser", currentUser);
+            return "voting-contests";
+
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+            return "error";
+        }
+    }
+
+    @GetMapping("/ongoing")
+    public String getOngoingContests(Model model, HttpSession session) {
+        try {
+
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("currentUser", currentUser);
+            return "ongoing-contests";
+
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+            return "error";
+        }
+    }
+
 
     @GetMapping("/new")
     public String showNewContestPage(Model model, HttpSession session) {

@@ -68,11 +68,14 @@
                th:href="@{/contests/finished}">Finished Contests</a>
         </li>
 
+        <li><a class="nav-link" href="#"
+               th:href="@{/contests/voting}">Voting Contests</a>
+        </li>
 
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
                 <ul th:if="${contest.isJury()}">
-                    <ul th:if="${!contest.getPhase().getName().equalsIgnoreCase('finished')}">
+                    <ul th:if="${contest.getPhase().getName().equalsIgnoreCase('ongoing')}">
                         <div class="speaker" data-aos="fade-up" data-aos-delay="100">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
                                  alt="Speaker 1" class="img-fluid">
@@ -94,7 +97,7 @@
                     </ul>
                 </ul>
                 <ul th:if="${!contest.isJury()}">
-                    <ul th:if="${!contest.getPhase().getName().equalsIgnoreCase('finished')}">
+                    <ul th:if="${contest.getPhase().getName().equalsIgnoreCase('ongoing')}">
                         <div class="speaker" data-aos="fade-up" data-aos-delay="100">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
                                  alt="Speaker 1" class="img-fluid">
