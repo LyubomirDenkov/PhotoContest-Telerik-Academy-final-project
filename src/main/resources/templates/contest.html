@@ -151,28 +151,31 @@
         </div>
     </div>
 </section>
-
+<form action="#" th:action="@{__${#httpServletRequest.requestURI}__/upload}" th:object="${imageDto}"
+      method="post" enctype="multipart/form-data" role="form">
 <div id="open-modal" class="modal-window">
 
     <div>
         <a href="#" title="Close" class="modal-close">Close</a>
         <h1>Title</h1>
-        <input type="text">
+        <input type="text" name="title" th:field="*{title}">
         <hr>
         <h1>Story</h1>
-        <textarea></textarea>
+        <textarea name="story" id="" cols="20" rows="10" th:field="*{story}"></textarea>
         <hr>
         <h1>Photo Url</h1>
-        <input type="url">
+        <input type="url" name="url">
         <hr>
         <h1>Or</h1>
-        <input class="file-input" type="file">
-
-        <a href="#" target="_blank">
+        <input class="file-input custom-file-input" type="file" name="file">
+        <hr>
+        <hr>
+        <a href="#" >
             <button type="submit" class="glow-on-hover">UPLOAD</button>
             </a>
     </div>
 </div>
+</form>
 </div>
 
 <!-- Vendor JS Files -->

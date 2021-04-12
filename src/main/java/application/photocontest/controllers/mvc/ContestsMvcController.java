@@ -6,9 +6,11 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
+import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.modelmappers.ImageReviewMapper;
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
+import application.photocontest.models.dto.ImageDto;
 import application.photocontest.models.dto.ImageReviewDto;
 import application.photocontest.service.contracts.CategoryService;
 import application.photocontest.service.contracts.ContestService;
@@ -39,9 +41,10 @@ public class ContestsMvcController {
     private final ContestMapper contestMapper;
     private final ImageService imageService;
     private final ImageReviewMapper imageReviewMapper;
+    private final ImageMapper imageMapper;
 
     public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService,
-                                 CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService, ImageReviewMapper imageReviewMapper) {
+                                 CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService, ImageReviewMapper imageReviewMapper, ImageMapper imageMapper) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
         this.categoryService = categoryService;
@@ -49,6 +52,7 @@ public class ContestsMvcController {
         this.contestMapper = contestMapper;
         this.imageService = imageService;
         this.imageReviewMapper = imageReviewMapper;
+        this.imageMapper = imageMapper;
     }
 
 
@@ -80,6 +84,7 @@ public class ContestsMvcController {
 
         model.addAttribute("currentUser", user);
         model.addAttribute("contest", contest);
+        model.addAttribute("imageDto",new ImageDto());
 
         return "contest";
     }
@@ -322,6 +327,28 @@ public class ContestsMvcController {
             model.addAttribute("not-found", e.getMessage());
             return "not-found";
         }
+    }
+
+    @PostMapping("/{id}/upload")
+    public String uploadImageToContest(@PathVariable int id, BindingResult errors,
+                                       HttpSession session, Model model,
+                                       @Valid @ModelAttribute("imageDto")ImageDto dto,
+                                       @RequestParam(value = "file",required = false) Optional<MultipartFile> file,
+                                       @RequestParam(value = "url", required = false) Optional<String> url){
+
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+            Image image = imageMapper.fromDto(currentUser,dto);
+            contestService.uploadImageToContest(currentUser,image,id,file,url);
+
+            return "redirect:/contests/{id}";
+        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException | IOException e) {
+            return "error";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("not-found", e.getMessage());
+            return "error";
+        }
+
     }
 
 

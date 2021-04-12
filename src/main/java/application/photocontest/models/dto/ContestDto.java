@@ -52,7 +52,6 @@ public class ContestDto {
                       int phaseTwo, int typeId, Set<Integer> participants, Set<Integer> jury, Set<Image> images) {
         this.title = title;
         this.categoryId = categoryId;
-
         this.phaseOne = phaseOne;
         this.phaseTwo = phaseTwo;
         this.typeId = typeId;

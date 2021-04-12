@@ -34,4 +34,24 @@ public class ContestConstants {
 
     public static final int NEEDED_POINTS_TO_BE_JURY = 150;
 
+    //MAILBOX
+    public static final String MAIL_TITLE = "From 'iPhoto' team";
+
+    //UPLOAD IMAGE
+    public static final String MAIL_TITLE_UPLOAD_PICTURE = "Successfully upload photo";
+    private static final String MESSAGE_UPLOAD_PICTURE = "You successfully upload photo to contest '%s', come back on %s to check your " +
+            "result.";
+
+    //JOIN
+    public static final String MAIL_TITLE_JOIN_CONTEST = "Successfully join contest '%s'";
+    public static final String SUCCESSFULLY_JOIN_CONTEST = "Successfully join in contest '%s', voting phase starts on %s.%n" +
+            "You have time to upload your picture before voting date.Enjoy!!";
+
+    //FINISHED
+    public static final String MAIL_TITLE_CONTEST_END = "Contest '%s' finished";
+    //TOP
+    public static final String MESSAGE_CONTEST_END_TOP_POSITION = "Congratulation %s!!%n You are on %s position and awarded with %d points.";
+
+    //MAILBOX ENDS
+
 }

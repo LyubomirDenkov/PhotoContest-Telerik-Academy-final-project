@@ -2,10 +2,7 @@ package application.photocontest.service;
 
 import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.models.Contest;
-import application.photocontest.models.Image;
-import application.photocontest.models.Points;
-import application.photocontest.models.User;
+import application.photocontest.models.*;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.PhaseRepository;
@@ -20,11 +17,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static application.photocontest.service.constants.ContestConstants.MAIL_TITLE_CONTEST_END;
+import static application.photocontest.service.constants.ContestConstants.MESSAGE_CONTEST_END_TOP_POSITION;
+
 @Component
 @EnableScheduling
 public class AsynchronousTaskScheduler implements Runnable {
 
-    private static final String FIRST = "first";
+    private final String FIRST_POSITION = "first";
+    private final String SECOND_POSITION = "second";
+    private final String THIRD_POSITION = "third";
+
     private final int DEFAULT_SCORE = 3;
 
     private final ContestRepository contestRepository;
@@ -133,6 +136,10 @@ public class AsynchronousTaskScheduler implements Runnable {
         boolean isFirstWithDoubleScoreThanSecond = false;
         for (int i = 0; i < imageRankingList.size() + 1; i++) {
 
+            if (i == imageRankingList.size()){
+                break;
+            }
+
             int firstPointer = imageRankingList.get(i).getPoints();
             int secondPointer = imageRankingList.get(i + 1).getPoints();
 
@@ -180,14 +187,14 @@ public class AsynchronousTaskScheduler implements Runnable {
         int pointsForPositionTwo = 35;
         int pointsForPositionThree = 20;
 
-        rewardAndUpdateUser(pointsForPositionOne, firstPlace);
-        rewardAndUpdateUser(pointsForPositionTwo, secondPlace);
-        rewardAndUpdateUser(pointsForPositionThree, thirdPlace);
+        rewardAndUpdateUser(pointsForPositionOne, firstPlace,FIRST_POSITION);
+        rewardAndUpdateUser(pointsForPositionTwo, secondPlace,SECOND_POSITION);
+        rewardAndUpdateUser(pointsForPositionThree, thirdPlace,THIRD_POSITION);
 
     }
 
 
-    private void rewardAndUpdateUser(int pointsReward, List<Image> images) {
+    private void rewardAndUpdateUser(int pointsReward, List<Image> images,String position) {
 
         int pointsRewardByPosition = pointsReward;
         if (images.size() > 1) {
@@ -201,7 +208,23 @@ public class AsynchronousTaskScheduler implements Runnable {
                 continue;
             }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
+
+            Message message = buildAndCreateMessage(user,pointsRewardByPosition,position);
+
+            Set<Message> messages = user.getMessages();
+            messages.add(message);
+            user.setMessages(messages);
+
+            userRepository.update(user);
             userRepository.updatePoints(points.get());
         }
+    }
+
+    private Message buildAndCreateMessage(User user,int points,String position){
+        Message message = new Message();
+        message.setTitle(String.format(MAIL_TITLE_CONTEST_END,"something"));
+        message.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION,user.getFirstName(),position,points));
+        message.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        return messageService.create(message);
     }
 }
