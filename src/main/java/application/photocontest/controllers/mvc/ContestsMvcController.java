@@ -143,7 +143,21 @@ public class ContestsMvcController {
 
             model.addAttribute("contests", contestService.getAll());
             model.addAttribute("currentUser", currentUser);
-            return "ongoing-contests";
+            return "contests";
+
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+            return "error";
+        }
+    }
+
+    @GetMapping("/own")
+    public String getOwnContests(Model model, HttpSession session) {
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+
+            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("currentUser", currentUser);
+            return "contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";

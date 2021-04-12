@@ -142,10 +142,10 @@
 
                             <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                             <div class="social">
-                                <a class="visit-custom" th:if="${currentUser == null}"
-                                   th:href="@{/auth/login}" href="#">VISIT</a>
-                                <a class="visit-custom" th:if="${currentUser != null}"
-                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#">VISIT</a>
+                                <a th:if="${currentUser == null}"
+                                   th:href="@{/auth/login}" href="#"><button class="glow-on-hover">VISIT</button></a>
+                                <a th:if="${currentUser != null}"
+                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#"><button class="glow-on-hover">VISIT</button></a>
                             </div>
                         </div>
                     </div>

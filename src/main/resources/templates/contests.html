@@ -72,6 +72,7 @@
         <div class="section-header">
             <h2>Your Contests</h2>
         </div>
+
         <li><a class="nav-link" href="#"
                th:href="@{/contests/finished}">  <button class="glow-on-hover" type="button">Finished Contests</button></a></li></a>
         </li>
@@ -83,8 +84,6 @@
             </li>
         </ul>
 
-
-
         <ul th:if="${currentUser.isUser()}"
             th:each="point : ${currentUser.getPoints()}">
             <li th:if="*{point.getPoints() > 150}"
@@ -94,9 +93,15 @@
             </li>
         </ul>
 
+        <ul th:if="${currentUser.isUser()}">
+            <li><a class="nav-link" href="#"
+                   th:href="@{/contests/own}">  <button class="glow-on-hover" type="button">Voting Contests</button></a></li></a>
+            </li>
+        </ul>
+
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
-                    <ul th:if="${contest.getPhase().getName().equalsIgnoreCase('ongoing')}">
+                    <ul >
                         <div class="speaker" data-aos="fade-up" data-aos-delay="100">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
                                  alt="Speaker 1" class="img-fluid">

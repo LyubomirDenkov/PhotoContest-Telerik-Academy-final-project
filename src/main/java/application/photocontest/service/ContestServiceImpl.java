@@ -118,8 +118,11 @@ public class ContestServiceImpl implements ContestService {
             contest.setIsJury(true);
             return contest;
         }
+
         if (contest.getParticipants().contains(user)) {
             contest.setParticipant(true);
+        }else {
+            return contest;
         }
 
         try{
