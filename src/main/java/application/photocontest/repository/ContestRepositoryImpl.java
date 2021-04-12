@@ -139,6 +139,27 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
+    public Contest getContestByImageUploaderId(int id){
+
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<Contest> query = session.createQuery("select c from Contest c " +
+                    "join c.images as image " +
+                    "where image.uploader.id = :id ", Contest.class);
+
+            query.setParameter("id", id);
+
+            List<Contest> result = query.list();
+
+            if (result.isEmpty()) {
+
+                throw new EntityNotFoundException("Contest", "user",String.valueOf(id));
+
+            }
+            return result.get(0);
+
+        }
+    }
 
 
 }

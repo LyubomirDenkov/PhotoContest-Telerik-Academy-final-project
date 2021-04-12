@@ -123,7 +123,6 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-
         return contest;
     }
 
@@ -184,20 +183,18 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public Image uploadImageToContest(User user, Image image, int contestId, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
-
         Contest contest = contestRepository.getById(contestId);
-        if (!contest.getParticipants().contains(user)){
-            throw new UnauthorizedOperationException("somethin");
-        }
+
+        validateUserIsImageUploader(user, image);
+        validateContestIsOngoing(contest);
+        validateUserIsParticipant(contest,user);
+        validateUserNotUploadedImageToContest(user);
+
         Image imageAddToContest = imageService.create(user, image, file, url);
 
 
-        //validateContestPhaseAndUserIsParticipant(contest, user, imageAddToContest.getId());
-
-
-
         Set<Image> contestImages = contest.getImages();
-        contestImages.add(image);
+        contestImages.add(imageAddToContest);
 
         contest.setImages(contestImages);
         contestRepository.update(contest);
@@ -262,10 +259,12 @@ public class ContestServiceImpl implements ContestService {
     public Image addImage(User user, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
-
-        validateContestPhaseAndUserIsParticipant(contest, user, imageId);
-
         Image image = imageRepository.getById(imageId);
+
+        validateContestIsOngoing(contest);
+        validateUserIsParticipant(contest, user);
+        validateUserIsImageUploader(user, image);
+
         Set<Image> addImage = contest.getImages();
         addImage.add(image);
 
@@ -357,8 +356,8 @@ public class ContestServiceImpl implements ContestService {
         Set<User> usersToAdd = new HashSet<>();
         for (Integer participant : participantSet) {
             user = userRepository.getById(participant);
-            
-            if (jurySet.contains(participant) || user.isOrganizer()){
+
+            if (jurySet.contains(participant) || user.isOrganizer()) {
                 continue;
             }
 
@@ -392,24 +391,39 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-    private void validateContestPhaseAndUserIsParticipant(Contest contest, User user, int imageId) {
-
-        Image image = imageRepository.getById(imageId);
-
+    private void validateContestIsOngoing(Contest contest) {
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         }
-        if (!contest.getParticipants().contains(userRepository
-                .getUserByUserName(user.getUserCredentials().getUserName()))) {
+    }
+
+    private void validateUserIsParticipant(Contest contest, User user) {
+        if (!contest.getParticipants().contains(user)) {
             throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
         }
+    }
+
+    private void validateUserIsImageUploader(User user, Image image) {
         if (image.getUploader().getId() != user.getId()) {
             throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
         }
+    }
+
+    private void validateContestNotContainsImage(Contest contest, Image image) {
         if (contest.getImages().contains(image)) {
             throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
         }
     }
+
+    private void validateUserNotUploadedImageToContest(User user){
+        try{
+            contestRepository.getContestByImageUploaderId(user.getId());
+        }catch (EntityNotFoundException e){
+            return;
+        }
+       throw new UnauthorizedOperationException("Image is already uploaded to contest");
+    }
+
 
     private void checkBeforeAddUser(User userToJoinInContest, User user, Contest contest) {
 
