@@ -35,14 +35,21 @@ public class ContestRepositoryImpl implements ContestRepository {
     public Contest getById(int id) {
 
 
-            try(Session session = sessionFactory.openSession()){
+            try(Session session = sessionFactory.openSession()) {
 
-                Contest contest = session.get(Contest.class,id);
+                Query<Contest> query = session.createQuery("from Contest " +
+                        "where id = :id ", Contest.class);
 
-                if (contest == null){
-                    throw new EntityNotFoundException("Contest",id);
+                query.setParameter("id", id);
+
+                List<Contest> result = query.list();
+
+                if (result.isEmpty()) {
+
+                    throw new EntityNotFoundException("Contest", "id", String.valueOf(id));
+
                 }
-                return contest;
+                return result.get(0);
             }
     }
 

@@ -3,6 +3,7 @@ package application.photocontest.modelmappers;
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
+import application.photocontest.models.dto.ImageDto;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,12 @@ public class ImageMapper {
     }
 
 
-    public Image fromDto(User user, String title, String story) {
+    public Image fromDto(User user, ImageDto dto) {
 
         Image image = new Image();
 
-        image.setTitle(title);
-        image.setStory(story);
+        image.setTitle(dto.getTitle());
+        image.setStory(dto.getStory());
         image.setUploader(user);
 
         return image;

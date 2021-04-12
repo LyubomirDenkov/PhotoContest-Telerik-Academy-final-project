@@ -5,6 +5,7 @@ import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
+import application.photocontest.models.dto.ImageDto;
 import application.photocontest.service.contracts.ImageService;
 import okhttp3.*;
 import okhttp3.RequestBody;
@@ -42,16 +43,15 @@ public class ImageController {
 
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload" , consumes = {"multipart/form-data", "application/json"})
     public Image create(@RequestHeader HttpHeaders headers,
                         @RequestParam(name = "file", required = false) Optional<MultipartFile> file,
                         @RequestParam(name = "url", required = false) Optional<String> url,
-                        @RequestParam(name = "title") String title,
-                        @RequestParam(name = "story") String story) throws IOException {
+                        @RequestPart("dto") ImageDto dto) throws IOException {
 
         User user = authenticationHelper.tryGetUser(headers);
 
-        Image image = imageMapper.fromDto(user, title, story);
+        Image image = imageMapper.fromDto(user, dto);
         return imageService.create(user, image,file,url);
     }
 

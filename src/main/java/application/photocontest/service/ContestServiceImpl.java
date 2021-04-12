@@ -7,6 +7,7 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
+import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,10 @@ public class ContestServiceImpl implements ContestService {
     private final ImageReviewRepository imageReviewRepository;
     private final ImgurService imgurService;
 
+    private final ImageService imageService;
+
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository, ImageReviewRepository imageReviewRepository, ImgurService imgurService) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository, ImageReviewRepository imageReviewRepository, ImgurService imgurService, ImageService imageService) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
@@ -43,6 +46,7 @@ public class ContestServiceImpl implements ContestService {
         this.phaseRepository = phaseRepository;
         this.imageReviewRepository = imageReviewRepository;
         this.imgurService = imgurService;
+        this.imageService = imageService;
     }
 
     @Override
@@ -111,12 +115,15 @@ public class ContestServiceImpl implements ContestService {
 
 
         if (contest.getJury().contains(user)) {
-            contest.setIsJury(true);
+            contest.setUserIsJury(true);
             return contest;
         }
         if (contest.getParticipants().contains(user)) {
-            contest.setIsParticipant(true);
+            contest.setParticipant(true);
         }
+
+
+
         return contest;
     }
 
@@ -169,6 +176,27 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
 
         return contest;
+
+    }
+
+
+    //TODO
+    @Override
+    public Image uploadImageToContest(User user, Image image, int contestId, Optional<MultipartFile> file, Optional<String> url) throws IOException {
+
+
+        Image imageAddToContest = imageService.create(user, image, file, url);
+
+        Contest contest = contestRepository.getById(contestId);
+
+        validateContestPhaseAndUserIsParticipant(contest, user, imageAddToContest.getId());
+
+        Set<Image> contestImages = contest.getImages();
+        contestImages.add(image);
+
+        contest.setImages(contestImages);
+        contestRepository.update(contest);
+        return image;
 
     }
 
@@ -230,10 +258,10 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(contestId);
 
-        checkBeforeAddImage(contest, user, imageId);
+        validateContestPhaseAndUserIsParticipant(contest, user, imageId);
 
         Image image = imageRepository.getById(imageId);
-        Set<Image> addImage = new HashSet<>();
+        Set<Image> addImage = contest.getImages();
         addImage.add(image);
 
         contest.setImages(addImage);
@@ -324,7 +352,10 @@ public class ContestServiceImpl implements ContestService {
         Set<User> usersToAdd = new HashSet<>();
         for (Integer participant : participantSet) {
             user = userRepository.getById(participant);
-            if (jurySet.contains(participant) || user.isOrganizer()) continue;
+            
+            if (jurySet.contains(participant) || user.isOrganizer()){
+                continue;
+            }
 
             Optional<Points> points = user.getPoints().stream().findFirst();
 
@@ -356,7 +387,10 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-    private void checkBeforeAddImage(Contest contest, User user, int imageId) {
+    private void validateContestPhaseAndUserIsParticipant(Contest contest, User user, int imageId) {
+
+        Image image = imageRepository.getById(imageId);
+
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         }
@@ -364,23 +398,23 @@ public class ContestServiceImpl implements ContestService {
                 .getUserByUserName(user.getUserCredentials().getUserName()))) {
             throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
         }
-        if (imageRepository.getById(imageId).getUploader().getId() != user.getId()) {
+        if (image.getUploader().getId() != user.getId()) {
             throw new UnauthorizedOperationException(ADD_ONLY_OWN_PHOTOS);
         }
-        if (contest.getImages().contains(imageRepository.getById(imageId))) {
+        if (contest.getImages().contains(image)) {
             throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
         }
     }
 
     private void checkBeforeAddUser(User userToJoinInContest, User user, Contest contest) {
 
-        if (!userToJoinInContest.getUserCredentials().getUserName().equals(user.getUserCredentials().getUserName())) {
+        if (!userToJoinInContest.equals(user)) {
             throw new UnauthorizedOperationException(USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
         }
         if (!contest.getPhase().equals(phaseRepository.getPhaseByName(CONTEST_PHASE_PREPARING))) {
             throw new UnauthorizedOperationException(CONTEST_PHASE_ERROR_MESSAGE);
         }
-        if (!contest.getType().equals(typeRepository.getById(POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST))) {
+        if (!contest.getType().equals(typeRepository.getById(1))) {
             throw new UnauthorizedOperationException(CONTEST_INVITATIONAL_ONLY);
         }
 

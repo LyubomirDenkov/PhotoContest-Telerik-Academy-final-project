@@ -9,6 +9,7 @@ import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.PhaseRepository;
 import application.photocontest.repository.contracts.UserRepository;
+import application.photocontest.service.contracts.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Component
 @EnableScheduling
-public class AsynchronousTaskScheduler {
+public class AsynchronousTaskScheduler implements Runnable{
 
     private final int DEFAULT_SCORE = 3;
 
@@ -28,14 +29,18 @@ public class AsynchronousTaskScheduler {
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final PhaseRepository phaseRepository;
+    private final MessageService messageService;
 
 
     @Autowired
-    public AsynchronousTaskScheduler(ContestRepository contestRepository, ImageRepository imageRepository, UserRepository userRepository, PhaseRepository phaseRepository) {
+    public AsynchronousTaskScheduler(ContestRepository contestRepository, ImageRepository imageRepository,
+                                     UserRepository userRepository, PhaseRepository phaseRepository,
+                                     MessageService messageService) {
         this.contestRepository = contestRepository;
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
         this.phaseRepository = phaseRepository;
+        this.messageService = messageService;
     }
 
 
@@ -43,11 +48,11 @@ public class AsynchronousTaskScheduler {
     public void run() {
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
                 " INFO TASK START");
-        List<Contest> contests = contestRepository.getAll();
+        /*List<Contest> contests = contestRepository.getAll();
 
         for (Contest contest : contests) {
             changeContestPhaseWhenEndPhaseDateIsReached(contest);
-        }
+        }*/
 
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
                 " INFO TASK DONE SUCCESSFULLY!!");

@@ -52,7 +52,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "points_id"))
     private Set<Points> points;
 
-
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_mails",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "message_id"))
+    private Set<Message> messages;
 
     public User() {
     }
@@ -69,7 +74,6 @@ public class User {
         this.points = points;
 
     }
-
 
 
     public int getId() {
@@ -138,11 +142,21 @@ public class User {
     }
 
     @JsonIgnore
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+
+    @JsonIgnore
     public boolean isOrganizer() {
 
         return roles.stream().anyMatch(r -> r.getName().equals(UserRoles.ORGANIZER.toString()));
 
     }
+
     @JsonIgnore
     public boolean isUser() {
 
@@ -155,11 +169,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getProfileImage().equals(user.getProfileImage()) && getRoles().equals(user.getRoles()) && getImages().equals(user.getImages()) && getPoints().equals(user.getPoints());
+        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getProfileImage().equals(user.getProfileImage()) && getRoles().equals(user.getRoles()) && getImages().equals(user.getImages()) && getPoints().equals(user.getPoints()) && getMessages().equals(user.getMessages());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getProfileImage(), getRoles(), getImages(), getPoints());
+        return Objects.hash(getId(), getUserCredentials(), getFirstName(), getLastName(), getProfileImage());
     }
 }

@@ -70,6 +70,10 @@ public class ContestMapper {
         contest.setType(typeRepository.getById(contestDto.getTypeId()));
                 contest.setPhase(phaseRepository.getPhaseByName(ContestPhases.ONGOING.toString()));
 
+                contest.setParticipant(false);
+                contest.setUserIsJury(false);
+                contest.setHasImageUploaded(false);
+
         Set<Image> images = new HashSet<>();
         contest.setImages(images);
 

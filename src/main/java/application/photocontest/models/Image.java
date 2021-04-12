@@ -97,7 +97,7 @@ public class Image {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return getId() == image.getId() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUploader().equals(image.getUploader()) && getUrl().equals(image.getUrl()) && getPoints() == image.getPoints();
+        return getId() == image.getId() && getPoints() == image.getPoints() && getTitle().equals(image.getTitle()) && getStory().equals(image.getStory()) && getUploader().equals(image.getUploader()) && getUrl().equals(image.getUrl());
     }
 
     @Override

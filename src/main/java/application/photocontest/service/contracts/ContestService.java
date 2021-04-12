@@ -17,6 +17,8 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
+    Image uploadImageToContest(User user,Image image, int contestId,Optional<MultipartFile> file,Optional<String> url) throws IOException;
+
     void delete(User user, int id);
 
     void addUserToContest(User user, int contestId, int userId);
