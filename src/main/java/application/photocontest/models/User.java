@@ -169,7 +169,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getProfileImage().equals(user.getProfileImage()) && getRoles().equals(user.getRoles()) && getImages().equals(user.getImages()) && getPoints().equals(user.getPoints()) && getMessages().equals(user.getMessages());
+        return getId() == user.getId() && getUserCredentials().equals(user.getUserCredentials()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getProfileImage().equals(user.getProfileImage());
     }
 
     @Override

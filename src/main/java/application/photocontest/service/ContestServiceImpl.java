@@ -185,11 +185,16 @@ public class ContestServiceImpl implements ContestService {
     public Image uploadImageToContest(User user, Image image, int contestId, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
 
+        Contest contest = contestRepository.getById(contestId);
+        if (!contest.getParticipants().contains(user)){
+            throw new UnauthorizedOperationException("somethin");
+        }
         Image imageAddToContest = imageService.create(user, image, file, url);
 
-        Contest contest = contestRepository.getById(contestId);
 
-        validateContestPhaseAndUserIsParticipant(contest, user, imageAddToContest.getId());
+        //validateContestPhaseAndUserIsParticipant(contest, user, imageAddToContest.getId());
+
+
 
         Set<Image> contestImages = contest.getImages();
         contestImages.add(image);
