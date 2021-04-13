@@ -21,6 +21,8 @@ import static application.photocontest.service.authorization.AuthorizationHelper
 public class UserServiceImpl implements UserService {
 
 
+    private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
+
     private final UserRepository userRepository;
     private final ImgurService imgurService;
 
@@ -84,8 +86,12 @@ public class UserServiceImpl implements UserService {
         }
 
         String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
-        user.setProfileImage(profileImageUrl);
 
+        if (profileImageUrl.isBlank()){
+            user.setProfileImage(INITIAL_PROFILE_IMAGE);
+        }else {
+            user.setProfileImage(profileImageUrl);
+        }
 
         User newRegisteredUser = userRepository.create(user);
         addRoleAndPointsToRegisteredUser(newRegisteredUser);
@@ -127,7 +133,10 @@ public class UserServiceImpl implements UserService {
 
         if (file.isPresent() || url.isPresent()) {
             String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
-            userToUpdate.setProfileImage(profileImageUrl);
+
+            if (!profileImageUrl.isBlank()) {
+                userToUpdate.setProfileImage(profileImageUrl);
+            }
         }
 
         return userRepository.update(userToUpdate);

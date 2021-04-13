@@ -77,6 +77,9 @@ public class UserMvcController {
                                         BindingResult bindingResult){
 
 
+        if (bindingResult.hasErrors()){
+            return "edit-profile";
+        }
 
 
         try {
@@ -84,10 +87,11 @@ public class UserMvcController {
             User userToUpdate = userMapper.fromDto(id,dto);
             userService.update(user,userToUpdate,file,url);
             return "redirect:/users/{id}/profile";
-        }catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
+        } catch (IllegalArgumentException e){
+            bindingResult.rejectValue("oldPassword","password_error",e.getMessage());
+            return "edit-profile";
+        } catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
             return "error";
         }
-
     }
-
 }

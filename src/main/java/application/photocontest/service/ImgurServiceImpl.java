@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 import java.util.Optional;
@@ -19,7 +20,6 @@ public class ImgurServiceImpl implements ImgurService {
     private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
     private static final String IMGUR_AUTHORIZATION = "Authorization";
     private static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
-    private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
 
     private static final int SUCCESS_STATUS_CODE = 200;
 
@@ -27,39 +27,43 @@ public class ImgurServiceImpl implements ImgurService {
     public ImgurServiceImpl() {
     }
 
-    public String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file,Optional<String> url) throws IOException {
+    public String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
 
-        if (file.isPresent() && url.isPresent()){
+        if (file.isPresent()) {
 
-            if (file.get().getOriginalFilename().isBlank()){
+            if (file.get().getOriginalFilename().isBlank()) {
                 file = Optional.empty();
             }
-            if (url.get().isBlank()){
+        }
+
+        if (url.isPresent()) {
+            if (url.get().isBlank()) {
                 url = Optional.empty();
             }
         }
 
-
-        if (file.isPresent() && url.isPresent() ){
+        if (file.isPresent() && url.isPresent()) {
 
             throw new UnsupportedOperationException("Only local file or url");
 
-        }else if (file.isEmpty() && url.isEmpty()){
-           return INITIAL_PROFILE_IMAGE;
+        } else if (file.isEmpty() && url.isEmpty()) {
+            return "";
         }
 
         String image = "";
-        if (file.isPresent()){
+        if (file.isPresent()) {
             image = Base64.getEncoder().encodeToString(file.get().getBytes());
-        }else {
+        } else {
 
-            URL imageUrl = new URL(url.get());
-            HttpURLConnection huc = (HttpURLConnection) imageUrl.openConnection();
-
-            validateUrlIsImage(huc.getResponseCode());
-
-            image = url.get();
+            try {
+                URL imageUrl = new URL(url.get());
+                HttpURLConnection huc = (HttpURLConnection) imageUrl.openConnection();
+                validateStatusCodeIsSuccess(huc.getResponseCode());
+                image = url.get();
+            } catch (MalformedURLException e) {
+                throw new UnsupportedOperationException("URL is not valid");
+            }
 
         }
 
@@ -77,7 +81,7 @@ public class ImgurServiceImpl implements ImgurService {
 
         Response response = client.newCall(request).execute();
 
-        validateUrlIsImage(response.code());
+        validateStatusCodeIsSuccess(response.code());
 
         JSONObject jsonObject = new JSONObject(response.body().string());
 
@@ -85,8 +89,9 @@ public class ImgurServiceImpl implements ImgurService {
         return jsonObjectData.getString("link");
     }
 
-    private void validateUrlIsImage(int statusCode){
-        if (statusCode != SUCCESS_STATUS_CODE){
+
+    private void validateStatusCodeIsSuccess(int statusCode) {
+        if (statusCode != SUCCESS_STATUS_CODE) {
             throw new UnsupportedOperationException(URL_IS_NOT_VALID_ERROR_MESSAGE);
         }
     }

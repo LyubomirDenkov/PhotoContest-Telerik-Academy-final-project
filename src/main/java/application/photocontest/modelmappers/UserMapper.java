@@ -45,10 +45,6 @@ public class UserMapper {
 
     public User fromDto(int id, UpdateUserDto userDto) {
 
-        Map<String, String> map = new HashMap<>();
-        RegisterDto registerDto = new RegisterDto();
-        registerDto.setFirstName(map.get("userName"));
-
         User user = userRepository.getById(id);
 
         if (!userDto.getOldPassword().equals(user.getUserCredentials().getPassword())){

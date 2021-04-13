@@ -10,21 +10,29 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form" action="#" th:action="@{/users/{id}/update(id=${currentUser.getId()})}" th:object="${updateUserDto}"
-              method="post" enctype="multipart/form-data" >
+        <form class="login-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+              th:object="${updateUserDto}"
+              method="post" enctype="multipart/form-data">
 
-            <input type="password" placeholder="Old password" th:field="*{oldPassword}">
-
-            <input type="password" placeholder="New password" th:field="*{newPassword}">
-
-            <input type="password" placeholder="Confirm password" th:field="*{repeatPassword}">
-
+            <div>
+                <input type="password" placeholder="Old password" th:field="*{oldPassword}">
+                <p th:errors="*{oldPassword}">Old password error</p>
+            </div>
+            <div>
+                <input type="password" placeholder="New password" th:field="*{newPassword}">
+                <p th:errors="*{newPassword}">New password error</p>
+            </div>
+            <div>
+                <input type="password" placeholder="Confirm password" th:field="*{repeatPassword}">
+                <p th:errors="*{repeatPassword}">Repeat password error</p>
+            </div>
             <br>
             <hr>
             <br>
             <input type="url" th:name="url" placeholder="Profile image url">
             <p>OR</p>
-            <input type="file" name="multiPartFile" id="multiPartFile" placeholder="Choose...." accept="image/png, image/jpeg, image/jpg">
+            <input type="file" name="multiPartFile" id="multiPartFile" placeholder="Choose...."
+                   accept="image/png, image/jpeg, image/jpg">
             <button>Submit</button>
         </form>
     </div>

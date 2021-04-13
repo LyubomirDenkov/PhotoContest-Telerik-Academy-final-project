@@ -5,19 +5,19 @@ import javax.validation.constraints.Size;
 
 public class UpdateUserDto {
 
-    private static final String PASSWORD_ERROR_MESSAGE = "Password must be at least 4 symbols.";
+    private static final String PASSWORD_ERROR_MESSAGE = "Password must be at least 8 symbols.";
 
 
     @NotEmpty
-    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
+    @Size(min = 8, message = PASSWORD_ERROR_MESSAGE)
     private String oldPassword;
 
     @NotEmpty
-    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
+    @Size(min = 8, message = PASSWORD_ERROR_MESSAGE)
     private String newPassword;
 
     @NotEmpty
-    @Size(min = 4, message = PASSWORD_ERROR_MESSAGE)
+    @Size(min = 8, message = PASSWORD_ERROR_MESSAGE)
     private String repeatPassword;
 
 

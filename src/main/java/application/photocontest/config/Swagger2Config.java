@@ -29,7 +29,7 @@ public class Swagger2Config {
                 .build()
                 .globalOperationParameters(newArrayList(new ParameterBuilder()
                         .name("Authorization")
-                        .description("Email address")
+                        .description("Username")
                         .modelRef(new ModelRef("String"))
                         .parameterType("header")
                         .required(false)
@@ -40,7 +40,7 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("DeliverIt API Documentation")
+                .title("Iphoto Documentation")
                 .description(description())
                 .version("1.0")
                 .build();
