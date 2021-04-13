@@ -72,39 +72,89 @@
         <div class="section-header">
             <h2>Your Contests</h2>
         </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-6">
-            <li><a class="nav-link"  href="#"
-               th:href="@{/contests/finished}">  <button class="glow-on-hover" type="button" >Finished Contests</button></a></li></a>
-        </li>
+        <div class="outer">
+            <div th:if="${currentUser.isOrganizer()}">
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
 
-        <ul th:if="${currentUser.isOrganizer()}">
-            <li><a class="nav-link" href="#"
+                               th:href="@{/contests/voting}">
+                            <button class="glow-on-hover" type="button">Voting Contests</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="inner">
 
-                   th:href="@{/contests/voting}">  <button class="glow-on-hover" type="button" >Voting Contests</button></a></li></a>
-            </li>
-            <li><a class="nav-link" href="#"
+                    <ul>
+                        <li><a class="nav-link" href="#"
+                               th:href="@{/contests/finished}">
+                            <button class="glow-on-hover" type="button">Finished Contests</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
 
-                   th:href="@{/contests/new}">  <button class="glow-on-hover" type="button" >Create New</button></a></li></a>
-            </li>
-        </ul>
+                </div>
 
-        <ul th:if="${currentUser.isUser()}"
-            th:each="point : ${currentUser.getPoints()}">
-            <li th:if="*{point.getPoints() > 150}"
-            ><a class="nav-link" href="#"
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
 
-                   th:href="@{/contests/voting}"><button class="glow-on-hover" type="button" >Voting Contests</button></a>
-            </li>
-        </ul>
+                               th:href="@{/contests/new}">
+                            <button class="glow-on-hover" type="button">Create New</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
 
-        <ul th:if="${currentUser.isUser()}">
-            <li><a class="nav-link"  href="#"
-                   th:href="@{/contests/own}">  <button class="glow-on-hover" type="button" >Voting Contests</button></a></li></a>
-            </li>
-        </ul>
+
+                </div>
+            </div>
+
+            <div th:if="${currentUser.isUser()}" class="outer">
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
+                               th:href="@{/contests/own}">
+                            <button class="glow-on-hover" type="button">Own Contests</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="inner">
+                    <ul th:if="${currentUser.isUser()}"
+                        th:each="point : ${currentUser.getPoints()}">
+                        <ul>
+
+                            <li th:if="*{point.getPoints() > 150}"
+                            ><a class="nav-link" href="#"
+
+                                th:href="@{/contests/voting}">
+                                <button class="glow-on-hover" type="button">Voting Contests</button>
+                            </a>
+                            </li>
+                        </ul>
+
+                    </ul>
+                </div>
+
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
+                               th:href="@{/contests/finished}">
+                            <button class="glow-on-hover" type="button">Finished Contests</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
-    </div>
 
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
@@ -122,8 +172,8 @@
                                 <p th:text="*{contest.getTimeTillFinished()}">Quas alias incidunt</p>
                                 <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                                 <div class="social">
-                                    <a th:href="@{/contests/{id}(id=${contest.getId()})}"
-                                       href="#"><button class="glow-on-hover">VISIT</button></a>
+                                    <a class="buy-tickets scrollto" th:href="@{/contests/{id}(id=${contest.getId()})}"
+                                       href="#">Rate</a>
                                 </div>
                             </div>
                         </div>
@@ -143,6 +193,7 @@
 
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
+
 
 </body>
 </html>
