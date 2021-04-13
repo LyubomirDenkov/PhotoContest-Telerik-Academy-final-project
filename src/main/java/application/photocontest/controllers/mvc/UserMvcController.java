@@ -78,6 +78,7 @@ public class UserMvcController {
 
 
 
+
         try {
             User user = authenticationHelper.tryGetUser(session);
             User userToUpdate = userMapper.fromDto(id,dto);

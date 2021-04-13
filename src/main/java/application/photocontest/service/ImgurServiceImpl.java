@@ -30,8 +30,21 @@ public class ImgurServiceImpl implements ImgurService {
     public String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file,Optional<String> url) throws IOException {
 
 
+        if (file.isPresent() && url.isPresent()){
+
+            if (file.get().getOriginalFilename().isBlank()){
+                file = Optional.empty();
+            }
+            if (url.get().isBlank()){
+                url = Optional.empty();
+            }
+        }
+
+
         if (file.isPresent() && url.isPresent() ){
+
             throw new UnsupportedOperationException("Only local file or url");
+
         }else if (file.isEmpty() && url.isEmpty()){
            return INITIAL_PROFILE_IMAGE;
         }
@@ -41,8 +54,8 @@ public class ImgurServiceImpl implements ImgurService {
             image = Base64.getEncoder().encodeToString(file.get().getBytes());
         }else {
 
-            URL testUrl = new URL(url.get());
-            HttpURLConnection huc = (HttpURLConnection) testUrl.openConnection();
+            URL imageUrl = new URL(url.get());
+            HttpURLConnection huc = (HttpURLConnection) imageUrl.openConnection();
 
             validateUrlIsImage(huc.getResponseCode());
 

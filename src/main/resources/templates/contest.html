@@ -109,7 +109,7 @@
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
                                     <button class="glow-on-hover" type="button">JOIN</button></a></li>
 
-                                <li th:if="${!contest.isHasImageUploaded() && !currentUser.isOrganizer()}">
+                                <li th:if="${!contest.isHasImageUploaded() && contest.isParticipant()}">
                                     <a href="#open-modal">
                                     <button type="button" class="glow-on-hover" >
                                        UPLOAD PHOTO
@@ -128,54 +128,27 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="col-lg-4 col-md-4 contest-info">
-                <ul th:if="${currentUser.equals(contest.getUser())}">
-                    <li><a class="nav-link" href="#"
-                           th:href="@{/contests/{id}/update(id=${contest.getId()})}">Update Contest</a>
-                    </li>
-                </ul>
-
-                <ul th:if="${!contest.isParticipant() && !currentUser.isOrganizer()}">
-                    <li><a class="nav-link" href="#"
-                           th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">Enroll</a>
-                    </li>
-                </ul>
-
-                <ul th:if="${contest.isJury()}">
-                    <li><a class="nav-link" href="#"
-                           th:href="@{__${#httpServletRequest.requestURI}__/images}">Rate Images</a>
-                    </li>
-                </ul>
-
-            </div>-->
         </div>
     </div>
 </section>
-<form action="#" th:action="@{__${#httpServletRequest.requestURI}__/upload}" th:object="${imageDto}"
-      method="post" enctype="multipart/form-data" role="form">
 <div id="open-modal" class="modal-window">
 
     <div>
         <a href="#" title="Close" class="modal-close">Close</a>
+        <form action="#" th:action="@{__${#httpServletRequest.requestURI}__/upload}" th:object="${imageDto}"
+              method="post">
         <h1>Title</h1>
         <input type="text" name="title" th:field="*{title}">
         <hr>
         <h1>Story</h1>
-        <textarea name="story" id="" cols="20" rows="10" th:field="*{story}"></textarea>
-        <hr>
-        <h1>Photo Url</h1>
-        <input type="url" name="url">
-        <hr>
-        <h1>Or</h1>
-        <input class="file-input custom-file-input" type="file" name="file">
-        <hr>
+        <textarea name="story" id="" cols="10" rows="5" th:field="*{story}"></textarea>
         <hr>
         <a href="#" >
-            <button type="submit" class="glow-on-hover">UPLOAD</button>
+            <button type="submit"  class="glow-on-hover">UPLOAD</button>
             </a>
+        </form>
     </div>
 </div>
-</form>
 </div>
 
 <!-- Vendor JS Files -->
@@ -203,7 +176,7 @@
             + minutes + "m " + seconds + "s ";
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById('timer').innerHTML = "Finished";
+            document.getElementById('timer').innerHTML = "Closed";
         }
     }, 1000);
 </script>

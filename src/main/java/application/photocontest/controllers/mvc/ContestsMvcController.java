@@ -346,14 +346,17 @@ public class ContestsMvcController {
     @PostMapping("/{id}/upload")
     public String uploadImageToContest(@PathVariable int id, BindingResult errors,
                                        HttpSession session, Model model,
-                                       @Valid @ModelAttribute("imageDto")ImageDto dto,
-                                       @RequestParam(value = "file",required = false) Optional<MultipartFile> file,
-                                       @RequestParam(value = "url", required = false) Optional<String> url){
+                                       @ModelAttribute("imageDto")ImageDto dto){
+
+        if (errors.hasErrors()){
+            return "index";
+        }
 
         try {
+
             User currentUser = authenticationHelper.tryGetUser(session);
             Image image = imageMapper.fromDto(currentUser,dto);
-            contestService.uploadImageToContest(currentUser,image,id,file,url);
+            contestService.uploadImageToContest(currentUser,image,id,Optional.empty(),Optional.empty());
 
             return "redirect:/contests/{id}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException | IOException e) {
