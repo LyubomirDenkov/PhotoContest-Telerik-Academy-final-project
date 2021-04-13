@@ -51,7 +51,7 @@ public class ContestController {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return contestService.getAll();
+            return contestService.getAll(user);
         } catch (
                 UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -169,7 +169,7 @@ public class ContestController {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return contestService.addImage(user, contestId, imageId);
+            return contestService.addImageToContest(user, contestId, imageId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

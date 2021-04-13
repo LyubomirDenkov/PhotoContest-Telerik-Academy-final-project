@@ -31,7 +31,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(User user) {
+        verifyUserHasRoles(user,UserRoles.ORGANIZER);
         return userRepository.getAll();
     }
 

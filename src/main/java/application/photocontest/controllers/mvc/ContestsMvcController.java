@@ -96,7 +96,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("contests", contestService.getAll(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -111,7 +111,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("contests", contestService.getAll(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "finished-contests";
 
@@ -126,7 +126,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("contests", contestService.getAll(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "voting-contests";
 
@@ -141,7 +141,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("contests", contestService.getAll(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -155,7 +155,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll());
+            model.addAttribute("contests", contestService.getAll(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -306,10 +306,10 @@ public class ContestsMvcController {
 
             return "image-review";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         } catch (DuplicateEntityException e) {
             model.addAttribute("not-found", e.getMessage());
-            return "not-found";
+            return "error";
         }
     }
 
@@ -336,10 +336,10 @@ public class ContestsMvcController {
 
             return "redirect:/contests/{contestId}/images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
-            return "not-found";
+            return "error";
         } catch (DuplicateEntityException e) {
             model.addAttribute("not-found", e.getMessage());
-            return "not-found";
+            return "error";
         }
     }
 

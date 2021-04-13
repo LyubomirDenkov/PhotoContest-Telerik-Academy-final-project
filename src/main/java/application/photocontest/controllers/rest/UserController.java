@@ -42,7 +42,7 @@ public class UserController {
     public List<User> getAll(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
 
-        return userService.getAll();
+        return userService.getAll(user);
     }
 
     @GetMapping("/{id}")

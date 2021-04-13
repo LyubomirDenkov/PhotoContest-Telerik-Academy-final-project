@@ -1,5 +1,6 @@
 package application.photocontest.service;
 
+import application.photocontest.enums.ContestPhases;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
@@ -50,11 +51,9 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<Contest> getAll() {
-
-        List<Contest> contests = contestRepository.getAll();
-
-        return contests;
+    public List<Contest> getAll(User user) {
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
+        return contestRepository.getAll();
     }
 
 
@@ -105,7 +104,6 @@ public class ContestServiceImpl implements ContestService {
         return contests;
     }
 
-    //TODO boolean for photo
     @Override
     public Contest getById(User user, int id) {
 
@@ -121,14 +119,14 @@ public class ContestServiceImpl implements ContestService {
 
         if (contest.getParticipants().contains(user)) {
             contest.setParticipant(true);
-        }else {
+        } else {
             return contest;
         }
 
-        try{
+        try {
             contestRepository.getContestByImageUploaderId(user.getId());
             contest.setHasImageUploaded(true);
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             contest.setHasImageUploaded(false);
         }
 
@@ -160,6 +158,7 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contestToCreate = contestRepository.create(contest);
         addParticipantsToContestAndPoints(contestToCreate, jurySet, participantSet);
+
         return contestToCreate;
 
     }
@@ -195,8 +194,8 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
 
         validateUserIsImageUploader(user, image);
-        validateContestIsOngoing(contest);
-        validateUserIsParticipant(contest,user);
+        validateContestPhase(contest, ContestPhases.ONGOING.toString());
+        validateUserIsParticipant(contest, user);
         validateUserNotUploadedImageToContest(user);
 
         Image imageAddToContest = imageService.create(user, image, file, url);
@@ -211,17 +210,18 @@ public class ContestServiceImpl implements ContestService {
 
     }
 
-    private void updateParticipants(Contest contest, Set<Integer> participantsSet) {
+    private void updateParticipants(Contest contest, Set<Integer> newParticipants) {
+
         Set<User> oldParticipants = contest.getParticipants();
 
-        Set<Integer> dtoParticipants = participantsSet;
 
         Set<User> jury = contest.getJury();
 
         Set<User> participants = new HashSet<>();
 
 
-        for (Integer participant : dtoParticipants) {
+        for (Integer participant : newParticipants) {
+
             User participantToAdd = userRepository.getById(participant);
             if (oldParticipants.contains(participantToAdd)) {
                 participants.add(participantToAdd);
@@ -265,14 +265,15 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Image addImage(User user, int contestId, int imageId) {
+    public Image addImageToContest(User user, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
         Image image = imageRepository.getById(imageId);
 
-        validateContestIsOngoing(contest);
+        validateContestPhase(contest, ContestPhases.ONGOING.toString());
         validateUserIsParticipant(contest, user);
         validateUserIsImageUploader(user, image);
+        validateContestNotContainsImage(contest, image);
 
         Set<Image> addImage = contest.getImages();
         addImage.add(image);
@@ -293,6 +294,7 @@ public class ContestServiceImpl implements ContestService {
         checkBeforeAddUser(userToJoinInContest, user, contest);
 
         Set<User> participants = contest.getParticipants();
+
         if (participants.contains(userToJoinInContest)) {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
@@ -366,9 +368,9 @@ public class ContestServiceImpl implements ContestService {
         for (Integer participant : participantSet) {
             user = userRepository.getById(participant);
 
-            if (jurySet.contains(participant) || user.isOrganizer()) {
+           /* if (isJuryOrOrganizer(jurySet, user)) {
                 continue;
-            }
+            }*/
 
             Optional<Points> points = user.getPoints().stream().findFirst();
 
@@ -382,13 +384,14 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void setContestJury(Set<Integer> jurySet, Contest contest) {
+
         Set<User> jury = new HashSet<>();
 
         jury.addAll(userRepository.getOrganizers());
 
         for (Integer userId : jurySet) {
             User userToAdd = userRepository.getById(userId);
-            if (!userToAdd.isUser() || jury.contains(userToAdd)) continue;
+            if (jury.contains(userToAdd)) continue;
 
             Optional<Points> points = userToAdd.getPoints().stream().findFirst();
 
@@ -399,9 +402,12 @@ public class ContestServiceImpl implements ContestService {
         contest.setJury(jury);
     }
 
+    private boolean isJuryOrOrganizer(Set<User> jury, User user) {
+        return jury.contains(user) || user.isOrganizer();
+    }
 
-    private void validateContestIsOngoing(Contest contest) {
-        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_PREPARING)) {
+    private void validateContestPhase(Contest contest, String phase) {
+        if (!contest.getPhase().getName().equalsIgnoreCase(phase)) {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         }
     }
@@ -424,13 +430,13 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateUserNotUploadedImageToContest(User user){
-        try{
+    private void validateUserNotUploadedImageToContest(User user) {
+        try {
             contestRepository.getContestByImageUploaderId(user.getId());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return;
         }
-       throw new UnauthorizedOperationException("Image is already uploaded to contest");
+        throw new UnauthorizedOperationException("Image is already uploaded to contest");
     }
 
 

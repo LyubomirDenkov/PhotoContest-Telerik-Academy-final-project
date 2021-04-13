@@ -25,7 +25,7 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     void rateImage(User user, int contestId, int imageId, int points, String comment);
 
-    Image addImage(User user, int contestId, int imageId);
+    Image addImageToContest(User user, int contestId, int imageId);
 
     List<Contest> getOngoingContests();
 
