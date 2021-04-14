@@ -111,7 +111,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", contestService.getFinishedContests(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "finished-contests";
 
@@ -126,7 +126,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", contestService.getVotingContests(currentUser));
             model.addAttribute("currentUser", currentUser);
             return "voting-contests";
 
@@ -141,7 +141,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", contestService.getOngoingContests());
             model.addAttribute("currentUser", currentUser);
             return "contests";
 

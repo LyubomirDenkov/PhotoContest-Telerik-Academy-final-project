@@ -3,7 +3,6 @@ package application.photocontest.services;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
-import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.service.ContestServiceImpl;
@@ -17,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static application.photocontest.Helpers.*;
 import static org.mockito.Mockito.*;
@@ -83,6 +81,29 @@ public class ContestServiceImplTests {
         contestService.getById(organizer,1);
 
         Mockito.verify(contestRepository, Mockito.times(1)).getById(1);
+    }
+
+    @Test
+    public void getOngoing_Should_Return_When_IsCalled() {
+        List<Contest> result = new ArrayList<>();
+
+        when(contestRepository.getOngoingContests()).thenReturn(result);
+
+        contestService.getOngoingContests();
+
+        Mockito.verify(contestRepository, Mockito.times(1)).getOngoingContests();
+    }
+
+    @Test
+    public void getFinished_Should_Return_When_IsCalled() {
+        List<Contest> result = new ArrayList<>();
+        User user = createMockUser();
+
+        when(contestRepository.getFinishedContests()).thenReturn(result);
+
+        contestService.getFinishedContests(user);
+
+        Mockito.verify(contestRepository, Mockito.times(1)).getFinishedContests();
     }
 
 }
