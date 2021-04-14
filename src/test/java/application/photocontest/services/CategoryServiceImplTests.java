@@ -1,7 +1,9 @@
 package application.photocontest.services;
 
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Category;
+import application.photocontest.models.Contest;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.CategoryRepository;
@@ -18,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static application.photocontest.Helpers.createMockCategory;
-import static application.photocontest.Helpers.createMockUser;
+import static application.photocontest.Helpers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,6 +76,15 @@ public class CategoryServiceImplTests {
                 () -> categoryService.create(user,category));
     }
 
+    @Test
+    public void getById_Should_Throw_When_Not_Exist() {
+
+
+        when(categoryRepository.getById(254)).thenThrow(EntityNotFoundException.class);
+
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> categoryRepository.getById(254));
+    }
     
 
 }
