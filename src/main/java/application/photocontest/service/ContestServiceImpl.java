@@ -60,9 +60,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     public List<Contest> getOngoingContests() {
-
         return contestRepository.getOngoingContests();
-
     }
 
     @Override
