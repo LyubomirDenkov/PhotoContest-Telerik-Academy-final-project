@@ -3,6 +3,7 @@ package application.photocontest.services;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Points;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.service.ContestServiceImpl;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static application.photocontest.Helpers.*;
 import static org.mockito.Mockito.*;
@@ -104,6 +106,41 @@ public class ContestServiceImplTests {
         contestService.getFinishedContests(user);
 
         Mockito.verify(contestRepository, Mockito.times(1)).getFinishedContests();
+    }
+
+    @Test
+    public void getVoting_Should_Return_When_OrganizerCalls() {
+        List<Contest> result = new ArrayList<>();
+        User organizer = createMockOrganizer();
+
+        when(contestRepository.getVotingContests()).thenReturn(result);
+
+        contestService.getVotingContests(organizer);
+
+        Mockito.verify(contestRepository, Mockito.times(1)).getVotingContests();
+    }
+
+    @Test
+    public void getVoting_Should_Return_When_UserCalls() {
+        List<Contest> result = new ArrayList<>();
+        User user = createMockUser();
+
+
+        when(contestRepository.getVotingContests()).thenReturn(result);
+
+        contestService.getVotingContests(user);
+
+        Mockito.verify(contestRepository, Mockito.times(1)).getVotingContests();
+    }
+
+    @Test
+    public void getVoting_Should_Throw_When_UserWithLessPoints() {
+        User user = createMockUser();
+        user.setPoints(Set.of(new Points(2,50)));
+
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.getVotingContests(user));
     }
 
 }

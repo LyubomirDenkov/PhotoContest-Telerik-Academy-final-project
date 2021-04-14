@@ -98,15 +98,16 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<Contest> getVotingContests(User currentUser) {
 
+        if (currentUser.isOrganizer()) {
+            return contestRepository.getVotingContests();
+        }
+
         Optional<Points> points = currentUser.getPoints().stream().findFirst();
         if (points.get().getPoints() < NEEDED_POINTS_TO_BE_JURY) {
             throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
         }
 
-        verifyUserHasRoles(currentUser, UserRoles.USER, UserRoles.ORGANIZER);
-
-
-        return contestRepository.getFinishedContests();
+        return contestRepository.getVotingContests();
 
 
     }
