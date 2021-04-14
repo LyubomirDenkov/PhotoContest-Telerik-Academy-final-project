@@ -71,9 +71,9 @@ public class UserMvcController {
 
     @PostMapping("{id}/update")
     public String handleEditUserProfile(@PathVariable int id, HttpSession session,
-                                        @Valid @ModelAttribute("updateUserDto") UpdateUserDto dto,
-                                        @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
                                         @RequestParam(value = "url", required = false) Optional<String> url,
+                                        @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
+                                        @Valid @ModelAttribute("updateUserDto") UpdateUserDto dto,
                                         BindingResult bindingResult){
 
 

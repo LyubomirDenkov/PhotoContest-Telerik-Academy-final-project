@@ -2,8 +2,8 @@ package application.photocontest.repository;
 
 
 import application.photocontest.exceptions.EntityNotFoundException;
-import application.photocontest.models.Message;
-import application.photocontest.repository.contracts.MessageRepository;
+import application.photocontest.models.Notification;
+import application.photocontest.repository.contracts.NotificationRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,44 +13,44 @@ import javax.transaction.Transactional;
 
 
 @Repository
-public class MessageRepositoryImpl implements MessageRepository {
+public class NotificationRepositoryImpl implements NotificationRepository {
 
 
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public MessageRepositoryImpl(SessionFactory sessionFactory) {
+    public NotificationRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
 
     @Override
-    public Message getById(int id) {
+    public Notification getById(int id) {
         try(Session session = sessionFactory.openSession()){
-            Message message = session.get(Message.class,id);
-            if (message == null){
+            Notification notification = session.get(Notification.class,id);
+            if (notification == null){
                 throw new EntityNotFoundException("Message",id);
             }
-            return message;
+            return notification;
         }
     }
 
     @Transactional
     @Override
-    public Message create(Message message) {
+    public Notification create(Notification notification) {
         try (Session session = sessionFactory.openSession()) {
-            session.save(message);
-            return getById(message.getId());
+            session.save(notification);
+            return getById(notification.getId());
         }
     }
 
     @Transactional
     @Override
     public void delete(int id) {
-        Message message = getById(id);
+        Notification notification = getById(id);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.delete(message);
+            session.delete(notification);
             session.getTransaction().commit();
         }
     }

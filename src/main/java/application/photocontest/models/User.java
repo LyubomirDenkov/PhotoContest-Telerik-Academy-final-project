@@ -59,7 +59,7 @@ public class User {
     @JoinTable(name = "users_mails",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "message_id"))
-    private Set<Message> messages;
+    private Set<Notification> notifications;
 
     public User() {
     }
@@ -141,12 +141,12 @@ public class User {
     }
 
 
-    public Set<Message> getMessages() {
-        return messages;
+    public Set<Notification> getMessages() {
+        return notifications;
     }
 
-    public void setMessages(Set<Message> messages) {
-        this.messages = messages;
+    public void setMessages(Set<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     @JsonIgnore

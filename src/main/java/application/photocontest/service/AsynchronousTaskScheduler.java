@@ -7,7 +7,7 @@ import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
 import application.photocontest.repository.contracts.PhaseRepository;
 import application.photocontest.repository.contracts.UserRepository;
-import application.photocontest.service.contracts.MessageService;
+import application.photocontest.service.contracts.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static application.photocontest.service.constants.ContestConstants.MAIL_TITLE_CONTEST_END;
-import static application.photocontest.service.constants.ContestConstants.MESSAGE_CONTEST_END_TOP_POSITION;
+import static application.photocontest.service.constants.Constants.MAIL_TITLE_CONTEST_END;
+import static application.photocontest.service.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
 
 @Component
 @EnableScheduling
@@ -34,18 +34,18 @@ public class AsynchronousTaskScheduler implements Runnable {
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final PhaseRepository phaseRepository;
-    private final MessageService messageService;
+    private final NotificationService notificationService;
 
 
     @Autowired
     public AsynchronousTaskScheduler(ContestRepository contestRepository, ImageRepository imageRepository,
                                      UserRepository userRepository, PhaseRepository phaseRepository,
-                                     MessageService messageService) {
+                                     NotificationService notificationService) {
         this.contestRepository = contestRepository;
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
         this.phaseRepository = phaseRepository;
-        this.messageService = messageService;
+        this.notificationService = notificationService;
     }
 
 
@@ -209,22 +209,22 @@ public class AsynchronousTaskScheduler implements Runnable {
             }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
 
-            Message message = buildAndCreateMessage(user,pointsRewardByPosition,position);
+            Notification notification = buildAndCreateMessage(user,pointsRewardByPosition,position);
 
-            Set<Message> messages = user.getMessages();
-            messages.add(message);
-            user.setMessages(messages);
+            Set<Notification> notifications = user.getMessages();
+            notifications.add(notification);
+            user.setMessages(notifications);
 
             userRepository.update(user);
             userRepository.updatePoints(points.get());
         }
     }
 
-    private Message buildAndCreateMessage(User user,int points,String position){
-        Message message = new Message();
-        message.setTitle(String.format(MAIL_TITLE_CONTEST_END,"something"));
-        message.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION,user.getFirstName(),position,points));
-        message.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        return messageService.create(message);
+    private Notification buildAndCreateMessage(User user, int points, String position){
+        Notification notification = new Notification();
+        notification.setTitle(String.format(MAIL_TITLE_CONTEST_END,"something"));
+        notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION,user.getFirstName(),position,points));
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        return notificationService.create(notification);
     }
 }

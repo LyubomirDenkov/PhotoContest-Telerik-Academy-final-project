@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "mailbox")
-public class Message {
+@Table(name = "notification")
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "message_id")
+    @Column(name = "notification_id")
     private int id;
 
     @Column(name = "title")
@@ -24,10 +24,10 @@ public class Message {
     @Column(name = "is_seen")
     private boolean isSeen;
 
-    public Message() {
+    public Notification() {
     }
 
-    public Message(int id, String title, String message, String date, boolean isSeen) {
+    public Notification(int id, String title, String message, String date, boolean isSeen) {
         this.id = id;
         this.title = title;
         this.message = message;
@@ -79,8 +79,8 @@ public class Message {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Message message1 = (Message) o;
-        return getId() == message1.getId() && isSeen() == message1.isSeen() && getTitle().equals(message1.getTitle()) && getMessage().equals(message1.getMessage()) && getDate().equals(message1.getDate());
+        Notification notification1 = (Notification) o;
+        return getId() == notification1.getId() && isSeen() == notification1.isSeen() && getTitle().equals(notification1.getTitle()) && getMessage().equals(notification1.getMessage()) && getDate().equals(notification1.getDate());
     }
 
     @Override

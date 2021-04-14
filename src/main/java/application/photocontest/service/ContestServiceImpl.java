@@ -24,7 +24,7 @@ import java.util.Set;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
-import static application.photocontest.service.constants.ContestConstants.*;
+import static application.photocontest.service.constants.Constants.*;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -77,13 +77,6 @@ public class ContestServiceImpl implements ContestService {
         return typeRepository.getAll();
     }
 
-    @Override
-    public Set<Image> getContestImages(int id) {
-        Contest contest = contestRepository.getById(id);
-        Set<Image> images = contest.getImages();
-
-        return images;
-    }
 
     @Override
     public List<Contest> getFinishedContests(User currentUser) {

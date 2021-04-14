@@ -113,7 +113,7 @@ public class ContestsMvcController {
 
             model.addAttribute("contests", contestService.getFinishedContests(currentUser));
             model.addAttribute("currentUser", currentUser);
-            return "finished-contests";
+            return "contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";
@@ -128,7 +128,7 @@ public class ContestsMvcController {
 
             model.addAttribute("contests", contestService.getVotingContests(currentUser));
             model.addAttribute("currentUser", currentUser);
-            return "voting-contests";
+            return "contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";

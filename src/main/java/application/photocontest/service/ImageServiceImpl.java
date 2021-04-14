@@ -41,7 +41,7 @@ public class ImageServiceImpl implements ImageService {
     public Image create(User user, Image image, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
         verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
-        User userUploader = userRepository.getUserByUserName(user.getUserCredentials().getUserName());
+        User userUploader = userRepository.getById(user.getId());
         image.setUploader(userUploader);
 
         String imageUrl =  imgurService.uploadImageToImgurAndReturnUrl(file,url);

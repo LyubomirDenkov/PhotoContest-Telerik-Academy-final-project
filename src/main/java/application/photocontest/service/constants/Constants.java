@@ -1,6 +1,6 @@
 package application.photocontest.service.constants;
 
-public class ContestConstants {
+public class Constants {
 
     //phaseError
     public static final String CONTEST_PHASE_PREPARING = "ongoing";
