@@ -34,6 +34,10 @@ public class ContestConstants {
 
     public static final int NEEDED_POINTS_TO_BE_JURY = 150;
 
+
+    public static final String JOIN_OPEN_CONTESTS_ERROR_MESSAGE = "You can join only in open contests.";
+    public static final String USER_IS_PARTICIPANT_OR_JURY_ERROR_MESSAGE = "Only a participant can upload photo.";
+
     //MAILBOX
     public static final String MAIL_TITLE = "From 'iPhoto' team";
 
