@@ -2,6 +2,7 @@ package application.photocontest;
 
 import application.photocontest.models.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public class Helpers {
@@ -31,7 +32,23 @@ public class Helpers {
     }
 
     public static Contest createMockContest(){
-        return null;
+        User organizer = createMockUser();
+        organizer.setRoles(Set.of(new Role(2,"organizer")));
+        Category category = createMockCategory();
+        category.setName("Nature");
+        Type type = new Type(1,"open");
+        Contest contest = new Contest();
+
+        contest.setTitle("Nature Photos");
+        contest.setCategory(category);
+        contest.setTimeTillVoting(java.sql.Timestamp.valueOf(LocalDateTime.now().plusDays(1)));
+        contest.setTimeTillFinished(java.sql.Timestamp.valueOf(LocalDateTime.now().plusHours(2)));
+        contest.setUser(organizer);
+        contest.setType(type);
+        contest.setBackgroundImage("https://i.imgur.com/JD4Auj5.png");
+        contest.setPhase(new Phase(1,"ongoing"));
+
+        return contest;
     }
 
 }
