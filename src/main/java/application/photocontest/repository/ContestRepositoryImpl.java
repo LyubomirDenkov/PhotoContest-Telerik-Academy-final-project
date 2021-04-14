@@ -116,7 +116,7 @@ public class ContestRepositoryImpl implements ContestRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.id = 1 ",Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'ongoing' ",Contest.class).list();
 
         }
     }
@@ -125,7 +125,7 @@ public class ContestRepositoryImpl implements ContestRepository {
     public List<Contest> getVotingContests() {
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.id = 2 ",Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'voting' ",Contest.class).list();
 
         }
     }
@@ -134,7 +134,7 @@ public class ContestRepositoryImpl implements ContestRepository {
     public List<Contest> getFinishedContests() {
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.id = 3 ",Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'finished' ",Contest.class).list();
 
         }
     }
@@ -158,6 +158,14 @@ public class ContestRepositoryImpl implements ContestRepository {
             }
             return result.get(0);
 
+        }
+    }
+
+    @Override
+    public List<Contest> getByUserId(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select c from Contest c join c.participants as user " +
+                    " where user.id = :id ", Contest.class).setParameter("id", id).list();
         }
     }
 

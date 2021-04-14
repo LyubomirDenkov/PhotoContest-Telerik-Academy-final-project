@@ -156,10 +156,11 @@
 
         </div>
 
+
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="contest : ${contests}">
                     <ul >
-                        <div class="speaker" data-aos="fade-up" data-aos-delay="100">
+                        <div class="speaker">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"
                                  alt="Speaker 1" class="img-fluid">
                             <div class="contest-type">
@@ -181,8 +182,8 @@
                 </ul>
             </div>
         </div>
+        </div>
 
-    </div>
 </section>
 
 <script src="assets/vendor/aos/aos.js"></script>

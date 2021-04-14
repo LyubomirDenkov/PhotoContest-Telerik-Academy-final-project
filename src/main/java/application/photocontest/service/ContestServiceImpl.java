@@ -59,13 +59,15 @@ public class ContestServiceImpl implements ContestService {
 
     public List<Contest> getOngoingContests() {
 
-        List<Contest> contests = contestRepository.getOngoingContests();
+        return contestRepository.getOngoingContests();
 
-        if (contests.size() > 6) {
-            return contests.subList(0, 6);
-        }
+    }
 
-        return contests;
+    @Override
+    public List<Contest> getByUserId(int id) {
+       return contestRepository.getByUserId(id);
+
+
     }
 
     @Override
@@ -84,24 +86,18 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<Contest> getFinishedContests() {
 
-        List<Contest> contests = contestRepository.getFinishedContests();
+        return contestRepository.getFinishedContests();
 
-        if (contests.size() > 6) {
-            return contests.subList(0, 6);
-        }
 
-        return contests;
+
     }
 
     @Override
     public List<Contest> getVotingContests() {
-        List<Contest> contests = contestRepository.getFinishedContests();
+       return contestRepository.getFinishedContests();
 
-        if (contests.size() > 6) {
-            return contests.subList(0, 6);
-        }
 
-        return contests;
+
     }
 
     @Override
