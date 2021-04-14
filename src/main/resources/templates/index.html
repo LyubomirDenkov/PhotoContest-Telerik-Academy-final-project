@@ -47,8 +47,8 @@
     <div class="container-fluid container-xxl d-flex align-items-center">
 
         <div id="logo" class="me-auto">
-            <!-- Uncomment below if you prefer to use a text logo -->
-            <!--<h1><a href="index.html">The<span>Event</span></a></h1>-->
+<!--             Uncomment below if you prefer to use a text logo
+            <h1><a href="index.html">The<span>Event</span></a></h1>-->
             <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
                                                             src="../static/assets/img/logo.png" alt="" title=""></a>
         </div>
@@ -65,9 +65,8 @@
             <ul th:if="${currentUser != null}">
 
                 <li><a class="nav-link" href="#"
-                       th:href="@{/users}">Leaderboard</a>
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
                 </li>
-
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
@@ -157,8 +156,8 @@
 
 
     <!-- ======= Venue Section ======= -->
-    <!--<section id="venue">
-        <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
+    <section id="venue">
+       <!-- <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
             <div class="section-header">
                 <br>
                 <h2>Top 6 rated pictures</h2>
@@ -177,9 +176,8 @@
                 </div>
             </div>
         </div>
-
-    </section>&lt;!&ndash; End Venue Section &ndash;&gt;
 -->
+    </section><!-- End Venue Section -->
 
     <!-- =======  F.A.Q Section ======= -->
     <section id="faq">

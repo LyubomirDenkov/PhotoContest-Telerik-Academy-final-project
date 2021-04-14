@@ -36,11 +36,11 @@ public class UserMvcController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping
-    public String getUsersLeaderboard(Model model, HttpSession session){
+    @GetMapping("/leaderboard")
+    public String getUsersLeaderboard(Model model, HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        model.addAttribute("currentUser",user);
-        model.addAttribute("users",userService.getLeaderboard(user));
+        model.addAttribute("currentUser", user);
+        model.addAttribute("users", userService.getLeaderboard(user));
         return "leaderboard";
     }
 
@@ -49,22 +49,22 @@ public class UserMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", userService.getById(user,id));
+            model.addAttribute("currentUser", userService.getById(user, id));
             return "profile";
-        }catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";
         }
     }
 
     @GetMapping("/{id}/update")
-    public String editUserProfile(@PathVariable int id, Model model,HttpSession session){
+    public String editUserProfile(@PathVariable int id, Model model, HttpSession session) {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("currentUser", userService.getById(user, id));
-            model.addAttribute("updateUserDto",new UpdateUserDto());
+            model.addAttribute("updateUserDto", new UpdateUserDto());
             return "edit-profile";
-        }catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";
         }
     }
@@ -74,21 +74,24 @@ public class UserMvcController {
                                         @RequestParam(value = "url", required = false) Optional<String> url,
                                         @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
                                         @Valid @ModelAttribute("updateUserDto") UpdateUserDto dto,
-                                        BindingResult bindingResult){
+                                        BindingResult bindingResult) {
 
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "edit-profile";
         }
 
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            User userToUpdate = userMapper.fromDto(id,dto);
-            userService.update(user,userToUpdate,file,url);
+            User userToUpdate = userMapper.fromDto(id, dto);
+            userService.update(user, userToUpdate, file, url);
             return "redirect:/users/{id}/profile";
-        } catch (IllegalArgumentException e){
-            bindingResult.rejectValue("oldPassword","password_error",e.getMessage());
+        } catch (UnsupportedOperationException e) {
+            bindingResult.rejectValue("oldPassword", "password_error", e.getMessage());
+            return "edit-profile";
+        } catch (IllegalArgumentException e) {
+            bindingResult.rejectValue("repeatPassword", "password_error", e.getMessage());
             return "edit-profile";
         } catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
             return "error";

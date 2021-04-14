@@ -42,7 +42,7 @@
             <ul th:if="${currentUser != null}">
 
                 <li><a class="nav-link" href="#"
-                       th:href="@{/users}">Leaderboard</a>
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
                 </li>
 
                 <li><a class="nav-link" href="#" th:href="@{/contests}">Contests</a>
@@ -87,7 +87,7 @@
                                 <p th:text="*{contest.getUser().getFirstName() + ' ' + contest.getUser().getLastName()}">50 GB SSD Storage</p>
                                 <p th:text="*{contest.getParticipants().size()}">Participants</p>
                                 <p th:text="*{#dates.format(contest.getTimeTillFinished(),'yyyy-MM-dd HH:mm')}">Unmetered Bandwidth</p>
-                                <p id="timer" th:text="*{contest.getTimeTillVoting()}">Unmetered Bandwidth</p>
+                                <p id="timer" th:text="*{contest.timeTillVoting}">Unmetered Bandwidth</p>
                             </div>
                         </div>
                     </div>
@@ -132,26 +132,6 @@
     </div>
 </section>
 
-
-<!--<div id="open-modal" class="modal-window">
-
-    <div>
-        <a href="#" title="Close" class="modal-close">Close</a>
-        <form action="#" th:action="@{__${#httpServletRequest.requestURI}__/upload}" th:object="${imageDto}"
-              method="post">
-        <h1>Title</h1>
-        <input type="text" name="title" th:field="*{title}">
-        <hr>
-        <h1>Story</h1>
-        <textarea name="story" id="" cols="10" rows="5" th:field="*{story}"></textarea>
-        <hr>
-        <a href="#" >
-            <button type="submit"  class="glow-on-hover">UPLOAD</button>
-            </a>
-        </form>
-    </div>
-</div>-->
-
 <!-- Vendor JS Files -->
 <script src="assets/vendor/aos/aos.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -163,7 +143,7 @@
 
 <script th:inline="javascript">
     var x = setInterval(function () {
-        var countDownDate = new Date([[${contest.timeTillFinished}]]).getTime();
+        var countDownDate = new Date([[${contest.timeTillVoting}]]).getTime();
 
         var now = new Date().getTime();
 
