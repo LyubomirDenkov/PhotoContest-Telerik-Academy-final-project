@@ -36,15 +36,6 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
 
-    @Transactional
-    @Override
-    public void createJurorRateEntity(ImageReview imageReview) {
-
-        try (Session session = sessionFactory.openSession()) {
-            session.save(imageReview);
-        }
-    }
-
 
     @Override
     public Long getReviewPointsByImageId(int id) {

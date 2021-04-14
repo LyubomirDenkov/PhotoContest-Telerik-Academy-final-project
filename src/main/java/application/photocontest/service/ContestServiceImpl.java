@@ -38,7 +38,6 @@ public class ContestServiceImpl implements ContestService {
     private final PhaseRepository phaseRepository;
     private final ImageReviewRepository imageReviewRepository;
     private final ImgurService imgurService;
-
     private final ImageService imageService;
 
     @Autowired
@@ -68,7 +67,7 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public List<Contest> getByUserId(int id) {
-       return contestRepository.getByUserId(id);
+        return contestRepository.getByUserId(id);
 
 
     }
@@ -92,13 +91,11 @@ public class ContestServiceImpl implements ContestService {
         return contestRepository.getFinishedContests();
 
 
-
     }
 
     @Override
     public List<Contest> getVotingContests() {
-       return contestRepository.getFinishedContests();
-
+        return contestRepository.getFinishedContests();
 
 
     }
@@ -155,7 +152,7 @@ public class ContestServiceImpl implements ContestService {
 
         if (contestBackground.isBlank()) {
             contest.setBackgroundImage(contestBackground);
-        }else {
+        } else {
             contest.setBackgroundImage(DEFAULT_CONTEST_BACKGROUND);
         }
 
@@ -246,21 +243,39 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public void rateImage(User user, int contestId, int imageId, int points, String comment) {
 
-        checkIfUserIsInJury(user, imageId, contestId, points);
+        Contest contest = contestRepository.getById(contestId);
+        Image image = imageRepository.getById(imageId);
+
+        boolean isUserRatedImageInContest = true;
+
+        validateContestPhase(contest, ContestPhases.VOTING);
+        validateUserIsJury(contest,user);
+        validateRatingPointsRange(MIN_RATING_POINTS,MAX_RATING_POINTS,points);
+        validateContestContainsImage(contest,image);
+
+        try{
+            imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contestId,imageId);
+        }catch (EntityNotFoundException e){
+            isUserRatedImageInContest = false;
+        }
+
+        if (isUserRatedImageInContest){
+            throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
+        }
+
 
         ImageReview imageReview = new ImageReview();
-        Image image = imageRepository.getById(imageId);
-        Contest contest = contestRepository.getById(contestId);
+
+
 
         imageReview.setUser(user);
         imageReview.setContest(contest);
         imageReview.setImage(image);
         imageReview.setPoints(points);
         imageReview.setComment(comment);
-        imageRepository.createJurorRateEntity(imageReview);
+        imageReviewRepository.create(imageReview);
 
         image.setPoints(image.getPoints() + points);
-
         imageRepository.update(image);
 
     }
@@ -329,10 +344,6 @@ public class ContestServiceImpl implements ContestService {
 
     private Contest checkPointsContestAndImage(int contestId, int imageId, int points) {
 
-        if (points < POINTS_WHEN_PARTICIPANT_ADDED || points > MAX_RATING) {
-            throw new IllegalArgumentException(RATING_BETWEEN_1_AND_10);
-        }
-
         Contest contest = contestRepository.getById(contestId);
 
         if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_VOTING)) {
@@ -347,23 +358,6 @@ public class ContestServiceImpl implements ContestService {
         return contest;
     }
 
-    private void checkIfUserIsInJury(User user, int imageId, int contestId, int points) {
-
-        Contest contest = checkPointsContestAndImage(contestId, imageId, points);
-
-        List<ImageReview> imageReviews = imageReviewRepository
-                .getImageRatingsByUsername(user.getUserCredentials().getUserName());
-
-        for (ImageReview imageReview : imageReviews) {
-            if (imageReview.getImage().getId() == imageId) {
-                throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
-            }
-        }
-
-        if (!contest.getJury().contains(user)) {
-            throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
-        }
-    }
 
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> participantSet) {
@@ -408,6 +402,7 @@ public class ContestServiceImpl implements ContestService {
         contest.setJury(jury);
     }
 
+
     private boolean isJuryOrOrganizer(Set<User> jury, User user) {
         return jury.contains(user) || user.isOrganizer();
     }
@@ -415,6 +410,13 @@ public class ContestServiceImpl implements ContestService {
     private void validateContestPhase(Contest contest, ContestPhases phase) {
         if (!contest.getPhase().getName().equalsIgnoreCase(phase.toString())) {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
+        }
+    }
+
+    private void validateRatingPointsRange(int min,int max, int points){
+
+        if (points < min || points > max) {
+            throw new UnauthorizedOperationException(RATING_RANGE_ERROR_MESSAGE);
         }
     }
 
@@ -427,6 +429,12 @@ public class ContestServiceImpl implements ContestService {
     private void validateUserIsParticipant(Contest contest, User user) {
         if (!contest.getParticipants().contains(user)) {
             throw new UnauthorizedOperationException(ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO);
+        }
+    }
+
+    private void validateUserIsJury(Contest contest, User user){
+        if (!contest.getJury().contains(user)) {
+            throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
         }
     }
 
@@ -444,6 +452,12 @@ public class ContestServiceImpl implements ContestService {
 
     private void validateContestNotContainsImage(Contest contest, Image image) {
         if (contest.getImages().contains(image)) {
+            throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
+        }
+    }
+
+    private void validateContestContainsImage(Contest contest , Image image){
+        if (!contest.getImages().contains(image)) {
             throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
         }
     }

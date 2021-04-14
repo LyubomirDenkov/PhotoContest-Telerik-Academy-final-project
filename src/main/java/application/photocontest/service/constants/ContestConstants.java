@@ -11,8 +11,9 @@ public class ContestConstants {
     //ratingError
     public static final String RATING_TWICE_ERROR_MSG = "You cannot rate twice.";
     public static final String PHASE_RATING_ERROR_MESSAGE = "You can only rate images in second phase.";
-    public static final String RATING_BETWEEN_1_AND_10 = "You can only give points between 1 and 10.";
-    public static final int MAX_RATING = 10;
+    public static final String RATING_RANGE_ERROR_MESSAGE = "You can only give points between 1 and 10.";
+    public static final int MAX_RATING_POINTS = 10;
+    public static final int MIN_RATING_POINTS = 1;
     public static final String ONLY_JURY_CAN_RATE_IMAGES = "Only jury can rate images.";
 
     //pointsReward
@@ -28,6 +29,8 @@ public class ContestConstants {
 
     //addingPhotoError
     public static final String PHOTO_ALREADY_IN_A_CONTEST = "This photo is already in the contest.";
+
+    public static final String PHOTO_NOT_IN_A_CONTEST = "This photo is not in the contest.";
     public static final String ADD_ONLY_OWN_PHOTOS = "You can add only own photos.";
     public static final String ONLY_A_PARTICIPANT_CAN_UPLOAD_PHOTO = "Only a participant can upload photo.";
     public static final String ADDING_IMAGES_ONLY_IN_PHASE_ONE = "You can add photos only in phase one.";

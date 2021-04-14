@@ -5,6 +5,7 @@ import application.photocontest.repository.contracts.ImageReviewRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,11 +19,32 @@ public class ImageReviewRepositoryImpl implements ImageReviewRepository {
     }
 
 
+    @Transactional
     @Override
-    public List<ImageReview> getImageRatingsByUsername(String userName) {
+    public void create(ImageReview imageReview) {
+
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from ImageReview where user.userCredentials.userName = :userName ",
-                    ImageReview.class).setParameter("userName", userName).list();
+            session.save(imageReview);
+        }
+    }
+
+    @Override
+    public List<ImageReview> getImageReviewByUserId(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from ImageReview where user.id = :id ",
+                    ImageReview.class).setParameter("id", id).list();
+
+        }
+    }
+
+    public ImageReview getImageReviewUserContestAndImageId(int userId,int contestId,int imageId){
+
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from ImageReview where user.id = :userId " +
+                            "and contest.id = :contestId and image.id = :imageId", ImageReview.class)
+                    .setParameter("userId", userId)
+                    .setParameter("contestId",contestId)
+                    .setParameter("imageId",imageId).uniqueResult();
 
         }
     }
