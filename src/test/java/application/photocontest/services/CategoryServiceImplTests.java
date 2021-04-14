@@ -6,7 +6,6 @@ import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.CategoryRepository;
 import application.photocontest.service.CategoryServiceImpl;
-import application.photocontest.service.contracts.CategoryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
