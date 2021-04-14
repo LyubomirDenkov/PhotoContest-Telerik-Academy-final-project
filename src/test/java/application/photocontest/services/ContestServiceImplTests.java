@@ -9,6 +9,7 @@ import application.photocontest.repository.contracts.TypeRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.ContestServiceImpl;
 import application.photocontest.service.contracts.ImgurService;
+import application.photocontest.service.contracts.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +38,9 @@ public class ContestServiceImplTests {
 
     @Mock
     ImgurService imgurService;
+
+    @Mock
+    UserService userService;
 
     @InjectMocks
     ContestServiceImpl contestService;
@@ -217,9 +221,44 @@ public class ContestServiceImplTests {
     }
 
     @Test
-    public void setContestJury_Should_Return_When_IsCalled() {
+    public void update_Should_Throw_When_UserIsNotAuthorized() {
+        Contest contest = createMockContest();
+        User organizer = createMockOrganizer();
+        contest.setUser(organizer);
+        User user = createMockUser();
+        Set<Integer> jury = Set.of(1,2,3);
+        Set<Integer> participants = Set.of(4,5,6);
+
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.update(user,contest,jury,participants,Optional.empty(),Optional.empty()));
 
     }
+
+    @Test
+    public void update_Should_Update_When_ValidationsOk() throws IOException {
+        Contest contest = createMockContest();
+        User user = createMockUser();
+        User organizer = createMockOrganizer();
+        User userParticipant = createMockUser();
+        Set<Integer> jury = Set.of(user.getId());
+        Set<Integer> participants = Set.of(userParticipant.getId());
+
+        Points points = new Points(6,100);
+
+
+        Mockito.when(userRepository.getOrganizers()).thenReturn(List.of(organizer));
+
+        Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
+
+        contestService.update(organizer,contest,jury,participants,Optional.empty(),Optional.empty());
+
+        Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
+
+
+
+    }
+
 
 
 
