@@ -56,9 +56,9 @@ public class User {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_mails",
+    @JoinTable(name = "users_notifications",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id"))
+            inverseJoinColumns = @JoinColumn(name = "notification_id"))
     private Set<Notification> notifications;
 
     public User() {
