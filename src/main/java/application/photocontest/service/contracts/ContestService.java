@@ -17,7 +17,7 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
-    Image uploadImageToContest(User user,Image image, int contestId,Optional<MultipartFile> file,Optional<String> url) throws IOException;
+    Image uploadImageToContest(User user, Image image, int contestId, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
     void delete(User user, int id);
 
@@ -31,11 +31,11 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     List<Type> getAllTypes();
 
-    List<Contest> getFinishedContests(User currentUser);
+    List<Contest> getFinishedContests(User user);
 
-    List<Contest> getVotingContests(User currentUser);
+    List<Contest> getVotingContests(User user);
 
-     List<Contest> getByUserId(int id);
+    List<Contest> getByUserId(int id);
 
 
 }

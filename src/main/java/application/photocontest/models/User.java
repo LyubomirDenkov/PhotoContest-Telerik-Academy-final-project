@@ -141,6 +141,7 @@ public class User {
     }
 
 
+    @JsonIgnore
     public Set<Notification> getMessages() {
         return notifications;
     }

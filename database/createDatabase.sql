@@ -24,14 +24,14 @@ create or replace table contest_type
         unique (name)
 );
 
-create or replace table mailbox
+create or replace table notification
 (
-    message_id int auto_increment
+    notification_id int auto_increment
         primary key,
-    title      text                 not null,
-    message    longtext             not null,
-    date       text                 not null,
-    is_seen    tinyint(1) default 0 not null
+    title           text                 not null,
+    message         longtext             not null,
+    date            text                 not null,
+    is_seen         tinyint(1) default 0 not null
 );
 
 create or replace table points
@@ -96,6 +96,16 @@ create or replace table contest
         foreign key (type_id) references contest_type (type_id)
 );
 
+create or replace table contest_jury
+(
+    contest_id int not null,
+    user_id    int not null,
+    constraint jury_users_contest_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint jury_users_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
 create or replace table contest_participants
 (
     contest_id int not null,
@@ -146,16 +156,6 @@ create or replace table image_reviews
         foreign key (user_id) references users (user_id)
 );
 
-create or replace table jury_users
-(
-    contest_id int not null,
-    user_id    int not null,
-    constraint jury_users_contest_fk
-        foreign key (contest_id) references contest (contest_id),
-    constraint jury_users_users_fk
-        foreign key (user_id) references users (user_id)
-);
-
 create or replace table user_points
 (
     user_id   int not null,
@@ -176,12 +176,12 @@ create or replace table users_images
         foreign key (user_id) references users (user_id)
 );
 
-create or replace table users_mails
+create or replace table users_notifications
 (
-    user_id    int not null,
-    message_id int not null,
-    constraint table_name_mailbox_fk
-        foreign key (message_id) references mailbox (message_id),
+    user_id         int not null,
+    notification_id int not null,
+    constraint table_name_notification_fk
+        foreign key (notification_id) references notification (notification_id),
     constraint table_name_users_fk
         foreign key (user_id) references users (user_id)
 );
@@ -195,4 +195,6 @@ create or replace table users_roles
     constraint users_roles_user_credentials_fk
         foreign key (user_id) references users (user_id)
 );
+
+
 

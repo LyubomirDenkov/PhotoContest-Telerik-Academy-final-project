@@ -18,7 +18,10 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
     List<Contest> getVotingContests();
 
     List<Contest> getFinishedContests();
+
     Contest getContestByImageUploaderId(int id);
 
     List<Contest> getByUserId(int id);
+
+    List<Contest> getUserContests(int id);
 }

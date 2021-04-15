@@ -4,6 +4,7 @@ import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
+import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImgurService;
 import application.photocontest.service.contracts.UserService;
@@ -25,16 +26,30 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ImgurService imgurService;
+    private final ContestRepository contestRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService) {
+    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService, ContestRepository contestRepository) {
         this.userRepository = userRepository;
         this.imgurService = imgurService;
+        this.contestRepository = contestRepository;
     }
 
     @Override
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
+    }
+
+    @Override
+    public List<Contest> getUserContests(User user, int userId) {
+
+        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+
+        if (!user.isOrganizer()){
+            verifyIsUserOwnAccount(user.getId(),userId,"Something");
+        }
+
+        return contestRepository.getUserContests(user.getId());
     }
 
     @Override
@@ -149,6 +164,8 @@ public class UserServiceImpl implements UserService {
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         verifyIsUserOwnAccount(user.getId(), id, "something");
+
+
 
         userRepository.delete(id);
     }

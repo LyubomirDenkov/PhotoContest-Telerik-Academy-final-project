@@ -1,5 +1,7 @@
 package application.photocontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -54,7 +56,7 @@ public class Contest {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "jury_users",
+            name = "contest_jury",
             joinColumns = @JoinColumn(name = "contest_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> jury;
@@ -66,15 +68,17 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> images;
 
+    @JsonIgnore
     @Column(name = "is_jury")
     private boolean isJury;
 
+    @JsonIgnore
     @Column(name = "is_participant")
     private boolean isParticipant;
 
+    @JsonIgnore
     @Column(name = "has_image_uploaded")
     private boolean hasImageUploaded;
-
 
     public Contest() {
     }
@@ -207,6 +211,7 @@ public class Contest {
         this.images = images;
     }
 
+    @JsonIgnore
     public boolean isJury() {
         return isJury;
     }
@@ -215,6 +220,7 @@ public class Contest {
         this.isJury = userIsJury;
     }
 
+    @JsonIgnore
     public boolean isParticipant() {
         return isParticipant;
     }
@@ -223,6 +229,7 @@ public class Contest {
         isParticipant = participant;
     }
 
+    @JsonIgnore
     public boolean isHasImageUploaded() {
         return hasImageUploaded;
     }

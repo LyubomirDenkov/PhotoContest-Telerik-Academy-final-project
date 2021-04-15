@@ -169,5 +169,11 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
+    public List<Contest> getUserContests(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select distinct c from Contest c join c.participants as participant join c.jury as jury " +
+                            " where participant.id = :id or jury.id = :id ", Contest.class).setParameter("id", id).list();
+        }
+    }
 
 }
