@@ -40,22 +40,15 @@ public class ContestServiceImplTests {
     ImgurService imgurService;
 
     @Mock
-    UserService userService;
-
-    @Mock
     PointsRepository pointsRepository;
 
     @Mock
     ImageRepository imageRepository;
 
-    @Mock
-    ImageService imageService;
 
     @Mock
     ImageReviewRepository imageReviewRepository;
 
-    @InjectMocks
-    ImageServiceImpl imageServiceImpl;
 
     @InjectMocks
     ContestServiceImpl contestService;
@@ -203,7 +196,7 @@ public class ContestServiceImplTests {
         Set<Integer> jury = Set.of(1,2,3);
         Set<Integer> participants = Set.of(4,5,6);
 
-        Mockito.when(contestRepository.getByTitle(contest.getTitle())).thenReturn(contest);
+        when(contestRepository.getByTitle(contest.getTitle())).thenReturn(contest);
 
         Assertions.assertThrows(DuplicateEntityException.class,
                 () -> contestService.create(contest.getUser(),contest,jury,participants, Optional.empty(),Optional.empty()));
