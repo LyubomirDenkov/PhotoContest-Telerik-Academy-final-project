@@ -358,8 +358,43 @@ public class ContestServiceImplTests {
 
     }
 
+    @Test
+    public void addImage_Should_Add_When_ValidatosOk() {
+        Contest contest = createMockContest();
+        User user = createMockUser();
+        contest.setJury(Set.of(user));
+        Image image = createMockImage();
 
 
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
+
+        contestService.addImageToContest(user,contest.getId(),image.getId());
+
+        Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+
+    }
+
+    @Test
+    public void addUser_Should_Add_When_ValidationsOk() {
+        Contest contest = createMockContest();
+        User user = createMockUser();
+        Set<User> userToAdd = new HashSet<>();
+        contest.setParticipants(userToAdd);
+
+
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
+
+        contestService.addUserToContest(user,contest.getId(),user.getId());
+
+        Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+
+    }
 
 
 }

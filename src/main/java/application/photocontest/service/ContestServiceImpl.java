@@ -319,6 +319,7 @@ public class ContestServiceImpl implements ContestService {
         validateUserIsNotParticipantOrJury(contest, userToJoinInContest);
 
 
+
         Set<User> participants = contest.getParticipants();
 
         if (participants.contains(userToJoinInContest)) {
@@ -443,7 +444,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void validateUserIsNotParticipantOrJury(Contest contest, User user) {
-        if (contest.getParticipants().contains(user)) {
+        if (contest.getParticipants().contains(user) || contest.getJury().contains(user)) {
             throw new UnauthorizedOperationException(USER_IS_PARTICIPANT_OR_JURY_ERROR_MESSAGE);
         }
     }
