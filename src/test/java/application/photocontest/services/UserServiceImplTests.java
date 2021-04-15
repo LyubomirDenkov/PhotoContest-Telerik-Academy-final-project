@@ -175,4 +175,49 @@ public class UserServiceImplTests {
 
 
 
+    @Test
+    public void update_Should_Throw_WhenNotAuthorized() {
+        User user = createMockUser();
+        User organizer = createMockOrganizer();
+
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.update(user,organizer,Optional.empty(),Optional.empty()));
+
+    }
+
+    @Test
+    public void update_Should_Update_WhenValidationsOk() throws IOException {
+        User user = createMockUser();
+
+        userService.update(user,user,Optional.empty(),Optional.empty());
+
+        verify(userRepository,times(1)).update(user);
+
+    }
+
+    @Test
+    public void delete_Should_Throw_When_NotAuthorized()  {
+        User user = createMockUser();
+        User organizer = createMockOrganizer();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.delete(user,organizer.getId()));
+
+
+    }
+
+    @Test
+    public void delete_Should_Delete_When_ValidationsOk()  {
+        User user = createMockUser();
+
+        userService.delete(user,user.getId());
+
+        verify(userRepository,times(1)).delete(user.getId());
+        
+
+
+    }
+
+
 }
