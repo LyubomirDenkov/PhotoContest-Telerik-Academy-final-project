@@ -18,10 +18,6 @@ public interface UserRepository extends GetRepositoryOperations<User>, CudReposi
 
     User getUserByPictureId(int id);
 
-    void createPoints(Points points);
-
-    void updatePoints(Points points);
-
     List<User> getOrganizers();
 
     List<User> getAllPotentialJury();

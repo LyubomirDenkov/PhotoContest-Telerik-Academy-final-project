@@ -3,10 +3,7 @@ package application.photocontest.service;
 import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
-import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.ImageRepository;
-import application.photocontest.repository.contracts.PhaseRepository;
-import application.photocontest.repository.contracts.UserRepository;
+import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -35,17 +32,19 @@ public class AsynchronousTaskScheduler implements Runnable {
     private final UserRepository userRepository;
     private final PhaseRepository phaseRepository;
     private final NotificationService notificationService;
+    private final PointsRepository pointsRepository;
 
 
     @Autowired
     public AsynchronousTaskScheduler(ContestRepository contestRepository, ImageRepository imageRepository,
                                      UserRepository userRepository, PhaseRepository phaseRepository,
-                                     NotificationService notificationService) {
+                                     NotificationService notificationService, PointsRepository pointsRepository) {
         this.contestRepository = contestRepository;
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
         this.phaseRepository = phaseRepository;
         this.notificationService = notificationService;
+        this.pointsRepository = pointsRepository;
     }
 
 
@@ -216,7 +215,7 @@ public class AsynchronousTaskScheduler implements Runnable {
             user.setMessages(notifications);
 
             userRepository.update(user);
-            userRepository.updatePoints(points.get());
+            pointsRepository.updatePoints(points.get());
         }
     }
 

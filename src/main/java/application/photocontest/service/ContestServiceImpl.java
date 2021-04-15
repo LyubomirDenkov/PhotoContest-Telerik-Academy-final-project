@@ -35,18 +35,21 @@ public class ContestServiceImpl implements ContestService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final TypeRepository typeRepository;
-    private final PhaseRepository phaseRepository;
+    private final PointsRepository pointsRepository;
     private final ImageReviewRepository imageReviewRepository;
     private final ImgurService imgurService;
     private final ImageService imageService;
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository, ImageRepository imageRepository, TypeRepository typeRepository, PhaseRepository phaseRepository, ImageReviewRepository imageReviewRepository, ImgurService imgurService, ImageService imageService) {
+    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository,
+                              ImageRepository imageRepository, TypeRepository typeRepository,
+                              PointsRepository pointsRepository, ImageReviewRepository imageReviewRepository,
+                              ImgurService imgurService, ImageService imageService) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.typeRepository = typeRepository;
-        this.phaseRepository = phaseRepository;
+        this.pointsRepository = pointsRepository;
         this.imageReviewRepository = imageReviewRepository;
         this.imgurService = imgurService;
         this.imageService = imageService;
@@ -234,7 +237,7 @@ public class ContestServiceImpl implements ContestService {
 
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
-            userRepository.updatePoints(points.get());
+            pointsRepository.updatePoints(points.get());
             participants.add(participantToAdd);
             userRepository.update(participantToAdd);
 
@@ -252,23 +255,22 @@ public class ContestServiceImpl implements ContestService {
         boolean isUserRatedImageInContest = true;
 
         validateContestPhase(contest, ContestPhases.VOTING);
-        validateUserIsJury(contest,user);
-        validateRatingPointsRange(MIN_RATING_POINTS,MAX_RATING_POINTS,points);
-        validateContestContainsImage(contest,image);
+        validateUserIsJury(contest, user);
+        validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, points);
+        validateContestContainsImage(contest, image);
 
-        try{
-            imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contestId,imageId);
-        }catch (EntityNotFoundException e){
+        try {
+            imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(), contestId, imageId);
+        } catch (EntityNotFoundException e) {
             isUserRatedImageInContest = false;
         }
 
-        if (isUserRatedImageInContest){
+        if (isUserRatedImageInContest) {
             throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
         }
 
 
         ImageReview imageReview = new ImageReview();
-
 
 
         imageReview.setUser(user);
@@ -327,7 +329,7 @@ public class ContestServiceImpl implements ContestService {
 
         int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
         points.get().setPoints(pointsToIncrease);
-        userRepository.updatePoints(points.get());
+        pointsRepository.updatePoints(points.get());
 
         userRepository.update(userToJoinInContest);
 
@@ -362,7 +364,6 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
-
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> participantSet) {
         User user;
 
@@ -379,7 +380,7 @@ public class ContestServiceImpl implements ContestService {
 
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
-            userRepository.updatePoints(points.get());
+            pointsRepository.updatePoints(points.get());
             usersToAdd.add(user);
         }
         contest.setParticipants(usersToAdd);
@@ -416,7 +417,7 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateRatingPointsRange(int min,int max, int points){
+    private void validateRatingPointsRange(int min, int max, int points) {
 
         if (points < min || points > max) {
             throw new UnauthorizedOperationException(RATING_RANGE_ERROR_MESSAGE);
@@ -435,7 +436,7 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateUserIsJury(Contest contest, User user){
+    private void validateUserIsJury(Contest contest, User user) {
         if (!contest.getJury().contains(user)) {
             throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
         }
@@ -459,7 +460,7 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateContestContainsImage(Contest contest , Image image){
+    private void validateContestContainsImage(Contest contest, Image image) {
         if (!contest.getImages().contains(image)) {
             throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
         }

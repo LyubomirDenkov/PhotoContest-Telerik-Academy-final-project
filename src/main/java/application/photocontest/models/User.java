@@ -46,7 +46,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> images;
 
-    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_points",
             joinColumns = @JoinColumn(name = "user_id"),

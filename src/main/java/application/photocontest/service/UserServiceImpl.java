@@ -5,6 +5,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.repository.contracts.PointsRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImgurService;
 import application.photocontest.service.contracts.UserService;
@@ -27,12 +28,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ImgurService imgurService;
     private final ContestRepository contestRepository;
+    private final PointsRepository pointsRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService, ContestRepository contestRepository) {
+    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService, ContestRepository contestRepository, PointsRepository pointsRepository) {
         this.userRepository = userRepository;
         this.imgurService = imgurService;
         this.contestRepository = contestRepository;
+        this.pointsRepository = pointsRepository;
     }
 
     @Override
@@ -132,7 +135,7 @@ public class UserServiceImpl implements UserService {
         Points points = new Points();
         Set<Points> startingPoints = new HashSet<>();
         startingPoints.add(points);
-        userRepository.createPoints(points);
+        pointsRepository.createPoints(points);
         user.setPoints(startingPoints);
         userRepository.update(user);
     }
