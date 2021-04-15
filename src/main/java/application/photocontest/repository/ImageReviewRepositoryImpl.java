@@ -29,9 +29,9 @@ public class ImageReviewRepositoryImpl implements ImageReviewRepository {
     }
 
     @Override
-    public List<ImageReview> getImageReviewByUserId(int id) {
+    public List<ImageReview> getImageReviewByImageId(int id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from ImageReview where user.id = :id ",
+            return session.createQuery("from ImageReview where image.id = :id ",
                     ImageReview.class).setParameter("id", id).list();
 
         }
