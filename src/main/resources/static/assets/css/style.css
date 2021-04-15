@@ -1295,7 +1295,7 @@ CUSTOM HERO SECTION CONTESTS
 
 @media (min-width: 992px) {
   #gallery .swiper-wrapper {
-    padding: 40px 0;
+    padding: 0;
   }
   #gallery .swiper-slide-active {
     border: 5px solid #f82249;
@@ -2503,4 +2503,16 @@ ul {
 }
 .custom-file-input{
   width: 60%;
+}
+
+/*
+IMAGE
+ */
+
+.image{
+  text-align: center;
+  display: block;
+  position: relative;
+  margin-top: 200px;
+
 }

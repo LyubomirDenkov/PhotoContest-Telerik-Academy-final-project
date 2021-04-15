@@ -138,6 +138,16 @@ create or replace table contest_image
         foreign key (image_id) references images (image_id)
 );
 
+create or replace table contest_winner_images
+(
+    contest_id int not null,
+    image_id   int null,
+    constraint contest_winner_images_contests_fk
+        foreign key (contest_id) references contest (contest_id),
+    constraint contest_winner_images_images_fk
+        foreign key (image_id) references images (image_id)
+);
+
 create or replace table image_reviews
 (
     image_review_id int auto_increment

@@ -37,5 +37,4 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     List<Contest> getByUserId(int id);
 
-
 }

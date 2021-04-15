@@ -16,4 +16,6 @@ public interface ImageService {
 
     void delete(User user, int id);
 
+    List<Image> latestWinnerImages();
+
 }

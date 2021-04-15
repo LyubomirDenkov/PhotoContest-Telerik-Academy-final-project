@@ -68,6 +68,13 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> images;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "contest_winner_images",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<Image> winnerImages;
+
     @JsonIgnore
     @Column(name = "is_jury")
     private boolean isJury;
@@ -209,6 +216,14 @@ public class Contest {
 
     public void setImages(Set<Image> images) {
         this.images = images;
+    }
+
+    public Set<Image> getWinnerImages() {
+        return winnerImages;
+    }
+
+    public void setWinnerImages(Set<Image> winnerImages) {
+        this.winnerImages = winnerImages;
     }
 
     @JsonIgnore

@@ -23,4 +23,5 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
     List<Contest> getByUserId(int id);
 
     List<Contest> getUserContests(int id);
+
 }

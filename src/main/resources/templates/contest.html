@@ -152,6 +152,47 @@
     </div>
 </section>
 
+<br><br><br><br>
+<br><br><br><br>
+<section>
+    <div class="section-header">
+        <h2>Winner photos</h2>
+        <br>
+        <br>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-4" th:each="image: ${contest.getWinnerImages()}">
+            <ul >
+                <div class="speaker">
+                    <a href="#" th:href="@{/images/{id}(id=${image.getId()})}" ><img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
+                         alt="Speaker 1" class="img-fluid"></a>
+                </div>
+            </ul>
+            </ul>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <div class="section-header">
+        <h2>Recent photos</h2>
+        <br>
+        <br>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6" th:each="image: ${contest.getImages()}">
+            <ul >
+                <div class="speaker">
+                    <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
+                         alt="Speaker 1" class="img-fluid">
+                </div>
+            </ul>
+            </ul>
+        </div>
+    </div>
+</section>
+
 <!-- Vendor JS Files -->
 <script src="assets/vendor/aos/aos.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
