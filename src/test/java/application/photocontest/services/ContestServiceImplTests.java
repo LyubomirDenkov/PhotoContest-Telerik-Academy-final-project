@@ -6,6 +6,8 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
 import application.photocontest.service.ContestServiceImpl;
+import application.photocontest.service.ImageServiceImpl;
+import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
 import application.photocontest.service.contracts.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +49,13 @@ public class ContestServiceImplTests {
     ImageRepository imageRepository;
 
     @Mock
+    ImageService imageService;
+
+    @Mock
     ImageReviewRepository imageReviewRepository;
+
+    @InjectMocks
+    ImageServiceImpl imageServiceImpl;
 
     @InjectMocks
     ContestServiceImpl contestService;
@@ -391,6 +399,26 @@ public class ContestServiceImplTests {
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
         contestService.addUserToContest(user,contest.getId(),user.getId());
+
+        Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+
+    }
+
+    @Test
+    public void uploadImage_Should_Upload_When_ValidationsOk() throws IOException {
+        Contest contest = createMockContest();
+        User user = createMockUser();
+        Image image = createMockImage();
+        image.setUploader(user);
+        user.setImages(Set.of(image));
+
+
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(contestRepository.getContestByImageUploaderId(user.getId())).thenThrow(EntityNotFoundException.class);
+
+        contestService.uploadImageToContest(user,image,contest.getId(),Optional.empty(),Optional.of(image.getUrl()));
 
         Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
 

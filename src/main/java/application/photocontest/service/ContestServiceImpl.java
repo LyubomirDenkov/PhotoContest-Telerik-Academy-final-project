@@ -348,21 +348,6 @@ public class ContestServiceImpl implements ContestService {
 
     }
 
-    private Contest checkPointsContestAndImage(int contestId, int imageId, int points) {
-
-        Contest contest = contestRepository.getById(contestId);
-
-        if (!contest.getPhase().getName().equalsIgnoreCase(CONTEST_PHASE_VOTING)) {
-            throw new UnauthorizedOperationException(PHASE_RATING_ERROR_MESSAGE);
-        }
-
-
-        Image currentImage = imageRepository.getById(imageId);
-        if (!contest.getImages().contains(currentImage)) {
-            throw new EntityNotFoundException("Image", imageId);
-        }
-        return contest;
-    }
 
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> participantSet) {
