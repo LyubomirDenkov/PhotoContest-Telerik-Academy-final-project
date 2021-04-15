@@ -4,9 +4,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
-import application.photocontest.repository.contracts.ContestRepository;
-import application.photocontest.repository.contracts.TypeRepository;
-import application.photocontest.repository.contracts.UserRepository;
+import application.photocontest.repository.contracts.*;
 import application.photocontest.service.ContestServiceImpl;
 import application.photocontest.service.contracts.ImgurService;
 import application.photocontest.service.contracts.UserService;
@@ -41,6 +39,12 @@ public class ContestServiceImplTests {
 
     @Mock
     UserService userService;
+
+    @Mock
+    PointsRepository pointsRepository;
+
+    @Mock
+    ImageRepository imageRepository;
 
     @InjectMocks
     ContestServiceImpl contestService;
@@ -244,8 +248,6 @@ public class ContestServiceImplTests {
         Set<Integer> jury = Set.of(user.getId());
         Set<Integer> participants = Set.of(userParticipant.getId());
 
-        Points points = new Points(6,100);
-
 
         Mockito.when(userRepository.getOrganizers()).thenReturn(List.of(organizer));
 
@@ -255,10 +257,54 @@ public class ContestServiceImplTests {
 
         Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
+    }
 
+    @Test
+    public void update_Should_UpdatePoints_When_ValidationsOk() throws IOException {
+        Contest contest = createMockContest();
+        User user = createMockUser();
+        User organizer = createMockOrganizer();
+        User userParticipant = createMockUser();
+        Set<Integer> jury = Set.of(user.getId());
+        Set<Integer> participants = Set.of(userParticipant.getId());
+
+        Points points = new Points(6,100);
+
+
+        Mockito.when(userRepository.getOrganizers()).thenReturn(List.of(organizer));
+
+        Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
+
+        pointsRepository.updatePoints(points);
+
+        Mockito.verify(pointsRepository,Mockito.times(1)).updatePoints(points);
+
+        userRepository.update(user);
+
+        Mockito.verify(userRepository,Mockito.times(1)).update(user);
+
+        contestService.update(organizer,contest,jury,participants,Optional.empty(),Optional.empty());
+
+        Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
     }
 
+
+    @Test
+    public void rateImage_Should_Throw_When_RatingTwice() throws IOException {
+        Contest contest = createMockContest();
+        User user = createMockUser();
+        Image image = createMockImage();
+
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
+
+       Assertions.assertThrows(UnauthorizedOperationException.class,
+               () -> contestService.rateImage(user,contest.getId(),image.getId(),5,"new Comment"));
+
+    }
 
 
 
