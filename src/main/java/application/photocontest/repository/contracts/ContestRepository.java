@@ -9,9 +9,8 @@ import java.util.List;
 
 
 public interface ContestRepository extends GetRepositoryOperations<Contest>, CudRepositoryOperations<Contest> {
-    Contest getByTitle(String title);
 
-    List<User> getContestJury();
+    Contest getByTitle(String title);
 
     List<Contest> getOngoingContests();
 

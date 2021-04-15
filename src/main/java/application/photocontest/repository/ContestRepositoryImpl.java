@@ -101,14 +101,6 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
-    @Override
-    public List<User> getContestJury() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select u from User u join u.roles as r " +
-                    "where r.name = 'organizer' ", User.class).list();
-        }
-    }
-
 
 
     @Override
@@ -171,8 +163,10 @@ public class ContestRepositoryImpl implements ContestRepository {
 
     public List<Contest> getUserContests(int id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select distinct c from Contest c join c.participants as participant join c.jury as jury " +
-                            " where participant.id = :id or jury.id = :id ", Contest.class).setParameter("id", id).list();
+            return session.createQuery("select c from Contest c join c.participants as participant " +
+                            " where participant.id = :id", Contest.class)
+                    .setParameter("id", id)
+                    .list();
         }
     }
 
