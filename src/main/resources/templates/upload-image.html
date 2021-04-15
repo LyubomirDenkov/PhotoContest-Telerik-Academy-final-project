@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload</title>
+  <link th:href="@{/assets/css/edit-profile.css}" href="../static/assets/css/edit-profile.css" rel="stylesheet">
+</head>
+<body>
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+          th:object="${imageDto}"
+          method="post" enctype="multipart/form-data">
+
+      <div>
+        <input placeholder="Title" th:field="*{title}">
+        <p th:errors="*{title}">title</p>
+      </div>
+      <div>
+        <textarea cols="30" rows="10" th:field="*{story}"></textarea>
+        <p th:errors="*{story}">story</p>
+      </div>
+      <input type="url" th:name="url" placeholder="Image url">
+      <p>OR</p>
+      <input type="file" name="multiPartFile" id="multiPartFile" placeholder="Choose...."
+             accept="image/png, image/jpeg, image/jpg">
+      <button>Submit</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

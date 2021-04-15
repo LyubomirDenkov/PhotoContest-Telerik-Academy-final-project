@@ -83,7 +83,6 @@ public class ContestsMvcController {
 
         model.addAttribute("currentUser", user);
         model.addAttribute("contest", contest);
-        model.addAttribute("imageDto", new ImageDto());
 
         return "contest";
     }
@@ -154,7 +153,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", userService.getUserContests(currentUser,id));
+            model.addAttribute("contests", userService.getUserContests(currentUser, id));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -342,10 +341,24 @@ public class ContestsMvcController {
         }
     }
 
+    @GetMapping("/{id}/upload")
+    public String showImageUploadPage(@PathVariable int id, HttpSession session, Model model) {
+        try {
+            User currentUser = authenticationHelper.tryGetUser(session);
+            model.addAttribute("currentUser", currentUser);
+            model.addAttribute("imageDto", new ImageDto());
+            return "upload-image";
+        } catch (AuthenticationFailureException e) {
+            return "error";
+        }
+    }
+
     @PostMapping("/{id}/upload")
-    public String uploadImageToContest(@PathVariable int id, BindingResult errors,
-                                       HttpSession session, Model model,
-                                       @ModelAttribute("imageDto") ImageDto dto) {
+    public String handleUploadImageToContest(@PathVariable int id, HttpSession session, Model model,
+                                             @RequestParam(value = "url", required = false) Optional<String> url,
+                                             @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
+                                             @Valid @ModelAttribute("imageDto") ImageDto dto,
+                                             BindingResult errors) {
 
         if (errors.hasErrors()) {
             return "index";
@@ -355,7 +368,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
             Image image = imageMapper.fromDto(currentUser, dto);
-            contestService.uploadImageToContest(currentUser, image, id, Optional.empty(), Optional.empty());
+            contestService.uploadImageToContest(currentUser, image, id, file, url);
 
             return "redirect:/contests/{id}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException | IOException e) {

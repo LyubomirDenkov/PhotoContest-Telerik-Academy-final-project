@@ -126,7 +126,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         try {
-            contestRepository.getContestByImageUploaderId(user.getId());
+            contestRepository.getContestByImageUploaderId(contest.getId(),user.getId());
             contest.setHasImageUploaded(true);
         } catch (EntityNotFoundException e) {
             contest.setHasImageUploaded(false);
@@ -200,7 +200,7 @@ public class ContestServiceImpl implements ContestService {
         validateUserIsImageUploader(user, image);
         validateContestPhase(contest, ContestPhases.ONGOING,ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         validateUserIsParticipant(contest, user);
-        validateUserNotUploadedImageToContest(user);
+        validateUserNotUploadedImageToContest(contest,user);
 
         Image imageAddToContest = imageService.create(user, image, file, url);
 
@@ -447,9 +447,9 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateUserNotUploadedImageToContest(User user) {
+    private void validateUserNotUploadedImageToContest(Contest contest,User user) {
         try {
-            contestRepository.getContestByImageUploaderId(user.getId());
+            contestRepository.getContestByImageUploaderId(contest.getId(),user.getId());
         } catch (EntityNotFoundException e) {
             return;
         }

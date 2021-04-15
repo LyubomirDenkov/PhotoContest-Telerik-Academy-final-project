@@ -121,23 +121,24 @@
                                     </a></li>
 
 
-                                    <li th:if="${contest.getPhase().getName().equals('ongoing') && !contest.isParticipant() && !currentUser.isOrganizer()}">
-                                        <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
-                                            <button class="glow-on-hover" type="button">JOIN</button>
+                                <li th:if="${contest.getPhase().getName().equals('ongoing') && !contest.isParticipant() && !currentUser.isOrganizer()}">
+                                    <a href="#"
+                                       th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
+                                        <button class="glow-on-hover" type="button">JOIN</button>
+                                    </a>
+                                </li>
+                                <div th:if="${contest.getPhase().getName().equals('ongoing')}">
+                                    <li th:if="${!contest.isHasImageUploaded() && contest.isParticipant() }">
+                                        <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/upload}">
+                                            <button type="button" class="glow-on-hover">
+                                                UPLOAD PHOTO
+                                            </button>
                                         </a>
                                     </li>
-
-                                <li th:if="${!contest.isHasImageUploaded() && contest.isParticipant()}">
-                                    <a href="#open-modal">
-                                        <button type="button" class="glow-on-hover">
-                                            UPLOAD PHOTO
-                                        </button>
-                                    </a></li>
-
-                                <li th:if="${contest.isHasImageUploaded()}">
-
-                                    <p>Image is uploaded, come back on phase 2 to track your image reviews</p></li>
-
+                                    <li th:if="${contest.isHasImageUploaded()}">
+                                        <p>Image is uploaded, come back when contest is finished to see result</p>
+                                    </li>
+                                </div>
                                 <li th:if="${contest.isJury() && contest.getPhase().getId() == 2}">
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/images}">
                                         <button class="glow-on-hover" type="button">REVIEW PHOTOS</button>
@@ -154,7 +155,7 @@
 
 <br><br><br><br>
 <br><br><br><br>
-<section>
+<section th:if="*{contest.getPhase().getName() == 'finished'}">
     <div class="section-header">
         <h2>Winner photos</h2>
         <br>
@@ -162,10 +163,12 @@
     </div>
     <div class="row">
         <div class="col-lg-4 col-md-4" th:each="image: ${contest.getWinnerImages()}">
-            <ul >
+            <ul>
                 <div class="speaker">
-                    <a href="#" th:href="@{/images/{id}(id=${image.getId()})}" ><img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
-                         alt="Speaker 1" class="img-fluid"></a>
+                    <a href="#" th:href="@{/images/{id}(id=${image.getId()})}"><img th:src="*{image.getUrl()}"
+                                                                                    src="../static/assets/img/speakers/1.jpg"
+                                                                                    alt="Speaker 1"
+                                                                                    class="img-fluid"></a>
                 </div>
             </ul>
             </ul>
@@ -182,10 +185,11 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-6" th:each="image: ${contest.getImages()}">
-            <ul >
+            <ul>
                 <div class="speaker">
-                    <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
-                         alt="Speaker 1" class="img-fluid">
+                    <a href="#" th:href="@{/images/{id}(id=${image.getId()})}">
+                        <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
+                             alt="Speaker 1" class="img-fluid"></a>
                 </div>
             </ul>
             </ul>
