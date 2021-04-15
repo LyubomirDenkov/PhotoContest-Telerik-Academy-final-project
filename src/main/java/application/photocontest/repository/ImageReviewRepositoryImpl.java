@@ -49,4 +49,26 @@ public class ImageReviewRepositoryImpl implements ImageReviewRepository {
         }
     }
 
+    @Override
+    public Long getImageReviewPointsByContestAndImageId(int contestId, int imageId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select sum(points) from ImageReview " +
+                    "where image.id = :imageId and contest.id = :contestId ", Long.class)
+                    .setParameter("imageId", imageId)
+                    .setParameter("contestId",contestId)
+                    .uniqueResult();
+        }
+    }
+
+    @Override
+    public Long getReviewsCountByContestAndImageId(int contestId,int imageId){
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select count(*) from ImageReview " +
+                            "where image.id = :imageId and contest.id = :contestId ",Long.class)
+                    .setParameter("imageId", imageId)
+                    .setParameter("contestId",contestId)
+                    .uniqueResult();
+        }
+    }
+
 }

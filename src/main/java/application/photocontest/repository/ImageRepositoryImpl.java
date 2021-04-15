@@ -37,22 +37,6 @@ public class ImageRepositoryImpl implements ImageRepository {
 
 
 
-    @Override
-    public Long getReviewPointsByImageId(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select sum(points) from ImageReview where image.id = :id ",
-                    Long.class).setParameter("id", id).uniqueResult();
-        }
-    }
-
-    public Long getReviewsCountByContestAndImageId(int contestId,int imageId){
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select count(*) from ImageReview where image.id = :imageId and " +
-                            "contest.id = :contestId ",
-                    Long.class).setParameter("imageId", imageId).setParameter("contestId",contestId).uniqueResult();
-        }
-    }
-
     @Transactional
     @Override
     public Image create(Image image) {

@@ -10,12 +10,4 @@ public interface ImageRepository extends CudRepositoryOperations<Image> {
     Image getById(int id);
 
 
-    Long getReviewPointsByImageId(int id);
-
-    Long getReviewsCountByContestAndImageId(int contestId,int imageId);
-
-
-
-
-
 }
