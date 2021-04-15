@@ -1,5 +1,6 @@
 package application.photocontest.services;
 
+import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Category;
@@ -85,6 +86,27 @@ public class CategoryServiceImplTests {
         Assertions.assertThrows(EntityNotFoundException.class,
                 () -> categoryRepository.getById(254));
     }
-    
 
+
+    @Test
+    public void create_Should_ThrowException_When_DuplicateName(){
+        User organizer = createMockOrganizer();
+        Category category = createMockCategory();
+
+        Assertions.assertThrows(DuplicateEntityException.class,
+                () -> categoryService.create(organizer,category));
+    }
+
+    @Test
+    public void create_Should_Create_When_ValidationsOk(){
+        User organizer = createMockOrganizer();
+        Category category = createMockCategory();
+
+        when(categoryRepository.getByName(category.getName())).thenThrow(EntityNotFoundException.class);
+
+        categoryService.create(organizer,category);
+
+        verify(categoryRepository, times(1)).create(category);
+
+    }
 }

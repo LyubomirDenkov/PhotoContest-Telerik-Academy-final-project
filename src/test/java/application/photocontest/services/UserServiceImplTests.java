@@ -150,7 +150,7 @@ public class UserServiceImplTests {
         User user = createMockUser();
         Set<Role> userRoles = new HashSet<>();
         user.setRoles(userRoles);
-        Points points = new Points();
+
 
 
         when(userRepository.getUserByUserName(user.getUserCredentials().getUserName())).thenThrow(EntityNotFoundException.class);
@@ -214,7 +214,7 @@ public class UserServiceImplTests {
         userService.delete(user,user.getId());
 
         verify(userRepository,times(1)).delete(user.getId());
-        
+
 
 
     }
