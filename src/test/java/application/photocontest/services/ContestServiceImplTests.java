@@ -45,6 +45,9 @@ public class ContestServiceImplTests {
     @Mock
     ImageRepository imageRepository;
 
+    @Mock
+    ImageService imageService;
+
 
     @Mock
     ImageReviewRepository imageReviewRepository;
@@ -320,7 +323,6 @@ public class ContestServiceImplTests {
         User user = createMockUser();
         Image image = createMockImage();
 
-        ImageReview newImageReview = new ImageReview();
 
 
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
@@ -345,6 +347,9 @@ public class ContestServiceImplTests {
         contest.setImages(Set.of(image));
         ImageReview imageReview = createMockImageReview();
 
+        ImageReview testImageReview = new ImageReview();
+        testImageReview.setId(2);
+
 
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
@@ -354,13 +359,13 @@ public class ContestServiceImplTests {
 
         contestService.rateImage(user,contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
 
-        Mockito.verify(imageRepository, Mockito.times(1)).update(image);
+        Mockito.verify(imageReviewRepository, Mockito.times(1)).create(testImageReview);
 
 
     }
 
     @Test
-    public void addImage_Should_Add_When_ValidatosOk() {
+    public void addImage_Should_Add_When_ValidationsOk() {
         Contest contest = createMockContest();
         User user = createMockUser();
         contest.setJury(Set.of(user));
@@ -410,6 +415,8 @@ public class ContestServiceImplTests {
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(contestRepository.getContestByImageUploaderId(user.getId())).thenThrow(EntityNotFoundException.class);
+
+        Mockito.when(imageService.create(user,image,Optional.empty(),Optional.of(""))).thenReturn(image);
 
         contestService.uploadImageToContest(user,image,contest.getId(),Optional.empty(),Optional.of(image.getUrl()));
 

@@ -20,7 +20,7 @@ import static application.photocontest.service.constants.Constants.MESSAGE_CONTE
 
 @Component
 @EnableScheduling
-public class AsynchronousTaskScheduler implements Runnable {
+public class ScheduledExecutorService implements Runnable {
 
     private final String FIRST_POSITION = "first";
     private final String SECOND_POSITION = "second";
@@ -37,9 +37,9 @@ public class AsynchronousTaskScheduler implements Runnable {
 
 
     @Autowired
-    public AsynchronousTaskScheduler(ContestRepository contestRepository,
-                                     ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository,
-                                     NotificationService notificationService, PointsRepository pointsRepository) {
+    public ScheduledExecutorService(ContestRepository contestRepository,
+                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository,
+                                    NotificationService notificationService, PointsRepository pointsRepository) {
         this.contestRepository = contestRepository;
         this.imageReviewRepository = imageReviewRepository;
         this.userRepository = userRepository;

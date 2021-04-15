@@ -10,7 +10,6 @@ public interface ImageReviewRepository {
 
     void create(ImageReview imageReview);
 
-
     List<ImageReview> getImageReviewByUserId(int id);
 
     ImageReview getImageReviewUserContestAndImageId(int userId,int contestId,int imageId);
