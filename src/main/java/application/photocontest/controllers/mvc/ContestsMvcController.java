@@ -40,18 +40,17 @@ public class ContestsMvcController {
     private final UserService userService;
     private final ContestMapper contestMapper;
     private final ImageService imageService;
-    private final ImageReviewMapper imageReviewMapper;
     private final ImageMapper imageMapper;
 
     public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService,
-                                 CategoryService categoryService, UserService userService, ContestMapper contestMapper, ImageService imageService, ImageReviewMapper imageReviewMapper, ImageMapper imageMapper) {
+                                 CategoryService categoryService, UserService userService,
+                                 ContestMapper contestMapper, ImageService imageService, ImageMapper imageMapper) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.contestMapper = contestMapper;
         this.imageService = imageService;
-        this.imageReviewMapper = imageReviewMapper;
         this.imageMapper = imageMapper;
     }
 
@@ -84,7 +83,7 @@ public class ContestsMvcController {
 
         model.addAttribute("currentUser", user);
         model.addAttribute("contest", contest);
-        model.addAttribute("imageDto",new ImageDto());
+        model.addAttribute("imageDto", new ImageDto());
 
         return "contest";
     }
@@ -150,12 +149,12 @@ public class ContestsMvcController {
         }
     }
 
-    @GetMapping("/own")
-    public String getOwnContests(Model model, HttpSession session) {
+    @GetMapping("/own/users/{id}")
+    public String getOwnContests(@PathVariable int id, Model model, HttpSession session) {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", userService.getUserContests(currentUser,id));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -196,7 +195,7 @@ public class ContestsMvcController {
             Contest contest = contestMapper.fromDto(contestDto, currentUser);
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
-            contestService.create(currentUser, contest, jurySet, participantsSet,file,url);
+            contestService.create(currentUser, contest, jurySet, participantsSet, file, url);
 
             return "redirect:/contests";
 
@@ -239,7 +238,7 @@ public class ContestsMvcController {
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
             Contest contest = contestMapper.fromDto(id, contestDto);
-            contestService.update(currentUser, contest, jurySet, participantsSet,file,url);
+            contestService.update(currentUser, contest, jurySet, participantsSet, file, url);
 
             return "redirect:/contests";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException | IOException e) {
@@ -326,7 +325,7 @@ public class ContestsMvcController {
                 return "contest-images";
             }
 
-            Contest contest = contestService.getById(currentUser,contestId);
+            Contest contest = contestService.getById(currentUser, contestId);
             isJury(currentUser, contest);
 
             int points = imageReviewDto.getPoints();
@@ -346,17 +345,17 @@ public class ContestsMvcController {
     @PostMapping("/{id}/upload")
     public String uploadImageToContest(@PathVariable int id, BindingResult errors,
                                        HttpSession session, Model model,
-                                       @ModelAttribute("imageDto")ImageDto dto){
+                                       @ModelAttribute("imageDto") ImageDto dto) {
 
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "index";
         }
 
         try {
 
             User currentUser = authenticationHelper.tryGetUser(session);
-            Image image = imageMapper.fromDto(currentUser,dto);
-            contestService.uploadImageToContest(currentUser,image,id,Optional.empty(),Optional.empty());
+            Image image = imageMapper.fromDto(currentUser, dto);
+            contestService.uploadImageToContest(currentUser, image, id, Optional.empty(), Optional.empty());
 
             return "redirect:/contests/{id}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException | IOException e) {

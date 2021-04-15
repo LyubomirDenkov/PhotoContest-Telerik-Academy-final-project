@@ -177,18 +177,18 @@ VALUES (20),
        (0),
        (0);
 
-INSERT INTO images (title, story, image, user_id, points)
-VALUES ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 5, 5),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 6, 10),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 7, 15),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 8, 20),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 9, 14),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 10, 17),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 11, 21),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 12, 6),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 13, 3),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 14, 5),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 15, 1);
+INSERT INTO images (title, story, image, user_id)
+VALUES ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 5),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 6),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 7),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 8),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 9),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 10),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 11),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 12),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 13),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 14),
+       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 15);
 
 
 INSERT INTO users_images(user_id, image_id)

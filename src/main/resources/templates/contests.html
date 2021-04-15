@@ -39,20 +39,31 @@
     <div class="container-fluid container-xxl d-flex align-items-center">
 
         <div id="logo" class="me-auto">
-            <!-- Uncomment below if you prefer to use a text logo -->
-            <!--<h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <!--             Uncomment below if you prefer to use a text logo
+                        <h1><a href="index.html">The<span>Event</span></a></h1>-->
             <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
                                                             src="../static/assets/img/logo.png" alt="" title=""></a>
         </div>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul th:if="${currentUser == null}">
+                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                <li><a class="nav-link scrollto" href="#about">About</a></li>
+                <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+                <li><a class="nav-link scrollto" href="#venue">Top pictures</a></li>
+                <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+                <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
+            </ul>
             <ul th:if="${currentUser != null}">
 
                 <li><a class="nav-link" href="#"
-                       th:href="@{/users}">Leaderboard</a>
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
                 </li>
 
-                <li><a class="nav-link" href="#" th:href="@{/contests}">Contests</a>
+                <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+                </li>
+                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                                                             th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -62,7 +73,8 @@
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
-        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#">Logout</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#buy-tickets">Logout</a>
     </div>
 </header><!-- End Header -->
 
@@ -74,6 +86,17 @@
         </div>
         <div class="outer">
             <div th:if="${currentUser.isOrganizer()}">
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
+
+                               th:href="@{/contests}">
+                            <button class="glow-on-hover" type="button">All contests</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="inner">
                     <ul>
                         <li><a class="nav-link" href="#"
@@ -117,8 +140,18 @@
                 <div class="inner">
                     <ul>
                         <li><a class="nav-link" href="#"
-                               th:href="@{/contests/own}">
+                               th:href="@{/contests/own/users/{id}(id=${currentUser.getId()})}">
                             <button class="glow-on-hover" type="button">Own Contests</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
+                               th:href="@{/contests/ongoing}">
+                            <button class="glow-on-hover" type="button">Ongoing Contests</button>
                         </a></li>
                         </a>
                         </li>
@@ -150,12 +183,11 @@
                     </ul>
                 </div>
             </div>
-
         </div>
 
 
         <div class="row">
-            <div class="col-lg-6 col-md-6" th:each="contest, iterStat : ${contests}">
+            <div class="col-lg-6 col-md-6" th:each="contest: ${contests}">
                     <ul >
                         <div class="speaker">
                             <img th:src="*{contest.getBackgroundImage()}" src="/assets/img/speakers/1.jpg"

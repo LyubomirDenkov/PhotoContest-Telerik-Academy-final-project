@@ -90,8 +90,6 @@ public class AsynchronousTaskScheduler implements Runnable {
         }
     }
 
-    //TODO REFACTOR LATER - logic is work
-
     private void calculateAndRewardPointsToImages(Contest contest) {
 
         int juryCount = contest.getJury().size();
@@ -101,16 +99,13 @@ public class AsynchronousTaskScheduler implements Runnable {
 
         for (Image image : images) {
             boolean hasReviews = true;
-            long imageReviewsPoints = 0;
             long imageReviewsCount = 0;
+            long imageReviewsPoints = 0;
 
             try {
-                Long count = imageReviewRepository.getReviewsCountByContestAndImageId(contest.getId(), image.getId());
+                imageReviewsCount = imageReviewRepository.getReviewsCountByContestAndImageId(contest.getId(), image.getId());
                 Long points = imageReviewRepository.getImageReviewPointsByContestAndImageId(contest.getId(), image.getId());
 
-                if (count != null) {
-                    imageReviewsCount += count;
-                }
                 if (points != null) {
                     imageReviewsPoints += points;
                 }
@@ -131,6 +126,10 @@ public class AsynchronousTaskScheduler implements Runnable {
             int pointsToAwardForNotReviewed = (int) (notReviewedCount * DEFAULT_SCORE) + (int) imageReviewsPoints;
 
             map.put(image, pointsToAwardForNotReviewed);
+        }
+
+        if (map.isEmpty()){
+            return;
         }
 
         Map<Image, Integer> sortedMap = map.entrySet().stream()

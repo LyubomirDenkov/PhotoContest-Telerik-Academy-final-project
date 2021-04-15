@@ -82,7 +82,6 @@ public class Helpers {
         image.setUrl("https://i.imgur.com/JD4Auj5.png");
         image.setUploader(createMockUser());
         image.setStory("mockStory");
-        image.setPoints(0);
 
         return image;
     }

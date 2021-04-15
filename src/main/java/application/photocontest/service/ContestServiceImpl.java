@@ -269,9 +269,7 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
         }
 
-
         ImageReview imageReview = new ImageReview();
-
 
         imageReview.setUser(user);
         imageReview.setContest(contest);
@@ -279,9 +277,6 @@ public class ContestServiceImpl implements ContestService {
         imageReview.setPoints(points);
         imageReview.setComment(comment);
         imageReviewRepository.create(imageReview);
-
-        image.setPoints(image.getPoints() + points);
-        imageRepository.update(image);
 
     }
 

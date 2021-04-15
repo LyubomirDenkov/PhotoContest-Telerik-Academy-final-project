@@ -32,35 +32,45 @@
 <body>
 
 
-
 <header id="header" class="d-flex align-items-center ">
     <div class="container-fluid container-xxl d-flex align-items-center">
 
         <div id="logo" class="me-auto">
-            <!-- Uncomment below if you prefer to use a text logo -->
-            <!--<h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <!--             Uncomment below if you prefer to use a text logo
+                        <h1><a href="index.html">The<span>Event</span></a></h1>-->
             <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
                                                             src="../static/assets/img/logo.png" alt="" title=""></a>
         </div>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul th:if="${currentUser == null}">
+                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                <li><a class="nav-link scrollto" href="#about">About</a></li>
+                <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+                <li><a class="nav-link scrollto" href="#venue">Top pictures</a></li>
+                <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+                <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
+            </ul>
             <ul th:if="${currentUser != null}">
 
                 <li><a class="nav-link" href="#"
-                       th:href="@{/users}">Leaderboard</a>
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
                 </li>
 
-                <li><a class="nav-link" href="#" th:href="@{/contests}">Contests</a>
+                <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+                </li>
+                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                                                             th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
                        th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
                 </li>
 
-
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
+        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
         <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#buy-tickets">Logout</a>
     </div>
 </header><!-- End Header -->
@@ -87,39 +97,40 @@
                             </thead>
                             <tbody>
                             <tr th:each="user : ${users}">
-                                <th scope="row" >
+                                <th scope="row">
                                     <div class="media align-items-center">
 
-                                            <img  class="avatar rounded-circle mr-3" th:src="*{user.getProfileImage()}" alt="Image placeholder"
-                                                 src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/bootstrap.jpg">
+                                        <img class="avatar rounded-circle mr-3" th:src="*{user.getProfileImage()}"
+                                             alt="Image placeholder"
+                                             src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/bootstrap.jpg">
 
                                         <div class="media-body">
                                             <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
-                                            ' ' + user.getLastName().toUpperCase()}">Argon Design System</span>
+                                            ' ' + user.getLastName().toUpperCase()}">Names</span>
                                         </div>
                                     </div>
                                 </th>
                                 <div th:each="points : *{user.getPoints()}">
-                                <td th:text="*{points.getPoints()}" >
-                                    $2,500 USD
-                                </td>
+                                    <td th:text="*{points.getPoints()}">
+                                        200
+                                    </td>
 
-                                <td>
-                      <span class="badge badge-dot mr-4" th:if="*{points.getPoints() < 51}" th:text="Junkie">
-                        <i class="bg-warning"></i> pending
+                                    <td>
+                      <span class="badge badge-dot mr-4" th:if="*{points.getPoints() < 51}">
+                        <i class="bg-white"></i> Photo Junkie
                       </span>
-                       <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 50 && points.getPoints() < 151}"
-                             th:text="Enthusiast">
-                        <i class="bg-warning"></i> pending
+                                        <span class="badge badge-dot mr-4"
+                                              th:if="*{points.getPoints() > 50 && points.getPoints() < 151}">
+                        <i class="bg-success"></i> Enthusiast
                       </span>
-                                    <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 150 && points.getPoints() < 1001}"
-                                          th:text="Master">
-                        <i class="bg-warning"></i> pending
+                                        <span class="badge badge-dot mr-4"
+                                              th:if="*{points.getPoints() > 150 && points.getPoints() < 1001}">
+                        <i class="bg-danger"></i> Master
                       </span>
-                                    <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 1000}" th:text="Photo-Dictator">
-                        <i class="bg-warning"></i> pending
+                                        <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 1000}">
+                        <i class="bg-warning"></i> Photo Dictator
                       </span>
-                                </td>
+                                    </td>
                                 </div>
                                 <td>
                       <span class="badge badge-dot mr-4" th:text="*{user.getImages().size()}">
