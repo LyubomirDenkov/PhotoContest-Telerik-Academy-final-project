@@ -329,6 +329,31 @@ public class ContestServiceImplTests {
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> contestService.rateImage(user,contest.getId(),image.getId(),5,"new Comment"));
 
+    }
+
+    @Test
+    public void rateImage_Should_Throw_When_PointsAreMore()  {
+        Contest contest = createMockContest();
+        Phase phase = new Phase();
+        phase.setId(2);
+        phase.setName("voting");
+        contest.setPhase(phase);
+        User user = createMockUser();
+        contest.setJury(Set.of(user));
+        Image image = createMockImage();
+        contest.setImages(Set.of(image));
+        ImageReview imageReview = createMockImageReview();
+
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
+
+        Mockito.when(imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contest.getId(),image.getId())).thenThrow(EntityNotFoundException.class);
+
+        contestService.rateImage(user,contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
+
+        Mockito.verify(imageRepository, Mockito.times(1)).update(image);
 
 
     }

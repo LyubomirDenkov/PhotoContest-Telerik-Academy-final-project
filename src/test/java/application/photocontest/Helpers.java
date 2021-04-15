@@ -87,4 +87,21 @@ public class Helpers {
         return image;
     }
 
+    public static ImageReview createMockImageReview() {
+        ImageReview imageReview = new ImageReview();
+
+
+        imageReview.setId(1);
+        imageReview.setImage(createMockImage());
+        imageReview.setComment("new Comment");
+        imageReview.setPoints(5);
+        imageReview.setContest(createMockContest());
+        imageReview.setUser(createMockUser());
+
+
+        return imageReview;
+    }
+
+
+
 }

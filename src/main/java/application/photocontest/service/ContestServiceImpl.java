@@ -198,7 +198,7 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
 
         validateUserIsImageUploader(user, image);
-        validateContestPhase(contest, ContestPhases.ONGOING);
+        validateContestPhase(contest, ContestPhases.ONGOING,ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         validateUserIsParticipant(contest, user);
         validateUserNotUploadedImageToContest(user);
 
@@ -254,7 +254,7 @@ public class ContestServiceImpl implements ContestService {
 
         boolean isUserRatedImageInContest = true;
 
-        validateContestPhaseWhenRating(contest, ContestPhases.VOTING);
+        validateContestPhase(contest, ContestPhases.VOTING,PHASE_RATING_ERROR_MESSAGE);
         validateUserIsJury(contest, user);
         validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, points);
         validateContestContainsImage(contest, image);
@@ -291,7 +291,7 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
         Image image = imageRepository.getById(imageId);
 
-        validateContestPhase(contest, ContestPhases.ONGOING);
+        validateContestPhase(contest, ContestPhases.ONGOING,PHASE_RATING_ERROR_MESSAGE);
         validateUserIsParticipant(contest, user);
         validateUserIsImageUploader(user, image);
         validateContestNotContainsImage(contest, image);
@@ -314,7 +314,7 @@ public class ContestServiceImpl implements ContestService {
         User userToJoinInContest = userRepository.getById(userId);
 
 
-        validateContestPhase(contest, ContestPhases.ONGOING);
+        validateContestPhase(contest, ContestPhases.ONGOING,JOIN_OPEN_CONTESTS_ERROR_MESSAGE);
         validateContestType(contest, ContestTypes.OPEN);
         validateUserIsNotParticipantOrJury(contest, userToJoinInContest);
 
@@ -411,16 +411,12 @@ public class ContestServiceImpl implements ContestService {
         return jury.contains(user) || user.isOrganizer();
     }
 
-    private void validateContestPhase(Contest contest, ContestPhases phase) {
+    private void validateContestPhase(Contest contest, ContestPhases phase, String message) {
         if (!contest.getPhase().getName().equalsIgnoreCase(phase.toString())) {
-            throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
+            throw new UnauthorizedOperationException(message);
         }
     }
-    private void validateContestPhaseWhenRating(Contest contest, ContestPhases phase) {
-        if (!contest.getPhase().getName().equalsIgnoreCase(phase.toString())) {
-            throw new UnauthorizedOperationException(PHASE_RATING_ERROR_MESSAGE);
-        }
-    }
+
     private void validateRatingPointsRange(int min, int max, int points) {
 
         if (points < min || points > max) {
