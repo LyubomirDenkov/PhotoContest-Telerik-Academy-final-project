@@ -2,6 +2,7 @@ package application.photocontest.controllers.mvc;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
 import application.photocontest.exceptions.AuthenticationFailureException;
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.User;
@@ -36,6 +37,16 @@ public class UserMvcController {
         this.userMapper = userMapper;
     }
 
+    @GetMapping
+    public String getAllUsers(Model model, HttpSession session){
+
+        User user = authenticationHelper.tryGetUser(session);
+        model.addAttribute("currentUser", user);
+        model.addAttribute("users", userService.getAll(user));
+
+        return "leaderboard";
+    }
+
     @GetMapping("/leaderboard")
     public String getUsersLeaderboard(Model model, HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
@@ -51,7 +62,7 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("currentUser", userService.getById(user, id));
             return "profile";
-        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException | UnauthorizedOperationException | EntityNotFoundException e) {
             return "error";
         }
     }

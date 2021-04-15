@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
+    @Override
     public List<User> getAll(User user) {
         verifyUserHasRoles(user,UserRoles.ORGANIZER);
         return userRepository.getAll();
@@ -102,11 +107,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllPotentialJury() {
         return userRepository.getAllPotentialJury();
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
     }
 
     public void addRoleAndPointsToRegisteredUser(User user) {

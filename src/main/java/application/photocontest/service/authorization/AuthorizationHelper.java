@@ -13,13 +13,8 @@ import java.util.stream.Collectors;
 
 public class AuthorizationHelper {
 
-    public static final String EMPLOYEE_AUTHORIZATION_ERROR_MESSAGE =
-            "Only an Employee is Authorized for this operation.";
-    public static final String EMPLOYEE_CUSTOMER_AUTHORIZATION_ERROR_MESSAGE =
-            "Only employee or customer is authorized to make this operation.";
-    public static final String ORGANIZER_AUTHORIZATION_ERROR_MESSAGE =
-            "Only an organizer is authorized to make this operation.";
 
+    private static final String UNAUTHORIZED = "Unauthorized";
 
     public static void verifyUserHasRoles(User user, UserRoles... roles){
 
@@ -29,7 +24,7 @@ public class AuthorizationHelper {
                  .map(r -> r.getName().toLowerCase())
                  .filter(rolesList::contains)
                  .findAny()
-                 .orElseThrow(() -> new UnauthorizedOperationException("Unauthorized"));
+                 .orElseThrow(() -> new UnauthorizedOperationException(UNAUTHORIZED));
     }
 
 

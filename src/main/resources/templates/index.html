@@ -70,6 +70,9 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
+                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                       th:href="@{/users}">Users</a>
+                </li>
 
                 <li><a class="nav-link" href="#"
                        th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>

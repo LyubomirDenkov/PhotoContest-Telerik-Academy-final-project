@@ -42,7 +42,21 @@ public class UserController {
     public List<User> getAll(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
 
-        return userService.getAll(user);
+        try {
+            return userService.getAll(user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/leaderboard")
+    public List<User> getLeaderboard(@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        try {
+            return userService.getLeaderboard(user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
@@ -54,6 +68,8 @@ public class UserController {
             return userService.getById(user, id);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
