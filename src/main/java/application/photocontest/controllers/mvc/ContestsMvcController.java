@@ -298,7 +298,7 @@ public class ContestsMvcController {
 
             isJury(currentUser, contest);
 
-            Image image = imageService.getById(currentUser, imageId);
+            Image image = imageService.getById(imageId);
 
             model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute("image", image);

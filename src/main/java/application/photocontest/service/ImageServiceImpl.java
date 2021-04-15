@@ -33,7 +33,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getById(User userCredentials, int id) {
+    public Image getById(int id) {
         return imageRepository.getById(id);
     }
 

@@ -39,7 +39,7 @@ public class ImageController {
     @GetMapping("/{id}")
     public Image getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return imageService.getById(user, id);
+        return imageService.getById(id);
 
     }
 
