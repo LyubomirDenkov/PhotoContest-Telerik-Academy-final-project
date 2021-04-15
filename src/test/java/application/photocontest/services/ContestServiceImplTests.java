@@ -46,6 +46,9 @@ public class ContestServiceImplTests {
     @Mock
     ImageRepository imageRepository;
 
+    @Mock
+    ImageReviewRepository imageReviewRepository;
+
     @InjectMocks
     ContestServiceImpl contestService;
 
@@ -291,7 +294,7 @@ public class ContestServiceImplTests {
 
 
     @Test
-    public void rateImage_Should_Throw_When_RatingTwice() throws IOException {
+    public void rateImage_Should_Throw_When_RatingTwice()  {
         Contest contest = createMockContest();
         User user = createMockUser();
         Image image = createMockImage();
@@ -303,6 +306,30 @@ public class ContestServiceImplTests {
 
        Assertions.assertThrows(UnauthorizedOperationException.class,
                () -> contestService.rateImage(user,contest.getId(),image.getId(),5,"new Comment"));
+
+    }
+
+    @Test
+    public void rateImage_Should_Throw_When_UserIsNotJury()  {
+        Contest contest = createMockContest();
+        Phase phase = new Phase();
+        phase.setId(2);
+        phase.setName("voting");
+        contest.setPhase(phase);
+        User user = createMockUser();
+        Image image = createMockImage();
+
+        ImageReview newImageReview = new ImageReview();
+
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.rateImage(user,contest.getId(),image.getId(),5,"new Comment"));
+
+
 
     }
 

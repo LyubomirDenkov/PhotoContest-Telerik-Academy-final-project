@@ -254,7 +254,7 @@ public class ContestServiceImpl implements ContestService {
 
         boolean isUserRatedImageInContest = true;
 
-        validateContestPhase(contest, ContestPhases.VOTING);
+        validateContestPhaseWhenRating(contest, ContestPhases.VOTING);
         validateUserIsJury(contest, user);
         validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, points);
         validateContestContainsImage(contest, image);
@@ -416,7 +416,11 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         }
     }
-
+    private void validateContestPhaseWhenRating(Contest contest, ContestPhases phase) {
+        if (!contest.getPhase().getName().equalsIgnoreCase(phase.toString())) {
+            throw new UnauthorizedOperationException(PHASE_RATING_ERROR_MESSAGE);
+        }
+    }
     private void validateRatingPointsRange(int min, int max, int points) {
 
         if (points < min || points > max) {
