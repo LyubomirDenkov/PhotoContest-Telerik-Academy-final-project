@@ -215,4 +215,20 @@ public class ContestController {
         }
     }
 
+    @ApiOperation(value = "Search contest by phase")
+    @GetMapping("/search")
+    public List<Contest> searchByPhase(@RequestHeader HttpHeaders headers,
+                                       @RequestParam Optional<String> phase) {
+        User user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            return contestService.search(user, phase);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
+
 }

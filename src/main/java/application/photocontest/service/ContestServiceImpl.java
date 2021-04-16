@@ -11,6 +11,7 @@ import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,8 +70,19 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<Contest> getByUserId(int id) {
         return contestRepository.getByUserId(id);
+    }
 
+    //TODO think of better implementation
+    @Override
+    public List<Contest> search(User user, Optional<String> phase) {
 
+        if (phase.get().equalsIgnoreCase("voting")) {
+            if (!user.isOrganizer()) {
+                return contestRepository.searchAsUser(phase);
+            }
+        }
+
+       return contestRepository.search(phase);
     }
 
     @Override
@@ -371,13 +383,6 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
 
     }
-
-    @Override
-    public void delete(User user, int id) {
-
-
-    }
-
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> participantSet) {
         User user;

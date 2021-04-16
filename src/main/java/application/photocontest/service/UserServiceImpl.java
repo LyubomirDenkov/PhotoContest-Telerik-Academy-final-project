@@ -160,17 +160,5 @@ public class UserServiceImpl implements UserService {
         return userRepository.update(userToUpdate);
     }
 
-    @Override
-    public void delete(User user, int id) {
-
-
-        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
-
-        verifyIsUserOwnAccount(user.getId(), id, "something");
-
-
-
-        userRepository.delete(id);
-    }
 
 }

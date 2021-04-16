@@ -6,6 +6,7 @@ import application.photocontest.repository.contracts.genericrepository.CudReposi
 import application.photocontest.repository.contracts.genericrepository.GetRepositoryOperations;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ContestRepository extends GetRepositoryOperations<Contest>, CudRepositoryOperations<Contest> {
@@ -24,6 +25,8 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     List<Contest> getUserContests(int id);
 
-    List<Contest> getContestByImageId(int imageId);
+    List<Contest> search(Optional<String> phase);
+
+    List<Contest> searchAsUser(Optional<String> phase);
 
 }

@@ -17,7 +17,6 @@ public interface UserService extends GetServiceOperations<User> {
 
     User update(User user,User userToUpdate, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
-    void delete(User user,int id);
 
     User create(User user, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 

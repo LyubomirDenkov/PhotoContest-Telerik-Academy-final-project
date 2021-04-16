@@ -178,19 +178,4 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    @Transactional
-    @Override
-    public void delete(int id) {
-
-        User userToDelete = getById(id);
-
-        try (Session session = sessionFactory.openSession()) {
-
-            session.beginTransaction();
-
-            session.delete(userToDelete);
-
-            session.getTransaction().commit();
-        }
-    }
 }

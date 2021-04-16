@@ -35,7 +35,6 @@ public class ImageReviewServiceImplTests {
 
     @Test
     public void Should_ThrowException_When_UserDontHaveRole(){
-        ImageReview imageReview = createMockImageReview();
         User user = new User();
         Set<Role> roles = new HashSet<>();
         user.setRoles(roles);

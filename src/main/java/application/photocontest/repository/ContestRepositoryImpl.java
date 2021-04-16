@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ContestRepositoryImpl implements ContestRepository {
@@ -76,10 +77,6 @@ public class ContestRepositoryImpl implements ContestRepository {
         return contest;
     }
 
-    @Override
-    public void delete(int id) {
-
-    }
 
     @Override
     public Contest getByTitle(String title) {
@@ -173,15 +170,19 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
-    public List<Contest> getContestByImageId(int imageId) {
-
+    public List<Contest> search(Optional<String> phase) {
         try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Contest where phase.name like :phase ", Contest.class)
+                    .setParameter("phase", phase).list();
+        }
+    }
 
-            return session.createQuery("select c from Contest c " +
-                    "join c.images as image " +
-                    "where image.id = :id  ", Contest.class).setParameter("id", imageId).list();
-
-
+    @Override
+    public List<Contest> searchAsUser(Optional<String> phase) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Contest where phase.name like :phase " +
+                    "and type.name like 'open' ", Contest.class)
+                    .setParameter("phase", phase).list();
         }
     }
 

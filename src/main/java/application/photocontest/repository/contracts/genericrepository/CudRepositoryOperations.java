@@ -5,6 +5,5 @@ public interface CudRepositoryOperations<T> {
 
     T update(T type);
 
-    void delete(int id);
 
 }
