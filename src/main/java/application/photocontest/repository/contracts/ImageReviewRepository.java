@@ -17,4 +17,6 @@ public interface ImageReviewRepository {
     Long getImageReviewPointsByContestAndImageId(int contestId, int imageId);
 
     Long getReviewsCountByContestAndImageId(int contestId,int imageId);
+
+    void delete(ImageReview imageReview);
 }

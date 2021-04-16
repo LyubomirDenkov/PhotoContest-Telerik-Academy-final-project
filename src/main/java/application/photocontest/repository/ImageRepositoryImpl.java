@@ -51,7 +51,6 @@ public class ImageRepositoryImpl implements ImageRepository {
         }
     }
 
-
     @Transactional
     @Override
     public Image create(Image image) {
@@ -61,36 +60,6 @@ public class ImageRepositoryImpl implements ImageRepository {
             session.save(image);
 
             return getById(image.getId());
-        }
-    }
-
-
-    @Transactional
-    @Override
-    public Image update(Image image) {
-        try (Session session = sessionFactory.openSession()) {
-
-            session.beginTransaction();
-
-            session.update(image);
-
-            session.getTransaction().commit();
-        }
-        return image;
-    }
-    @Transactional
-    @Override
-    public void delete(int id) {
-
-        Image imageToDelete = getById(id);
-
-        try (Session session = sessionFactory.openSession()) {
-
-            session.beginTransaction();
-
-            session.delete(imageToDelete);
-
-            session.getTransaction().commit();
         }
     }
 }

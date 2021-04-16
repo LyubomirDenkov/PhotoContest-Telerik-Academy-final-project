@@ -14,8 +14,6 @@ public interface ImageService {
 
     Image create(User user, Image image, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
-    void delete(User user, int id);
-
     List<Image> latestWinnerImages();
 
 }

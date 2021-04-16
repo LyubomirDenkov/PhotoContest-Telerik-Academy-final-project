@@ -37,4 +37,6 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     List<Contest> getByUserId(int id);
 
+    void removeImageFromContest(User user,int contestId,int imageId);
+
 }

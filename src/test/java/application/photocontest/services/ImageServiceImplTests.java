@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class ImageServiceImplTests {
 
         imageService.getById(image.getId());
 
-        verify(imageRepository,times(1)).getById(image.getId());
+        verify(imageRepository, times(1)).getById(image.getId());
 
     }
 
@@ -61,13 +62,24 @@ public class ImageServiceImplTests {
 
         when(userRepository.getById(user.getId())).thenReturn(user);
 
-        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.of(image.getUrl()))).thenReturn(image.getUrl());
+        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.of(image.getUrl()))).thenReturn(image.getUrl());
 
         when(imageRepository.create(image)).thenReturn(image);
 
-        imageService.create(user,image,Optional.empty(),Optional.of(image.getUrl()));
+        imageService.create(user, image, Optional.empty(), Optional.of(image.getUrl()));
 
-        verify(userRepository,times(1)).update(user);
+        verify(userRepository, times(1)).update(user);
+
+    }
+
+    @Test
+    public void latestWinnerImages_Should_CallRepository_When_MethodIsCalled() {
+
+        when(imageRepository.latestWinnerImages()).thenReturn(List.of(createMockImage()));
+
+        imageService.latestWinnerImages();
+
+        verify(imageRepository, times(1)).latestWinnerImages();
 
     }
 }

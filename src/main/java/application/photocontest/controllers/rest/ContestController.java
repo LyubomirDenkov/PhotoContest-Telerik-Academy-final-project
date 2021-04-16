@@ -157,7 +157,7 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
@@ -175,6 +175,21 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "Add image to contest")
+    @PutMapping("/{contestId}/image/{imageId}/remove")
+    public void removeImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+                            @PathVariable int imageId) {
+        User user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            contestService.removeImageFromContest(user, contestId, imageId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }

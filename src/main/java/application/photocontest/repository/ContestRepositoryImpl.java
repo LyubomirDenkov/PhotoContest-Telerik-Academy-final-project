@@ -35,22 +35,22 @@ public class ContestRepositoryImpl implements ContestRepository {
     public Contest getById(int id) {
 
 
-            try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
 
-                Query<Contest> query = session.createQuery("from Contest " +
-                        "where id = :id ", Contest.class);
+            Query<Contest> query = session.createQuery("from Contest " +
+                    "where id = :id ", Contest.class);
 
-                query.setParameter("id", id);
+            query.setParameter("id", id);
 
-                List<Contest> result = query.list();
+            List<Contest> result = query.list();
 
-                if (result.isEmpty()) {
+            if (result.isEmpty()) {
 
-                    throw new EntityNotFoundException("Contest", "id", String.valueOf(id));
+                throw new EntityNotFoundException("Contest", "id", String.valueOf(id));
 
-                }
-                return result.get(0);
             }
+            return result.get(0);
+        }
     }
 
 
@@ -102,13 +102,12 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
 
-
     @Override
     public List<Contest> getOngoingContests() {
 
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.name like 'ongoing' ",Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'ongoing' ", Contest.class).list();
 
         }
     }
@@ -117,7 +116,7 @@ public class ContestRepositoryImpl implements ContestRepository {
     public List<Contest> getVotingContests() {
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.name like 'voting' ",Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'voting' ", Contest.class).list();
 
         }
     }
@@ -126,12 +125,13 @@ public class ContestRepositoryImpl implements ContestRepository {
     public List<Contest> getFinishedContests() {
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.name like 'finished' ",Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'finished' ", Contest.class).list();
 
         }
     }
 
-    public Contest getContestByImageUploaderId(int contestId, int userId){
+    @Override
+    public Contest getContestByImageUploaderId(int contestId, int userId) {
 
         try (Session session = sessionFactory.openSession()) {
 
@@ -140,14 +140,14 @@ public class ContestRepositoryImpl implements ContestRepository {
                     "where c.id = :contestId and " +
                     "image.uploader.id = :userId ", Contest.class);
 
-            query.setParameter("contestId",contestId);
+            query.setParameter("contestId", contestId);
             query.setParameter("userId", userId);
 
             List<Contest> result = query.list();
 
             if (result.isEmpty()) {
 
-                throw new EntityNotFoundException("Contest", "user",String.valueOf(userId));
+                throw new EntityNotFoundException("Contest", "user", String.valueOf(userId));
 
             }
             return result.get(0);
@@ -166,9 +166,22 @@ public class ContestRepositoryImpl implements ContestRepository {
     public List<Contest> getUserContests(int id) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("select c from Contest c join c.participants as participant " +
-                            " where participant.id = :id", Contest.class)
+                    " where participant.id = :id", Contest.class)
                     .setParameter("id", id)
                     .list();
+        }
+    }
+
+    @Override
+    public List<Contest> getContestByImageId(int imageId) {
+
+        try (Session session = sessionFactory.openSession()) {
+
+            return session.createQuery("select c from Contest c " +
+                    "join c.images as image " +
+                    "where image.id = :id  ", Contest.class).setParameter("id", imageId).list();
+
+
         }
     }
 

@@ -1,9 +1,13 @@
 package application.photocontest.service;
 
 import application.photocontest.enums.UserRoles;
+import application.photocontest.models.Contest;
 import application.photocontest.models.Image;
+import application.photocontest.models.ImageReview;
 import application.photocontest.models.User;
+import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
+import application.photocontest.repository.contracts.ImageReviewRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
@@ -27,7 +31,9 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository, UserRepository userRepository, ImgurService imgurService) {
+    public ImageServiceImpl(ImageRepository imageRepository,
+                            UserRepository userRepository,
+                            ImgurService imgurService) {
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
         this.imgurService = imgurService;
@@ -41,11 +47,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image create(User user, Image image, Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
-        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
         User userUploader = userRepository.getById(user.getId());
         image.setUploader(userUploader);
 
-        String imageUrl =  imgurService.uploadImageToImgurAndReturnUrl(file,url);
+        String imageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
         image.setUrl(imageUrl);
 
         Image imageToCreate = imageRepository.create(image);
@@ -58,17 +64,8 @@ public class ImageServiceImpl implements ImageService {
         return imageToCreate;
 
     }
-
-
-    @Override
-    public void delete(User userCredentials, int id) {
-
-        imageRepository.delete(id);
-    }
-
     @Override
     public List<Image> latestWinnerImages() {
         return imageRepository.latestWinnerImages();
     }
-
 }

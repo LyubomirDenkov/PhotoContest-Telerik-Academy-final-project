@@ -74,6 +74,36 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public void removeImageFromContest(User user, int contestId, int imageId) {
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
+
+        Contest contest = contestRepository.getById(contestId);
+        Image image = imageRepository.getById(imageId);
+
+        if (!user.isOrganizer()) {
+            validateUserIsJury(contest, user);
+        }
+
+        removeImageFromContestCollection(contest,image);
+
+    }
+
+    private void removeImageFromContestCollection(Contest contest, Image image) {
+
+        Set<Image> images = contest.getImages();
+        Set<Image> winnerImages = contest.getWinnerImages();
+
+        images.remove(image);
+        winnerImages.remove(image);
+
+        contest.setImages(images);
+        contest.setWinnerImages(winnerImages);
+
+        contestRepository.update(contest);
+
+    }
+
+    @Override
     public List<Type> getAllTypes() {
         return typeRepository.getAll();
     }
@@ -258,7 +288,7 @@ public class ContestServiceImpl implements ContestService {
         validateUserIsJury(contest, user);
         validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, points);
 
-        if (!isContestContainsImage(contest,image)){
+        if (!isContestContainsImage(contest, image)) {
             throw new UnauthorizedOperationException(PHOTO_NOT_IN_A_CONTEST);
         }
 
@@ -293,7 +323,7 @@ public class ContestServiceImpl implements ContestService {
         validateUserIsParticipant(contest, user);
         validateUserIsImageUploader(user, image);
 
-        if (isContestContainsImage(contest,image)){
+        if (isContestContainsImage(contest, image)) {
             throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
         }
 

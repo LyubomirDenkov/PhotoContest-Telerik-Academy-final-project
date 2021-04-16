@@ -35,7 +35,6 @@ public class ContestDto {
     @Max(value = 30, message = PHASE_ONE_MAX_ERROR_MSG)
     private int phaseOne;
 
-
     @Positive
     @Min(value = 1, message = PHASE_TWO_MIN_ERROR_MSG)
     @Max(value = 24, message = PHASE_TWO_MAX_ERROR_MSG)

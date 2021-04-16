@@ -1,6 +1,7 @@
 package application.photocontest.controllers.rest;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
+import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
 import application.photocontest.models.User;
@@ -43,7 +44,7 @@ public class ImageController {
 
     }
 
-    @PostMapping(value = "/upload" , consumes = {"multipart/form-data", "application/json"})
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data", "application/json"})
     public Image create(@RequestHeader HttpHeaders headers,
                         @RequestParam(name = "file", required = false) Optional<MultipartFile> file,
                         @RequestParam(name = "url", required = false) Optional<String> url,
@@ -53,17 +54,8 @@ public class ImageController {
         Image image = imageMapper.fromDto(user, dto);
         try {
             return imageService.create(user, image, file, url);
-        }catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage());
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-    }
-
-
-    @DeleteMapping("/{id}")
-    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-
-        User user = authenticationHelper.tryGetUser(headers);
-
-        imageService.delete(user, id);
     }
 }

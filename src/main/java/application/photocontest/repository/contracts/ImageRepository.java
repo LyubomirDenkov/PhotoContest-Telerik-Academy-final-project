@@ -7,10 +7,12 @@ import application.photocontest.repository.contracts.genericrepository.CudReposi
 import java.util.List;
 
 
-public interface ImageRepository extends CudRepositoryOperations<Image> {
+public interface ImageRepository {
 
     Image getById(int id);
 
     List<Image> latestWinnerImages();
+
+    Image create(Image image);
 
 }
