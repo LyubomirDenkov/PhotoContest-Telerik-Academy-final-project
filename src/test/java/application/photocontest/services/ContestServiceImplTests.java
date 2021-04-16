@@ -346,11 +346,17 @@ public class ContestServiceImplTests {
         Image image = createMockImage();
         contest.setImages(Set.of(image));
         ImageReview imageReview = createMockImageReview();
+        User organizer = createMockOrganizer();
 
         ImageReview testImageReview = new ImageReview();
         testImageReview.setId(2);
+        testImageReview.setUser(organizer);
+        testImageReview.setImage(image);
+        testImageReview.setContest(contest);
+        testImageReview.setPoints(5);
+        testImageReview.setComment("comment");
 
-
+        
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
@@ -359,7 +365,7 @@ public class ContestServiceImplTests {
 
         contestService.rateImage(user,contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
 
-        Mockito.verify(imageReviewRepository, Mockito.times(1)).create(testImageReview);
+        Mockito.verify(imageReviewRepository).create(imageReview);
 
 
     }
@@ -414,7 +420,7 @@ public class ContestServiceImplTests {
 
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
-        Mockito.when(contestRepository.getContestByImageUploaderId(user.getId())).thenThrow(EntityNotFoundException.class);
+        Mockito.when(contestRepository.getContestByImageUploaderId(contest.getId(),user.getId())).thenThrow(EntityNotFoundException.class);
 
         Mockito.when(imageService.create(user,image,Optional.empty(),Optional.of(""))).thenReturn(image);
 

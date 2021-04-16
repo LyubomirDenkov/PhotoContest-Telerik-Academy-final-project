@@ -1,6 +1,7 @@
 package application.photocontest.service;
 
 
+import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Notification;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.NotificationRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class NotificationServiceImpl implements NotificationService {
 
 
+    public static final String GET_NOTIFICATION_ERROR_MESSAGE = "You can only see your own messages.";
     private final NotificationRepository notificationRepository;
     @Autowired
     public NotificationServiceImpl(NotificationRepository notificationRepository) {

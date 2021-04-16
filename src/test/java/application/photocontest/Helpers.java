@@ -3,6 +3,7 @@ package application.photocontest;
 import application.photocontest.models.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -99,6 +100,23 @@ public class Helpers {
 
 
         return imageReview;
+    }
+
+    public static Notification createMockNotification() {
+        Notification notification = new Notification();
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        notification.setId(1);
+        notification.setTitle("new notification");
+        notification.setDate("2020-05-06:15:00");
+        notification.setMessage("new message");
+        notification.setSeen(false);
+
+
+
+
+
+        return notification;
     }
 
 
