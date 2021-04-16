@@ -23,11 +23,13 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification getById(User user, int id) {
         return notificationRepository.getById(id);
     }
+
     @Override
     public Notification create(Notification notification) {
         Notification createdNotification = notificationRepository.create(notification);
         return createdNotification;
     }
+
     @Override
     public void delete(int messageId) {
         notificationRepository.delete(messageId);

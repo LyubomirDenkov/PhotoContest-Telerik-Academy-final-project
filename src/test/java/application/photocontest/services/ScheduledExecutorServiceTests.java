@@ -1,9 +1,9 @@
 package application.photocontest.services;
 
 
-import application.photocontest.models.Contest;
-import application.photocontest.models.Phase;
+import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
+import application.photocontest.service.NotificationServiceImpl;
 import application.photocontest.service.ScheduledExecutorService;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
@@ -17,8 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
-import static application.photocontest.Helpers.createMockContest;
+import static application.photocontest.Helpers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ScheduledExecutorServiceTests {
@@ -28,6 +30,9 @@ public class ScheduledExecutorServiceTests {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    NotificationRepository notificationRepository;
 
     @Mock
     ImgurService imgurService;
@@ -53,25 +58,44 @@ public class ScheduledExecutorServiceTests {
 
         scheduledExecutorService.run();
 
-        Mockito.verify(contestRepository,Mockito.times(1)).getAll();
+        verify(contestRepository, times(1)).getAll();
 
     }
 
     @Test
     public void changeContestPhase_Should_Run_For_Contests() {
         LocalDateTime localDateTime = LocalDateTime.now();
+        User user = createMockUser();
         Contest contest = createMockContest();
+        Image image = createMockImage();
+
+        Points points = new Points();
+        points.setId(1);
+        points.setPoints(10);
+        user.setPoints(Set.of(points));
+
+        contest.setTimeTillFinished(java.sql.Timestamp.valueOf(localDateTime.minusMinutes(5)));
+
         Phase phase = new Phase();
         phase.setId(1);
-        phase.setName("finished");
+        phase.setName("voting");
 
+        contest.setPhase(phase);
+        contest.setImages(Set.of(image));
 
+        Notification notification = createMockNotification();
+        Notification secondNotification = createMockNotification();
+        user.setMessages(Set.of(notification));
 
-        Mockito.when(contestRepository.getAll()).thenReturn(List.of(contest));
+        when(contestRepository.getAll()).thenReturn(List.of(contest));
+
+        when(userRepository.getUserByPictureId(1)).thenReturn(user);
+
+        when(notificationRepository.create(secondNotification)).thenReturn(secondNotification);
 
         scheduledExecutorService.run();
 
-        Mockito.verify(contestRepository,Mockito.times(1)).getAll();
+        verify(pointsRepository,times(1)).updatePoints(points);
 
     }
 
