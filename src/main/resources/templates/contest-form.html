@@ -9,7 +9,7 @@
 
 
 <form th:fragment="contest-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${contest}"
-      method="post">
+      method="post" enctype="multipart/form-data">
     <h5 class="card-title text-center">Create new contest</h5>
     <label class="text-label-own" th:text="#{contest.label.title}">Title</label>
     <br/>
@@ -58,9 +58,6 @@
     <label class="error error-custom" th:errors="*{typeId}">type error placeholder</label>
     <br/><br/>
 
-    <label class="text-label-own" th:text="#{contest.label.image}">Image</label>
-    <br/><br/>
-
     <label class="text-label-own" th:text="#{category.label.name}">Category Name</label>
     <br>
     <select class="select-toggle" multiple="multiple" th:field="*{participants}">
@@ -85,7 +82,10 @@
     </select>
     <label class="error error-custom" th:errors="*{jury}">participant error placeholder</label>
     <br/><br/>
-
+    <input type="url" name="url" id="url" placeholder="Image url">
+    <p>OR</p>
+    <input type="file" name="multiPartFile" id="multiPartFile" placeholder="Choose...."
+           accept="image/png, image/jpeg, image/jpg">
 
     <input class="btn btn-outline-primary custom-button-size" type="submit" value="Save"/>
 </form>

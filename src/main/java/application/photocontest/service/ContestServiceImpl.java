@@ -156,7 +156,7 @@ public class ContestServiceImpl implements ContestService {
 
         String contestBackground = imgurService.uploadImageToImgurAndReturnUrl(file, url);
 
-        if (contestBackground.isBlank()) {
+        if (!contestBackground.isBlank()) {
             contest.setBackgroundImage(contestBackground);
         } else {
             contest.setBackgroundImage(DEFAULT_CONTEST_BACKGROUND);

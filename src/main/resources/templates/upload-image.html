@@ -20,7 +20,7 @@
         <textarea cols="30" rows="10" th:field="*{story}"></textarea>
         <p th:errors="*{story}">story</p>
       </div>
-      <input type="url" th:name="url" placeholder="Image url">
+      <input type="url" name="url" placeholder="Image url">
       <p>OR</p>
       <input type="file" name="multiPartFile" id="multiPartFile" placeholder="Choose...."
              accept="image/png, image/jpeg, image/jpg">

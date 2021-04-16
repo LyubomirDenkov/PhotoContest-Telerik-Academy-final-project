@@ -170,7 +170,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-
+            model.addAttribute("currentUser", currentUser);
             model.addAttribute("contest", new ContestDto());
             return "contest-new";
 
@@ -180,10 +180,14 @@ public class ContestsMvcController {
     }
 
     @PostMapping("/new")
-    public String handleNewContestPage(@Valid @ModelAttribute("contest") ContestDto contestDto, HttpSession session,
-                                       @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
-                                       @RequestParam(value = "url", required = false) Optional<String> url) {
+    public String handleNewContestPage(@RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
+                                        @RequestParam(value = "url", required = false) Optional<String> url,
+                                        @Valid @ModelAttribute("contest") ContestDto contestDto, BindingResult errors,
+                                       HttpSession session) {
 
+        if (errors.hasErrors()){
+            return "contest-new";
+        }
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
@@ -267,7 +271,7 @@ public class ContestsMvcController {
 
             Contest contest = contestService.getById(currentUser, contestId);
 
-            model.addAttribute("currentUser",currentUser);
+            model.addAttribute("currentUser", currentUser);
             model.addAttribute("contest", contest);
 
             return "contest-images";

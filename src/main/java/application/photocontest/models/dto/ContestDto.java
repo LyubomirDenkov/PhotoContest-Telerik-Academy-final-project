@@ -2,11 +2,9 @@ package application.photocontest.models.dto;
 
 
 import application.photocontest.models.Image;
+import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -15,8 +13,12 @@ import java.util.Set;
 
 public class ContestDto {
 
-    public static final String PHASE_ONE_ERROR_MSG = "Phase one can be between 1 and 30 days.";
-    public static final String PHASE_TWO_ERROR_MSG = "Phase one can be between 1 and 24 hours.";
+    public static final String PHASE_ONE_MIN_ERROR_MSG = "Phase one can be minimum 1 day.";
+
+    public static final String PHASE_ONE_MAX_ERROR_MSG = "Phase one can be max 30 days.";
+
+    public static final String PHASE_TWO_MIN_ERROR_MSG = "Phase one can be minimum 1 hour.";
+    public static final String PHASE_TWO_MAX_ERROR_MSG = "Phase one can be max 24 hours.";
     private static final String CATEGORY_ID_ERROR_MESSAGE = "Category Id must be positive.";
     private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
     private static final String TYPE_ID_SHOULD_BE_POSITIVE = "Type Id should be positive.";
@@ -28,12 +30,15 @@ public class ContestDto {
     @Positive(message = CATEGORY_ID_ERROR_MESSAGE)
     private int categoryId;
 
-
-    @NotNull
+    @Positive
+    @Min(value = 1, message = PHASE_ONE_MIN_ERROR_MSG)
+    @Max(value = 30, message = PHASE_ONE_MAX_ERROR_MSG)
     private int phaseOne;
 
 
-    @NotNull
+    @Positive
+    @Min(value = 1, message = PHASE_TWO_MIN_ERROR_MSG)
+    @Max(value = 24, message = PHASE_TWO_MAX_ERROR_MSG)
     private int phaseTwo;
 
     @Positive(message = TYPE_ID_SHOULD_BE_POSITIVE)
