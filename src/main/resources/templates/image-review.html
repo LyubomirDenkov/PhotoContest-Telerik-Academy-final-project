@@ -72,7 +72,7 @@
                                             <h4 class="card__heading" th:text="#{image.label.rating}">Rating</h4>
                                         </div>
 
-                                        <div class="card__details">
+                                        <div id="card-own" class="card__details">
 
                                             <label class="text-label-own"
                                                    th:text="#{review.label.points}">Points</label>
@@ -83,13 +83,12 @@
                                             <label class="error error-custom" th:errors="${imageReview.points}">Name
                                                 error
                                                 placeholder</label>
-                                            <br/><br/>
-
+                                            <br/>
                                             <label class="text-label-own"
                                                    th:text="#{review.label.comment}">Comment</label>
                                             <br/>
-                                            <input class="input-custom-field" type="text"
-                                                   th:field="${imageReview.comment}"/>
+                                            <textarea cols="60" rows="6"  th:field="${imageReview.comment}">
+                                            </textarea>
                                             <br>
                                             <label class="error error-custom" th:errors="${imageReview.comment}">Name
                                                 error
@@ -97,10 +96,10 @@
                                             <br/><br/>
 
 
-                                            <li>
+                                           <ul> <li>
                                                 <a>
                                                     <button class="glow-on-hover" type="button">SUBMIT</button>
-                                                </a></li>
+                                                </a></li></ul>
                                         </div>
                                     </div>
                                 </div>

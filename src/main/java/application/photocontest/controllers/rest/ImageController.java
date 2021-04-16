@@ -1,6 +1,7 @@
 package application.photocontest.controllers.rest;
 
 import application.photocontest.controllers.authentications.AuthenticationHelper;
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ImageMapper;
 import application.photocontest.models.Image;
@@ -40,8 +41,14 @@ public class ImageController {
     @GetMapping("/{id}")
     public Image getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return imageService.getById(id);
 
+        try {
+            return imageService.getById(user, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PostMapping(value = "/upload", consumes = {"multipart/form-data", "application/json"})

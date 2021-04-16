@@ -196,28 +196,4 @@ public class UserServiceImplTests {
 
     }
 
-    @Test
-    public void delete_Should_Throw_When_NotAuthorized()  {
-        User user = createMockUser();
-        User organizer = createMockOrganizer();
-
-        Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> userService.delete(user,organizer.getId()));
-
-
-    }
-
-    @Test
-    public void delete_Should_Delete_When_ValidationsOk()  {
-        User user = createMockUser();
-
-        userService.delete(user,user.getId());
-
-        verify(userRepository,times(1)).delete(user.getId());
-
-
-
-    }
-
-
 }

@@ -290,7 +290,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            Image image = imageService.getById(imageId);
+            Image image = imageService.getById(currentUser,imageId);
 
             model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute("currentUser", currentUser);

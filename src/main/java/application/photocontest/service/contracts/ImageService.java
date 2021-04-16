@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ImageService {
 
-    Image getById(int id);
+    Image getById(User user,int id);
 
     Image create(User user, Image image, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 

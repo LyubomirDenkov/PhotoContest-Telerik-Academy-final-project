@@ -128,6 +128,18 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
     @Override
+    public List<User> getContestParticipants(int contestId) {
+
+        try (Session session = sessionFactory.openSession()) {
+
+           return session.createQuery("select p from Contest c " +
+                    "join c.participants as p " +
+                    "where c.id = :id ", User.class).setParameter("id",contestId).list();
+
+        }
+    }
+
+    @Override
     public Contest getContestByImageUploaderId(int contestId, int userId) {
 
         try (Session session = sessionFactory.openSession()) {

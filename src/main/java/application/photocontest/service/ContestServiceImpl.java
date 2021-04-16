@@ -82,7 +82,7 @@ public class ContestServiceImpl implements ContestService {
             }
         }
 
-       return contestRepository.search(phase);
+        return contestRepository.search(phase);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class ContestServiceImpl implements ContestService {
             validateUserIsJury(contest, user);
         }
 
-        removeImageFromContestCollection(contest,image);
+        removeImageFromContestCollection(contest, image);
 
     }
 
@@ -232,10 +232,12 @@ public class ContestServiceImpl implements ContestService {
 
     }
 
-
-    //TODO
     @Override
-    public Image uploadImageToContest(User user, Image image, int contestId, Optional<MultipartFile> file, Optional<String> url) throws IOException {
+    public Image uploadImageToContest(User user,
+                                      Image image,
+                                      int contestId,
+                                      Optional<MultipartFile> file,
+                                      Optional<String> url) throws IOException {
 
         Contest contest = contestRepository.getById(contestId);
 
@@ -245,29 +247,27 @@ public class ContestServiceImpl implements ContestService {
         validateUserNotUploadedImageToContest(contest, user);
 
         Image imageAddToContest = imageService.create(user, image, file, url);
-
-
         Set<Image> contestImages = contest.getImages();
         contestImages.add(imageAddToContest);
-
         contest.setImages(contestImages);
         contestRepository.update(contest);
         return image;
 
     }
 
+    @Override
+    public List<User> getContestParticipants(User user, int contestId) {
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
+        return contestRepository.getContestParticipants(contestId);
+    }
+
     private void updateParticipants(Contest contest, Set<Integer> newParticipants) {
 
         Set<User> oldParticipants = contest.getParticipants();
-
-
         Set<User> jury = contest.getJury();
-
         Set<User> participants = new HashSet<>();
 
-
         for (Integer participant : newParticipants) {
-
             User participantToAdd = userRepository.getById(participant);
             if (oldParticipants.contains(participantToAdd)) {
                 participants.add(participantToAdd);
@@ -409,9 +409,7 @@ public class ContestServiceImpl implements ContestService {
 
     private void setContestJury(Set<Integer> jurySet, Contest contest) {
 
-        Set<User> jury = new HashSet<>();
-
-        jury.addAll(userRepository.getOrganizers());
+        Set<User> jury = new HashSet<>(userRepository.getOrganizers());
 
         for (Integer userId : jurySet) {
             User userToAdd = userRepository.getById(userId);

@@ -47,7 +47,7 @@ public class Swagger2Config {
     }
 
     private String description(){
-        return "Welcome to DeliverIT Documentation. The DeliverIT API allows you to do stuff. \n" +
+        return "Welcome to Iphoto Documentation. The DeliverIT API allows you to do stuff. \n" +
                 "See also at: https://github.com/LyubomirDenkov/DeliverIt-documentation";
     }
 

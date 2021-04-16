@@ -40,7 +40,10 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getById(int id) {
+    public Image getById(User user, int id) {
+
+        verifyUserHasRoles(user, UserRoles.USER);
+
         return imageRepository.getById(id);
     }
 
@@ -64,6 +67,7 @@ public class ImageServiceImpl implements ImageService {
         return imageToCreate;
 
     }
+
     @Override
     public List<Image> latestWinnerImages() {
         return imageRepository.latestWinnerImages();

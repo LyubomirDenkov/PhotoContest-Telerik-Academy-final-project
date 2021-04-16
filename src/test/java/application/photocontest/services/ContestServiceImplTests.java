@@ -314,7 +314,7 @@ public class ContestServiceImplTests {
     }
 
     @Test
-    public void rateImage_Should_Throw_When_UserIsNotJury()  {
+    public void rateImage_Should_ThrowException_When_UserIsNotJury()  {
         Contest contest = createMockContest();
         Phase phase = new Phase();
         phase.setId(2);
@@ -361,11 +361,12 @@ public class ContestServiceImplTests {
 
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
-        Mockito.when(imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contest.getId(),image.getId())).thenThrow(EntityNotFoundException.class);
+        Mockito.when(imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contest.getId(),image.getId()))
+                .thenThrow(EntityNotFoundException.class);
 
         contestService.rateImage(user,contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
 
-        Mockito.verify(imageReviewRepository).create(imageReview);
+        verify(imageReviewRepository,times(1)).create(imageReview);
 
 
     }

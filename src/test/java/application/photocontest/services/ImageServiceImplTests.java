@@ -43,8 +43,9 @@ public class ImageServiceImplTests {
     @Test
     public void getById_Should_Return_Image() {
         Image image = createMockImage();
+        User user = createMockUser();
 
-        imageService.getById(image.getId());
+        imageService.getById(user,image.getId());
 
         verify(imageRepository, times(1)).getById(image.getId());
 

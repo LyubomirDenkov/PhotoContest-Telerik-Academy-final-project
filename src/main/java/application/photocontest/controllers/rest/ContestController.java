@@ -59,6 +59,20 @@ public class ContestController {
         }
     }
 
+    @GetMapping("/{contestId}/participants")
+    public List<User> getContestParticipants(@RequestHeader HttpHeaders headers,@PathVariable int contestId){
+
+        User user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            return contestService.getContestParticipants(user,contestId);
+        } catch (
+                UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+
+        }
+    }
+
     @ApiOperation(value = "Get ongoing contests")
     @GetMapping("/ongoing")
     public List<Contest> getOngoingContests() {
@@ -196,7 +210,7 @@ public class ContestController {
     }
 
     @ApiOperation(value = "Rate image")
-    @PostMapping("/{contestId}/rating/{imageId}")
+    @PostMapping("/{contestId}/image/{imageId}/rate")
     public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                           @PathVariable int imageId, @Valid @RequestBody ImageReviewDto imageReviewDto) {
 

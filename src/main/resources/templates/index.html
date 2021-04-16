@@ -157,23 +157,34 @@
         </div>
     </section><!-- End Speakers Section -->
 
-    <section id="gallery">
+    <section id="hotels" class="section-with-bg">
 
         <div class="container" data-aos="fade-up">
             <div class="section-header">
-                <h2>Gallery</h2>
-                <p>Check our gallery from the recent events</p>
+                <h2>Latest winner photos</h2>
+            </div>
+
+            <div class="row" data-aos="fade-up" data-aos-delay="100">
+
+                <div class="col-lg-4 col-md-6" th:each="image : ${images}">
+                    <div class="hotel">
+                        <div class="hotel-img">
+                            <a th:if="${currentUser != null}" href="#" th:href="@{/images/{id}(id=${image.getId()})}">
+                            <img th:src="*{image.getUrl()}" src="../static/assets/img/hotels/1.jpg" alt="Hotel 1" class="img-fluid">
+                            </a>
+                            <a th:if="${currentUser == null}" href="#" th:href="@{/auth/login}">
+                                <img th:src="*{image.getUrl()}" src="../static/assets/img/hotels/1.jpg" alt="Hotel 1" class="img-fluid">
+                            </a>
+                        </div>
+                        <h3 th:text="*{image.getTitle()}"></h3>
+                        <p>Uploaded by:</p>
+                        <p th:text="*{image.getUploader().getFirstName() + ' ' + image.getUploader().getLastName()}"></p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="gallery-slider swiper-container" >
-            <div class="swiper-wrapper align-items-center" th:each="image : ${images}">
-                <div class="swiper-slide"><img th:src="*{image.getUrl()}" src="../static/assets/img/gallery/1.jpg" class="img-fluid" alt=""></div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-
-    </section><!-- End Gallery Section -->
+    </section><!-- End Hotels Section -->
 
     <!-- =======  F.A.Q Section ======= -->
     <section id="faq">

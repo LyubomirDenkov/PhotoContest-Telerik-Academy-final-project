@@ -47,6 +47,7 @@ public class Contest {
     private Phase phase;
 
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_participants",
@@ -54,6 +55,7 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> participants;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_jury",
@@ -194,6 +196,7 @@ public class Contest {
         this.phase = phase;
     }
 
+    @JsonIgnore
     public Set<User> getParticipants() {
         return participants;
     }
@@ -202,6 +205,7 @@ public class Contest {
         this.participants = participants;
     }
 
+    @JsonIgnore
     public Set<User> getJury() {
         return jury;
     }
