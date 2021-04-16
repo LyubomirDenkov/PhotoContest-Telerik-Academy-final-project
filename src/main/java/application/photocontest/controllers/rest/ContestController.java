@@ -59,6 +59,7 @@ public class ContestController {
         }
     }
 
+    @ApiOperation(value = "Get ongoing contests")
     @GetMapping("/ongoing")
     public List<Contest> getOngoingContests() {
         return contestService.getOngoingContests();

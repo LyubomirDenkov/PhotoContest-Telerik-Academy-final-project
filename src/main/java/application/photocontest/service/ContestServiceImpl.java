@@ -126,7 +126,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
         try {
-            contestRepository.getContestByImageUploaderId(contest.getId(),user.getId());
+            contestRepository.getContestByImageUploaderId(contest.getId(), user.getId());
             contest.setHasImageUploaded(true);
         } catch (EntityNotFoundException e) {
             contest.setHasImageUploaded(false);
@@ -198,9 +198,9 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
 
         validateUserIsImageUploader(user, image);
-        validateContestPhase(contest, ContestPhases.ONGOING,ADDING_IMAGES_ONLY_IN_PHASE_ONE);
+        validateContestPhase(contest, ContestPhases.ONGOING, ADDING_IMAGES_ONLY_IN_PHASE_ONE);
         validateUserIsParticipant(contest, user);
-        validateUserNotUploadedImageToContest(contest,user);
+        validateUserNotUploadedImageToContest(contest, user);
 
         Image imageAddToContest = imageService.create(user, image, file, url);
 
@@ -254,10 +254,13 @@ public class ContestServiceImpl implements ContestService {
 
         boolean isUserRatedImageInContest = true;
 
-        validateContestPhase(contest, ContestPhases.VOTING,PHASE_RATING_ERROR_MESSAGE);
+        validateContestPhase(contest, ContestPhases.VOTING, PHASE_RATING_ERROR_MESSAGE);
         validateUserIsJury(contest, user);
         validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, points);
-        validateContestContainsImage(contest, image);
+
+        if (!isContestContainsImage(contest,image)){
+            throw new UnauthorizedOperationException(PHOTO_NOT_IN_A_CONTEST);
+        }
 
         try {
             imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(), contestId, imageId);
@@ -286,10 +289,13 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = contestRepository.getById(contestId);
         Image image = imageRepository.getById(imageId);
 
-        validateContestPhase(contest, ContestPhases.ONGOING,PHASE_RATING_ERROR_MESSAGE);
+        validateContestPhase(contest, ContestPhases.ONGOING, PHASE_RATING_ERROR_MESSAGE);
         validateUserIsParticipant(contest, user);
         validateUserIsImageUploader(user, image);
-        validateContestNotContainsImage(contest, image);
+
+        if (isContestContainsImage(contest,image)){
+            throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
+        }
 
         Set<Image> addImage = contest.getImages();
         addImage.add(image);
@@ -309,10 +315,9 @@ public class ContestServiceImpl implements ContestService {
         User userToJoinInContest = userRepository.getById(userId);
 
 
-        validateContestPhase(contest, ContestPhases.ONGOING,JOIN_OPEN_CONTESTS_ERROR_MESSAGE);
+        validateContestPhase(contest, ContestPhases.ONGOING, JOIN_OPEN_CONTESTS_ERROR_MESSAGE);
         validateContestType(contest, ContestTypes.OPEN);
         validateUserIsNotParticipantOrJury(contest, userToJoinInContest);
-
 
 
         Set<User> participants = contest.getParticipants();
@@ -342,7 +347,6 @@ public class ContestServiceImpl implements ContestService {
 
 
     }
-
 
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> participantSet) {
@@ -435,21 +439,13 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateContestNotContainsImage(Contest contest, Image image) {
-        if (contest.getImages().contains(image)) {
-            throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
-        }
+    private boolean isContestContainsImage(Contest contest, Image image) {
+        return contest.getImages().contains(image);
     }
 
-    private void validateContestContainsImage(Contest contest, Image image) {
-        if (!contest.getImages().contains(image)) {
-            throw new UnauthorizedOperationException(PHOTO_ALREADY_IN_A_CONTEST);
-        }
-    }
-
-    private void validateUserNotUploadedImageToContest(Contest contest,User user) {
+    private void validateUserNotUploadedImageToContest(Contest contest, User user) {
         try {
-            contestRepository.getContestByImageUploaderId(contest.getId(),user.getId());
+            contestRepository.getContestByImageUploaderId(contest.getId(), user.getId());
         } catch (EntityNotFoundException e) {
             return;
         }
