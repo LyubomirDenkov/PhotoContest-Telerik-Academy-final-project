@@ -85,7 +85,8 @@
             <span>Rated with:</span><span><img th:src="@{/assets/img/star.png}" src="../static/assets/img/star.png" alt="star" width="20px"></span>
             <span th:text="*{review.getPoints()}">RATE</span>
             <span> points</span>
-            <p th:text="*{review.getComment()}">COMMENT</p>
+            <br>
+           <span>Comment: </span> <span th:text="*{review.getComment()}">COMMENT</span>
         </div>
     </div>
     <br>

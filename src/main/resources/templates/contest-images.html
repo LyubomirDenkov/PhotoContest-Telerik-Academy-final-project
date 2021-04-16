@@ -2,67 +2,88 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<meta charset="UTF-8">
-<title>Contest</title>
+    <title>Images</title>
 
-<link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
-<link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
-      rel="apple-touch-icon">
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+          rel="apple-touch-icon">
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
-      rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+          rel="stylesheet">
 
-<!-- Vendor CSS Files -->
-<link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
-<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
-      href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
-      href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-<link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
-      href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-<link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
-      href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
+          href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
+          href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
+          href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
+          href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-<!-- Template Main CSS File -->
-<link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-
+<!-- ======= Header ======= -->
 <header id="header" class="d-flex align-items-center ">
     <div class="container-fluid container-xxl d-flex align-items-center">
 
         <div id="logo" class="me-auto">
-            <!-- Uncomment below if you prefer to use a text logo -->
             <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
                                                             src="../static/assets/img/logo.png" alt="" title=""></a>
         </div>
 
+        <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul th:if="${currentUser != null}">
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
+                </li>
+
+                <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+                </li>
+                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                                                             th:href="@{/users}">Users</a>
+                </li>
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
+                </li>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#">Login</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#">Logout</a>
     </div>
-</header>
+</header><!-- End Header -->
 <section id="speakers">
     <div class="container">
         <div class="section-header">
-            <h2>Your Contests</h2>
+            <h2 th:text="*{contest.getTitle()}" ></h2>
         </div>
 
         <div class="row">
             <div class="col-lg-6 col-md-6" th:each="image : ${contest.getImages()}">
-                    <img th:src="*{image.getUrl()}"
-                         alt="Speaker 1" class="img-fluid">
-                    <div class="contest-type">
-                        <div class="contest-type-text" th:text="*{image.getTitle()}">Open</div>
-                    </div>
-                    <div class="details">
-                        <p th:text="*{image.getUploader()}">Quas alias incidunt</p>
-                        <div class="social">
-                            <a class="buy-tickets scrollto"
-                               th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${image.getId()})}" href="#">Rate</a>
-                        </div>
+                <img th:src="*{image.getUrl()}"
+                     alt="Speaker 1" class="img-fluid">
+                <div class="contest-type">
+                    <div class="contest-type-text" th:text="*{image.getTitle()}">Open</div>
+                </div>
+                <div class="details">
+                    <p class="names" th:text="*{image.getUploader().getFirstName() + ' ' + image.uploader.getLastName()}">Quas alias
+                        incidunt</p>
+                    <div class="social">
+                        <a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${image.getId()})}"
+                           href="#"><button class="glow-on-hover custom-border">RATE</button></a>
                     </div>
                 </div>
+                <br>
+                <br>
+            </div>
         </div>
     </div>
 </section>

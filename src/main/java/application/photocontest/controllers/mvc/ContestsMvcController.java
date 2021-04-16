@@ -170,7 +170,6 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            isOrganizer(currentUser);
 
             model.addAttribute("contest", new ContestDto());
             return "contest-new";
@@ -189,7 +188,6 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            isOrganizer(currentUser);
 
             Contest contest = contestMapper.fromDto(contestDto, currentUser);
             Set<Integer> jurySet = contestDto.getJury();
@@ -208,7 +206,6 @@ public class ContestsMvcController {
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
-            isOrganizer(currentUser);
             Contest contest = contestService.getById(currentUser, id);
 
             ContestDto contestDto = contestMapper.toDto(contest);
@@ -230,7 +227,6 @@ public class ContestsMvcController {
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
-            isOrganizer(currentUser);
             if (errors.hasErrors()) {
                 return "contest-update";
             }
@@ -252,8 +248,6 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            isUser(currentUser);
-
             contestService.addUserToContest(currentUser, id, userId);
 
             return "redirect:/contests/{id}";
@@ -273,8 +267,7 @@ public class ContestsMvcController {
 
             Contest contest = contestService.getById(currentUser, contestId);
 
-            isJury(currentUser, contest);
-
+            model.addAttribute("currentUser",currentUser);
             model.addAttribute("contest", contest);
 
             return "contest-images";
@@ -293,13 +286,10 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            Contest contest = contestService.getById(currentUser, contestId);
-
-            isJury(currentUser, contest);
-
             Image image = imageService.getById(imageId);
 
             model.addAttribute("imageReview", new ImageReviewDto());
+            model.addAttribute("currentUser", currentUser);
             model.addAttribute("image", image);
 
             return "image-review";
@@ -321,11 +311,8 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
             if (errors.hasErrors()) {
-                return "contest-images";
+                return "image-review";
             }
-
-            Contest contest = contestService.getById(currentUser, contestId);
-            isJury(currentUser, contest);
 
             int points = imageReviewDto.getPoints();
             String comment = imageReviewDto.getComment();
@@ -378,24 +365,5 @@ public class ContestsMvcController {
             return "error";
         }
 
-    }
-
-
-    private void isOrganizer(User user) {
-        if (!user.isOrganizer()) {
-            throw new UnauthorizedOperationException("Not authorized");
-        }
-    }
-
-    private void isUser(User currentUser) {
-        if (!currentUser.isUser()) {
-            throw new UnauthorizedOperationException("Not authorized");
-        }
-    }
-
-    private void isJury(User currentUser, Contest contest) {
-        if (!contest.getJury().contains(currentUser)) {
-            throw new UnauthorizedOperationException("Not authorized");
-        }
     }
 }

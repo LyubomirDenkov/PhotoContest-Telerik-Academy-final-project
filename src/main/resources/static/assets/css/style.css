@@ -2623,3 +2623,14 @@ IMAGE
 .comments-text {
     text-align: center;
 }
+
+.names{
+    color: wheat;
+    font-weight: bolder;
+}
+
+.custom-border{
+    color: wheat;
+    border-style: solid;
+    border-color: #f82249;
+}
