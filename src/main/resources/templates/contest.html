@@ -140,7 +140,7 @@
                                         <p>Image is uploaded, come back when contest is finished to see result</p>
                                     </li>
                                 </div>
-                                <li th:if="${contest.isJury() && contest.getPhase().getId() == 2}">
+                                <li th:if="${contest.isJury()}">
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/images}">
                                         <button class="glow-on-hover" type="button">REVIEW PHOTOS</button>
                                     </a></li>

@@ -75,7 +75,7 @@
                 <div class="details">
                     <p class="names" th:text="*{image.getUploader().getFirstName() + ' ' + image.uploader.getLastName()}">Quas alias
                         incidunt</p>
-                    <div class="social">
+                    <div class="social" th:if="*{contest.getPhase().getName().equals('voting')}">
                         <a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${image.getId()})}"
                            href="#"><button class="glow-on-hover custom-border">RATE</button></a>
                     </div>

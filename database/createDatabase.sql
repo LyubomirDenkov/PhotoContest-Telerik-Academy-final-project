@@ -183,7 +183,7 @@ create or replace table notification
     title           text                 not null,
     message         longtext             not null,
     date            text                 not null,
-user_id int not null,
+user_id int  not null,
     is_seen         tinyint(1) default 0 not null,
  constraint notifications_users_fk
         foreign key (user_id) references users (user_id)
