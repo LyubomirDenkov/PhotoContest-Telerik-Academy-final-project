@@ -3,20 +3,18 @@ package application.photocontest.services;
 
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
-import application.photocontest.service.NotificationServiceImpl;
 import application.photocontest.service.ScheduledExecutorService;
-import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
 import application.photocontest.service.contracts.NotificationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static application.photocontest.Helpers.*;

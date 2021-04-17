@@ -27,10 +27,6 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     List<Contest> getByUserId(int id);
 
-    List<Contest> getUserContests(int id);
-
-    List<Contest> search(Optional<String> phase);
-
-    List<Contest> searchAsUser(Optional<String> phase);
+    List<Contest> getUserContests(int id, Optional<String> phase);
 
 }

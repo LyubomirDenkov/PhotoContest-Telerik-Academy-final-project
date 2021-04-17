@@ -5,5 +5,4 @@ public interface CudRepositoryOperations<T> {
 
     T update(T type);
 
-
 }

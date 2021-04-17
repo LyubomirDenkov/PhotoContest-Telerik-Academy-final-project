@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Contest> getUserContests(User user, int userId) {
+    public List<Contest> getUserContests(User user, int userId, Optional<String> phase) {
 
         verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             verifyIsUserOwnAccount(user.getId(),userId,"Something");
         }
 
-        return contestRepository.getUserContests(user.getId());
+        return contestRepository.getUserContests(user.getId(),phase);
     }
 
     @Override

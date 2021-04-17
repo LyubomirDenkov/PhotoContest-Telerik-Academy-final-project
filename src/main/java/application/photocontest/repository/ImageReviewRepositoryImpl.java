@@ -1,10 +1,12 @@
 package application.photocontest.repository;
 
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.ImageReview;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ImageReviewRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,6 @@ public class ImageReviewRepositoryImpl implements ImageReviewRepository {
     public ImageReviewRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
 
 
     @Override
@@ -43,12 +44,18 @@ public class ImageReviewRepositoryImpl implements ImageReviewRepository {
     public ImageReview getImageReviewUserContestAndImageId(int userId, int contestId, int imageId) {
 
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from ImageReview where user.id = :userId " +
+            Query<ImageReview> query = session.createQuery("from ImageReview where user.id = :userId " +
                     "and contest.id = :contestId and image.id = :imageId", ImageReview.class)
                     .setParameter("userId", userId)
                     .setParameter("contestId", contestId)
-                    .setParameter("imageId", imageId).uniqueResult();
+                    .setParameter("imageId", imageId);
 
+            List<ImageReview> imageReviewList = query.list();
+
+            if (imageReviewList.isEmpty()) {
+                throw new EntityNotFoundException("Review", "id parameters", "contest,image and user");
+            }
+            return imageReviewList.get(0);
         }
     }
 

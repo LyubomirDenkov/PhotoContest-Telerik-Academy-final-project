@@ -155,7 +155,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", userService.getUserContests(currentUser, id));
+            model.addAttribute("contests", userService.getUserContests(currentUser, id, Optional.empty()));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -321,10 +321,8 @@ public class ContestsMvcController {
             }
 
             ImageReview imageReview = imageReviewMapper.fromDto(imageReviewDto);
-            int points = imageReviewDto.getPoints();
-            String comment = imageReviewDto.getComment();
 
-            contestService.rateImage(currentUser, imageReview, contestId, imageId, points, comment);
+            contestService.rateImage(currentUser, imageReview, contestId, imageId);
 
             return "redirect:/contests/{contestId}/images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {

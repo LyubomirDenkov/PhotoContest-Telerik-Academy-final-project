@@ -24,5 +24,5 @@ public interface UserService extends GetServiceOperations<User> {
 
     List<User> getAllUsers();
 
-    List<Contest> getUserContests(User user,int userId);
+    List<Contest> getUserContests(User user, int userId, Optional<String> phase);
 }

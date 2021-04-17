@@ -63,27 +63,30 @@ public class ContestController {
     }
 
     @GetMapping("/{contestId}/participants")
-    public List<User> getContestParticipants(@RequestHeader HttpHeaders headers,@PathVariable int contestId){
+    public List<User> getContestParticipants(@RequestHeader HttpHeaders headers, @PathVariable int contestId) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return contestService.getContestParticipants(user,contestId);
+            return contestService.getContestParticipants(user, contestId);
         } catch (
                 UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
 
         }
-    }@GetMapping("/{contestId}/images")
+    }
 
-    public List<User> getContestImages(@RequestHeader HttpHeaders headers,@PathVariable int contestId){
+    @GetMapping("/{contestId}/images")
+
+    public List<Image> getContestImages(@RequestHeader HttpHeaders headers, @PathVariable int contestId) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return contestService.getContestParticipants(user,contestId);
-        } catch (
-                UnauthorizedOperationException e) {
+            return contestService.getContestImages(user, contestId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
 
         }
@@ -95,23 +98,38 @@ public class ContestController {
         return contestService.getOngoingContests();
     }
 
+    @ApiOperation(value = "Get ongoing contests")
+    @GetMapping("/voting")
+    public List<Contest> getVotingContests(@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return contestService.getVotingContests(user);
+    }
+
+    @ApiOperation(value = "Get ongoing contests")
+    @GetMapping("/finished")
+    public List<Contest> getFinishedContests(@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return contestService.getFinishedContests(user);
+    }
+
 
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")
     public Contest getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        User user = authenticationHelper.tryGetUser(headers);
 
+        User user = authenticationHelper.tryGetUser(headers);
 
         try {
             return contestService.getById(user, id);
-        } catch (
-                UnauthorizedOperationException e) {
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
 
         }
     }
 
-    @ApiOperation(value = "Create contest",consumes = "multipart/form-data")
+    @ApiOperation(value = "Create contest", consumes = "multipart/form-data")
     @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public Contest create(@RequestHeader HttpHeaders headers,
                           @Valid @RequestPart("dto") ContestDto contestDto,
@@ -228,15 +246,13 @@ public class ContestController {
     @ApiOperation(value = "Rate image")
     @PostMapping("/{contestId}/image/{imageId}/rate")
     public ImageReview rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
-                          @PathVariable int imageId, @Valid @RequestBody ImageReviewDto imageReviewDto) {
+                                 @PathVariable int imageId, @Valid @RequestBody ImageReviewDto imageReviewDto) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
             ImageReview imageReview = imageReviewMapper.fromDto(imageReviewDto);
-            int points = imageReviewDto.getPoints();
-            String comment = imageReviewDto.getComment();
-          return contestService.rateImage(user, imageReview,contestId, imageId, points, comment);
+            return contestService.rateImage(user, imageReview, contestId, imageId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {
@@ -245,21 +261,4 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-    @ApiOperation(value = "Search contest by phase")
-    @GetMapping("/search")
-    public List<Contest> searchByPhase(@RequestHeader HttpHeaders headers,
-                                       @RequestParam Optional<String> phase) {
-        User user = authenticationHelper.tryGetUser(headers);
-
-        try {
-            return contestService.search(user, phase);
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-
-    }
-
 }

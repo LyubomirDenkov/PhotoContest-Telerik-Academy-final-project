@@ -28,7 +28,8 @@ public class ContestRepositoryImpl implements ContestRepository {
     @Override
     public List<Contest> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Contest ", Contest.class).list();
+            return session.createQuery("from Contest " , Contest.class)
+                    .list();
         }
     }
 
@@ -104,7 +105,8 @@ public class ContestRepositoryImpl implements ContestRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.name like 'ongoing' ", Contest.class).list();
+            return session.createQuery("from Contest where phase.name like 'ongoing' " +
+                    "and type.name like 'open'", Contest.class).list();
 
         }
     }
@@ -132,9 +134,9 @@ public class ContestRepositoryImpl implements ContestRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
-           return session.createQuery("select p from Contest c " +
+            return session.createQuery("select p from Contest c " +
                     "join c.participants as p " +
-                    "where c.id = :id ", User.class).setParameter("id",contestId).list();
+                    "where c.id = :id ", User.class).setParameter("id", contestId).list();
 
         }
     }
@@ -146,7 +148,7 @@ public class ContestRepositoryImpl implements ContestRepository {
 
             return session.createQuery("select i from Contest c " +
                     "join c.images as i " +
-                    "where c.id = :id ", Image.class).setParameter("id",contestId).list();
+                    "where c.id = :id ", Image.class).setParameter("id", contestId).list();
 
         }
     }
@@ -184,30 +186,14 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
-    public List<Contest> getUserContests(int id) {
+    public List<Contest> getUserContests(int id, Optional<String> phase) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("select c from Contest c join c.participants as participant " +
-                    " where participant.id = :id", Contest.class)
+                    "where participant.id = :id " +
+                    "and c.phase.name like concat('%', :phase ,'%')", Contest.class)
                     .setParameter("id", id)
+                    .setParameter("phase", phase.orElse(""))
                     .list();
         }
     }
-
-    @Override
-    public List<Contest> search(Optional<String> phase) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Contest where phase.name like :phase ", Contest.class)
-                    .setParameter("phase", phase).list();
-        }
-    }
-
-    @Override
-    public List<Contest> searchAsUser(Optional<String> phase) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Contest where phase.name like :phase " +
-                    "and type.name like 'open' ", Contest.class)
-                    .setParameter("phase", phase).list();
-        }
-    }
-
 }

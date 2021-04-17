@@ -122,7 +122,7 @@
 
 
                                 <li th:if="${contest.getPhase().getName().equals('ongoing') && !contest.isParticipant()
-                                 && !currentUser.isOrganizer() && contest.getType().getName().equals('open')}">
+                                && !contest.isJury() && !currentUser.isOrganizer()}">
                                     <a href="#"
                                        th:href="@{__${#httpServletRequest.requestURI}__/user/{id}(id=${currentUser.getId()})}">
                                         <button class="glow-on-hover" type="button">JOIN</button>

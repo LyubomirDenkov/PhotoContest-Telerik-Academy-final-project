@@ -7,14 +7,12 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.Contest;
 import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -78,10 +76,11 @@ public class UserController {
     public List<Contest> getUserContests(@RequestParam(name = "phase", required = false) Optional<String> phase,
                                          @RequestHeader HttpHeaders headers,
                                          @PathVariable int userId) {
+
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return userService.getUserContests(user, userId);
+            return userService.getUserContests(user, userId,phase);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

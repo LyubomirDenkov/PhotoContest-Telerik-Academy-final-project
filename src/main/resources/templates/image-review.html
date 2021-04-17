@@ -71,36 +71,42 @@
                                         <div class="card__title card__title--1">
                                             <h4 class="card__heading" th:text="#{image.label.rating}">Rating</h4>
                                         </div>
+                                        <form class="login-form" action="#"
+                                              th:action="@{__${#httpServletRequest.requestURI}__}"
+                                              th:object="${imageReview}" method="post">
+                                            <div id="card-own" class="card__details">
 
-                                        <div id="card-own" class="card__details">
-
-                                            <label class="text-label-own"
-                                                   th:text="#{review.label.points}">Points</label>
-                                            <br/>
-                                            <input class="input-custom-field" type="number"
-                                                   th:field="${imageReview.points}"/>
-                                            <br>
-                                            <label class="error error-custom" th:errors="${imageReview.points}">Name
-                                                error
-                                                placeholder</label>
-                                            <br/>
-                                            <label class="text-label-own"
-                                                   th:text="#{review.label.comment}">Comment</label>
-                                            <br/>
-                                            <textarea cols="60" rows="6"  th:field="${imageReview.comment}">
+                                                <label class="text-label-own"
+                                                       th:text="#{review.label.points}">Points</label>
+                                                <br/>
+                                                <input class="input-custom-field" type="number"
+                                                       th:field="*{points}"/>
+                                                <br>
+                                                <label class="error error-custom" th:errors="${imageReview.points}">Name
+                                                    error
+                                                    placeholder</label>
+                                                <br/>
+                                                <label class="text-label-own"
+                                                       th:text="#{review.label.comment}">Comment</label>
+                                                <br/>
+                                                <textarea cols="60" rows="6" th:field="*{comment}">
                                             </textarea>
-                                            <br>
-                                            <label class="error error-custom" th:errors="${imageReview.comment}">Name
-                                                error
-                                                placeholder</label>
-                                            <br/><br/>
+                                                <br>
+                                                <label class="error error-custom" th:errors="${imageReview.comment}">Name
+                                                    error
+                                                    placeholder</label>
+                                                <br/><br/>
 
 
-                                           <ul> <li>
-                                                <a>
-                                                    <button class="glow-on-hover" type="button">SUBMIT</button>
-                                                </a></li></ul>
-                                        </div>
+                                                <ul>
+                                                    <li>
+                                                        <a>
+                                                            <button class="glow-on-hover" type="submit">SUBMIT</button>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -110,8 +116,6 @@
             </div>
         </div>
     </div>
-
-
 </section>
 
 </body>

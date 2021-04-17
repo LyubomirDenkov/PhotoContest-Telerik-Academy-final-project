@@ -4,7 +4,6 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
-import application.photocontest.models.Points;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
@@ -75,7 +74,7 @@ public class UserServiceImplTests {
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> userService.getUserContests(user,5));
+                () -> userService.getUserContests(user,5, Optional.empty()));
 
     }
 
@@ -84,11 +83,11 @@ public class UserServiceImplTests {
         Contest contest = createMockContest();
         User user = createMockUser();
 
-        when(contestRepository.getUserContests(user.getId())).thenReturn(List.of(contest));
+        when(contestRepository.getUserContests(user.getId(), Optional.empty())).thenReturn(List.of(contest));
 
-        userService.getUserContests(user,user.getId());
+        userService.getUserContests(user,user.getId(), Optional.empty());
 
-        verify(contestRepository,times(1)).getUserContests(user.getId());
+        verify(contestRepository,times(1)).getUserContests(user.getId(), Optional.empty());
 
 
     }

@@ -308,7 +308,7 @@ public class ContestServiceImplTests {
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
        Assertions.assertThrows(UnauthorizedOperationException.class,
-               () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId(),5,"new Comment"));
+               () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId()));
 
     }
 
@@ -330,7 +330,7 @@ public class ContestServiceImplTests {
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId(),5,"new Comment"));
+                () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId()));
 
     }
 
@@ -365,7 +365,7 @@ public class ContestServiceImplTests {
 
         Mockito.when(imageReviewRepository.create(imageReview)).thenReturn(imageReview);
 
-        contestService.rateImage(user, imageReview, contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
+        contestService.rateImage(user, imageReview, contest.getId(),image.getId());
 
         verify(imageReviewRepository,times(1)).create(imageReview);
 

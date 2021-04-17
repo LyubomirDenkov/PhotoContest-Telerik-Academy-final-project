@@ -25,7 +25,7 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     void addUserToContest(User user, int contestId, int userId);
 
-    ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId, int points, String comment);
+    ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId);
 
     Image addImageToContest(User user, int contestId, int imageId);
 
@@ -38,8 +38,6 @@ public interface ContestService extends GetServiceOperations<Contest> {
     List<Contest> getVotingContests(User user);
 
     List<Contest> getByUserId(int id);
-
-    List<Contest> search(User user, Optional<String> phase);
 
     void removeImageFromContest(User user, int contestId, int imageId);
 

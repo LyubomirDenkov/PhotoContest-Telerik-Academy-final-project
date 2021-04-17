@@ -72,19 +72,6 @@ public class ContestServiceImpl implements ContestService {
         return contestRepository.getByUserId(id);
     }
 
-    //TODO think of better implementation
-    @Override
-    public List<Contest> search(User user, Optional<String> phase) {
-
-        if (phase.get().equalsIgnoreCase("voting")) {
-            if (!user.isOrganizer()) {
-                return contestRepository.searchAsUser(phase);
-            }
-        }
-
-        return contestRepository.search(phase);
-    }
-
     @Override
     public void removeImageFromContest(User user, int contestId, int imageId) {
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
@@ -123,14 +110,20 @@ public class ContestServiceImpl implements ContestService {
             return contestRepository.getVotingContests();
         }
 
-        Optional<Points> points = user.getPoints().stream().findFirst();
-        if (points.get().getPoints() < NEEDED_POINTS_TO_BE_JURY) {
-            throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
-        }
+        validateUserHasPointsToSeeVotingContests(user, ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
 
         return contestRepository.getVotingContests();
 
 
+    }
+
+    private void validateUserHasPointsToSeeVotingContests(User user, String message) {
+        Optional<Points> points = user.getPoints().stream().findFirst();
+        if (points.isPresent()) {
+            if (points.get().getPoints() < NEEDED_POINTS_TO_BE_JURY) {
+                throw new UnauthorizedOperationException(message);
+            }
+        }
     }
 
     @Override
@@ -140,6 +133,10 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(id);
 
+        if (!user.isOrganizer()) {
+            validateContestType(contest, ContestTypes.OPEN);
+            validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGT_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+        }
 
         if (contest.getJury().contains(user)) {
             contest.setIsJury(true);
@@ -149,6 +146,11 @@ public class ContestServiceImpl implements ContestService {
         if (contest.getParticipants().contains(user)) {
             contest.setParticipant(true);
         } else {
+
+            if (contest.getPhase().getName().equalsIgnoreCase(ContestPhases.VOTING.toString()) && !contest.isJury()) {
+                throw new UnauthorizedOperationException(ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+            }
+
             return contest;
         }
 
@@ -243,11 +245,9 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<Image> getContestImages(User user, int contestId) {
 
-        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
-        if (!user.isOrganizer()){
-
-
+        if (!user.isOrganizer()) {
 
         }
 
@@ -288,7 +288,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId, int points, String comment) {
+    public ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId) {
 
         Contest contest = contestRepository.getById(contestId);
         Image image = imageRepository.getById(imageId);
@@ -297,7 +297,7 @@ public class ContestServiceImpl implements ContestService {
 
         validateContestPhase(contest, ContestPhases.VOTING, PHASE_RATING_ERROR_MESSAGE);
         validateUserIsJury(contest, user);
-        validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, points);
+        validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, imageReview.getPoints());
 
         if (!isContestContainsImage(contest, image)) {
             throw new UnauthorizedOperationException(PHOTO_NOT_IN_A_CONTEST);
@@ -313,17 +313,11 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
         }
 
+        imageReview.setUser(user);
+        imageReview.setContest(contest);
+        imageReview.setImage(image);
 
-
-        ImageReview imageReviewToCreate =  imageReviewRepository.create(imageReview);
-
-        imageReviewToCreate.setUser(user);
-        imageReviewToCreate.setContest(contest);
-        imageReviewToCreate.setImage(image);
-        imageReviewToCreate.setPoints(points);
-        imageReviewToCreate.setComment(comment);
-
-        return imageReviewToCreate;
+        return imageReviewRepository.create(imageReview);
 
     }
 
@@ -359,7 +353,7 @@ public class ContestServiceImpl implements ContestService {
         User userToJoinInContest = userRepository.getById(userId);
 
 
-        validateContestPhase(contest, ContestPhases.ONGOING, JOIN_OPEN_CONTESTS_ERROR_MESSAGE);
+        validateContestPhase(contest, ContestPhases.ONGOING, JOIN_VIEW_OPEN_CONTESTS_ERROR_MESSAGE);
         validateContestType(contest, ContestTypes.OPEN);
         validateUserIsNotParticipantOrJury(contest, userToJoinInContest);
 
@@ -446,7 +440,7 @@ public class ContestServiceImpl implements ContestService {
 
     private void validateContestType(Contest contest, ContestTypes type) {
         if (!contest.getType().getName().equalsIgnoreCase(type.toString())) {
-            throw new UnauthorizedOperationException(JOIN_OPEN_CONTESTS_ERROR_MESSAGE);
+            throw new UnauthorizedOperationException(JOIN_VIEW_OPEN_CONTESTS_ERROR_MESSAGE);
         }
     }
 
