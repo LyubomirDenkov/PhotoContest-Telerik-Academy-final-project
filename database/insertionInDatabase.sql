@@ -177,7 +177,7 @@ VALUES (20),
        (0);
 
 INSERT INTO images (title, story, image, user_id)
-VALUES ('Leopard', 'Quick nap and back to hunting.', 'https://imgur.com/V1kXKir', 6),
+VALUES ('Leopard', 'Quick nap and back to hunting.', 'https://i.imgur.com/V1kXKir.jpg', 6),
        ('Serious kitty', 'As you can see my cat is a really good actor.', 'https://i.imgur.com/TH9NzDM.jpg', 7),
        ('Mops', 'I am so busy today, I have a full schedule - eat and taking naps every 3 hours.',
         'https://i.imgur.com/JWcaqIN.jpg', 8),
@@ -186,12 +186,12 @@ VALUES ('Leopard', 'Quick nap and back to hunting.', 'https://imgur.com/V1kXKir'
        ('Eagle', 'Looking sharp today, because of the men spice', 'https://i.imgur.com/ZhgtMUW.jpg', 11),
        ('Family', 'Animals seem to show us what a real family is really often', 'https://i.imgur.com/ZH1Q2PL.jpg', 12),
        ('Sunrise', 'Beautiful sunrise in the nature', 'https://i.imgur.com/rO6rIGD.jpg', 13),
-       ('Lake view', 'Nature at its best', 'https://imgur.com/KRVNPVH', 14),
-       ('Beach', 'My best friend and my favourite place in one picture', 'https://imgur.com/kHsYoe0', 15),
-       ('Snowy dog', 'Always happy when its snowing', 'https://imgur.com/BE4eDew', 16),
-       ('Bears', 'Bears fighting', 'https://imgur.com/Ipfizk3', 17),
-       ('Horse', 'The national champion for 2021', 'https://imgur.com/vX84jNu', 18),
-       ('Wolf', 'Looking hungry', 'https://imgur.com/rHohnrq', 19),
+       ('Lake view', 'Nature at its best', 'https://i.imgur.com/KRVNPVH.jpg', 14),
+       ('Beach', 'My best friend and my favourite place in one picture', 'https://i.imgur.com/kHsYoe0.jpeg', 15),
+       ('Snowy dog', 'Always happy when its snowing', 'https://i.imgur.com/BE4eDew.jpg', 16),
+       ('Bears', 'Bears fighting', 'https://i.imgur.com/Ipfizk3.jpeg', 17),
+       ('Horse', 'The national champion for 2021', 'https://i.imgur.com/vX84jNu.jpeg', 18),
+       ('Wolf', 'Looking hungry', 'https://i.imgur.com/rHohnrq.jpeg', 19),
        ('nature', 'Very beautiful photo', 'https://i.imgur.com/4hQTAC9.jpg', 6),
        ('water & woods', ' I believe in God, only I spell it Nature.', 'https://i.imgur.com/hlp3JL7.jpg', 7),
        ('water and woods', ' Choose only one master—nature. ', 'https://i.imgur.com/9rCxSZB.jpg', 8),
@@ -228,7 +228,7 @@ VALUES (5, 1),
 
 INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
 VALUES
-('Animals',2,'2021-04-10 18:52:35','2021-04-15 18:52:35',1,1,'https://imgur.com/k4jzhdq',3),
+('Animals',2,'2021-04-10 18:52:35','2021-04-15 18:52:35',1,1,'https://i.imgur.com/yXDhZke.jpg',3),
 ('Dogs',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
 ('Dogs',1,'2021-04-10 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
 ('Dogs',1,'2021-04-11 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
