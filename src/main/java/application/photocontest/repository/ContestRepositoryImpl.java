@@ -28,7 +28,7 @@ public class ContestRepositoryImpl implements ContestRepository {
     @Override
     public List<Contest> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Contest " , Contest.class)
+            return session.createQuery("from Contest ", Contest.class)
                     .list();
         }
     }
@@ -116,6 +116,17 @@ public class ContestRepositoryImpl implements ContestRepository {
         try (Session session = sessionFactory.openSession()) {
 
             return session.createQuery("from Contest where phase.name like 'voting' ", Contest.class).list();
+
+        }
+    }
+
+    @Override
+    public List<Contest> getUserJuryVotingContests(int userId) {
+        try (Session session = sessionFactory.openSession()) {
+
+            return session.createQuery("select c from Contest c join c.jury as jury " +
+                    "where jury.id = :id " +
+                    "and c.phase.name like 'voting'", Contest.class).setParameter("id", userId).list();
 
         }
     }

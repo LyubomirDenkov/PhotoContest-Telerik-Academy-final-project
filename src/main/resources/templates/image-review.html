@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Image</title>
+    <title>Review</title>
 
     <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
     <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
@@ -27,11 +27,54 @@
     <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!-- ======= Header ======= -->
+<header id="header" class="d-flex align-items-center ">
+    <div class="container-fluid container-xxl d-flex align-items-center">
+
+        <div id="logo" class="me-auto">
+            <!--             Uncomment below if you prefer to use a text logo
+                        <h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
+                                                            src="../static/assets/img/logo.png" alt="" title=""></a>
+        </div>
+
+        <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul th:if="${currentUser == null}">
+                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                <li><a class="nav-link scrollto" href="#about">About</a></li>
+                <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+                <li><a class="nav-link scrollto" href="#venue">Top pictures</a></li>
+                <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+                <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
+            </ul>
+            <ul th:if="${currentUser != null}">
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
+                </li>
+
+                <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+                </li>
+                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                                                             th:href="@{/users}">Users</a>
+                </li>
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
+                </li>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#buy-tickets">Logout</a>
+    </div>
+</header><!-- End Header -->
 
 <section id="speakers">
     <div class="container">
         <div class="section-header">
-            <h2>Recent contests</h2>
+            <h2 th:text="*{image.getTitle()}" >TEXT</h2>
             <br>
             <br>
         </div>
@@ -58,9 +101,10 @@
                                             <div class="col-6 card-text-custom">
                                                 <p th:text="*{image.getUploader().getFirstName() + ' ' + image.getUploader().getLastName()}">
                                                     Uploader Name</p>
-                                                <p th:text="*{image.getStory()}">Story</p>
+
                                             </div>
                                         </div>
+                                        <span class="custom-text-story" th:text="*{image.getStory()}" ></span>
                                     </div>
                                 </div>
                             </div>
@@ -68,9 +112,8 @@
                             <div class="col-lg-6 col-md-6">
                                 <div class="card-custom">
                                     <div class="card__side card__side--front-2">
-                                        <div class="card__title card__title--1">
-                                            <h4 class="card__heading" th:text="#{image.label.rating}">Rating</h4>
-                                        </div>
+                                        <h3 class="custom-text-rate"> Rate </h3>
+                                        <h3 class="custom-text-rate" th:text="${rateTwice}" ></h3>
                                         <form class="login-form" action="#"
                                               th:action="@{__${#httpServletRequest.requestURI}__}"
                                               th:object="${imageReview}" method="post">
@@ -91,6 +134,7 @@
                                                 <br/>
                                                 <textarea cols="60" rows="6" th:field="*{comment}">
                                             </textarea>
+
                                                 <br>
                                                 <label class="error error-custom" th:errors="${imageReview.comment}">Name
                                                     error

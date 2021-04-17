@@ -80,13 +80,16 @@ public class ContestsMvcController {
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model, HttpSession session) {
 
-        User user = authenticationHelper.tryGetUser(session);
-        Contest contest = contestService.getById(user, id);
 
-        model.addAttribute("currentUser", user);
-        model.addAttribute("contest", contest);
-
-        return "contest";
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            Contest contest = contestService.getById(user, id);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("contest", contest);
+            return "contest";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            return "error";
+        }
     }
 
 
@@ -183,11 +186,11 @@ public class ContestsMvcController {
 
     @PostMapping("/new")
     public String handleNewContestPage(@RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
-                                        @RequestParam(value = "url", required = false) Optional<String> url,
-                                        @Valid @ModelAttribute("contest") ContestDto contestDto, BindingResult errors,
+                                       @RequestParam(value = "url", required = false) Optional<String> url,
+                                       @Valid @ModelAttribute("contest") ContestDto contestDto, BindingResult errors,
                                        HttpSession session) {
 
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "contest-new";
         }
 
@@ -292,7 +295,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            Image image = imageService.getById(currentUser,imageId);
+            Image image = imageService.getById(currentUser, imageId);
 
             model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute("currentUser", currentUser);
@@ -315,7 +318,10 @@ public class ContestsMvcController {
 
 
         try {
+
             User currentUser = authenticationHelper.tryGetUser(session);
+            model.addAttribute("image", imageService.getById(currentUser, imageId));
+
             if (errors.hasErrors()) {
                 return "image-review";
             }
@@ -325,8 +331,11 @@ public class ContestsMvcController {
             contestService.rateImage(currentUser, imageReview, contestId, imageId);
 
             return "redirect:/contests/{contestId}/images";
-        } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
+        } catch (AuthenticationFailureException | EntityNotFoundException e) {
             return "error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("rateTwice", e.getMessage());
+            return "image-review";
         } catch (DuplicateEntityException e) {
             model.addAttribute("not-found", e.getMessage());
             return "error";

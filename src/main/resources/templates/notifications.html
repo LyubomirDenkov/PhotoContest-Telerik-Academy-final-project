@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mailbox</title>
+  <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+        rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+        rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
+        href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
+        href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
+        href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
+        href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+<header id="header" class="d-flex align-items-center ">
+  <div class="container-fluid container-xxl d-flex align-items-center">
+
+    <div id="logo" class="me-auto">
+      <!--             Uncomment below if you prefer to use a text logo
+                  <h1><a href="index.html">The<span>Event</span></a></h1>-->
+      <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
+                                                      src="../static/assets/img/logo.png" alt="" title=""></a>
+    </div>
+
+    <nav id="navbar" class="navbar order-last order-lg-0">
+      <ul th:if="${currentUser == null}">
+        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+        <li><a class="nav-link scrollto" href="#about">About</a></li>
+        <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+        <li><a class="nav-link scrollto" href="#venue">Top pictures</a></li>
+        <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+        <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
+      </ul>
+      <ul th:if="${currentUser != null}">
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/users/leaderboard}">Leaderboard</a>
+        </li>
+
+        <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+        </li>
+        <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                                                     th:href="@{/users}">Users</a>
+        </li>
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
+        </li>
+
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav><!-- .navbar -->
+    <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#">Login</a>
+    <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#">Logout</a>
+  </div>
+</header><!-- End Header -->
+
+<div class="container">
+  <div class="row py-5 px-4">
+    <div class="col-md-10 mx-auto">
+      <!-- Profile widget -->
+      <div class="bg-white shadow rounded overflow-hidden">
+        <div class="px-4 pt-0 cover">
+          <div class="media align-items-end profile-head">
+            <div class="profile mr-3">
+              <img id="image" th:src="*{currentUser.getProfileImage()}"
+                   src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
+                   alt="profile image" width="250" class="rounded mb-2 img-thumbnail">
+              <h4 class="mt-0 mb-0 custom-text-name">Notifications</h4>
+
+            </div>
+          </div>
+        </div>
+        <div class="bg-light p-4 d-flex justify-content-end text-center">
+          <ul class="list-inline mb-0">
+            <table class="table table-inbox table-hover" >
+              <tr>
+                <td></td>
+                <td>From</td>
+                <td>Title</td>
+                <td>Message</td>
+                <td>Date</td>
+              </tr>
+              <tbody th:each="notification : ${notifications}">
+              <tr class="unread">
+                <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
+                <td class="view-message  dont-show">From iPhoto team</td>
+                <td class="view-message" th:text="*{notification.title}">Title</td>
+                <td class="view-message  inbox-small-cells" th:text="*{notification.getMessage()}" ><i class="fa fa-paperclip"></i></td>
+                <td class="view-message  text-right" th:text="*{notification.getDate()}">Date time</td>
+              </tr>
+              </tbody>
+            </table>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

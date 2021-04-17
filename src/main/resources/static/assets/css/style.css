@@ -98,6 +98,20 @@ h1, h2, h3, h4, h5, h6 {
 #card-own{
     display: block;
 }
+.custom-text-rate{
+    text-align: center;
+    color: wheat;
+}
+
+.custom-text-story{
+    color: wheat;
+    font-weight: bolder;
+}
+
+.error-custom{
+    color: red;
+    font-weight: bolder;
+}
 
 /* Sections Header
 --------------------------------*/

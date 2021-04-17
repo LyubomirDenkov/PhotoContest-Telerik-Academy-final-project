@@ -40,11 +40,14 @@ public class UserMvcController {
     @GetMapping
     public String getAllUsers(Model model, HttpSession session){
 
-        User user = authenticationHelper.tryGetUser(session);
-        model.addAttribute("currentUser", user);
-        model.addAttribute("users", userService.getAll(user));
-
-        return "leaderboard";
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("users", userService.getAll(user));
+            return "leaderboard";
+        }catch (UnauthorizedOperationException e){
+            return "error";
+        }
     }
 
     @GetMapping("/leaderboard")

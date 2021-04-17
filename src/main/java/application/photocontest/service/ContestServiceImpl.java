@@ -118,8 +118,7 @@ public class ContestServiceImpl implements ContestService {
 
         validateUserHasPointsToSeeVotingContests(user, ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
 
-        return contestRepository.getVotingContests();
-
+        return contestRepository.getUserJuryVotingContests(user.getId());
 
     }
 
@@ -130,10 +129,6 @@ public class ContestServiceImpl implements ContestService {
                 throw new UnauthorizedOperationException(message);
             }
         }
-
-        return contestRepository.getVotingContests();
-
-
     }
 
     @Override
@@ -262,12 +257,6 @@ public class ContestServiceImpl implements ContestService {
         }
 
         return contestRepository.getContestImages(contestId);
-    }
-
-    @Override
-    public List<User> getContestParticipants(User user, int contestId) {
-        verifyUserHasRoles(user, UserRoles.ORGANIZER);
-        return contestRepository.getContestParticipants(contestId);
     }
 
     private void updateParticipants(Contest contest, Set<Integer> newParticipants) {

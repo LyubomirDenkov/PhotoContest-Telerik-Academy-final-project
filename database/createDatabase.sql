@@ -24,15 +24,6 @@ create or replace table contest_type
         unique (name)
 );
 
-create or replace table notification
-(
-    notification_id int auto_increment
-        primary key,
-    title           text                 not null,
-    message         longtext             not null,
-    date            text                 not null,
-    is_seen         tinyint(1) default 0 not null
-);
 
 create or replace table points
 (
@@ -57,7 +48,7 @@ create or replace table user_credentials
 );
 
 alter table user_credentials
-    add primary key (user_name);
+add primary key (user_name);
 
 create or replace table users
 (
@@ -184,6 +175,20 @@ create or replace table users_images
     constraint users_images_user_credentials_fk
         foreign key (user_id) references users (user_id)
 );
+
+create or replace table notification
+(
+    notification_id int auto_increment
+        primary key,
+    title           text                 not null,
+    message         longtext             not null,
+    date            text                 not null,
+user_id not null,
+    is_seen         tinyint(1) default 0 not null,
+ constraint notifications_users_fk
+        foreign key (user_id) references users (user_id)
+);
+
 
 create or replace table users_notifications
 (

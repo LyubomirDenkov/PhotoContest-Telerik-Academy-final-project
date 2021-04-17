@@ -128,7 +128,7 @@ public class ScheduledExecutorService implements Runnable {
             map.put(image, pointsToAwardForNotReviewed);
         }
 
-        if (map.isEmpty()){
+        if (map.isEmpty()) {
             return;
         }
 
@@ -143,11 +143,11 @@ public class ScheduledExecutorService implements Runnable {
                         LinkedHashMap::new
                 ));
 
-        calculateRewardPointsForFirstThreePlaces(sortedMap);
+        calculateRewardPointsForFirstThreePlaces(sortedMap, contest.getTitle());
     }
 
 
-    private void calculateRewardPointsForFirstThreePlaces(Map<Image, Integer> map) {
+    private void calculateRewardPointsForFirstThreePlaces(Map<Image, Integer> map, String contestTitle) {
 
         List<Image> firstPlace = new ArrayList<>();
         List<Image> secondPlace = new ArrayList<>();
@@ -201,13 +201,13 @@ public class ScheduledExecutorService implements Runnable {
         int pointsForPositionTwo = 35;
         int pointsForPositionThree = 20;
 
-        rewardAndUpdateUser(pointsForPositionOne, firstPlace, FIRST_POSITION);
-        rewardAndUpdateUser(pointsForPositionTwo, secondPlace, SECOND_POSITION);
-        rewardAndUpdateUser(pointsForPositionThree, thirdPlace, THIRD_POSITION);
+        rewardAndUpdateUser(pointsForPositionOne, firstPlace, FIRST_POSITION, contestTitle);
+        rewardAndUpdateUser(pointsForPositionTwo, secondPlace, SECOND_POSITION, contestTitle);
+        rewardAndUpdateUser(pointsForPositionThree, thirdPlace, THIRD_POSITION, contestTitle);
 
     }
 
-    private void rewardAndUpdateUser(int pointsReward, List<Image> images, String position) {
+    private void rewardAndUpdateUser(int pointsReward, List<Image> images, String position, String contestTitle) {
 
         int pointsRewardByPosition = pointsReward;
         if (images.size() > 1) {
@@ -222,7 +222,7 @@ public class ScheduledExecutorService implements Runnable {
             }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
 
-            Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position);
+            Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
 
             Set<Notification> notifications = user.getMessages();
             notifications.add(notification);
@@ -233,11 +233,12 @@ public class ScheduledExecutorService implements Runnable {
         }
     }
 
-    private Notification buildAndCreateNotification(User user, int points, String position) {
+    private Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
         Notification notification = new Notification();
-        notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, "something"));
+        notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, contestTitle));
         notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION, user.getFirstName(), position, points));
         notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setUser(user);
         return notificationService.create(notification);
     }
 }

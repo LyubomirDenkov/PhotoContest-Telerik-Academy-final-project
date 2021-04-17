@@ -1,5 +1,7 @@
 package application.photocontest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -21,17 +23,24 @@ public class Notification {
     @Column(name = "date")
     private String date;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @JsonIgnore
     @Column(name = "is_seen")
     private boolean isSeen;
 
     public Notification() {
     }
 
-    public Notification(int id, String title, String message, String date, boolean isSeen) {
+    public Notification(int id, String title, String message, String date, User user, boolean isSeen) {
         this.id = id;
         this.title = title;
         this.message = message;
         this.date = date;
+        this.user = user;
         this.isSeen = isSeen;
     }
 
@@ -51,6 +60,7 @@ public class Notification {
         this.message = message;
     }
 
+    @JsonIgnore
     public boolean isSeen() {
         return isSeen;
     }
@@ -75,16 +85,26 @@ public class Notification {
         this.date = date;
     }
 
+
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Notification notification1 = (Notification) o;
-        return getId() == notification1.getId() && isSeen() == notification1.isSeen() && getTitle().equals(notification1.getTitle()) && getMessage().equals(notification1.getMessage()) && getDate().equals(notification1.getDate());
+        Notification that = (Notification) o;
+        return getId() == that.getId() && isSeen() == that.isSeen() && getTitle().equals(that.getTitle()) && getMessage().equals(that.getMessage()) && getDate().equals(that.getDate()) && getUser().equals(that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getMessage(), getDate(), isSeen());
+        return Objects.hash(getId(), getTitle(), getMessage(), getDate(), getUser(), isSeen());
     }
 }
