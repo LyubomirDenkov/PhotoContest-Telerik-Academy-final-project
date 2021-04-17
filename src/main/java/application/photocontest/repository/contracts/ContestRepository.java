@@ -21,7 +21,9 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     List<User> getContestParticipants(int contestId);
 
-    Contest getContestByImageUploaderId(int contestId,int userId);
+    List<Image> getContestImages(int contestId);
+
+    Contest getContestByImageUploaderId(int contestId, int userId);
 
     List<Contest> getByUserId(int id);
 

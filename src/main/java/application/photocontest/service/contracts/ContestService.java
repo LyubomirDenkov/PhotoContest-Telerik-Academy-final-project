@@ -19,6 +19,8 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     Image uploadImageToContest(User user, Image image, int contestId, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
+    List<Image> getContestImages(User user, int contestId);
+
     List<User> getContestParticipants(User user, int contestId);
 
     void addUserToContest(User user, int contestId, int userId);
@@ -39,6 +41,6 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     List<Contest> search(User user, Optional<String> phase);
 
-    void removeImageFromContest(User user,int contestId,int imageId);
+    void removeImageFromContest(User user, int contestId, int imageId);
 
 }

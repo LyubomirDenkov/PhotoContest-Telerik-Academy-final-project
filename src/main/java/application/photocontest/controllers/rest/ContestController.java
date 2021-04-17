@@ -74,6 +74,19 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
 
         }
+    }@GetMapping("/{contestId}/images")
+
+    public List<User> getContestImages(@RequestHeader HttpHeaders headers,@PathVariable int contestId){
+
+        User user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            return contestService.getContestParticipants(user,contestId);
+        } catch (
+                UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+
+        }
     }
 
     @ApiOperation(value = "Get ongoing contests")
@@ -98,7 +111,7 @@ public class ContestController {
         }
     }
 
-    @ApiOperation(value = "Create contest")
+    @ApiOperation(value = "Create contest",consumes = "multipart/form-data")
     @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public Contest create(@RequestHeader HttpHeaders headers,
                           @Valid @RequestPart("dto") ContestDto contestDto,

@@ -31,6 +31,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     private static final String DEFAULT_CONTEST_BACKGROUND = "https://i.imgur.com/ophF343.jpg";
+    private static final String IMAGE_IS_ALREADY_UPLOADED_ERROR_MESSAGE = "Image is already uploaded to contest";
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
@@ -95,22 +96,7 @@ public class ContestServiceImpl implements ContestService {
             validateUserIsJury(contest, user);
         }
 
-        removeImageFromContestCollection(contest, image);
-
-    }
-
-    private void removeImageFromContestCollection(Contest contest, Image image) {
-
-        Set<Image> images = contest.getImages();
-        Set<Image> winnerImages = contest.getWinnerImages();
-
-        images.remove(image);
-        winnerImages.remove(image);
-
-        contest.setImages(images);
-        contest.setWinnerImages(winnerImages);
-
-        contestRepository.update(contest);
+        removeImageAndUpdateContest(contest, image);
 
     }
 
@@ -252,6 +238,20 @@ public class ContestServiceImpl implements ContestService {
         contestRepository.update(contest);
         return image;
 
+    }
+
+    @Override
+    public List<Image> getContestImages(User user, int contestId) {
+
+        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+
+        if (!user.isOrganizer()){
+
+
+
+        }
+
+        return contestRepository.getContestImages(contestId);
     }
 
     @Override
@@ -484,7 +484,22 @@ public class ContestServiceImpl implements ContestService {
         } catch (EntityNotFoundException e) {
             return;
         }
-        throw new UnauthorizedOperationException("Image is already uploaded to contest");
+        throw new UnauthorizedOperationException(IMAGE_IS_ALREADY_UPLOADED_ERROR_MESSAGE);
     }
 
+
+    private void removeImageAndUpdateContest(Contest contest, Image image) {
+
+        Set<Image> images = contest.getImages();
+        Set<Image> winnerImages = contest.getWinnerImages();
+
+        images.remove(image);
+        winnerImages.remove(image);
+
+        contest.setImages(images);
+        contest.setWinnerImages(winnerImages);
+
+        contestRepository.update(contest);
+
+    }
 }

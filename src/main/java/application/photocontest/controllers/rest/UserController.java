@@ -75,7 +75,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/contests")
-    public List<Contest> getUserContests(@RequestHeader HttpHeaders headers,@PathVariable int userId){
+    public List<Contest> getUserContests(@RequestParam(name = "phase", required = false) Optional<String> phase,
+                                         @RequestHeader HttpHeaders headers,
+                                         @PathVariable int userId) {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
