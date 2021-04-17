@@ -63,6 +63,12 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
+    @Override
+    public List<User> getContestParticipants(User user, int contestId) {
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
+        return contestRepository.getContestParticipants(contestId);
+    }
+
     public List<Contest> getOngoingContests() {
         return contestRepository.getOngoingContests();
     }
@@ -71,8 +77,8 @@ public class ContestServiceImpl implements ContestService {
     public List<Contest> getByUserId(int id) {
         return contestRepository.getByUserId(id);
     }
-
     //TODO think of better implementation
+
     @Override
     public List<Contest> search(User user, Optional<String> phase) {
 
@@ -252,12 +258,6 @@ public class ContestServiceImpl implements ContestService {
         }
 
         return contestRepository.getContestImages(contestId);
-    }
-
-    @Override
-    public List<User> getContestParticipants(User user, int contestId) {
-        verifyUserHasRoles(user, UserRoles.ORGANIZER);
-        return contestRepository.getContestParticipants(contestId);
     }
 
     private void updateParticipants(Contest contest, Set<Integer> newParticipants) {
