@@ -23,7 +23,7 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     void addUserToContest(User user, int contestId, int userId);
 
-    void rateImage(User user, int contestId, int imageId, int points, String comment);
+    ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId, int points, String comment);
 
     Image addImageToContest(User user, int contestId, int imageId);
 

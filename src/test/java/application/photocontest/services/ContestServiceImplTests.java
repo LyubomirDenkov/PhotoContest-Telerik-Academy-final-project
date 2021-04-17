@@ -6,10 +6,8 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
 import application.photocontest.service.ContestServiceImpl;
-import application.photocontest.service.ImageServiceImpl;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
-import application.photocontest.service.contracts.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -302,6 +300,7 @@ public class ContestServiceImplTests {
         Contest contest = createMockContest();
         User user = createMockUser();
         Image image = createMockImage();
+        ImageReview imageReview = createMockImageReview();
 
 
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
@@ -309,7 +308,7 @@ public class ContestServiceImplTests {
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
        Assertions.assertThrows(UnauthorizedOperationException.class,
-               () -> contestService.rateImage(user,contest.getId(),image.getId(),5,"new Comment"));
+               () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId(),5,"new Comment"));
 
     }
 
@@ -322,6 +321,7 @@ public class ContestServiceImplTests {
         contest.setPhase(phase);
         User user = createMockUser();
         Image image = createMockImage();
+        ImageReview imageReview = createMockImageReview();
 
 
 
@@ -330,7 +330,7 @@ public class ContestServiceImplTests {
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.rateImage(user,contest.getId(),image.getId(),5,"new Comment"));
+                () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId(),5,"new Comment"));
 
     }
 
@@ -349,7 +349,6 @@ public class ContestServiceImplTests {
         User organizer = createMockOrganizer();
 
         ImageReview testImageReview = new ImageReview();
-        testImageReview.setId(2);
         testImageReview.setUser(organizer);
         testImageReview.setImage(image);
         testImageReview.setContest(contest);
@@ -364,7 +363,9 @@ public class ContestServiceImplTests {
         Mockito.when(imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contest.getId(),image.getId()))
                 .thenThrow(EntityNotFoundException.class);
 
-        contestService.rateImage(user,contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
+        Mockito.when(imageReviewRepository.create(imageReview)).thenReturn(imageReview);
+
+        contestService.rateImage(user, imageReview, contest.getId(),image.getId(),imageReview.getPoints(),imageReview.getComment());
 
         verify(imageReviewRepository,times(1)).create(imageReview);
 

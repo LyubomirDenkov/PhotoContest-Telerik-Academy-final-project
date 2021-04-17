@@ -41,10 +41,11 @@ public class ContestsMvcController {
     private final ContestMapper contestMapper;
     private final ImageService imageService;
     private final ImageMapper imageMapper;
+    private final ImageReviewMapper imageReviewMapper;
 
     public ContestsMvcController(AuthenticationHelper authenticationHelper, ContestService contestService,
                                  CategoryService categoryService, UserService userService,
-                                 ContestMapper contestMapper, ImageService imageService, ImageMapper imageMapper) {
+                                 ContestMapper contestMapper, ImageService imageService, ImageMapper imageMapper, ImageReviewMapper imageReviewMapper) {
         this.authenticationHelper = authenticationHelper;
         this.contestService = contestService;
         this.categoryService = categoryService;
@@ -52,6 +53,7 @@ public class ContestsMvcController {
         this.contestMapper = contestMapper;
         this.imageService = imageService;
         this.imageMapper = imageMapper;
+        this.imageReviewMapper = imageReviewMapper;
     }
 
 
@@ -318,10 +320,11 @@ public class ContestsMvcController {
                 return "image-review";
             }
 
+            ImageReview imageReview = imageReviewMapper.fromDto(imageReviewDto);
             int points = imageReviewDto.getPoints();
             String comment = imageReviewDto.getComment();
 
-            contestService.rateImage(currentUser, contestId, imageId, points, comment);
+            contestService.rateImage(currentUser, imageReview, contestId, imageId, points, comment);
 
             return "redirect:/contests/{contestId}/images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {

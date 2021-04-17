@@ -11,7 +11,6 @@ import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
-import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -289,7 +288,7 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Override
-    public void rateImage(User user, int contestId, int imageId, int points, String comment) {
+    public ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId, int points, String comment) {
 
         Contest contest = contestRepository.getById(contestId);
         Image image = imageRepository.getById(imageId);
@@ -314,14 +313,17 @@ public class ContestServiceImpl implements ContestService {
             throw new UnauthorizedOperationException(RATING_TWICE_ERROR_MSG);
         }
 
-        ImageReview imageReview = new ImageReview();
 
-        imageReview.setUser(user);
-        imageReview.setContest(contest);
-        imageReview.setImage(image);
-        imageReview.setPoints(points);
-        imageReview.setComment(comment);
-        imageReviewRepository.create(imageReview);
+
+        ImageReview imageReviewToCreate =  imageReviewRepository.create(imageReview);
+
+        imageReviewToCreate.setUser(user);
+        imageReviewToCreate.setContest(contest);
+        imageReviewToCreate.setImage(image);
+        imageReviewToCreate.setPoints(points);
+        imageReviewToCreate.setComment(comment);
+
+        return imageReviewToCreate;
 
     }
 

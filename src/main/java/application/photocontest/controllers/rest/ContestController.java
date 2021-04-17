@@ -8,6 +8,7 @@ import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.ContestMapper;
 
 import application.photocontest.modelmappers.ImageMapper;
+import application.photocontest.modelmappers.ImageReviewMapper;
 import application.photocontest.models.*;
 import application.photocontest.models.dto.ContestDto;
 import application.photocontest.models.dto.ImageDto;
@@ -35,13 +36,15 @@ public class ContestController {
     private final AuthenticationHelper authenticationHelper;
     private final ContestMapper contestMapper;
     private final ImageMapper imageMapper;
+    private final ImageReviewMapper imageReviewMapper;
 
     @Autowired
-    public ContestController(ContestService contestService, AuthenticationHelper authenticationHelper, ContestMapper contestMapper, ImageMapper imageMapper) {
+    public ContestController(ContestService contestService, AuthenticationHelper authenticationHelper, ContestMapper contestMapper, ImageMapper imageMapper, ImageReviewMapper imageReviewMapper) {
         this.contestService = contestService;
         this.authenticationHelper = authenticationHelper;
         this.contestMapper = contestMapper;
         this.imageMapper = imageMapper;
+        this.imageReviewMapper = imageReviewMapper;
     }
 
     @ApiOperation(value = "Get all contests")
@@ -211,15 +214,16 @@ public class ContestController {
 
     @ApiOperation(value = "Rate image")
     @PostMapping("/{contestId}/image/{imageId}/rate")
-    public void rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+    public ImageReview rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                           @PathVariable int imageId, @Valid @RequestBody ImageReviewDto imageReviewDto) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
+            ImageReview imageReview = imageReviewMapper.fromDto(imageReviewDto);
             int points = imageReviewDto.getPoints();
             String comment = imageReviewDto.getComment();
-            contestService.rateImage(user, contestId, imageId, points, comment);
+          return contestService.rateImage(user, imageReview,contestId, imageId, points, comment);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

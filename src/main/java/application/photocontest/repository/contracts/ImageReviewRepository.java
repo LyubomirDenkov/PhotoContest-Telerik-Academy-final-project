@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ImageReviewRepository {
 
-    void create(ImageReview imageReview);
+    ImageReview create(ImageReview imageReview);
 
     List<ImageReview> getImageReviewByImageId(int id);
 

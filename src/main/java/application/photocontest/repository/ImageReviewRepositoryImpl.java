@@ -20,12 +20,14 @@ public class ImageReviewRepositoryImpl implements ImageReviewRepository {
     }
 
 
-    @Transactional
+
     @Override
-    public void create(ImageReview imageReview) {
+    public ImageReview create(ImageReview imageReview) {
 
         try (Session session = sessionFactory.openSession()) {
             session.save(imageReview);
+
+            return imageReview;
         }
     }
 
