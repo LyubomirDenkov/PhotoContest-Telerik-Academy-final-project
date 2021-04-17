@@ -335,7 +335,7 @@ public class ContestServiceImplTests {
     }
 
     @Test
-    public void rateImage_Should_Throw_When_PointsAreMore()  {
+    public void rateImage_Should_Rate_When_ValidationsOk()  {
         Contest contest = createMockContest();
         Phase phase = new Phase();
         phase.setId(2);
@@ -418,8 +418,6 @@ public class ContestServiceImplTests {
         image.setUploader(user);
         user.setImages(Set.of(image));
 
-
-
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(contestRepository.getContestByImageUploaderId(contest.getId(),user.getId())).thenThrow(EntityNotFoundException.class);
@@ -429,6 +427,61 @@ public class ContestServiceImplTests {
         contestService.uploadImageToContest(user,image,contest.getId(),Optional.empty(),Optional.of(image.getUrl()));
 
         Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+
+    }
+
+
+    @Test
+    public void getContestParticipants_Should_Throw_When_User_NotAuthorized() {
+
+        User user = createMockUser();
+        Contest contest = createMockContest();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.getContestParticipants(user,contest.getId()));
+    }
+
+    @Test
+    public void getContestParticipants_Should_Return_When_User_IsCalled() {
+
+        User organizer = createMockOrganizer();
+        Contest contest = createMockContest();
+
+        contestService.getContestParticipants(organizer, contest.getId());
+
+        Mockito.verify(contestRepository, times(1)).getContestParticipants(contest.getId());
+
+    }
+
+    @Test
+    public void removeImageFromContest_Should_Throw_When_User_NotAuthorized() {
+
+        User user = createMockUser();
+        Set<Role> roles = new HashSet<>();
+        user.setRoles(roles);
+        Contest contest = createMockContest();
+        Image image = createMockImage();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.removeImageFromContest(user,contest.getId(),image.getId()));
+    }
+
+    @Test
+    public void removeImageFromContest_Should_Remove_When_ValidationsOk() {
+
+        User organizer = createMockOrganizer();
+        Contest contest = createMockContest();
+        Image image = createMockImage();
+        contest.setWinnerImages(Set.of(image));
+        contest.setImages(Set.of(image));
+
+        Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
+
+        Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
+
+        contestService.removeImageFromContest(organizer, contest.getId(), image.getId());
+
+        Mockito.verify(contestRepository, times(1)).update(contest);
 
     }
 

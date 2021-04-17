@@ -63,6 +63,12 @@ public class ContestServiceImpl implements ContestService {
     }
 
 
+    @Override
+    public List<User> getContestParticipants(User user, int contestId) {
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
+        return contestRepository.getContestParticipants(contestId);
+    }
+
     public List<Contest> getOngoingContests() {
         return contestRepository.getOngoingContests();
     }
@@ -124,6 +130,10 @@ public class ContestServiceImpl implements ContestService {
                 throw new UnauthorizedOperationException(message);
             }
         }
+
+        return contestRepository.getVotingContests();
+
+
     }
 
     @Override
