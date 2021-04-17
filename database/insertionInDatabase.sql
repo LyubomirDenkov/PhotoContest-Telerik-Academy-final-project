@@ -177,17 +177,20 @@ VALUES (20),
        (0);
 
 INSERT INTO images (title, story, image, user_id)
-VALUES ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 5),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 6),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 7),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 8),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 9),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 10),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 11),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 12),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 13),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 14),
-       ('how are you doing ', 'how are you doing ', 'https://i.imgur.com/JD4Auj5.png', 15);
+VALUES ('Leopard','Quick nap and back to hunting.','https://imgur.com/V1kXKir',6),
+       ('Serious kitty','As you can see my cat is a really good actor.','https://i.imgur.com/TH9NzDM.jpg',7),
+       ('Mops','I am so busy today, I have a full schedule - eat and taking naps every 3 hours.','https://i.imgur.com/JWcaqIN.jpg',8),
+       ('Raccoon','Please god make America Great Again','https://i.imgur.com/LqEnBSP.jpg',9),
+       ('Mother lion','Come on little man you need to eat again','https://i.imgur.com/iIWwOsK.jpg',10),
+       ('Eagle','Looking sharp today, because of the men spice','https://i.imgur.com/ZhgtMUW.jpg',11),
+       ('Family','Animals seem to show us what a real family is really often','https://i.imgur.com/ZH1Q2PL.jpg',12),
+       ('Sunrise','Beautiful sunrise in the nature', 'https://i.imgur.com/rO6rIGD.jpg',13),
+       ('Lake view','Nature at its best','https://imgur.com/KRVNPVH',14),
+       ('Beach','My best friend and my favourite place in one picture','https://imgur.com/kHsYoe0',15),
+       ('Snowy dog','Always happy when its snowing','https://imgur.com/BE4eDew',16),
+       ('Bears', 'Bears fighting','https://imgur.com/Ipfizk3',17),
+       ('Horse','The national champion for 2021','https://imgur.com/vX84jNu',18),
+       ('Wolf','Looking hungry','https://imgur.com/rHohnrq',19);
 
 
 INSERT INTO users_images(user_id, image_id)

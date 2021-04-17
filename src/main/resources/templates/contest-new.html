@@ -5,6 +5,10 @@
     <title>Contest-Form</title>
 
     <link th:href="@{/assets/css/edit-profile.css}" href="../static/assets/css/edit-profile.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 </head>
 <body>
 
@@ -20,16 +24,28 @@
                 <p th:errors="*{title}">Contest title error</p>
             </div>
 
-            <div>
-                <select class="select-button" th:field="*{categoryId}">
-                    <option th:each="category : ${categories}"
-                            th:value="${category.getId()}"
-                            th:text="${category.getName()}">
-                        Category
-                    </option>
-                </select>
-                <p th:errors="*{categoryId}">Select category error</p>
-            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select  class="form-control multiselect multiselect-icon" th:field="*{categoryId}">
+                        <option th:each="category : ${categories}"
+                                th:value="${category.getId()}"
+                                th:text="${category.getName()}">
+                            <p th:errors="*{categoryId}">Category name error</p>
+                        </option>
+                    </select>
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <select  class="form-control multiselect multiselect-icon" th:field="*{typeId}">
+                            <option th:each="type : ${types}"
+                                    th:value="${type.getId()}"
+                                    th:text="${type.getName()}">
+                                <p th:errors="*{typeId}">Type name error</p>
+                            </option>
+                        </select>
+                    </div>
 
             <div>
                 <input type="number" placeholder="Days Till Second Phase" th:field="*{phaseOne}">
@@ -41,28 +57,18 @@
                 <p th:errors="*{phaseTwo}">Days Till Third Phase error</p>
             </div>
 
-            <div>
-                <select class="select-button" th:field="*{typeId}">
-                    <option th:each="type : ${types}"
-                            th:value="${type.getId()}"
-                            th:text="${type.getName()}">
-                        Type
-                    </option>
-                </select>
-                <p th:errors="*{typeId}">Select type error</p>
-            </div>
 
-            <div>
-                <select class="select-toggle" multiple="multiple" th:field="*{participants}">
-                    <option th:each="user : ${participants}"
-                            th:value="${user.getId()}"
-                            th:text="${user.getUserCredentials().userName}">
-                        Participant
-                    </option>
-                </select>
-            </div>
-            <label class="error error-custom" th:errors="*{participants}">participant error placeholder</label>
-            <br/><br/>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <select type="text" class="form-control multiselect multiselect-icon" role="multiselect" th:field="*{participants}">
+                        <option th:each="user : ${participants}"
+                                th:value="${user.getId()}"
+                                th:text="${user.getUserCredentials().userName}">
+                            Participant
+                        </option>
+                    </select>
+                </div>
 
             <div>
                 <select class="select-toggle" multiple="multiple" th:field="*{jury}">
@@ -84,6 +90,9 @@
             <input type="file" name="multiPartFile" id="multiPartFile" placeholder="Choose...."
                    accept="image/png, image/jpeg, image/jpg">
             <button class="glow-on-hover" type="submit">Create</button>
+            </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
