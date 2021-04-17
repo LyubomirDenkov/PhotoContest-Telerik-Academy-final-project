@@ -423,7 +423,7 @@ public class ContestServiceImplTests {
 
         Mockito.when(contestRepository.getContestByImageUploaderId(contest.getId(),user.getId())).thenThrow(EntityNotFoundException.class);
 
-        Mockito.when(imageService.create(user,image,Optional.empty(),Optional.of(""))).thenReturn(image);
+        Mockito.when(imageService.create(user,image,Optional.empty(),Optional.of(image.getUrl()))).thenReturn(image);
 
         contestService.uploadImageToContest(user,image,contest.getId(),Optional.empty(),Optional.of(image.getUrl()));
 
