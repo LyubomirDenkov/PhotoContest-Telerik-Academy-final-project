@@ -1,6 +1,8 @@
 package application.photocontest.repository;
 
+import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Points;
+import application.photocontest.models.User;
 import application.photocontest.repository.contracts.PointsRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,12 +21,28 @@ public class PointsRepositoryImpl implements PointsRepository {
         this.sessionFactory = sessionFactory;
     }
 
+
     @Override
-    public void createPoints(Points points) {
+    public Points getById(int id) {
+
+        try (Session session = sessionFactory.openSession()) {
+
+            Points points = session.get(Points.class, id);
+
+            if (points == null) {
+                throw new EntityNotFoundException("Points", id);
+            }
+            return points;
+        }
+    }
+
+    @Override
+    public Points createPoints(Points points) {
         try (Session session = sessionFactory.openSession()) {
 
             session.save(points);
 
+            return getById(points.getId());
         }
     }
 

@@ -4,7 +4,9 @@ import application.photocontest.models.Points;
 
 public interface PointsRepository {
 
-    void createPoints(Points points);
+    Points getById(int id);
+
+    Points createPoints(Points points);
 
     void updatePoints(Points points);
 }

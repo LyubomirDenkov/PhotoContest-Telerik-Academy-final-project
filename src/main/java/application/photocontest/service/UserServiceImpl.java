@@ -53,27 +53,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Contest> getUserContests(User user, int userId, Optional<String> phase) {
 
-        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
-        if (!user.isOrganizer()){
-            verifyIsUserOwnAccount(user.getId(),userId,"Something");
+        if (!user.isOrganizer()) {
+            verifyIsUserOwnAccount(user.getId(), userId, "Something");
         }
 
-        return contestRepository.getUserContests(user.getId(),phase);
+        return contestRepository.getUserContests(user.getId(), phase);
     }
 
     @Override
     public List<Notification> getUserNotifications(User user, int id) {
-        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
-        verifyIsUserOwnAccount(user.getId(),id, SELF_NOTIFICATIONS_ERROR_MESSAGE);
+        verifyIsUserOwnAccount(user.getId(), id, SELF_NOTIFICATIONS_ERROR_MESSAGE);
 
         return notificationRepository.getAll(id);
     }
 
     @Override
     public List<User> getAll(User user) {
-        verifyUserHasRoles(user,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
         return userRepository.getAll();
     }
 
@@ -97,12 +97,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getLeaderboard(User user) {
 
-        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         List<User> leaderboard = userRepository.getLeaderboard();
 
-        if (leaderboard.size() > 20 ){
-            return leaderboard.subList(0,20);
+        if (leaderboard.size() > 20) {
+            return leaderboard.subList(0, 20);
         }
 
         return leaderboard;
@@ -126,24 +126,17 @@ public class UserServiceImpl implements UserService {
 
         String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
 
-        if (profileImageUrl.isBlank()){
+        if (profileImageUrl.isBlank()) {
             user.setProfileImage(INITIAL_PROFILE_IMAGE);
-        }else {
+        } else {
             user.setProfileImage(profileImageUrl);
         }
 
-
-
         User newRegisteredUser = userRepository.create(user);
-
-        Set<Notification> userNotifications = new HashSet<>();
-        Notification notification = sendMessageWhenUserCreated(user);
-        Notification notificationToAdd = notificationRepository.create(notification);
-        userNotifications.add(notificationToAdd);
-        user.setNotifications(userNotifications);
-
-        addRoleAndPointsToRegisteredUser(newRegisteredUser);
-
+        addRoleToNewRegisteredUser(newRegisteredUser);
+        addPointsToNewRegisteredUser(newRegisteredUser);
+        addNotificationForNewRegisteredUser(newRegisteredUser);
+        userRepository.update(newRegisteredUser);
         return newRegisteredUser;
     }
 
@@ -152,19 +145,32 @@ public class UserServiceImpl implements UserService {
         return userRepository.getAllPotentialJury();
     }
 
-    public void addRoleAndPointsToRegisteredUser(User user) {
+
+    private void addRoleToNewRegisteredUser(User user) {
         Role role = userRepository.getRoleByName(UserRoles.USER.toString());
-        Set<Role> roles = user.getRoles();
+
+        Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
-        Points points = new Points();
-        Set<Points> startingPoints = new HashSet<>();
-        startingPoints.add(points);
-        pointsRepository.createPoints(points);
-        user.setPoints(startingPoints);
-        userRepository.update(user);
     }
 
+    private void addPointsToNewRegisteredUser(User user) {
+
+        Points points = new Points();
+        Points pointsToAdd = pointsRepository.createPoints(points);
+        Set<Points> startingPoints = new HashSet<>();
+        startingPoints.add(pointsToAdd);
+        user.setPoints(startingPoints);
+    }
+
+    private void addNotificationForNewRegisteredUser(User user) {
+
+        Set<Notification> userNotifications = new HashSet<>();
+        Notification notification = sendMessageWhenUserCreated(user);
+        Notification notificationToAdd = notificationRepository.create(notification);
+        userNotifications.add(notificationToAdd);
+        user.setNotifications(userNotifications);
+    }
 
     @Override
     public User update(User user, User userToUpdate, Optional<MultipartFile> file, Optional<String> url) throws IOException {
