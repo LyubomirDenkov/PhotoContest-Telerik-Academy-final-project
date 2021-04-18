@@ -28,20 +28,16 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
-    @Column(name = "is_seen")
-    private boolean isSeen;
 
     public Notification() {
     }
 
-    public Notification(int id, String title, String message, String date, User user, boolean isSeen) {
+    public Notification(int id, String title, String message, String date, User user) {
         this.id = id;
         this.title = title;
         this.message = message;
         this.date = date;
         this.user = user;
-        this.isSeen = isSeen;
     }
 
     public int getId() {
@@ -58,15 +54,6 @@ public class Notification {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    @JsonIgnore
-    public boolean isSeen() {
-        return isSeen;
-    }
-
-    public void setSeen(boolean seen) {
-        isSeen = seen;
     }
 
     public String getTitle() {
@@ -100,11 +87,11 @@ public class Notification {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Notification that = (Notification) o;
-        return getId() == that.getId() && isSeen() == that.isSeen() && getTitle().equals(that.getTitle()) && getMessage().equals(that.getMessage()) && getDate().equals(that.getDate()) && getUser().equals(that.getUser());
+        return getId() == that.getId() && getTitle().equals(that.getTitle()) && getMessage().equals(that.getMessage()) && getDate().equals(that.getDate()) && getUser().equals(that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getMessage(), getDate(), getUser(), isSeen());
+        return Objects.hash(getId(), getTitle(), getMessage(), getDate(), getUser());
     }
 }

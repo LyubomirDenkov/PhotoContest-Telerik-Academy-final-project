@@ -153,14 +153,14 @@ public class ContestController {
         }
     }
 
-    @ApiOperation(value = "Add user to contest")
+    @ApiOperation(value = "Join to contest")
     @PutMapping("/{contestId}/user/{userId}")
-    public void addUser(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
-                        @PathVariable int userId) {
+    public void joinContest(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
+                            @PathVariable int userId) {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            contestService.addUserToContest(user, contestId, userId);
+            contestService.joinContest(user, contestId, userId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException | DuplicateEntityException e) {

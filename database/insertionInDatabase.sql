@@ -215,7 +215,12 @@ VALUES ('Leopard', 'Quick nap and back to hunting.', 'https://i.imgur.com/V1kXKi
        ('sunrise in Hawaii', 'Beautiful place to relax', 'https://i.imgur.com/KoguQkl.jpg', 26),
        ('laguna beach', 'Beautiful sunset in California', 'https://i.imgur.com/434p0Oy.jpg', 27),
        ('Zanzibar', 'Awesome day in Zanzibar', 'https://i.imgur.com/QbHS7UE.jpg', 28),
-       ('Milky way', 'Photo with effect', 'https://i.imgur.com/vlivM39.jpg', 29);
+       ('Aston Martin', 'Photo-shoot with the new F1 safety car ', 'https://i.imgur.com/mDezdm2.jpg', 29),
+       ('Mercedes S', 'The all new S class', 'https://i.imgur.com/QHl1vTl.jpg', 30),
+       ('Ferrari', 'Photo-shoot for Top Gear', 'https://i.imgur.com/mIimSn2.jpg', 31),
+       ('Mclaren', 'The all new Mclaren', 'https://i.imgur.com/jMm9mYr.jpg', 32),
+       ('Red porsche', 'Cruising on the street', 'https://i.imgur.com/e4yV6SH.jpg', 33),
+       ('Lamborghini', 'Urus on vossen wheels', 'https://i.imgur.com/6Ds4oTv.jpg', 34);
 
 
 INSERT INTO users_images(user_id, image_id)
@@ -256,7 +261,12 @@ VALUES (6, 1),
        (26, 35),
        (27, 36),
        (28, 37),
-       (29, 38);
+       (29, 38),
+       (30, 39),
+       (31, 40),
+       (32, 41),
+       (33, 42),
+       (34, 43);
 
 
 INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
@@ -308,9 +318,12 @@ VALUES (1, 1),
        (1, 4),
        (1, 5),
        (1, 6),
-       (1, 6),
-       (1, 8),
-       (5, 33),
+       (2, 38),
+       (2, 39),
+       (2, 40),
+       (2, 41),
+       (2, 42),
+       (2, 43),
        (5, 34),
        (5, 35),
        (5, 36),
@@ -338,6 +351,12 @@ VALUES (1, 6),
        (1, 11),
        (1, 12),
        (1, 13),
+       (2, 29),
+       (2, 30),
+       (2, 31),
+       (2, 32),
+       (2, 33),
+       (2, 34),
        (5, 25),
        (5, 26),
        (5, 27),

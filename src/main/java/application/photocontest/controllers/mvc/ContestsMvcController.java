@@ -254,13 +254,13 @@ public class ContestsMvcController {
     }
 
     @GetMapping("/{id}/user/{userId}")
-    public String addUserToContest(@PathVariable int id, @PathVariable int userId, HttpSession session, Model model) {
+    public String joinContest(@PathVariable int id, @PathVariable int userId, HttpSession session, Model model) {
 
 
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            contestService.addUserToContest(currentUser, id, userId);
+            contestService.joinContest(currentUser, id, userId);
 
             return "redirect:/contests/{id}";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
