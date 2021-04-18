@@ -9,8 +9,12 @@ import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Set;
 
 @Component
@@ -27,10 +31,14 @@ public class NotificationHelper {
 
     public void sendMessageWhenInvitedToJuryOrParticipant(User user, String role, Contest contest) {
         Notification notification = new Notification();
+        LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
+
+
 
         notification.setTitle("Invitation");
-        notification.setMessage(String.format("Congratulations %s ! You have been invited as a %s in %s contest."
-                , user.getUserCredentials().getUserName(), role, contest.getTitle()));
+        notification.setMessage(String.format("Congratulations %s ! You have been invited as a %s in %s contest. " +
+                        "Voting phase starts at %s."
+                , user.getFirstName(), role, contest.getTitle(),timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
         notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         notification.setUser(user);
 
@@ -40,4 +48,8 @@ public class NotificationHelper {
         userRepository.update(user);
     }
 
+    public LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
+        return new java.sql.Timestamp(
+                dateToConvert.getTime()).toLocalDateTime();
+    }
 }
