@@ -224,9 +224,9 @@ public class ScheduledExecutorService implements Runnable {
 
             Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
 
-            Set<Notification> notifications = user.getMessages();
+            Set<Notification> notifications = user.getNotifications();
             notifications.add(notification);
-            user.setMessages(notifications);
+            user.setNotifications(notifications);
 
             userRepository.update(user);
             pointsRepository.updatePoints(points.get());

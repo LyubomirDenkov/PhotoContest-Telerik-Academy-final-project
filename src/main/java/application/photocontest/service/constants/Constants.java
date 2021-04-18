@@ -61,6 +61,8 @@ public class Constants {
     //TOP
     public static final String MESSAGE_CONTEST_END_TOP_POSITION = "Congratulation %s!!%n You are on %s position and awarded with %d points.";
 
-    //MAILBOX ENDS
+    //NOTIFICATION
+    public static final String INVITED_AS_JURY = "jury";
+    public static final String INVITED_AS_Participant = "participant";
 
 }

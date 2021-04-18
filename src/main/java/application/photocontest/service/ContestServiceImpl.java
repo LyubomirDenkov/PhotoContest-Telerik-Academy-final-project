@@ -11,6 +11,7 @@ import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
+import application.photocontest.service.helper.NotificationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,12 +41,13 @@ public class ContestServiceImpl implements ContestService {
     private final ImageReviewRepository imageReviewRepository;
     private final ImgurService imgurService;
     private final ImageService imageService;
+    private final NotificationHelper notificationHelper;
 
     @Autowired
     public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository,
                               ImageRepository imageRepository, TypeRepository typeRepository,
                               PointsRepository pointsRepository, ImageReviewRepository imageReviewRepository,
-                              ImgurService imgurService, ImageService imageService) {
+                              ImgurService imgurService, ImageService imageService, NotificationHelper notificationHelper) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
@@ -54,6 +56,7 @@ public class ContestServiceImpl implements ContestService {
         this.imageReviewRepository = imageReviewRepository;
         this.imgurService = imgurService;
         this.imageService = imageService;
+        this.notificationHelper = notificationHelper;
     }
 
     @Override
@@ -396,6 +399,7 @@ public class ContestServiceImpl implements ContestService {
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
             pointsRepository.updatePoints(points.get());
+            notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(user,INVITED_AS_Participant,contest);
             usersToAdd.add(user);
         }
         contest.setParticipants(usersToAdd);
@@ -414,6 +418,7 @@ public class ContestServiceImpl implements ContestService {
 
             if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
+                notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(userToAdd,INVITED_AS_JURY,contest);
             }
         }
         contest.setJury(jury);

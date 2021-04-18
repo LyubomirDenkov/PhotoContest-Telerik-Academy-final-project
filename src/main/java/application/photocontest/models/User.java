@@ -140,12 +140,11 @@ public class User {
     }
 
 
-    @JsonIgnore
-    public Set<Notification> getMessages() {
+    public Set<Notification> getNotifications() {
         return notifications;
     }
 
-    public void setMessages(Set<Notification> notifications) {
+    public void setNotifications(Set<Notification> notifications) {
         this.notifications = notifications;
     }
 
