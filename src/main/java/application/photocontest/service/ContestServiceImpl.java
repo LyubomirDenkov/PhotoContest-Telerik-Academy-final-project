@@ -422,6 +422,7 @@ public class ContestServiceImpl implements ContestService {
             pointsRepository.update(points.get());
             addNotificationToUserNotifications(user, contest, INVITED_AS_PARTICIPANT);
             userRepository.update(user);
+            participants.add(user);
         }
         contest.setParticipants(participants);
     }
@@ -490,7 +491,7 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateUserIsInContestCollection(Set<User> users,User user,String message){
+    private void validateUserIsInContestCollection(Set<User> users, User user, String message) {
         if (!users.contains(user)) {
             throw new UnauthorizedOperationException(message);
         }

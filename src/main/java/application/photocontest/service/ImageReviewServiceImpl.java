@@ -26,7 +26,7 @@ public class ImageReviewServiceImpl implements ImageReviewService {
     @Override
     public List<ImageReview> getAllReviewsByImageId(User user, int imageId) {
 
-        verifyUserHasRoles(user, UserRoles.USER);
+        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
 
         return imageReviewRepository.getImageReviewByImageId(imageId);
     }

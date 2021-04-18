@@ -56,8 +56,8 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                                                             th:href="@{/users}">Users</a>
+                <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                            th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -142,13 +142,15 @@
                                         </a>
                                     </li>
                                     <li th:if="${contest.isHasImageUploaded()}">
-                                        <p class="custom-text">Image is uploaded, come back when contest is finished to see result</p>
+                                        <p class="custom-text">Image is uploaded, come back when contest is finished to
+                                            see result</p>
                                     </li>
                                 </div>
                                 <li th:if="${contest.isJury()}">
                                     <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/images}">
                                         <button class="glow-on-hover" type="button">REVIEW PHOTOS</button>
-                                    </a></li>
+                                    </a>
+                                </li>
 
                             </ul>
                         </div>

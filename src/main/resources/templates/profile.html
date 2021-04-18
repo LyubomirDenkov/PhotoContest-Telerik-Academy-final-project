@@ -56,8 +56,8 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                                                             th:href="@{/users}">Users</a>
+                <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                            th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -92,8 +92,11 @@
                                 Williams</h4>
 
                         </div>
-                        <div class="media-body mb-5 text-white">
-                            <a href="#" th:href="@{/users/{id}/update(id=${currentUser.getId()})}" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                        <div th:if="${visitor.equals(currentUser)}">
+                            <div class="media-body mb-5 text-white">
+                                <a href="#" th:href="@{/users/{id}/update(id=${currentUser.getId()})}"
+                                   class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -116,8 +119,9 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6 mb-2 pr-lg-1" th:each="image : ${currentUser.getImages()}">
-                            <img th:src="*{image.getUrl()}" src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                                    alt="" class="img-fluid rounded shadow-sm">
+                            <img th:src="*{image.getUrl()}"
+                                 src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
+                                 alt="" class="img-fluid rounded shadow-sm">
                         </div>
                     </div>
                 </div>

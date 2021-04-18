@@ -64,6 +64,7 @@ public class UserMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("currentUser", userService.getById(user, id));
+            model.addAttribute("visitor", user);
             return "profile";
         } catch (AuthenticationFailureException | UnauthorizedOperationException | EntityNotFoundException e) {
             return "error";

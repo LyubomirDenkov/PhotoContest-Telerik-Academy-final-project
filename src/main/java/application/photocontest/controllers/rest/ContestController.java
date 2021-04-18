@@ -56,10 +56,10 @@ public class ContestController {
 
         try {
             return contestService.getAll(user, phase);
-        } catch (
-                UnauthorizedOperationException e) {
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-
+        } catch (UnsupportedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
