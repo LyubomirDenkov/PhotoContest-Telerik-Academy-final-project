@@ -109,8 +109,15 @@
                                              src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/bootstrap.jpg">
 
                                         <div class="media-body">
+                                            <li th:if="${currentUser.isOrganizer()}">
+                                                <a href="#" th:href="@{/users/{id}/profile(id=${user.getId()})}">
                                             <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
                                             ' ' + user.getLastName().toUpperCase()}">Names</span>
+                                                </a></li>
+                                            <ul th:if="${!currentUser.isOrganizer()}">
+                                            <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
+                                            ' ' + user.getLastName().toUpperCase()}">Names</span>
+                                            </ul>
                                         </div>
                                     </div>
                                 </th>
