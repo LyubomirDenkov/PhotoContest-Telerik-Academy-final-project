@@ -100,45 +100,60 @@ public class ContestRepositoryImpl implements ContestRepository {
     }
 
 
-    @Override
-    public List<Contest> getOngoingContests() {
+    public List<Contest> getOngoingContests(boolean isOrganizer) {
+
+        StringBuilder query = new StringBuilder();
+        query.append("from Contest where phase.name like 'ongoing' ");
+
+        if (!isOrganizer) {
+            query.append(" and type.name like 'open'");
+        }
 
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.name like 'ongoing' " +
-                    "and type.name like 'open'", Contest.class).list();
+            return session.createQuery(query.toString(), Contest.class).list();
 
         }
     }
 
-    @Override
-    public List<Contest> getVotingContests() {
+    public List<Contest> getFinishedContests(int userId, boolean isOrganizer) {
+
+        StringBuilder query = new StringBuilder();
+
+        if (!isOrganizer) {
+            query.append("select c from Contest c join c.participants as user where user.id = ")
+                    .append(userId)
+                    .append("  and c.phase.name = 'finished'");
+        } else {
+            query.append("from Contest where phase.name = 'finished'");
+        }
+
+
         try (Session session = sessionFactory.openSession()) {
 
-            return session.createQuery("from Contest where phase.name like 'voting' ", Contest.class).list();
+            return session.createQuery(query.toString(), Contest.class).list();
 
         }
     }
 
-    @Override
-    public List<Contest> getUserJuryVotingContests(int userId) {
+
+    public List<Contest> getVotingContests(int userId, boolean isOrganizer) {
+
+        StringBuilder query = new StringBuilder();
+
+        if (!isOrganizer) {
+            query.append(String.format("select c from Contest c join c.jury as jury where jury.id = %d ", userId))
+                    .append(" and c.phase.name like 'voting'");
+        } else {
+            query.append("from Contest where phase.name like 'voting'");
+        }
+
+
         try (Session session = sessionFactory.openSession()) {
-
-            return session.createQuery("select c from Contest c join c.jury as jury " +
-                    "where jury.id = :id " +
-                    "and c.phase.name like 'voting'", Contest.class).setParameter("id", userId).list();
-
+            return session.createQuery(query.toString(), Contest.class).list();
         }
     }
 
-    @Override
-    public List<Contest> getFinishedContests() {
-        try (Session session = sessionFactory.openSession()) {
-
-            return session.createQuery("from Contest where phase.name like 'finished' ", Contest.class).list();
-
-        }
-    }
 
     @Override
     public List<User> getContestParticipants(int contestId) {

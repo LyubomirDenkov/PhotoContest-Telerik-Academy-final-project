@@ -13,11 +13,11 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     Contest getByTitle(String title);
 
-    List<Contest> getOngoingContests();
+    List<Contest> getOngoingContests(boolean isOrganizer);
 
-    List<Contest> getVotingContests();
+    List<Contest> getFinishedContests(int userId, boolean isOrganizer);
 
-    List<Contest> getFinishedContests();
+    List<Contest> getVotingContests(int userId,boolean isOrganizer);
 
     List<User> getContestParticipants(int contestId);
 
@@ -28,6 +28,4 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
     List<Contest> getByUserId(int id);
 
     List<Contest> getUserContests(int id, Optional<String> phase);
-
-    List<Contest> getUserJuryVotingContests(int userId);
 }

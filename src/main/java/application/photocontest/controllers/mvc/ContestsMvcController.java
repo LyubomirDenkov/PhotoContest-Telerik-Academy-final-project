@@ -99,7 +99,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser));
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.empty()));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -114,7 +114,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getFinishedContests(currentUser));
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of("finished")));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -129,7 +129,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getVotingContests(currentUser));
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of("voting")));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -144,7 +144,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getOngoingContests());
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of("ongoing")));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 

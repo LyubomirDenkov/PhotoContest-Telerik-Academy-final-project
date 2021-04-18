@@ -45,7 +45,6 @@ public class HomeMvcController {
             model.addAttribute("currentUser", null);
         }
 
-        model.addAttribute("contests", contestService.getOngoingContests());
         model.addAttribute("images", imageService.latestWinnerImages());
 
         return "index";

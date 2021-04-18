@@ -62,23 +62,23 @@ public class ContestServiceImplTests {
         List<Contest> result = new ArrayList<>();
         User organizer = createMockOrganizer();
 
-        when(contestService.getAll(organizer))
+        when(contestService.getAll(organizer,Optional.empty()))
                 .thenReturn(result);
 
-        contestService.getAll(organizer);
+        contestService.getAll(organizer,Optional.empty());
 
         verify(contestRepository,times(1)).getAll();
     }
 
     @Test
-    public void getAll_Should_Throw_When_User_IsCalled() {
+    public void getAll_Should_Throw_When_UserIsNotOrganizer() {
 
 
         User user = createMockUser();
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.getAll(user));
+                () -> contestService.getAll(user,Optional.empty()));
     }
 
     @Test
@@ -109,53 +109,8 @@ public class ContestServiceImplTests {
         Mockito.verify(contestRepository, Mockito.times(1)).getById(1);
     }
 
-    @Test
-    public void getOngoing_Should_Return_When_IsCalled() {
-        List<Contest> result = new ArrayList<>();
-
-        when(contestRepository.getOngoingContests()).thenReturn(result);
-
-        contestService.getOngoingContests();
-
-        Mockito.verify(contestRepository, Mockito.times(1)).getOngoingContests();
-    }
-
-    @Test
-    public void getFinished_Should_Return_When_IsCalled() {
-        List<Contest> result = new ArrayList<>();
-        User user = createMockUser();
-
-        when(contestRepository.getFinishedContests()).thenReturn(result);
-
-        contestService.getFinishedContests(user);
-
-        Mockito.verify(contestRepository, Mockito.times(1)).getFinishedContests();
-    }
-
-    @Test
-    public void getVoting_Should_Return_When_OrganizerCalls() {
-        List<Contest> result = new ArrayList<>();
-        User organizer = createMockOrganizer();
-
-        when(contestRepository.getVotingContests()).thenReturn(result);
-
-        contestService.getVotingContests(organizer);
-
-        Mockito.verify(contestRepository, Mockito.times(1)).getVotingContests();
-    }
-
-    @Test
-    public void getVoting_Should_Return_When_UserCalls() {
-        List<Contest> result = new ArrayList<>();
-        User user = createMockUser();
 
 
-        when(contestRepository.getVotingContests()).thenReturn(result);
-
-        contestService.getVotingContests(user);
-
-        Mockito.verify(contestRepository, Mockito.times(1)).getVotingContests();
-    }
 
     @Test
     public void getVoting_Should_Throw_When_UserWithLessPoints() {
@@ -164,7 +119,7 @@ public class ContestServiceImplTests {
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.getVotingContests(user));
+                () -> contestService.getAll(user,Optional.of("voting")));
     }
 
     @Test

@@ -62,9 +62,45 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public List<Contest> getAll(User user) {
-        verifyUserHasRoles(user, UserRoles.ORGANIZER);
-        return contestRepository.getAll();
+    public List<Contest> getAll(User user, Optional<String> phase) {
+
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
+        boolean isOrganizer = false;
+
+        if (user.isOrganizer()) {
+            isOrganizer = true;
+        }
+
+        if (phase.isEmpty()) {
+            if (isOrganizer) {
+                return contestRepository.getAll();
+            } else {
+                throw new UnsupportedOperationException("Cannot get all contests!");
+            }
+        }
+
+        switch (phase.get()) {
+
+            case "ongoing":
+
+                return contestRepository.getOngoingContests(isOrganizer);
+
+            case "voting":
+
+                if (!user.isOrganizer()) {
+                    validateUserHasPointsToSeeVotingContests(user, ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+                }
+
+                return contestRepository.getVotingContests(user.getId(), isOrganizer);
+
+            case "finished":
+
+                return contestRepository.getFinishedContests(user.getId(), isOrganizer);
+
+            default:
+                throw new UnsupportedOperationException("Contest phase is not valid");
+        }
+
     }
 
 
@@ -72,10 +108,6 @@ public class ContestServiceImpl implements ContestService {
     public List<User> getContestParticipants(User user, int contestId) {
         verifyUserHasRoles(user, UserRoles.ORGANIZER);
         return contestRepository.getContestParticipants(contestId);
-    }
-
-    public List<Contest> getOngoingContests() {
-        return contestRepository.getOngoingContests();
     }
 
     @Override
@@ -103,29 +135,6 @@ public class ContestServiceImpl implements ContestService {
         return typeRepository.getAll();
     }
 
-
-    @Override
-    public List<Contest> getFinishedContests(User user) {
-
-        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
-
-        return contestRepository.getFinishedContests();
-
-
-    }
-
-    @Override
-    public List<Contest> getVotingContests(User user) {
-
-        if (user.isOrganizer()) {
-            return contestRepository.getVotingContests();
-        }
-
-        validateUserHasPointsToSeeVotingContests(user, ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
-
-        return contestRepository.getUserJuryVotingContests(user.getId());
-
-    }
 
     private void validateUserHasPointsToSeeVotingContests(User user, String message) {
         Optional<Points> points = user.getPoints().stream().findFirst();

@@ -49,12 +49,13 @@ public class ContestController {
 
     @ApiOperation(value = "Get all contests")
     @GetMapping
-    public List<Contest> getAll(@RequestHeader HttpHeaders headers) {
+    public List<Contest> getAll(@RequestHeader HttpHeaders headers,
+                                @RequestParam(name = "phase") Optional<String> phase) {
 
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return contestService.getAll(user);
+            return contestService.getAll(user, phase);
         } catch (
                 UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -91,27 +92,6 @@ public class ContestController {
 
         }
     }
-
-    @ApiOperation(value = "Get ongoing contests")
-    @GetMapping("/ongoing")
-    public List<Contest> getOngoingContests() {
-        return contestService.getOngoingContests();
-    }
-
-    @ApiOperation(value = "Get ongoing contests")
-    @GetMapping("/voting")
-    public List<Contest> getVotingContests(@RequestHeader HttpHeaders headers) {
-        User user = authenticationHelper.tryGetUser(headers);
-        return contestService.getVotingContests(user);
-    }
-
-    @ApiOperation(value = "Get ongoing contests")
-    @GetMapping("/finished")
-    public List<Contest> getFinishedContests(@RequestHeader HttpHeaders headers) {
-        User user = authenticationHelper.tryGetUser(headers);
-        return contestService.getFinishedContests(user);
-    }
-
 
     @ApiOperation(value = "Get by id")
     @GetMapping("/{id}")

@@ -11,7 +11,11 @@ import java.util.Optional;
 import java.util.Set;
 
 
-public interface ContestService extends GetServiceOperations<Contest> {
+public interface ContestService  {
+
+    List<Contest> getAll(User user,Optional<String> phase);
+
+    Contest getById(User user, int id);
 
     Contest create(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantSet, Optional<MultipartFile> file, Optional<String> url) throws IOException;
 
@@ -29,13 +33,7 @@ public interface ContestService extends GetServiceOperations<Contest> {
 
     Image addImageToContest(User user, int contestId, int imageId);
 
-    List<Contest> getOngoingContests();
-
     List<Type> getAllTypes();
-
-    List<Contest> getFinishedContests(User user);
-
-    List<Contest> getVotingContests(User user);
 
     List<Contest> getByUserId(int id);
 
