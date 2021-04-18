@@ -220,7 +220,12 @@ VALUES ('Leopard', 'Quick nap and back to hunting.', 'https://i.imgur.com/V1kXKi
        ('Ferrari', 'Photo-shoot for Top Gear', 'https://i.imgur.com/mIimSn2.jpg', 31),
        ('Mclaren', 'The all new Mclaren', 'https://i.imgur.com/jMm9mYr.jpg', 32),
        ('Red porsche', 'Cruising on the street', 'https://i.imgur.com/e4yV6SH.jpg', 33),
-       ('Lamborghini', 'Urus on vossen wheels', 'https://i.imgur.com/6Ds4oTv.jpg', 34);
+       ('Argentina mountain', 'The best view I have captured during my trip to Argentina', 'https://i.imgur.com/60k7Ius.jpg', 34),
+       ('Mountain', 'Snowy day', 'https://i.imgur.com/6iGvbAM.jpg', 35),
+       ('Fuji', 'Fuji mountain', 'https://i.imgur.com/vf3OUaZ.jpg', 37),
+       ('Lake', 'Lake during winter', 'https://i.imgur.com/ZNcQdmH.jpg', 9),
+       ('Stars', 'Stars in the sky', 'https://i.imgur.com/XhPA6O7.jpg', 36),
+       ('Mountain', 'Snowy mountain', 'https://i.imgur.com/Z3o4ut5.jpg', 10);
 
 
 INSERT INTO users_images(user_id, image_id)
@@ -266,7 +271,12 @@ VALUES (6, 1),
        (31, 40),
        (32, 41),
        (33, 42),
-       (34, 43);
+       (34, 43),
+       (35, 44),
+       (36, 45),
+       (37, 46),
+       (9, 47),
+       (12, 48);
 
 
 INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
@@ -323,11 +333,17 @@ VALUES (1, 1),
        (2, 40),
        (2, 41),
        (2, 42),
-       (2, 43),
+       (3, 43),
+       (3, 44),
+       (3, 45),
+       (3, 46),
+       (3, 47),
+       (3, 48),
        (5, 34),
        (5, 35),
        (5, 36),
-       (5, 37);
+       (5, 37),
+       (5,33);
 
 INSERT INTO contest_winner_images(contest_id, image_id)
 VALUES (1, 1),
@@ -351,12 +367,12 @@ VALUES (1, 6),
        (1, 11),
        (1, 12),
        (1, 13),
-       (2, 29),
-       (2, 30),
-       (2, 31),
-       (2, 32),
-       (2, 33),
        (2, 34),
+       (2, 35),
+       (2, 36),
+       (2, 37),
+       (2, 9),
+       (2, 7),
        (5, 25),
        (5, 26),
        (5, 27),
