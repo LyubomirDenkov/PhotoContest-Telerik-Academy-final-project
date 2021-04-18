@@ -33,8 +33,6 @@ public class NotificationHelper {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
-
-
         notification.setTitle("Invitation");
         notification.setMessage(String.format("Congratulations %s ! You have been invited as a %s in %s contest. " +
                         "Voting phase starts at %s."
@@ -46,6 +44,21 @@ public class NotificationHelper {
         Set<Notification> userNotifications = user.getNotifications();
         userNotifications.add(notificationToAdd);
         userRepository.update(user);
+    }
+
+    public void sendMessageWhenSuccessfullyJoinedContest(User user,Contest contest) {
+        Notification notification = new Notification();
+        LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
+
+        notification.setTitle("Successful Joining");
+        notification.setMessage(String.format("Congratulations %s ! You have successfully joined %s contest. " +
+                        "Voting phase starts at %s.",user.getFirstName(),contest.getTitle(),timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setUser(user);
+
+        Notification notificationToAdd = notificationRepository.create(notification);
+        Set<Notification> userNotifications = user.getNotifications();
+        userNotifications.add(notificationToAdd);
     }
 
     public LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {

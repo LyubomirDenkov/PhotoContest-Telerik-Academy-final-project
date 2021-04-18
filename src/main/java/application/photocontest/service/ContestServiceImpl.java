@@ -371,7 +371,7 @@ public class ContestServiceImpl implements ContestService {
         int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
         points.get().setPoints(pointsToIncrease);
         pointsRepository.updatePoints(points.get());
-
+        notificationHelper.sendMessageWhenSuccessfullyJoinedContest(user,contest);
         userRepository.update(userToJoinInContest);
 
         participants.add(userToJoinInContest);
