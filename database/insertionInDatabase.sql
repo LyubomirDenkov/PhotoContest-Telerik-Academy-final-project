@@ -324,3 +324,9 @@ VALUES
 (1,11),
 (1,12),
 (1,13);
+
+INSERT INTO contest_jury(contest_id, user_id)
+VALUES (1,1),
+       (1,2),
+       (1,3),
+       (1,4);
