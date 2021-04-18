@@ -214,7 +214,10 @@ public class ContestServiceImpl implements ContestService {
 
         if (file.isPresent() || url.isPresent()) {
             String backgroundImage = imgurService.uploadImageToImgurAndReturnUrl(file, url);
-            contest.setBackgroundImage(backgroundImage);
+
+            if (!backgroundImage.isBlank()) {
+                contest.setBackgroundImage(backgroundImage);
+            }
         }
 
         contestRepository.update(contest);
@@ -423,7 +426,7 @@ public class ContestServiceImpl implements ContestService {
 
                 Set<Notification> userNotifications = userToAdd.getNotifications();
                 Notification notification = sendMessageWhenInvitedToJuryOrParticipant(userToAdd, INVITED_AS_JURY, contest);
-               Notification notificationToAdd = notificationRepository.create(notification);
+                Notification notificationToAdd = notificationRepository.create(notification);
                 userNotifications.add(notificationToAdd);
                 userToAdd.setNotifications(userNotifications);
                 userRepository.update(userToAdd);
