@@ -16,6 +16,11 @@ body {
     font-family: "Open Sans", sans-serif;
 }
 
+.custom-text {
+    color: wheat;
+    font-weight: bolder;
+}
+
 .custom-text-name {
     color: black;
 }
@@ -95,20 +100,21 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
 }
 
-#card-own{
+#card-own {
     display: block;
 }
-.custom-text-rate{
+
+.custom-text-rate {
     text-align: center;
     color: wheat;
 }
 
-.custom-text-story{
+.custom-text-story {
     color: wheat;
     font-weight: bolder;
 }
 
-.error-custom{
+.error-custom {
     color: red;
     font-weight: bolder;
 }
@@ -2642,12 +2648,12 @@ IMAGE
     text-align: center;
 }
 
-.names{
+.names {
     color: wheat;
     font-weight: bolder;
 }
 
-.custom-border{
+.custom-border {
     color: wheat;
     border-style: solid;
     border-color: #f82249;

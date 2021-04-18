@@ -141,9 +141,10 @@ public class ContestServiceImpl implements ContestService {
 
         Contest contest = contestRepository.getById(id);
 
-        if (!user.isOrganizer()) {
-            validateContestType(contest, ContestTypes.OPEN);
-            validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGT_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+        if (contest.getPhase().getName().equals(ContestPhases.VOTING.toString())) {
+            if (!user.isOrganizer()) {
+                validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGT_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+            }
         }
 
         if (contest.getJury().contains(user)) {
@@ -153,13 +154,6 @@ public class ContestServiceImpl implements ContestService {
 
         if (contest.getParticipants().contains(user)) {
             contest.setParticipant(true);
-        } else {
-
-            if (contest.getPhase().getName().equalsIgnoreCase(ContestPhases.VOTING.toString()) && !contest.isJury()) {
-                throw new UnauthorizedOperationException(ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
-            }
-
-            return contest;
         }
 
         try {
@@ -399,7 +393,7 @@ public class ContestServiceImpl implements ContestService {
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
             pointsRepository.updatePoints(points.get());
-            notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(user,INVITED_AS_Participant,contest);
+            notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(user, INVITED_AS_Participant, contest);
             usersToAdd.add(user);
         }
         contest.setParticipants(usersToAdd);
@@ -418,7 +412,7 @@ public class ContestServiceImpl implements ContestService {
 
             if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
-                notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(userToAdd,INVITED_AS_JURY,contest);
+                notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(userToAdd, INVITED_AS_JURY, contest);
             }
         }
         contest.setJury(jury);
