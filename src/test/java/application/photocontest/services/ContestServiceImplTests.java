@@ -46,6 +46,8 @@ public class ContestServiceImplTests {
     @Mock
     ImageService imageService;
 
+    @Mock
+    NotificationRepository notificationRepository;
 
     @Mock
     ImageReviewRepository imageReviewRepository;
@@ -75,6 +77,7 @@ public class ContestServiceImplTests {
 
 
         User user = createMockUser();
+        user.setRoles(new HashSet<>());
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
@@ -207,6 +210,8 @@ public class ContestServiceImplTests {
         User userParticipant = createMockUser();
         Set<Integer> jury = Set.of(user.getId());
         Set<Integer> participants = Set.of(userParticipant.getId());
+        Notification notification = createMockNotification();
+        notification.setUser(user);
 
 
         Mockito.when(userRepository.getOrganizers()).thenReturn(List.of(organizer));
@@ -427,8 +432,8 @@ public class ContestServiceImplTests {
         User organizer = createMockOrganizer();
         Contest contest = createMockContest();
         Image image = createMockImage();
-        contest.setWinnerImages(Set.of(image));
-        contest.setImages(Set.of(image));
+        contest.setWinnerImages(new HashSet<>());
+        contest.setImages(new HashSet<>());
 
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 

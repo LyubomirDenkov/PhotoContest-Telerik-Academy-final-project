@@ -30,6 +30,7 @@ public class Helpers {
         user.setProfileImage("https://i.imgur.com/GdDsxXO.png");
         user.setPoints(Set.of(new Points(1,160)));
         user.setRoles(Set.of(new Role(1,"user")));
+        user.setNotifications(new HashSet<>());
         return user;
     }
 

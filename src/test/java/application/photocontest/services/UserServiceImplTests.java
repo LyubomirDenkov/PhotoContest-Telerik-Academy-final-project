@@ -4,9 +4,11 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Notification;
 import application.photocontest.models.Role;
 import application.photocontest.models.User;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.repository.contracts.NotificationRepository;
 import application.photocontest.repository.contracts.PointsRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.UserServiceImpl;
@@ -43,6 +45,8 @@ public class UserServiceImplTests {
     @Mock
     PointsRepository pointsRepository;
 
+    @Mock
+    NotificationRepository notificationRepository;
 
 
     @InjectMocks
@@ -149,16 +153,19 @@ public class UserServiceImplTests {
         User user = createMockUser();
         Set<Role> userRoles = new HashSet<>();
         user.setRoles(userRoles);
+        Notification notification = createMockNotification();
+        
 
 
 
         when(userRepository.getUserByUserName(user.getUserCredentials().getUserName())).thenThrow(EntityNotFoundException.class);
 
-        Mockito.when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.empty())).thenReturn("");
+        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.empty())).thenReturn("");
 
         when(userRepository.create(user)).thenReturn(user);
 
         when(userRepository.update(user)).thenReturn(user);
+
 
         userService.create(user,Optional.empty(),Optional.empty());
 
