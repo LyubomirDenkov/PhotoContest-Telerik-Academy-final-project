@@ -388,12 +388,12 @@ public class ContestServiceImpl implements ContestService {
             throw new DuplicateEntityException(USER_IS_ALREADY_IN_THIS_CONTEST);
         }
 
-        Optional<Points> points = user.getPoints().stream().findFirst();
+        Optional<Points> points = userToJoinInContest.getPoints().stream().findFirst();
 
         int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
         points.get().setPoints(pointsToIncrease);
         pointsRepository.update(points.get());
-        sendMessageWhenSuccessfullyJoinedContest(user, contest);
+        addNotificationToUserNotifications(userToJoinInContest,contest);
         userRepository.update(userToJoinInContest);
 
         participants.add(userToJoinInContest);
@@ -450,6 +450,14 @@ public class ContestServiceImpl implements ContestService {
     private void addNotificationToUserNotifications(User user, Contest contest, String invitationRole) {
         Set<Notification> userNotifications = user.getNotifications();
         Notification notification = sendMessageWhenInvitedToJuryOrParticipant(user, invitationRole, contest);
+        Notification notificationToAdd = notificationRepository.create(notification);
+        userNotifications.add(notificationToAdd);
+        user.setNotifications(userNotifications);
+    }
+
+    private void addNotificationToUserNotifications(User user, Contest contest) {
+        Set<Notification> userNotifications = user.getNotifications();
+        Notification notification = sendMessageWhenSuccessfullyJoinedContest(user, contest);
         Notification notificationToAdd = notificationRepository.create(notification);
         userNotifications.add(notificationToAdd);
         user.setNotifications(userNotifications);
