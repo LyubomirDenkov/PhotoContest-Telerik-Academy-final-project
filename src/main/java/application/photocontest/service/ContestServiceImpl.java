@@ -11,7 +11,6 @@ import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
-import application.photocontest.service.helper.NotificationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +25,8 @@ import java.util.Set;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 import static application.photocontest.service.constants.Constants.*;
+import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenInvitedToJuryOrParticipant;
+import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenSuccessfullyJoinedContest;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -41,13 +42,14 @@ public class ContestServiceImpl implements ContestService {
     private final ImageReviewRepository imageReviewRepository;
     private final ImgurService imgurService;
     private final ImageService imageService;
-    private final NotificationHelper notificationHelper;
+    private final NotificationRepository notificationRepository;
+
 
     @Autowired
     public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository,
                               ImageRepository imageRepository, TypeRepository typeRepository,
                               PointsRepository pointsRepository, ImageReviewRepository imageReviewRepository,
-                              ImgurService imgurService, ImageService imageService, NotificationHelper notificationHelper) {
+                              ImgurService imgurService, ImageService imageService, NotificationRepository notificationRepository) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
@@ -56,7 +58,7 @@ public class ContestServiceImpl implements ContestService {
         this.imageReviewRepository = imageReviewRepository;
         this.imgurService = imgurService;
         this.imageService = imageService;
-        this.notificationHelper = notificationHelper;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -365,7 +367,7 @@ public class ContestServiceImpl implements ContestService {
         int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
         points.get().setPoints(pointsToIncrease);
         pointsRepository.updatePoints(points.get());
-        notificationHelper.sendMessageWhenSuccessfullyJoinedContest(user,contest);
+        sendMessageWhenSuccessfullyJoinedContest(user, contest);
         userRepository.update(userToJoinInContest);
 
         participants.add(userToJoinInContest);
@@ -393,8 +395,13 @@ public class ContestServiceImpl implements ContestService {
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
             pointsRepository.updatePoints(points.get());
-            notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(user, INVITED_AS_Participant, contest);
-            usersToAdd.add(user);
+
+            Set<Notification> userNotifications = user.getNotifications();
+            Notification notification = sendMessageWhenInvitedToJuryOrParticipant(user, INVITED_AS_JURY, contest);
+            Notification notificationToAdd = notificationRepository.create(notification);
+            userNotifications.add(notificationToAdd);
+            user.setNotifications(userNotifications);
+            userRepository.update(user);
         }
         contest.setParticipants(usersToAdd);
         contestRepository.update(contest);
@@ -404,6 +411,7 @@ public class ContestServiceImpl implements ContestService {
 
         Set<User> jury = new HashSet<>(userRepository.getOrganizers());
 
+
         for (Integer userId : jurySet) {
             User userToAdd = userRepository.getById(userId);
             if (jury.contains(userToAdd)) continue;
@@ -412,7 +420,13 @@ public class ContestServiceImpl implements ContestService {
 
             if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
-                notificationHelper.sendMessageWhenInvitedToJuryOrParticipant(userToAdd, INVITED_AS_JURY, contest);
+
+                Set<Notification> userNotifications = userToAdd.getNotifications();
+                Notification notification = sendMessageWhenInvitedToJuryOrParticipant(userToAdd, INVITED_AS_JURY, contest);
+               Notification notificationToAdd = notificationRepository.create(notification);
+                userNotifications.add(notificationToAdd);
+                userToAdd.setNotifications(userNotifications);
+                userRepository.update(userToAdd);
             }
         }
         contest.setJury(jury);

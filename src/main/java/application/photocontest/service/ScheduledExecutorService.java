@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static application.photocontest.service.helper.NotificationHelper.buildAndCreateNotification;
+
 @Component
 @EnableScheduling
 public class ScheduledExecutorService implements Runnable {
@@ -30,18 +32,16 @@ public class ScheduledExecutorService implements Runnable {
     private final UserRepository userRepository;
     private final PhaseRepository phaseRepository;
     private final PointsRepository pointsRepository;
-    private final NotificationHelper notificationHelper;
 
 
     @Autowired
     public ScheduledExecutorService(ContestRepository contestRepository,
-                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository, PointsRepository pointsRepository, NotificationHelper notificationHelper) {
+                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository, PointsRepository pointsRepository) {
         this.contestRepository = contestRepository;
         this.imageReviewRepository = imageReviewRepository;
         this.userRepository = userRepository;
         this.phaseRepository = phaseRepository;
         this.pointsRepository = pointsRepository;
-        this.notificationHelper = notificationHelper;
     }
 
 
@@ -218,7 +218,7 @@ public class ScheduledExecutorService implements Runnable {
             }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
 
-            Notification notification = notificationHelper.buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
+            Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
 
             Set<Notification> notifications = user.getNotifications();
             notifications.add(notification);

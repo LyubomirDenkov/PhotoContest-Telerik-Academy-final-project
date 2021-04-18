@@ -4,76 +4,66 @@ package application.photocontest.service.helper;
 import application.photocontest.models.Contest;
 import application.photocontest.models.Notification;
 import application.photocontest.models.User;
-import application.photocontest.repository.contracts.NotificationRepository;
-import application.photocontest.repository.contracts.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Set;
 
 import static application.photocontest.service.constants.Constants.MAIL_TITLE_CONTEST_END;
 import static application.photocontest.service.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
 
-@Component
+
 public class NotificationHelper {
 
-    private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
 
-    @Autowired
-    public NotificationHelper(UserRepository userRepository, NotificationRepository notificationRepository) {
-        this.userRepository = userRepository;
-        this.notificationRepository = notificationRepository;
-    }
-
-    public void sendMessageWhenInvitedToJuryOrParticipant(User user, String role, Contest contest) {
+    public static Notification sendMessageWhenInvitedToJuryOrParticipant(User user,String role, Contest contest) {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
         notification.setTitle("Invitation");
         notification.setMessage(String.format("Congratulations %s ! You have been invited as a %s in %s contest. " +
                         "Voting phase starts at %s."
-                , user.getFirstName(), role, contest.getTitle(),timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
+                , user.getFirstName(), role, contest.getTitle(), timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
         notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         notification.setUser(user);
 
-        Notification notificationToAdd = notificationRepository.create(notification);
-        Set<Notification> userNotifications = user.getNotifications();
-        userNotifications.add(notificationToAdd);
-        userRepository.update(user);
+        return notification;
     }
 
-    public void sendMessageWhenSuccessfullyJoinedContest(User user,Contest contest) {
+    public static Notification sendMessageWhenSuccessfullyJoinedContest(User user, Contest contest) {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
         notification.setTitle("Successful Joining");
         notification.setMessage(String.format("Congratulations %s ! You have successfully joined %s contest. " +
-                        "Voting phase starts at %s.",user.getFirstName(),contest.getTitle(),timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
+                "Voting phase starts at %s.", user.getFirstName(), contest.getTitle(), timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
         notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         notification.setUser(user);
 
-        Notification notificationToAdd = notificationRepository.create(notification);
-        Set<Notification> userNotifications = user.getNotifications();
-        userNotifications.add(notificationToAdd);
+       return notification;
     }
 
-    public Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
+    public static Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
         Notification notification = new Notification();
         notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, contestTitle));
         notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION, user.getFirstName(), position, points));
         notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         notification.setUser(user);
-        return notificationRepository.create(notification);
+
+        return notification;
     }
 
-    public LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
+    public static Notification sendMessageWhenUserCreated(User user) {
+        Notification notification = new Notification();
+        notification.setTitle("Welcome!");
+        notification.setMessage("Congratulations! You have successfully joined to the iPhoto community!");
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setUser(user);
+
+
+        return notification;
+    }
+
+    public static LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
         return new java.sql.Timestamp(
                 dateToConvert.getTime()).toLocalDateTime();
     }

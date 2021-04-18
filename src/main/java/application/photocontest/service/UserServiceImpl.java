@@ -19,6 +19,9 @@ import java.util.*;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.*;
+import static application.photocontest.service.constants.Constants.INVITED_AS_JURY;
+import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenInvitedToJuryOrParticipant;
+import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenUserCreated;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -129,7 +132,16 @@ public class UserServiceImpl implements UserService {
             user.setProfileImage(profileImageUrl);
         }
 
+
+
         User newRegisteredUser = userRepository.create(user);
+
+        Set<Notification> userNotifications = new HashSet<>();
+        Notification notification = sendMessageWhenUserCreated(user);
+        Notification notificationToAdd = notificationRepository.create(notification);
+        userNotifications.add(notificationToAdd);
+        user.setNotifications(userNotifications);
+
         addRoleAndPointsToRegisteredUser(newRegisteredUser);
 
         return newRegisteredUser;
