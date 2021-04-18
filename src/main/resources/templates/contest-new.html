@@ -6,6 +6,9 @@
 
     <link th:href="@{/assets/css/edit-profile.css}" href="../static/assets/css/edit-profile.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link rel="stylesheet"
+          th:href="@{/assets/virtual-select.min.css}"
+          href="../static/assets/virtual-select.min.css" />
 </head>
 <body>
 
@@ -53,8 +56,18 @@
                 <input type="number" placeholder="Hours Till Third Phase" th:field="*{phaseTwo}">
                 <p th:errors="*{phaseTwo}">Days Till Third Phase error</p>
             </div>
+                    <div id="sample-select"
+                         multiple
+                         placeholder="Select country"
+                         data-value-key="id"
+                         data-search="true"
+                         th:field="*{participants}">
+                            <option th:each="participant : ${participants}"
+                                    th:value="${participant.getId()}"
+                                    th:text="${participant.getUserCredentials().userName}">
+                            </option>
 
-
+                    </div>
                     <div class="form-group">
                         <select class="select-toggle" multiple="multiple" th:field="*{participants}">
                             <option th:each="participant : ${participants}"
@@ -90,10 +103,12 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('.selectpicker').selectpicker();
-    })
+<script src="../static/assets/virtual-select.min.js">
+
+        VirtualSelect.init({
+            ele: '#example-select',
+            options: myOptions
+        });
 </script>
 
 </body>
