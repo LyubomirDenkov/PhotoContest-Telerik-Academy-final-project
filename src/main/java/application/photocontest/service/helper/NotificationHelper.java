@@ -17,6 +17,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Set;
 
+import static application.photocontest.service.constants.Constants.MAIL_TITLE_CONTEST_END;
+import static application.photocontest.service.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
+
 @Component
 public class NotificationHelper {
 
@@ -59,6 +62,15 @@ public class NotificationHelper {
         Notification notificationToAdd = notificationRepository.create(notification);
         Set<Notification> userNotifications = user.getNotifications();
         userNotifications.add(notificationToAdd);
+    }
+
+    public Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
+        Notification notification = new Notification();
+        notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, contestTitle));
+        notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION, user.getFirstName(), position, points));
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setUser(user);
+        return notificationRepository.create(notification);
     }
 
     public LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {

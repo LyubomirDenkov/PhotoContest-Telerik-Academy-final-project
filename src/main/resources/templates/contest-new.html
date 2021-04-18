@@ -56,7 +56,7 @@
 
 
                     <div class="form-group">
-                        <select multiple="multiple" class="custom-select" th:field="*{participants}">
+                        <select class="selectpicker" multiple data-actions-box="true" th:field="*{participants}">
                             <option th:each="participant : ${participants}"
                                     th:value="${participant.getId()}"
                                     th:text="${participant.getUserCredentials().userName}">

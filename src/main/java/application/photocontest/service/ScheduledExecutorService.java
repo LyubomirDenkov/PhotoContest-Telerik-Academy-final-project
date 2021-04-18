@@ -4,7 +4,7 @@ import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
-import application.photocontest.service.contracts.NotificationService;
+import application.photocontest.service.helper.NotificationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static application.photocontest.service.constants.Constants.MAIL_TITLE_CONTEST_END;
-import static application.photocontest.service.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
 
 @Component
 @EnableScheduling
@@ -32,20 +29,19 @@ public class ScheduledExecutorService implements Runnable {
     private final ImageReviewRepository imageReviewRepository;
     private final UserRepository userRepository;
     private final PhaseRepository phaseRepository;
-    private final NotificationService notificationService;
     private final PointsRepository pointsRepository;
+    private final NotificationHelper notificationHelper;
 
 
     @Autowired
     public ScheduledExecutorService(ContestRepository contestRepository,
-                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository,
-                                    NotificationService notificationService, PointsRepository pointsRepository) {
+                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository, PointsRepository pointsRepository, NotificationHelper notificationHelper) {
         this.contestRepository = contestRepository;
         this.imageReviewRepository = imageReviewRepository;
         this.userRepository = userRepository;
         this.phaseRepository = phaseRepository;
-        this.notificationService = notificationService;
         this.pointsRepository = pointsRepository;
+        this.notificationHelper = notificationHelper;
     }
 
 
@@ -222,7 +218,7 @@ public class ScheduledExecutorService implements Runnable {
             }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
 
-            Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
+            Notification notification = notificationHelper.buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
 
             Set<Notification> notifications = user.getNotifications();
             notifications.add(notification);
@@ -233,12 +229,4 @@ public class ScheduledExecutorService implements Runnable {
         }
     }
 
-    private Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
-        Notification notification = new Notification();
-        notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, contestTitle));
-        notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION, user.getFirstName(), position, points));
-        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        notification.setUser(user);
-        return notificationService.create(notification);
-    }
 }
