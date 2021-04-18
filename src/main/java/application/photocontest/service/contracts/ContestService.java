@@ -27,7 +27,7 @@ public interface ContestService  {
 
     List<User> getContestParticipants(User user, int contestId);
 
-    void addUserToContest(User user, int contestId, int userId);
+    void joinContest(User user, int contestId, int userId);
 
     ImageReview rateImage(User user, ImageReview imageReview, int contestId, int imageId);
 

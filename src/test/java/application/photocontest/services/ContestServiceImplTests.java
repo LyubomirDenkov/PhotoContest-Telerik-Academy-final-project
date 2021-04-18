@@ -359,7 +359,7 @@ public class ContestServiceImplTests {
 
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
-        contestService.addUserToContest(user,contest.getId(),user.getId());
+        contestService.joinContest(user,contest.getId(),user.getId());
 
         Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
 

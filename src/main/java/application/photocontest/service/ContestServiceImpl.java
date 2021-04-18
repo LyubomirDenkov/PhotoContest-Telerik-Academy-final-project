@@ -368,7 +368,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public void addUserToContest(User user, int contestId, int userId) {
+    public void joinContest(User user, int contestId, int userId) {
 
         verifyUserHasRoles(user, UserRoles.USER);
         verifyIsUserOwnAccount(user.getId(), userId, USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS);
