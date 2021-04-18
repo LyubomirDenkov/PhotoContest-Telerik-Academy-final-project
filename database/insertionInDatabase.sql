@@ -136,7 +136,8 @@ VALUES ('Nature'),
        ('Dogs'),
        ('Cats'),
        ('Cities'),
-       ('Mountains');
+       ('Mountains'),
+       ('Cars');
 
 INSERT INTO category(name)
 VALUES ('nature');
@@ -250,13 +251,10 @@ VALUES (6, 1),
 
 INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
 VALUES
-('Animals',2,'2021-04-10 18:52:35','2021-04-15 18:52:35',1,1,'https://i.imgur.com/yXDhZke.jpg',3),
-('Cars',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',1,1,'https://i.imgur.com/vJjekqs.jpg',1),
-('Dogs',1,'2021-04-10 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-11 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-24 18:52:35','2021-04-25 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-24 18:52:35','2021-04-25 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
-('Dogs',1,'2021-04-24 18:52:35','2021-04-25 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1);
+('Animals',2,'2021-04-16 18:52:35','2021-04-17 18:52:35',1,1,'https://i.imgur.com/yXDhZke.jpg',2),
+('Cars',7,'2021-04-27 18:52:35','2021-04-28 18:52:35',2,1,'https://i.imgur.com/vJjekqs.jpg',1),
+('Mountains',6,'2021-04-17 18:52:35','2021-04-23 18:52:35',3,1,'https://i.imgur.com/xnWz7Bl.jpg',1),
+('Lamborghini',7,'2021-04-23 18:52:35','2021-04-24 18:52:35',4,1,'https://i.imgur.com/VRI2dVR.jpg',1);
 
 INSERT INTO user_points(user_id, points_id)
 VALUES (5, 1),
@@ -302,3 +300,16 @@ INSERT INTO contest_image(contest_id, image_id) VALUES
 (1,6),
 (1,6),
 (1,8);
+
+INSERT INTO contest_winner_images(contest_id, image_id)
+VALUES(1,1),
+      (1,2),
+      (1,5);
+
+INSERT INTO image_reviews(user_id, contest_id, image_id, points, comment)
+VALUES (1,1,1,10,'Good photo'),
+       (1,1,2,7,'Good photo mate'),
+       (1,1,5,6,'Very good'),
+       (2,1,1,10,'Very well'),
+       (2,1,2,7,'Good'),
+       (2,1,5,6,'Good photo!');

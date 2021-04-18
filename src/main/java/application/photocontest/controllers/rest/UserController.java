@@ -73,7 +73,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/notifications")
     public List<Notification> getUserNotifications(@RequestHeader HttpHeaders headers, @PathVariable int id) {
 
         User user = authenticationHelper.tryGetUser(headers);
