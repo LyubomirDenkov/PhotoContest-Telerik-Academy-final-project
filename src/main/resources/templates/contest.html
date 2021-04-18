@@ -134,7 +134,7 @@
                                     </a>
                                 </li>
                                 <div th:if="${contest.getPhase().getName().equals('ongoing')}">
-                                    <li th:if="${!contest.isHasImageUploaded() && contest.isParticipant() }">
+                                    <li th:if="${!contest.isHasImageUploaded() && contest.isParticipant()}">
                                         <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/upload}">
                                             <button type="button" class="glow-on-hover">
                                                 UPLOAD PHOTO
