@@ -5,6 +5,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.ContestRepository;
+import application.photocontest.repository.contracts.NotificationRepository;
 import application.photocontest.repository.contracts.PointsRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImgurService;
@@ -24,18 +25,21 @@ public class UserServiceImpl implements UserService {
 
 
     private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
+    private static final String SELF_NOTIFICATIONS_ERROR_MESSAGE = "You can view only your notifications.";
 
     private final UserRepository userRepository;
     private final ImgurService imgurService;
     private final ContestRepository contestRepository;
     private final PointsRepository pointsRepository;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService, ContestRepository contestRepository, PointsRepository pointsRepository) {
+    public UserServiceImpl(UserRepository userRepository, ImgurService imgurService, ContestRepository contestRepository, PointsRepository pointsRepository, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.imgurService = imgurService;
         this.contestRepository = contestRepository;
         this.pointsRepository = pointsRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -53,6 +57,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return contestRepository.getUserContests(user.getId(),phase);
+    }
+
+    @Override
+    public List<Notification> getUserNotifications(User user, int id) {
+        verifyUserHasRoles(user,UserRoles.USER,UserRoles.ORGANIZER);
+
+        verifyIsUserOwnAccount(user.getId(),id, SELF_NOTIFICATIONS_ERROR_MESSAGE);
+
+        return notificationRepository.getAll(id);
     }
 
     @Override

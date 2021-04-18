@@ -6,6 +6,7 @@ import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.Contest;
+import application.photocontest.models.Notification;
 import application.photocontest.models.User;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.models.dto.UpdateUserDto;
@@ -69,6 +70,18 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public List<Notification> getUserNotifications(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+
+        User user = authenticationHelper.tryGetUser(headers);
+
+        try {
+            return userService.getUserNotifications(user, id);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

@@ -28,6 +28,7 @@
     <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!-- ======= Header ======= -->
 <header id="header" class="d-flex align-items-center ">
     <div class="container-fluid container-xxl d-flex align-items-center">
 
@@ -57,6 +58,10 @@
                 </li>
                 <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
                                                              th:href="@{/users}">Users</a>
+                </li>
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/notifications}">Notifications</a>
                 </li>
 
                 <li><a class="nav-link" href="#"

@@ -24,6 +24,7 @@
   <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!-- ======= Header ======= -->
 <header id="header" class="d-flex align-items-center ">
   <div class="container-fluid container-xxl d-flex align-items-center">
 
@@ -56,14 +57,18 @@
         </li>
 
         <li><a class="nav-link" href="#"
+               th:href="@{/notifications}">Notifications</a>
+        </li>
+
+        <li><a class="nav-link" href="#"
                th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
         </li>
 
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav><!-- .navbar -->
-    <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#">Login</a>
-    <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#">Logout</a>
+    <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
+    <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#buy-tickets">Logout</a>
   </div>
 </header><!-- End Header -->
 

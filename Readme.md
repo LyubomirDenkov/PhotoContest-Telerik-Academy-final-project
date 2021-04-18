@@ -15,3 +15,9 @@ BUILD AND RUN PROJECT STEPS
 - 5 - Open the following link: http://localhost:8080/swagger-ui.html#/ or use another program to test the application.
 - 6 - ENJOY!
 ---
+
+
+![alt](https://imgur.com/hT7wUmn.gif)
+![alt](https://imgur.com/uBJwD6M.gif)
+![alt](https://imgur.com/jo190dO.gif)
+![alt](https://i.imgur.com/bqrCrWl.gif)

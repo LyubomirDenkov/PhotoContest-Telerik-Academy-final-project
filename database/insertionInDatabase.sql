@@ -251,7 +251,7 @@ VALUES (6, 1),
 INSERT INTO contest(title, category_id, first_phase, second_phase, user_id, type_id, image_url, phase_id)
 VALUES
 ('Animals',2,'2021-04-10 18:52:35','2021-04-15 18:52:35',1,1,'https://i.imgur.com/yXDhZke.jpg',3),
-('Dogs',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
+('Cars',1,'2021-04-27 18:52:35','2021-04-28 18:52:35',1,1,'https://i.imgur.com/vJjekqs.jpg',1),
 ('Dogs',1,'2021-04-10 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
 ('Dogs',1,'2021-04-11 18:52:35','2021-04-30 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),
 ('Dogs',1,'2021-04-24 18:52:35','2021-04-25 18:52:35',1,1,'https://i.imgur.com/JD4Auj5.png',1),

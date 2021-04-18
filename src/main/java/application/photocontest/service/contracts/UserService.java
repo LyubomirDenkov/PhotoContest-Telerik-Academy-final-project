@@ -1,6 +1,7 @@
 package application.photocontest.service.contracts;
 
 import application.photocontest.models.Contest;
+import application.photocontest.models.Notification;
 import application.photocontest.models.User;
 import application.photocontest.service.contracts.genericservice.GetServiceOperations;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,4 +26,7 @@ public interface UserService extends GetServiceOperations<User> {
     List<User> getAllUsers();
 
     List<Contest> getUserContests(User user, int userId, Optional<String> phase);
+
+    List<Notification> getUserNotifications(User user, int id);
+
 }
