@@ -313,3 +313,14 @@ VALUES (1,1,1,10,'Good photo'),
        (2,1,1,10,'Very well'),
        (2,1,2,7,'Good'),
        (2,1,5,6,'Good photo!');
+
+INSERT INTO contest_participants(contest_id, user_id)
+VALUES
+(1,6),
+(1,7),
+(1,8),
+(1,9),
+(1,10),
+(1,11),
+(1,12),
+(1,13);
