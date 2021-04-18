@@ -34,6 +34,9 @@ import java.util.Set;
 public class ContestsMvcController {
 
 
+    private static final String FINISHED = "finished";
+    private static final String VOTING = "voting";
+    private static final String ONGOING = "ongoing";
     private final AuthenticationHelper authenticationHelper;
     private final ContestService contestService;
     private final CategoryService categoryService;
@@ -114,7 +117,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of("finished")));
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of(FINISHED)));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -129,7 +132,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of("voting")));
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of(VOTING)));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 
@@ -144,7 +147,7 @@ public class ContestsMvcController {
 
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of("ongoing")));
+            model.addAttribute("contests", contestService.getAll(currentUser, Optional.of(ONGOING)));
             model.addAttribute("currentUser", currentUser);
             return "contests";
 

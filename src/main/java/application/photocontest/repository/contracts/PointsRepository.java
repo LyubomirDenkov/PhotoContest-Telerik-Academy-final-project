@@ -8,5 +8,5 @@ public interface PointsRepository {
 
     Points createPoints(Points points);
 
-    void updatePoints(Points points);
+    void update(Points points);
 }

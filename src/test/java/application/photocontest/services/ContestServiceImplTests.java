@@ -235,9 +235,9 @@ public class ContestServiceImplTests {
 
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
-        pointsRepository.updatePoints(points);
+        pointsRepository.update(points);
 
-        Mockito.verify(pointsRepository,Mockito.times(1)).updatePoints(points);
+        Mockito.verify(pointsRepository,Mockito.times(1)).update(points);
 
         userRepository.update(user);
 

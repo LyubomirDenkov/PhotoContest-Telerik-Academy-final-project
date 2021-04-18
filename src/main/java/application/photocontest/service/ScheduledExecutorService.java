@@ -4,7 +4,6 @@ import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
 import application.photocontest.repository.contracts.*;
-import application.photocontest.service.helper.NotificationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -225,7 +224,7 @@ public class ScheduledExecutorService implements Runnable {
             user.setNotifications(notifications);
 
             userRepository.update(user);
-            pointsRepository.updatePoints(points.get());
+            pointsRepository.update(points.get());
         }
     }
 

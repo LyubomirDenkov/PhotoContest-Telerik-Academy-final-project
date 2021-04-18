@@ -232,7 +232,6 @@ public class Contest {
         this.winnerImages = winnerImages;
     }
 
-
     public boolean isJury() {
         return isJury;
     }
@@ -240,7 +239,6 @@ public class Contest {
     public void setIsJury(boolean userIsJury) {
         this.isJury = userIsJury;
     }
-
 
     public boolean isParticipant() {
         return isParticipant;

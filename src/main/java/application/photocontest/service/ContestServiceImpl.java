@@ -46,10 +46,16 @@ public class ContestServiceImpl implements ContestService {
 
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, UserRepository userRepository,
-                              ImageRepository imageRepository, TypeRepository typeRepository,
-                              PointsRepository pointsRepository, ImageReviewRepository imageReviewRepository,
-                              ImgurService imgurService, ImageService imageService, NotificationRepository notificationRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository,
+                              UserRepository userRepository,
+                              ImageRepository imageRepository,
+                              TypeRepository typeRepository,
+                              PointsRepository pointsRepository,
+                              ImageReviewRepository imageReviewRepository,
+                              ImgurService imgurService,
+                              ImageService imageService,
+                              NotificationRepository notificationRepository) {
+
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
@@ -178,8 +184,12 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public Contest create(User user, Contest contest, Set<Integer> jurySet,
-                          Set<Integer> participantSet, Optional<MultipartFile> file, Optional<String> url) throws IOException {
+    public Contest create(User user,
+                          Contest contest,
+                          Set<Integer> jurySet,
+                          Set<Integer> participantSet,
+                          Optional<MultipartFile> file,
+                          Optional<String> url) throws IOException {
 
 
         boolean ifContestTitleExist = true;
@@ -194,8 +204,6 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-        setContestJury(jurySet, contest);
-
         String contestBackground = imgurService.uploadImageToImgurAndReturnUrl(file, url);
 
         if (!contestBackground.isBlank()) {
@@ -204,14 +212,20 @@ public class ContestServiceImpl implements ContestService {
             contest.setBackgroundImage(DEFAULT_CONTEST_BACKGROUND);
         }
 
-        Contest contest1 = contestRepository.create(contest);
-        addParticipantsToContestAndPoints(contest1, participantSet);
-        return contest1;
+        Contest contestToCreate = contestRepository.create(contest);
+        setContestJury(jurySet, contestToCreate);
+        addParticipantsToContestAndPoints(contestToCreate, participantSet);
+        contestRepository.update(contestToCreate);
+        return contestToCreate;
     }
 
     @Override
-    public Contest update(User user, Contest contest, Set<Integer> jurySet, Set<Integer> participantsSet,
-                          Optional<MultipartFile> file, Optional<String> url) throws IOException {
+    public Contest update(User user,
+                          Contest contest,
+                          Set<Integer> jurySet,
+                          Set<Integer> participantsSet,
+                          Optional<MultipartFile> file,
+                          Optional<String> url) throws IOException {
 
 
         if (!user.getUserCredentials().getUserName().equals(contest.getUser().getUserCredentials().getUserName())) {
@@ -288,7 +302,7 @@ public class ContestServiceImpl implements ContestService {
 
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
-            pointsRepository.updatePoints(points.get());
+            pointsRepository.update(points.get());
             participants.add(participantToAdd);
             userRepository.update(participantToAdd);
 
@@ -378,7 +392,7 @@ public class ContestServiceImpl implements ContestService {
 
         int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
         points.get().setPoints(pointsToIncrease);
-        pointsRepository.updatePoints(points.get());
+        pointsRepository.update(points.get());
         sendMessageWhenSuccessfullyJoinedContest(user, contest);
         userRepository.update(userToJoinInContest);
 
@@ -391,12 +405,11 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void addParticipantsToContestAndPoints(Contest contest, Set<Integer> participantSet) {
+
         User user;
-
-
-        Set<User> usersToAdd = new HashSet<>();
-        for (Integer participant : participantSet) {
-            user = userRepository.getById(participant);
+        Set<User> participants = contest.getParticipants();
+        for (Integer userId : participantSet) {
+            user = userRepository.getById(userId);
 
             if (isJuryOrOrganizer(contest.getJury(), user)) {
                 continue;
@@ -406,17 +419,11 @@ public class ContestServiceImpl implements ContestService {
 
             int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
             points.get().setPoints(pointsToIncrease);
-            pointsRepository.updatePoints(points.get());
-
-            Set<Notification> userNotifications = user.getNotifications();
-            Notification notification = sendMessageWhenInvitedToJuryOrParticipant(user, INVITED_AS_JURY, contest);
-            Notification notificationToAdd = notificationRepository.create(notification);
-            userNotifications.add(notificationToAdd);
-            user.setNotifications(userNotifications);
+            pointsRepository.update(points.get());
+            addNotificationToUserNotifications(user, contest, INVITED_AS_PARTICIPANT);
             userRepository.update(user);
         }
-        contest.setParticipants(usersToAdd);
-        contestRepository.update(contest);
+        contest.setParticipants(participants);
     }
 
     private void setContestJury(Set<Integer> jurySet, Contest contest) {
@@ -432,16 +439,19 @@ public class ContestServiceImpl implements ContestService {
 
             if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
                 jury.add(userToAdd);
-
-                Set<Notification> userNotifications = userToAdd.getNotifications();
-                Notification notification = sendMessageWhenInvitedToJuryOrParticipant(userToAdd, INVITED_AS_JURY, contest);
-                Notification notificationToAdd = notificationRepository.create(notification);
-                userNotifications.add(notificationToAdd);
-                userToAdd.setNotifications(userNotifications);
+                addNotificationToUserNotifications(userToAdd, contest, INVITED_AS_JURY);
                 userRepository.update(userToAdd);
             }
         }
         contest.setJury(jury);
+    }
+
+    private void addNotificationToUserNotifications(User user, Contest contest, String invitationRole) {
+        Set<Notification> userNotifications = user.getNotifications();
+        Notification notification = sendMessageWhenInvitedToJuryOrParticipant(user, invitationRole, contest);
+        Notification notificationToAdd = notificationRepository.create(notification);
+        userNotifications.add(notificationToAdd);
+        user.setNotifications(userNotifications);
     }
 
 
@@ -477,6 +487,12 @@ public class ContestServiceImpl implements ContestService {
     private void validateUserIsJury(Contest contest, User user) {
         if (!contest.getJury().contains(user)) {
             throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
+        }
+    }
+
+    private void validateUserIsInContestCollection(Set<User> users,User user,String message){
+        if (!users.contains(user)) {
+            throw new UnauthorizedOperationException(message);
         }
     }
 

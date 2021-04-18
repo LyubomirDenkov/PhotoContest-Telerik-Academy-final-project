@@ -21,10 +21,8 @@ public class Constants {
     //pointsReward
     public static final int POINTS_REWARD_WHEN_INVITED_TO_CONTEST = 3;
     public static final int POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST = 1;
-    public static final int POINTS_WHEN_PARTICIPANT_ADDED = 1;
 
     //contestError
-    public static final String CONTEST_INVITATIONAL_ONLY = "Content is invitational only";
     public static final String USER_IS_ALREADY_IN_THIS_CONTEST = "User is already in this contest.";
     public static final String USER_CANNOT_ADD_OTHER_USERS_IN_CONTESTS = "User cannot add other users in contests.";
     public static final String UPDATING_CONTEST_ERROR_MESSAGE = "Only the organizer of the contest can update it.";
@@ -43,19 +41,6 @@ public class Constants {
     public static final String JOIN_VIEW_OPEN_CONTESTS_ERROR_MESSAGE = "You can join/view only in open contests.";
     public static final String USER_IS_PARTICIPANT_OR_JURY_ERROR_MESSAGE = "Only a participant can upload photo.";
 
-    //MAILBOX
-    public static final String MAIL_TITLE = "From 'iPhoto' team";
-
-    //UPLOAD IMAGE
-    public static final String MAIL_TITLE_UPLOAD_PICTURE = "Successfully upload photo";
-    private static final String MESSAGE_UPLOAD_PICTURE = "You successfully upload photo to contest '%s', come back on %s to check your " +
-            "result.";
-
-    //JOIN
-    public static final String MAIL_TITLE_JOIN_CONTEST = "Successfully join contest '%s'";
-    public static final String SUCCESSFULLY_JOIN_CONTEST = "Successfully join in contest '%s', voting phase starts on %s.%n" +
-            "You have time to upload your picture before voting date.Enjoy!!";
-
     //FINISHED
     public static final String MAIL_TITLE_CONTEST_END = "Contest '%s' finished";
     //TOP
@@ -63,6 +48,6 @@ public class Constants {
 
     //NOTIFICATION
     public static final String INVITED_AS_JURY = "jury";
-    public static final String INVITED_AS_Participant = "participant";
+    public static final String INVITED_AS_PARTICIPANT = "participant";
 
 }

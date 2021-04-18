@@ -48,7 +48,7 @@ public class PointsRepositoryImpl implements PointsRepository {
 
     @Transactional
     @Override
-    public void updatePoints(Points points) {
+    public void update(Points points) {
         try (Session session = sessionFactory.openSession()) {
 
             session.beginTransaction();
