@@ -24,3 +24,66 @@ BUILD AND RUN PROJECT STEPS
 ![alt](https://i.imgur.com/jo190dO.gif)
 
 ![alt](https://i.imgur.com/bqrCrWl.gif)
+
+
+---
+                                                                 CATEGORIES
+---
+
+**NO AUTHORIZATION NEEDED**
+
+**Get**
+- Route - /api/categories
+
+      All categories method
+
+---
+
+**ORGANIZER OPERATION**
+
+**Get**
+
+- Route -  /api/categories/categoryID
+
+      Category by ID
+
+
+---
+          
+---
+
+**ORGANIZER OPERATION**
+
+**Post**
+
+- Route -  /api/categories
+
+      Create a new category
+
+---
+                                                                 IMAGES
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+- Route - /api/images
+
+      All images method
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Post**
+
+- Route -  /api/images
+
+      Uploads a new image
+
+---
+                                                                 USERS
+---
+
