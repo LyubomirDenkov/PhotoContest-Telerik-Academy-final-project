@@ -12,6 +12,11 @@ https://trello.com/b/pdC2sZtN/photo-contest
 Link to Api Documentation
 http://localhost:8080/swagger-ui.html#/
 
+iPhoto is a platform powered by an amazing community that has uploaded hundreds of thousands
+of their own photos to fuel creativity around the world. You can sign up for free.
+Either way, you've got access to over a million photos under the iPhoto
+license - which makes them free to do whatever you like with them
+
 
 BUILD AND RUN PROJECT STEPS
 ---
