@@ -222,4 +222,15 @@ public class ContestRepositoryImpl implements ContestRepository {
                     .list();
         }
     }
+
+    @Override
+    public List<Contest> mainPageOngoingContests() {
+        try (Session session = sessionFactory.openSession()) {
+
+            return session.createQuery("from Contest where phase.name like 'ongoing'" +
+                            " and type.name like 'open'",
+                    Contest.class).list();
+
+        }
+    }
 }
