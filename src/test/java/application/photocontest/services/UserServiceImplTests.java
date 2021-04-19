@@ -22,10 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static application.photocontest.Helpers.*;
 import static org.mockito.Mockito.*;
@@ -53,13 +50,10 @@ public class UserServiceImplTests {
     UserServiceImpl userService;
 
 
-
-
-
     @Test
     public void getAllUsers_Should_Return_All() {
         userService.getAllUsers();
-        Mockito.verify(userRepository,Mockito.times(1)).getAllUsers();
+        Mockito.verify(userRepository, Mockito.times(1)).getAllUsers();
     }
 
 
@@ -78,7 +72,7 @@ public class UserServiceImplTests {
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> userService.getUserContests(user,5, Optional.empty()));
+                () -> userService.getUserContests(user, 5, Optional.empty()));
 
     }
 
@@ -89,10 +83,9 @@ public class UserServiceImplTests {
 
         when(contestRepository.getUserContests(user.getId(), Optional.empty())).thenReturn(List.of(contest));
 
-        userService.getUserContests(user,user.getId(), Optional.empty());
+        userService.getUserContests(user, user.getId(), Optional.empty());
 
-        verify(contestRepository,times(1)).getUserContests(user.getId(), Optional.empty());
-
+        verify(contestRepository, times(1)).getUserContests(user.getId(), Optional.empty());
 
     }
 
@@ -104,7 +97,7 @@ public class UserServiceImplTests {
 
         userService.getAll(organizer);
 
-        verify(userRepository,times(1)).getAll();
+        verify(userRepository, times(1)).getAll();
 
     }
 
@@ -113,7 +106,7 @@ public class UserServiceImplTests {
 
         User organizer = createMockOrganizer();
 
-        when(userService.getById(organizer,254)).thenThrow(EntityNotFoundException.class);
+        when(userService.getById(organizer, 254)).thenThrow(EntityNotFoundException.class);
 
         Assertions.assertThrows(EntityNotFoundException.class,
                 () -> userRepository.getById(254));
@@ -123,9 +116,22 @@ public class UserServiceImplTests {
     public void getById_Should_Throw_When_Not_Authorized() {
 
         User user = createMockUser();
+        user.setRoles(new HashSet<>());
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> userService.getById(user,254));
+                () -> userService.getById(user, 254));
+    }
+
+    @Test
+    public void getById_Should_Return_When_IsAuthenticatedAndItsOrganizerOrHisOwnAccount() {
+
+        User user = createMockUser();
+
+        when(userRepository.getById(1)).thenReturn(user);
+
+        userService.getById(user, 1);
+
+        verify(userRepository, times(1)).getById(1);
     }
 
     @Test
@@ -136,15 +142,15 @@ public class UserServiceImplTests {
 
         userService.getLeaderboard(user);
 
-        verify(userRepository,times(1)).getLeaderboard();
+        verify(userRepository, times(1)).getLeaderboard();
     }
 
     @Test
     public void create_Should_Throw_When_DuplicateName() {
-     User user = createMockUser();
+        User user = createMockUser();
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> userService.create(user,Optional.empty(),Optional.empty()));
+                () -> userService.create(user, Optional.empty(), Optional.empty()));
     }
 
 
@@ -154,20 +160,18 @@ public class UserServiceImplTests {
         Set<Role> userRoles = new HashSet<>();
         user.setRoles(userRoles);
         Notification notification = createMockNotification();
-        
-
 
 
         when(userRepository.getUserByUserName(user.getUserCredentials().getUserName())).thenThrow(EntityNotFoundException.class);
 
-        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.empty())).thenReturn("");
+        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.empty())).thenReturn("");
 
         when(userRepository.create(user)).thenReturn(user);
 
         when(userRepository.update(user)).thenReturn(user);
 
 
-        userService.create(user,Optional.empty(),Optional.empty());
+        userService.create(user, Optional.empty(), Optional.empty());
 
         verify(userRepository, times(1)).update(user);
     }
@@ -176,9 +180,8 @@ public class UserServiceImplTests {
     @Test
     public void getAllPotentialJury_Should_Return_All() {
         userService.getAllPotentialJury();
-        Mockito.verify(userRepository,Mockito.times(1)).getAllPotentialJury();
+        Mockito.verify(userRepository, Mockito.times(1)).getAllPotentialJury();
     }
-
 
 
     @Test
@@ -188,7 +191,7 @@ public class UserServiceImplTests {
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> userService.update(user,organizer,Optional.empty(),Optional.empty()));
+                () -> userService.update(user, organizer, Optional.empty(), Optional.empty()));
 
     }
 
@@ -196,9 +199,48 @@ public class UserServiceImplTests {
     public void update_Should_Update_WhenValidationsOk() throws IOException {
         User user = createMockUser();
 
-        userService.update(user,user,Optional.empty(),Optional.empty());
+        userService.update(user, user, Optional.empty(), Optional.empty());
 
-        verify(userRepository,times(1)).update(user);
+        verify(userRepository, times(1)).update(user);
+
+    }
+
+
+    @Test
+    public void getUserNotifications_Should_ThrowException_When_UserIsNotAuthenticated() {
+        User user = createMockUser();
+        user.setRoles(new HashSet<>());
+
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.getUserNotifications(user, 1));
+
+    }
+
+    @Test
+    public void getUserNotifications_Should_ThrowException_When_IsNotUserAccount() {
+        User user = createMockUser();
+        user.setId(1);
+
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.getUserNotifications(user, 22));
+
+    }
+
+
+    @Test
+    public void getUserNotifications_Should_ReturnNotifications_When_UserIsAuthenticatedAndItsHisAccount() {
+        User user = createMockUser();
+        user.setId(1);
+        List<Notification> notifications = new ArrayList<>();
+
+
+        when(notificationRepository.getAll(1)).thenReturn(notifications);
+
+        userService.getUserNotifications(user, 1);
+
+        verify(notificationRepository, times(1)).getAll(1);
 
     }
 

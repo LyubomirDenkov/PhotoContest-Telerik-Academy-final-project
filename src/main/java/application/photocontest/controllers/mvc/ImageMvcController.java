@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static application.photocontest.service.constants.Constants.CURRENT_USER;
+import static application.photocontest.constants.Constants.CURRENT_USER;
 
 @Controller
 @RequestMapping("images")

@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import static application.photocontest.service.constants.Constants.MAIL_TITLE_CONTEST_END;
-import static application.photocontest.service.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
+import static application.photocontest.constants.Constants.MAIL_TITLE_CONTEST_END;
+import static application.photocontest.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
 
 
 public class NotificationHelper {

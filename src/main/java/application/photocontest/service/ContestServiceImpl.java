@@ -24,7 +24,7 @@ import java.util.Set;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
-import static application.photocontest.service.constants.Constants.*;
+import static application.photocontest.constants.Constants.*;
 import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenInvitedToJuryOrParticipant;
 import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenSuccessfullyJoinedContest;
 
@@ -34,6 +34,8 @@ public class ContestServiceImpl implements ContestService {
     private static final String DEFAULT_CONTEST_BACKGROUND = "https://i.imgur.com/ophF343.jpg";
     private static final String IMAGE_IS_ALREADY_UPLOADED_ERROR_MESSAGE = "Image is already uploaded to contest";
     private static final String CONTEST_PHASE_IS_NOT_VALID_ERROR_MESSAGE = "Contest phase is not valid";
+    private static final String USER_CANNOT_GET_ALL_CONTEST_WITHOUT_PHASE_PARAMETER = "User cannot get all contest without phase parameter";
+    private static final String NOT_AUTHORIZED_TO_SEE_OTHER_FINISHED_CONTESTS_WHERE_NOT_PARTICIPATED = "Not authorized to see other finished contests where not participated";
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
@@ -81,7 +83,7 @@ public class ContestServiceImpl implements ContestService {
             if (isOrganizer) {
                 return contestRepository.getAll();
             } else {
-                throw new UnsupportedOperationException("Cannot get all contests!");
+                throw new UnauthorizedOperationException(USER_CANNOT_GET_ALL_CONTEST_WITHOUT_PHASE_PARAMETER);
             }
         }
 
@@ -171,7 +173,7 @@ public class ContestServiceImpl implements ContestService {
 
         if (contest.getPhase().getName().equals(ContestPhases.VOTING.toString())) {
             if (!user.isOrganizer()) {
-                validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGT_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+                validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGTH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
             }
         }
 
@@ -287,12 +289,18 @@ public class ContestServiceImpl implements ContestService {
     public List<Image> getContestImages(User user, int contestId) {
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
+        Contest contest = contestRepository.getById(contestId);
 
-        if (!user.isOrganizer()) {
-
+        if (isJuryOrOrganizer(contest.getJury(),user)){
+            return contestRepository.getContestImages(contestId);
         }
 
-        return contestRepository.getContestImages(contestId);
+        if (contest.getPhase().getName().equals(ContestPhases.FINISHED.toString())){
+            if (contest.getParticipants().contains(user)){
+                return contestRepository.getContestImages(contestId);
+            }
+        }
+        throw new UnauthorizedOperationException(NOT_AUTHORIZED_TO_SEE_OTHER_FINISHED_CONTESTS_WHERE_NOT_PARTICIPATED);
     }
 
     private void updateParticipants(Contest contest, Set<Integer> newParticipants) {

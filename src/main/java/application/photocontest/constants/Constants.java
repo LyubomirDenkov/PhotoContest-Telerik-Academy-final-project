@@ -1,4 +1,4 @@
-package application.photocontest.service.constants;
+package application.photocontest.constants;
 
 public class Constants {
 
@@ -15,7 +15,7 @@ public class Constants {
     public static final int MIN_RATING_POINTS = 1;
     public static final String ONLY_JURY_CAN_RATE_IMAGES = "Only jury can rate images.";
     public static final String ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only jury can access voting contests.";
-    public static final String USER_WITH_ENOUGT_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only user with 150 or more points can access voting contests.";
+    public static final String USER_WITH_ENOUGTH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only user with 150 or more points can access voting contests.";
 
     //pointsReward
     public static final int POINTS_REWARD_WHEN_INVITED_TO_CONTEST = 3;

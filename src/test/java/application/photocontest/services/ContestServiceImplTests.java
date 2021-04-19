@@ -1,5 +1,6 @@
 package application.photocontest.services;
 
+import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
@@ -57,20 +58,231 @@ public class ContestServiceImplTests {
     ContestServiceImpl contestService;
 
 
-
     @Test
     public void getAll_Should_ReturnAllContests_When_IsCalled() {
 
         List<Contest> result = new ArrayList<>();
         User organizer = createMockOrganizer();
 
-        when(contestService.getAll(organizer,Optional.empty()))
+        when(contestService.getAll(organizer, Optional.empty()))
                 .thenReturn(result);
 
-        contestService.getAll(organizer,Optional.empty());
+        contestService.getAll(organizer, Optional.empty());
 
-        verify(contestRepository,times(1)).getAll();
+        verify(contestRepository, times(1)).getAll();
     }
+
+
+    @Test
+    public void getAll_Should_Throw_When_IsCalledFromUserWithoutPhaseParameter() {
+
+        User user = createMockUser();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.getAll(user, Optional.empty()));
+
+
+    }
+
+
+    @Test
+    public void getAll_Should_ReturnOngoing_When_PhaseIsCalledOngoing() {
+
+        User user = createMockOrganizer();
+        boolean isOrganizer = true;
+        List<Contest> contests = new ArrayList<>();
+
+        when(contestRepository.getOngoingContests(isOrganizer)).thenReturn(contests);
+
+        contestService.getAll(user, Optional.of("ongoing"));
+
+        verify(contestRepository, times(1)).getOngoingContests(isOrganizer);
+
+    }
+
+    @Test
+    public void getAll_Should_ReturnVoting_When_PhaseIsCalledVoting() {
+
+        User user = createMockOrganizer();
+        boolean isOrganizer = true;
+        List<Contest> contests = new ArrayList<>();
+
+        when(contestRepository.getVotingContests(user.getId(),isOrganizer)).thenReturn(contests);
+
+        contestService.getAll(user, Optional.of("voting"));
+
+        verify(contestRepository, times(1)).getVotingContests(user.getId(), isOrganizer);
+
+    }
+
+    @Test
+    public void getAll_Should_ReturnFinished_When_PhaseIsCalledFinished() {
+
+        User user = createMockOrganizer();
+        boolean isOrganizer = true;
+        List<Contest> contests = new ArrayList<>();
+
+        when(contestRepository.getFinishedContests(user.getId(),isOrganizer)).thenReturn(contests);
+
+        contestService.getAll(user, Optional.of("finished"));
+
+        verify(contestRepository, times(1)).getFinishedContests(user.getId(), isOrganizer);
+
+    }
+
+    @Test
+    public void getAll_Should_Throw_When_UserDontHaveEnoughPointsToCanSeeVotingContests() {
+
+        User user = createMockUser();
+        user.setPoints(Set.of(new Points(1, 22)));
+
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.getAll(user, Optional.of("voting")));
+
+    }
+
+    @Test
+    public void getAll_Should_Throw_When_PhaseIsNotValid() {
+
+        User user = createMockOrganizer();
+
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> contestService.getAll(user, Optional.of("something")));
+
+    }
+
+    @Test
+    public void getByUserId_Should_ReturnContest_When_Exist() {
+
+        List<Contest> contests = new ArrayList<>();
+
+        when(contestRepository.getByUserId(1)).thenReturn(contests);
+
+        contestService.getByUserId(1);
+
+        verify(contestRepository, times(1)).getByUserId(1);
+
+    }
+
+
+    @Test
+    public void removeImageFromContest_Should_ThrowException_When_UserIsNotJury() {
+
+        User user = createMockUser();
+        Contest contest = createMockContest();
+        Image image = createMockImage();
+        contest.setJury(new HashSet<>());
+
+
+        when(contestRepository.getById(1)).thenReturn(contest);
+
+        when(imageRepository.getById(1)).thenReturn(image);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.removeImageFromContest(user, contest.getId(), image.getId()));
+
+
+    }
+
+    @Test
+    public void removeImageFromContest_Should_RemoveImage_When_UserIsJury() {
+
+        User user = createMockOrganizer();
+        Contest contest = createMockContest();
+        Image image = createMockImage();
+        contest.setJury(Set.of(user));
+        contest.setImages(new HashSet<>());
+        contest.setWinnerImages(new HashSet<>());
+
+
+        when(contestRepository.getById(1)).thenReturn(contest);
+
+        when(imageRepository.getById(1)).thenReturn(image);
+
+
+        contestService.removeImageFromContest(user, contest.getId(), image.getId());
+
+        verify(contestRepository, times(1)).update(contest);
+
+    }
+
+
+    @Test
+    public void mainPageOngoingContest_Should_Return_When_IsCall() {
+
+
+        List<Contest> contestList = new ArrayList<>();
+
+
+        when(contestRepository.mainPageOngoingContests()).thenReturn(contestList);
+
+
+        contestService.mainPageOngoingContest();
+
+
+        verify(contestRepository, times(1)).mainPageOngoingContests();
+
+    }
+
+    @Test
+    public void getAllTypes_Should_Return_When_IsCall() {
+
+
+        List<Type> types = new ArrayList<>();
+
+
+        when(typeRepository.getAll()).thenReturn(types);
+
+
+        contestService.getAllTypes();
+
+
+        verify(typeRepository, times(1)).getAll();
+
+    }
+
+
+    @Test
+    public void getContestImages_Should_ThrowException_When_NotAuthenticated() {
+
+        User user = createMockUser();
+        user.setRoles(new HashSet<>());
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.getContestImages(user, 1));
+
+    }
+
+    @Test
+    public void getContestImages_Should_ThrowException_When_UserIsNotParticipatedInContest() {
+
+        User user = createMockUser();
+        Contest contest = createMockContest();
+        contest.setParticipants(new HashSet<>());
+        contest.setPhase(new Phase(1, "finished"));
+
+        when(contestRepository.getById(1)).thenReturn(contest);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.getContestImages(user, 1));
+
+    }
+
+    @Test
+    public void getContestImages_Should_ReturnImages_When_UserIsJury() {
+
+        User user = createMockOrganizer();
+        Contest contest = createMockContest();
+
+        when(contestRepository.getById(1)).thenReturn(contest);
+
+        contestService.getContestImages(user, 1);
+
+        verify(contestRepository, times(1)).getContestImages(1);
+    }
+
 
     @Test
     public void getAll_Should_Throw_When_UserIsNotOrganizer() {
@@ -81,7 +293,7 @@ public class ContestServiceImplTests {
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.getAll(user,Optional.empty()));
+                () -> contestService.getAll(user, Optional.empty()));
     }
 
     @Test
@@ -93,9 +305,8 @@ public class ContestServiceImplTests {
         when(contestRepository.getById(254)).thenThrow(EntityNotFoundException.class);
 
         Assertions.assertThrows(EntityNotFoundException.class,
-                () -> contestService.getById(organizer,254));
+                () -> contestService.getById(organizer, 254));
     }
-
 
 
     @Test
@@ -107,22 +318,20 @@ public class ContestServiceImplTests {
 
         when(contestRepository.getById(1)).thenReturn(contest);
 
-        contestService.getById(organizer,1);
+        contestService.getById(organizer, 1);
 
         Mockito.verify(contestRepository, Mockito.times(1)).getById(1);
     }
 
 
-
-
     @Test
     public void getVoting_Should_Throw_When_UserWithLessPoints() {
         User user = createMockUser();
-        user.setPoints(Set.of(new Points(2,50)));
+        user.setPoints(Set.of(new Points(2, 50)));
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.getAll(user,Optional.of("voting")));
+                () -> contestService.getAll(user, Optional.of("voting")));
     }
 
     @Test
@@ -152,21 +361,24 @@ public class ContestServiceImplTests {
     @Test
     public void create_Should_Throw_When_DuplicateName() {
         Contest contest = createMockContest();
-        Set<Integer> jury = Set.of(1,2,3);
-        Set<Integer> participants = Set.of(4,5,6);
+        Set<Integer> jury = Set.of(1, 2, 3);
+        Set<Integer> participants = Set.of(4, 5, 6);
 
         when(contestRepository.getByTitle(contest.getTitle())).thenReturn(contest);
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> contestService.create(contest.getUser(),contest,jury,participants, Optional.empty(),Optional.empty()));
+                () -> contestService.create(contest.getUser(), contest, jury, participants, Optional.empty(), Optional.empty()));
     }
 
     @Test
     public void create_Should_Create_When_ValidationsOk() throws IOException {
         Contest contest = createMockContest();
+        contest.setParticipants(new HashSet<>());
+        contest.setJury(new HashSet<>());
         User user = createMockUser();
         User organizer = createMockOrganizer();
         User userParticipant = createMockUser();
+        userParticipant.setId(5);
         Set<Integer> jury = Set.of(user.getId());
         Set<Integer> participants = Set.of(userParticipant.getId());
 
@@ -176,15 +388,15 @@ public class ContestServiceImplTests {
 
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
-        Mockito.when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.empty())).thenReturn("");
+        Mockito.when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.empty())).thenReturn("");
 
         Mockito.when(userRepository.getById(userParticipant.getId())).thenReturn(userParticipant);
 
         Mockito.when(contestRepository.create(contest)).thenReturn(contest);
 
-        contestService.create(organizer,contest,jury,participants,Optional.empty(),Optional.empty());
+        contestService.create(organizer, contest, jury, participants, Optional.empty(), Optional.empty());
 
-        Mockito.verify(contestRepository,Mockito.times(1)).create(contest);
+        Mockito.verify(contestRepository, Mockito.times(1)).create(contest);
     }
 
     @Test
@@ -193,22 +405,24 @@ public class ContestServiceImplTests {
         User organizer = createMockOrganizer();
         contest.setUser(organizer);
         User user = createMockUser();
-        Set<Integer> jury = Set.of(1,2,3);
-        Set<Integer> participants = Set.of(4,5,6);
+        Set<Integer> jury = Set.of(1, 2, 3);
+        Set<Integer> participants = Set.of(4, 5, 6);
 
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.update(user,contest,jury,participants,Optional.empty(),Optional.empty()));
+                () -> contestService.update(user, contest, jury, participants, Optional.empty(), Optional.empty()));
 
     }
 
     @Test
     public void update_Should_Update_When_ValidationsOk() throws IOException {
         Contest contest = createMockContest();
+        contest.setParticipants(new HashSet<>());
+        contest.setJury(new HashSet<>());
         User user = createMockUser();
         User organizer = createMockOrganizer();
         User userParticipant = createMockUser();
-        Set<Integer> jury = Set.of(user.getId());
+        Set<Integer> jury = new HashSet<>();
         Set<Integer> participants = Set.of(userParticipant.getId());
         Notification notification = createMockNotification();
         notification.setUser(user);
@@ -218,7 +432,7 @@ public class ContestServiceImplTests {
 
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
-        contestService.update(organizer,contest,jury,participants,Optional.empty(),Optional.empty());
+        contestService.update(organizer, contest, jury, participants, Optional.empty(), Optional.empty());
 
         Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
@@ -233,7 +447,7 @@ public class ContestServiceImplTests {
         Set<Integer> jury = Set.of(user.getId());
         Set<Integer> participants = Set.of(userParticipant.getId());
 
-        Points points = new Points(6,100);
+        Points points = new Points(6, 100);
 
 
         Mockito.when(userRepository.getOrganizers()).thenReturn(List.of(organizer));
@@ -242,13 +456,13 @@ public class ContestServiceImplTests {
 
         pointsRepository.update(points);
 
-        Mockito.verify(pointsRepository,Mockito.times(1)).update(points);
+        Mockito.verify(pointsRepository, Mockito.times(1)).update(points);
 
         userRepository.update(user);
 
-        Mockito.verify(userRepository,Mockito.times(1)).update(user);
+        Mockito.verify(userRepository, Mockito.times(1)).update(user);
 
-        contestService.update(organizer,contest,jury,participants,Optional.empty(),Optional.empty());
+        contestService.update(organizer, contest, jury, participants, Optional.empty(), Optional.empty());
 
         Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
@@ -256,7 +470,7 @@ public class ContestServiceImplTests {
 
 
     @Test
-    public void rateImage_Should_Throw_When_RatingTwice()  {
+    public void rateImage_Should_Throw_When_RatingTwice() {
         Contest contest = createMockContest();
         User user = createMockUser();
         Image image = createMockImage();
@@ -267,13 +481,13 @@ public class ContestServiceImplTests {
 
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
-       Assertions.assertThrows(UnauthorizedOperationException.class,
-               () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId()));
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> contestService.rateImage(user, imageReview, contest.getId(), image.getId()));
 
     }
 
     @Test
-    public void rateImage_Should_ThrowException_When_UserIsNotJury()  {
+    public void rateImage_Should_ThrowException_When_UserIsNotJury() {
         Contest contest = createMockContest();
         Phase phase = new Phase();
         phase.setId(2);
@@ -284,18 +498,17 @@ public class ContestServiceImplTests {
         ImageReview imageReview = createMockImageReview();
 
 
-
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.rateImage(user, imageReview, contest.getId(),image.getId()));
+                () -> contestService.rateImage(user, imageReview, contest.getId(), image.getId()));
 
     }
 
     @Test
-    public void rateImage_Should_Rate_When_ValidationsOk()  {
+    public void rateImage_Should_Rate_When_ValidationsOk() {
         Contest contest = createMockContest();
         Phase phase = new Phase();
         phase.setId(2);
@@ -315,19 +528,19 @@ public class ContestServiceImplTests {
         testImageReview.setPoints(5);
         testImageReview.setComment("comment");
 
-        
+
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
-        Mockito.when(imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(),contest.getId(),image.getId()))
+        Mockito.when(imageReviewRepository.getImageReviewUserContestAndImageId(user.getId(), contest.getId(), image.getId()))
                 .thenThrow(EntityNotFoundException.class);
 
         Mockito.when(imageReviewRepository.create(imageReview)).thenReturn(imageReview);
 
-        contestService.rateImage(user, imageReview, contest.getId(),image.getId());
+        contestService.rateImage(user, imageReview, contest.getId(), image.getId());
 
-        verify(imageReviewRepository,times(1)).create(imageReview);
+        verify(imageReviewRepository, times(1)).create(imageReview);
 
 
     }
@@ -340,14 +553,13 @@ public class ContestServiceImplTests {
         Image image = createMockImage();
 
 
-
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(imageRepository.getById(image.getId())).thenReturn(image);
 
-        contestService.addImageToContest(user,contest.getId(),image.getId());
+        contestService.addImageToContest(user, contest.getId(), image.getId());
 
-        Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+        Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
     }
 
@@ -359,14 +571,13 @@ public class ContestServiceImplTests {
         contest.setParticipants(userToAdd);
 
 
-
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
-        contestService.joinContest(user,contest.getId(),user.getId());
+        contestService.joinContest(user, contest.getId(), user.getId());
 
-        Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+        Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
     }
 
@@ -380,13 +591,13 @@ public class ContestServiceImplTests {
 
         Mockito.when(contestRepository.getById(contest.getId())).thenReturn(contest);
 
-        Mockito.when(contestRepository.getContestByImageUploaderId(contest.getId(),user.getId())).thenThrow(EntityNotFoundException.class);
+        Mockito.when(contestRepository.getContestByImageUploaderId(contest.getId(), user.getId())).thenThrow(EntityNotFoundException.class);
 
-        Mockito.when(imageService.create(user,image,Optional.empty(),Optional.of(image.getUrl()))).thenReturn(image);
+        Mockito.when(imageService.create(user, image, Optional.empty(), Optional.of(image.getUrl()))).thenReturn(image);
 
-        contestService.uploadImageToContest(user,image,contest.getId(),Optional.empty(),Optional.of(image.getUrl()));
+        contestService.uploadImageToContest(user, image, contest.getId(), Optional.empty(), Optional.of(image.getUrl()));
 
-        Mockito.verify(contestRepository,Mockito.times(1)).update(contest);
+        Mockito.verify(contestRepository, Mockito.times(1)).update(contest);
 
     }
 
@@ -398,7 +609,7 @@ public class ContestServiceImplTests {
         Contest contest = createMockContest();
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.getContestParticipants(user,contest.getId()));
+                () -> contestService.getContestParticipants(user, contest.getId()));
     }
 
     @Test
@@ -423,7 +634,7 @@ public class ContestServiceImplTests {
         Image image = createMockImage();
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> contestService.removeImageFromContest(user,contest.getId(),image.getId()));
+                () -> contestService.removeImageFromContest(user, contest.getId(), image.getId()));
     }
 
     @Test

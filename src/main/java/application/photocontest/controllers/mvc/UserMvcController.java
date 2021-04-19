@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
-import static application.photocontest.service.constants.Constants.CURRENT_USER;
+import static application.photocontest.constants.Constants.CURRENT_USER;
 
 @Controller
 @RequestMapping("/users")

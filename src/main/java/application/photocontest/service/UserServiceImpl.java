@@ -1,5 +1,6 @@
 package application.photocontest.service;
 
+import application.photocontest.constants.Constants;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
@@ -19,8 +20,6 @@ import java.util.*;
 
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.*;
-import static application.photocontest.service.constants.Constants.INVITED_AS_JURY;
-import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenInvitedToJuryOrParticipant;
 import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenUserCreated;
 
 @Service
@@ -30,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
     private static final String SELF_NOTIFICATIONS_ERROR_MESSAGE = "You can view only your notifications.";
     private static final String IS_USER_OWN_ACCOUNT_ERROR_MESSAGE = "Each user can edit his own account.";
+    private static final String USER_CAN_ACCESS_ONLY_HIS_OWN_ACCOUNT_ERROR_MESSAGE = "User can access only his own account";
 
     private final UserRepository userRepository;
     private final ImgurService imgurService;
@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Notification> getUserNotifications(User user, int id) {
+
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         verifyIsUserOwnAccount(user.getId(), id, SELF_NOTIFICATIONS_ERROR_MESSAGE);
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         if (!user.isOrganizer()) {
-            verifyIsUserOwnAccount(user.getId(), id, "something");
+            verifyIsUserOwnAccount(user.getId(), id, USER_CAN_ACCESS_ONLY_HIS_OWN_ACCOUNT_ERROR_MESSAGE);
         }
 
         return userRepository.getById(id);

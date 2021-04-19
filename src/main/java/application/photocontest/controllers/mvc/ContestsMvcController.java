@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static application.photocontest.service.constants.Constants.*;
+import static application.photocontest.constants.Constants.*;
 
 @Controller
 @RequestMapping("/contests")
