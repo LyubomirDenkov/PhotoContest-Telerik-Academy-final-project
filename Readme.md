@@ -1,6 +1,4 @@
 
-![](ReadMeImages/logo.png)
-
 ![alt](https://i.imgur.com/5jSDw6U.gif)
 
 iPhoto Database relations:
