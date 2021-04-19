@@ -47,8 +47,8 @@
     <div class="container-fluid container-xxl d-flex align-items-center">
 
         <div id="logo" class="me-auto">
-<!--             Uncomment below if you prefer to use a text logo
-            <h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <!--             Uncomment below if you prefer to use a text logo
+                        <h1><a href="index.html">The<span>Event</span></a></h1>-->
             <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
                                                             src="../static/assets/img/logo.png" alt="" title=""></a>
         </div>
@@ -69,11 +69,11 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                       th:href="@{/users}">Users</a>
+                <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                            th:href="@{/users}">Users</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                                                             th:href="@{/categories}">Categories</a>
+                <li><a class="nav-link" href="#"
+                       th:href="@{/categories}">Categories</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -147,9 +147,13 @@
                             <p th:text="*{contest.getPhase().getName().toUpperCase()}">Quas alias incidunt</p>
                             <div class="social">
                                 <a th:if="${currentUser == null}"
-                                   th:href="@{/auth/login}" href="#"><button class="glow-on-hover">VISIT</button></a>
+                                   th:href="@{/auth/login}" href="#">
+                                    <button class="glow-on-hover">VISIT</button>
+                                </a>
                                 <a th:if="${currentUser != null}"
-                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#"><button class="glow-on-hover">VISIT</button></a>
+                                   th:href="@{/contests/{id}(id=${contest.getId()})}" href="#">
+                                    <button class="glow-on-hover">VISIT</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -171,10 +175,12 @@
                     <div class="hotel">
                         <div class="hotel-img">
                             <a th:if="${currentUser != null}" href="#" th:href="@{/images/{id}(id=${image.getId()})}">
-                            <img th:src="*{image.getUrl()}" src="../static/assets/img/hotels/1.jpg" alt="Hotel 1" class="img-fluid">
+                                <img th:src="*{image.getUrl()}" src="../static/assets/img/hotels/1.jpg" alt="Hotel 1"
+                                     class="img-fluid">
                             </a>
                             <a th:if="${currentUser == null}" href="#" th:href="@{/auth/login}">
-                                <img th:src="*{image.getUrl()}" src="../static/assets/img/hotels/1.jpg" alt="Hotel 1" class="img-fluid">
+                                <img th:src="*{image.getUrl()}" src="../static/assets/img/hotels/1.jpg" alt="Hotel 1"
+                                     class="img-fluid">
                             </a>
                         </div>
                         <h3 th:text="*{image.getTitle()}"></h3>
