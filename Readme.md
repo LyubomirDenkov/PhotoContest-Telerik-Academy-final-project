@@ -1,6 +1,8 @@
 
 ![](ReadMeImages/logo.png)
 
+![alt](https://imgur.com/9NPXWfa.gif)
+
 iPhoto Database relations:
 ![](ReadMeImages/iPhotoDB.png)
 
