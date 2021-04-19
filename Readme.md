@@ -54,11 +54,18 @@ BUILD AND RUN PROJECT STEPS
 
 **ORGANIZER OPERATION**
 
+**Request Body**
+
 **Post**
+
 
 - Route -  /api/categories
 
       Create a new category
+      Example:
+      {
+        "name": "Nature"
+      }
 
 ---
                                                                  IMAGES
@@ -79,10 +86,12 @@ BUILD AND RUN PROJECT STEPS
 
 **Post**
 
-- Route -  /api/images
+- Route -  /api/images/upload
 
       Uploads a new image
 
+
+![](ReadMe images/upload image.png)
 ---
                                                                  USERS
 ---
@@ -176,6 +185,7 @@ BUILD AND RUN PROJECT STEPS
 
       Creates a new user
 
+![](ReadMe images/userRegister.png)
 ---
 
 ---
@@ -187,5 +197,139 @@ BUILD AND RUN PROJECT STEPS
 - Route -  /api/users/userID
 
       Updates user
+![](ReadMe images/userUpdate.png)
+---
 
 ---
+                                                                 CONTESTS
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+- Route - /api/contests
+
+      Returns all users
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+- Route - /api/contests/contestID
+
+      Returns contest by id
+
+---
+
+**ORGANIZER OPERATION**
+
+**Get**
+- Route - /api/contests/contestID/participants
+
+      Returns the participants in contest
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+- Route - /api/contests/contestID/images
+
+      Returns the images in contest
+
+---
+
+---
+
+**ORGANIZER OPERATION**
+
+**POST**
+- Route - /api/contests
+
+      Create a new contest
+![](ReadMe images/create contest.png)
+
+---
+
+---
+
+**ORGANIZER OPERATION**
+
+**Put**
+- Route - /api/contests
+
+      Updates contest
+![](ReadMe images/update contest.png)
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Put**
+- Route - /api/contests/contestID/user/userID
+
+      Join user to contest
+
+---
+
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Post**
+- Route - /api/contests/contestID/upload
+
+      Uploads an image to contest
+![](ReadMe images/uploadToContest.png)
+
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Put**
+- Route - /api/contests/contestID/image/imageID
+
+      Adds an image to contest
+      Does not require multi-part
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Put**
+- Route - /api/contests/contestID/image/remove
+
+      Removes an image from contest
+
+---
+
+---
+
+**JURY OPERATION**
+
+**Put**
+- Route - /api/contests/contestID/image/rate
+
+      Rates an image from contest
+![](ReadMe images/rateImage.png)
+
+---
+
+
+
+
+
+
