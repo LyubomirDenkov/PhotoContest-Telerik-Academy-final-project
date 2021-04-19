@@ -43,21 +43,29 @@ public class CategoryMvcController {
 
 
     @GetMapping
-    public String getAll() {
+    public String getAll(Model model, HttpSession session) {
+
+        try {
+
+            User currentUser = authenticationHelper.tryGetUser(session);
+            model.addAttribute("currentUser", currentUser);
+        } catch (AuthenticationFailureException e) {
+            return "error";
+        }
         return "categories";
     }
 
     @PostMapping("/new")
-    public String create(@Valid @ModelAttribute("category") CategoryDto categoryDto, HttpSession session,
-                         BindingResult errors) {
+    public String handleCreateCategoryPage(@Valid @ModelAttribute("category") CategoryDto categoryDto, HttpSession session,
+                                           BindingResult errors) {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
             if (errors.hasErrors()) {
                 return "category-new";
             }
-            Category category = categoryMapper.fromDto(categoryDto);
 
+            Category category = categoryMapper.fromDto(categoryDto);
             categoryService.create(user, category);
 
             return "redirect:/categories";
@@ -73,8 +81,9 @@ public class CategoryMvcController {
     public String showNewCategoryPage(Model model, HttpSession session) {
 
         try {
-            User currentUser = authenticationHelper.tryGetUser(session);
 
+            User currentUser = authenticationHelper.tryGetUser(session);
+            model.addAttribute("currentUser", currentUser);
             model.addAttribute("category", new CategoryDto());
 
             return "category-new";

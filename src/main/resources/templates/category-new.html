@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Categories</title>
-    <link rel="icon" type="image/png" href="../static/assets/img/navbar-logo.svg" th:href="@{/assets/img/navbar-logo.svg}"/>
-    <link href="../static/css/style.css" th:href="@{/style.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+          rel="apple-touch-icon">
 
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -34,6 +35,54 @@
 
 </head>
 <body>
+<!-- ======= Header ======= -->
+<header id="header" class="d-flex align-items-center ">
+    <div class="container-fluid container-xxl d-flex align-items-center">
+
+        <div id="logo" class="me-auto">
+            <!--             Uncomment below if you prefer to use a text logo
+                        <h1><a href="index.html">The<span>Event</span></a></h1>-->
+            <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
+                                                            src="../static/assets/img/logo.png" alt="" title=""></a>
+        </div>
+
+        <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul th:if="${currentUser == null}">
+                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                <li><a class="nav-link scrollto" href="#about">About</a></li>
+                <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+                <li><a class="nav-link scrollto" href="#hotels">Top pictures</a></li>
+                <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
+            </ul>
+            <ul th:if="${currentUser != null}">
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/users/leaderboard}">Leaderboard</a>
+                </li>
+
+                <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+                </li>
+                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
+                                                             th:href="@{/users}">Users</a>
+                </li>
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/notifications}">Notifications</a>
+                </li>
+
+                <li><a class="nav-link" href="#"
+                       th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
+                </li>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#buy-tickets">Logout</a>
+    </div>
+</header><!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
 
 <div class="container">
     <div class="row">
@@ -48,7 +97,11 @@
                             <label for="inputFirstName">Category name</label>
                             <p class="error-custom" th:errors="*{name}">Category name error.</p>
                         </div>
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Create</button>
+                        <li>
+                            <a>
+                                <button class="glow-on-hover" type="submit">CREATE</button>
+                            </a>
+                        </li>
                     </form>
                 </div>
             </div>

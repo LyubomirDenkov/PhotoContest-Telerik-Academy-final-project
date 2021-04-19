@@ -50,6 +50,21 @@
             <p>Here are the categories of our contests</p>
         </div>
 
+        <div class="outer">
+            <div th:if="${currentUser.isOrganizer()}">
+                <div class="inner">
+                    <ul>
+                        <li><a class="nav-link" href="#"
+
+                               th:href="@{/categories/new}">
+                            <button class="glow-on-hover" type="button">Create New</button>
+                        </a></li>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         <div class="row" data-aos="fade-up" data-aos-delay="100">
 
             <div class="col-lg-4 col-md-4" th:each="category : ${categories}">
