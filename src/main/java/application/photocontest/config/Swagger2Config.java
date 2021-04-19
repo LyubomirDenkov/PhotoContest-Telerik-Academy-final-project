@@ -47,8 +47,11 @@ public class Swagger2Config {
     }
 
     private String description(){
-        return "Welcome to Iphoto Documentation. The DeliverIT API allows you to do stuff. \n" +
-                "See also at: https://github.com/LyubomirDenkov/DeliverIt-documentation";
+        return "iPhoto is a platform powered by an amazing community that has uploaded hundreds of thousands\n" +
+                "of their own photos to fuel creativity around the world. You can sign up for free.\n" +
+                "Either way, you've got access to over a million photos under the iPhoto\n" +
+                "license - which makes them free to do whatever you like with them. \n" +
+                "See also at: https://gitlab.com/Nikolayy9/photo-contest";
     }
 
 }
