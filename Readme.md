@@ -17,14 +17,6 @@ BUILD AND RUN PROJECT STEPS
 ---
 
 
-![alt](https://i.imgur.com/hT7wUmn.gif)
-
-![alt](https://i.imgur.com/uBJwD6M.gif)
-
-![alt](https://i.imgur.com/jo190dO.gif)
-
-![alt](https://i.imgur.com/bqrCrWl.gif)
-
 
 ---
                                                                  CATEGORIES
@@ -91,7 +83,7 @@ BUILD AND RUN PROJECT STEPS
       Uploads a new image
 
 
-![](ReadMeImages/upload image.png)
+![](ReadMeImages/uploadImage.png)
 
 ---
                                                                  USERS
@@ -257,7 +249,7 @@ BUILD AND RUN PROJECT STEPS
 
       Create a new contest
 
-![](ReadMeImages/create contest.png)
+![](ReadMeImages/createContest.png)
 
 ---
 
@@ -270,7 +262,7 @@ BUILD AND RUN PROJECT STEPS
 
       Updates contest
 
-![](ReadMeImages/update contest.png)
+![](ReadMeImages/updateContest.png)
 
 ---
 
