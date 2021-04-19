@@ -47,7 +47,7 @@ public class UserMapper {
 
         User user = userRepository.getById(id);
 
-        if (!userDto.getOldPassword().equals(user.getUserCredentials().getPassword())){
+        if (!passwordEncoder.matches(userDto.getOldPassword(),user.getUserCredentials().getPassword())){
             throw new UnsupportedOperationException("Old password not match");
         }
         if (!userDto.getNewPassword().equals(userDto.getRepeatPassword())){
