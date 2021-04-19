@@ -14,9 +14,22 @@ public class Constants {
     public static final int MAX_RATING_POINTS = 10;
     public static final int MIN_RATING_POINTS = 1;
     public static final String ONLY_JURY_CAN_RATE_IMAGES = "Only jury can rate images.";
+    public static final String ONLY_JURY_CAN_REMOVE_IMAGES = "Only jury can remove images.";
     public static final String ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only jury can access voting contests.";
     public static final String USER_WITH_ENOUGTH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only user with 150 or more points can access voting contests.";
 
+
+    public static final String DEFAULT_CONTEST_BACKGROUND = "https://i.imgur.com/ophF343.jpg";
+    public static final String IMAGE_IS_ALREADY_UPLOADED_ERROR_MESSAGE = "Image is already uploaded to contest";
+    public static final String CONTEST_PHASE_IS_NOT_VALID_ERROR_MESSAGE = "Contest phase is not valid";
+    public static final String USER_CANNOT_GET_ALL_CONTEST_WITHOUT_PHASE_PARAMETER = "User cannot get all contest without phase parameter";
+    public static final String NOT_AUTHORIZED_TO_SEE_OTHER_FINISHED_CONTESTS_WHERE_NOT_PARTICIPATED = "Not authorized to see other finished contests where not participated";
+
+    public static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
+    public static final String SELF_NOTIFICATIONS_ERROR_MESSAGE = "You can view only your notifications.";
+    public static final String IS_USER_OWN_ACCOUNT_ERROR_MESSAGE = "Each user can edit his own account.";
+    public static final String USER_CAN_ACCESS_ONLY_HIS_OWN_ACCOUNT_ERROR_MESSAGE = "User can access only his own account";
+    public static final String USERNAME_ALREADY_EXIST_ERROR_MESSAGE = "Username already exist";
     //pointsReward
     public static final int POINTS_REWARD_WHEN_INVITED_TO_CONTEST = 3;
     public static final int POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST = 1;

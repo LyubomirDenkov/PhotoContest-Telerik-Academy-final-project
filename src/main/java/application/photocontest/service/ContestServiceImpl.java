@@ -31,11 +31,7 @@ import static application.photocontest.service.helper.NotificationHelper.sendMes
 @Service
 public class ContestServiceImpl implements ContestService {
 
-    private static final String DEFAULT_CONTEST_BACKGROUND = "https://i.imgur.com/ophF343.jpg";
-    private static final String IMAGE_IS_ALREADY_UPLOADED_ERROR_MESSAGE = "Image is already uploaded to contest";
-    private static final String CONTEST_PHASE_IS_NOT_VALID_ERROR_MESSAGE = "Contest phase is not valid";
-    private static final String USER_CANNOT_GET_ALL_CONTEST_WITHOUT_PHASE_PARAMETER = "User cannot get all contest without phase parameter";
-    private static final String NOT_AUTHORIZED_TO_SEE_OTHER_FINISHED_CONTESTS_WHERE_NOT_PARTICIPATED = "Not authorized to see other finished contests where not participated";
+
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
@@ -514,13 +510,7 @@ public class ContestServiceImpl implements ContestService {
 
     private void validateUserIsJury(Contest contest, User user) {
         if (!contest.getJury().contains(user)) {
-            throw new UnauthorizedOperationException(ONLY_JURY_CAN_RATE_IMAGES);
-        }
-    }
-
-    private void validateUserIsInContestCollection(Set<User> users, User user, String message) {
-        if (!users.contains(user)) {
-            throw new UnauthorizedOperationException(message);
+            throw new UnauthorizedOperationException(ONLY_JURY_CAN_REMOVE_IMAGES);
         }
     }
 

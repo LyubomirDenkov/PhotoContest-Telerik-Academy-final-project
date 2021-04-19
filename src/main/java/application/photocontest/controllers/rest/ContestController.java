@@ -123,6 +123,8 @@ public class ContestController {
             Set<Integer> participantsSet = contestDto.getParticipants();
             return contestService.create(user, contest, jurySet, participantsSet, file, url);
 
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DuplicateEntityException | UnsupportedOperationException | IOException e) {
@@ -169,7 +171,7 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+    @ApiOperation(value = "Upload to contest")
     @PostMapping(value = "/{contestId}/upload", consumes = {"multipart/form-data", "application/json"})
     public Image uploadImageToContest(@RequestHeader HttpHeaders headers,
                                       @PathVariable int contestId,
@@ -183,9 +185,7 @@ public class ContestController {
             return contestService.uploadImageToContest(user, image, contestId, file, url);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (IOException e) {
+        } catch (UnauthorizedOperationException | IOException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
@@ -224,7 +224,7 @@ public class ContestController {
     }
 
     @ApiOperation(value = "Rate image")
-    @PostMapping("/{contestId}/image/{imageId}/rate")
+    @PostMapping("/{contestId}/image/{imageId}/rating")
     public ImageReview rateImage(@RequestHeader HttpHeaders headers, @PathVariable int contestId,
                                  @PathVariable int imageId, @Valid @RequestBody ImageReviewDto imageReviewDto) {
 

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
+import static application.photocontest.constants.Constants.*;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.*;
 import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenUserCreated;
@@ -25,11 +26,6 @@ import static application.photocontest.service.helper.NotificationHelper.sendMes
 @Service
 public class UserServiceImpl implements UserService {
 
-
-    private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
-    private static final String SELF_NOTIFICATIONS_ERROR_MESSAGE = "You can view only your notifications.";
-    private static final String IS_USER_OWN_ACCOUNT_ERROR_MESSAGE = "Each user can edit his own account.";
-    private static final String USER_CAN_ACCESS_ONLY_HIS_OWN_ACCOUNT_ERROR_MESSAGE = "User can access only his own account";
 
     private final UserRepository userRepository;
     private final ImgurService imgurService;
@@ -57,7 +53,7 @@ public class UserServiceImpl implements UserService {
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         if (!user.isOrganizer()) {
-            verifyIsUserOwnAccount(user.getId(), userId, "Something");
+            verifyIsUserOwnAccount(user.getId(), userId, USER_CAN_ACCESS_ONLY_HIS_OWN_ACCOUNT_ERROR_MESSAGE);
         }
 
         return contestRepository.getUserContests(user.getId(), phase);
@@ -123,7 +119,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (isUserNameExist) {
-            throw new DuplicateEntityException("USERNAME EXIST");
+            throw new DuplicateEntityException(USERNAME_ALREADY_EXIST_ERROR_MESSAGE);
         }
 
         String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
