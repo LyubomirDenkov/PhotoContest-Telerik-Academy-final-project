@@ -1,4 +1,11 @@
 
+![](ReadMeImages/logo.png)
+
+iPhoto Database relations:
+![](ReadMeImages/iPhotoDB.png)
+
+
+
 Link to Trello board:
 https://trello.com/b/pdC2sZtN/photo-contest
 
