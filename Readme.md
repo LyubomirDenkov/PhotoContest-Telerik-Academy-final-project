@@ -17,7 +17,7 @@ BUILD AND RUN PROJECT STEPS
 ---
 
 
-![alt](https://imgur.com/hT7wUmn.gif)
-![alt](https://imgur.com/uBJwD6M.gif)
-![alt](https://imgur.com/jo190dO.gif)
+![alt](https://i.imgur.com/hT7wUmn.gif)
+![alt](https://i.imgur.com/uBJwD6M.gif)
+![alt](https://i.imgur.com/jo190dO.gif)
 ![alt](https://i.imgur.com/bqrCrWl.gif)

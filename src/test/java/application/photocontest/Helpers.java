@@ -111,9 +111,6 @@ public class Helpers {
         notification.setTitle("new notification");
         notification.setDate("2020-05-06:15:00");
         notification.setMessage("new message");
-        notification.setSeen(false);
-
-
 
 
 
