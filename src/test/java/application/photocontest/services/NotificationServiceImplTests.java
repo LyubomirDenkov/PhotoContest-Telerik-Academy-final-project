@@ -15,8 +15,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import static application.photocontest.Helpers.createMockNotification;
 import static application.photocontest.Helpers.createMockUser;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class NotificationServiceImplTests {
@@ -29,16 +35,37 @@ public class NotificationServiceImplTests {
 
 
 
+
+    @Test
+    public void getAllUsers_Should_Return_All() {
+        User user =  createMockUser();
+        List<Notification> list = new ArrayList<>();
+        when(notificationRepository.getAll(user.getId())).thenReturn(list);
+        notificationService.getAll(user);
+        verify(notificationRepository, Mockito.times(1)).getAll(user.getId());
+    }
+
+
+    @Test
+    public void getAllUsers_Should_Throw_WhenNotAuthorized() {
+        User user = createMockUser();
+        user.setRoles(new HashSet<>());
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> notificationService.getAll(user));
+
+    }
+
     @Test
     public void getAll_Should_Get_When_IsCalled() {
         Notification notification = createMockNotification();
         User user = createMockUser();
 
-        Mockito.when(notificationRepository.getById(notification.getId())).thenReturn(notification);
+        when(notificationRepository.getById(notification.getId())).thenReturn(notification);
 
         notificationService.getById(user,notification.getId());
 
-        Mockito.verify(notificationRepository,Mockito.times(1)).getById(notification.getId());
+        verify(notificationRepository,Mockito.times(1)).getById(notification.getId());
 
     }
 
@@ -48,7 +75,7 @@ public class NotificationServiceImplTests {
 
         notificationService.create(notification);
 
-        Mockito.verify(notificationRepository,Mockito.times(1)).create(notification);
+        verify(notificationRepository,Mockito.times(1)).create(notification);
 
     }
     @Test
@@ -57,7 +84,7 @@ public class NotificationServiceImplTests {
 
         notificationService.delete(notification.getId());
 
-        Mockito.verify(notificationRepository,Mockito.times(1)).delete(notification.getId());
+        verify(notificationRepository,Mockito.times(1)).delete(notification.getId());
 
     }
 
