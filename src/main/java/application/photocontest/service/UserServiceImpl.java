@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
     private static final String INITIAL_PROFILE_IMAGE = "https://i.imgur.com/GdDsxXO.png";
     private static final String SELF_NOTIFICATIONS_ERROR_MESSAGE = "You can view only your notifications.";
+    private static final String IS_USER_OWN_ACCOUNT_ERROR_MESSAGE = "Each user can edit his own account.";
 
     private final UserRepository userRepository;
     private final ImgurService imgurService;
@@ -178,7 +179,7 @@ public class UserServiceImpl implements UserService {
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
-        verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), "something");
+        verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), IS_USER_OWN_ACCOUNT_ERROR_MESSAGE);
 
         if (file.isPresent() || url.isPresent()) {
             String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);

@@ -28,7 +28,7 @@ BUILD AND RUN PROJECT STEPS
 - 6 - ENJOY!
 ---
 
-
+![](https://i.imgur.com/oOjcGRv.gif)
 
 ---
                                                                  CATEGORIES
