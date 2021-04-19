@@ -2,12 +2,6 @@ package application.photocontest.service.constants;
 
 public class Constants {
 
-    //phaseError
-    public static final String CONTEST_PHASE_PREPARING = "ongoing";
-    public static final String CONTEST_PHASE_VOTING = "voting";
-    public static final String CONTEST_PHASE_FINISHED = "finished";
-    public static final String CONTEST_PHASE_ERROR_MESSAGE = "You cannot join in a contest which is not in phase one.";
-
     //ratingError
     public static final String RATING_TWICE_ERROR_MSG = "You cannot rate twice.";
     public static final String PHASE_RATING_ERROR_MESSAGE = "You can only rate images in second phase.";

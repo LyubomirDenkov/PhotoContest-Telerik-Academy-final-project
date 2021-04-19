@@ -31,9 +31,12 @@ import static application.photocontest.service.helper.NotificationHelper.sendMes
 @Service
 public class ContestServiceImpl implements ContestService {
 
-
+    private static final String FINISHED = "finished";
+    private static final String VOTING = "voting";
+    private static final String ONGOING = "ongoing";
     private static final String DEFAULT_CONTEST_BACKGROUND = "https://i.imgur.com/ophF343.jpg";
     private static final String IMAGE_IS_ALREADY_UPLOADED_ERROR_MESSAGE = "Image is already uploaded to contest";
+    private static final String CONTEST_PHASE_IS_NOT_VALID_ERROR_MESSAGE = "Contest phase is not valid";
     private final ContestRepository contestRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
@@ -87,11 +90,11 @@ public class ContestServiceImpl implements ContestService {
 
         switch (phase.get()) {
 
-            case "ongoing":
+            case ONGOING:
 
                 return contestRepository.getOngoingContests(isOrganizer);
 
-            case "voting":
+            case VOTING:
 
                 if (!user.isOrganizer()) {
                     validateUserHasPointsToSeeVotingContests(user, ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
@@ -99,12 +102,12 @@ public class ContestServiceImpl implements ContestService {
 
                 return contestRepository.getVotingContests(user.getId(), isOrganizer);
 
-            case "finished":
+            case FINISHED:
 
                 return contestRepository.getFinishedContests(user.getId(), isOrganizer);
 
             default:
-                throw new UnsupportedOperationException("Contest phase is not valid");
+                throw new UnsupportedOperationException(CONTEST_PHASE_IS_NOT_VALID_ERROR_MESSAGE);
         }
 
     }

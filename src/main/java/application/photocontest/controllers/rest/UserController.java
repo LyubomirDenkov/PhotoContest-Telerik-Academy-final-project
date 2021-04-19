@@ -106,11 +106,11 @@ public class UserController {
                        @RequestParam(name = "file") Optional<MultipartFile> file,
                        @RequestParam(name = "url") Optional<String> url) {
 
-        User user = userMapper.fromDto(dto);
 
         try {
+            User user = userMapper.fromDto(dto);
             return userService.create(user, file, url);
-        } catch (DuplicateEntityException | IOException | UnsupportedOperationException e) {
+        } catch (IllegalArgumentException | DuplicateEntityException | IOException | UnsupportedOperationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

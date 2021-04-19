@@ -21,6 +21,7 @@ import static application.photocontest.enums.UserRanks.JUNKIE;
 public class UserMapper {
 
 
+    private static final String PASSWORDS_NOT_MATCH_ERROR_MESSAGE = "Passwords not match";
     private final UserRepository userRepository;
 
     @Autowired
@@ -31,9 +32,14 @@ public class UserMapper {
 
     public User fromDto(RegisterDto registerDto) {
 
+        if (!registerDto.getPassword().equals(registerDto.getRepeatPassword())){
+            throw new IllegalArgumentException(PASSWORDS_NOT_MATCH_ERROR_MESSAGE);
+        }
+
         UserCredentials userCredentials = new UserCredentials();
         userCredentials.setUserName(registerDto.getUserName());
         userCredentials.setPassword(registerDto.getPassword());
+
 
         User user = new User();
         user.setFirstName(registerDto.getFirstName());
@@ -51,7 +57,7 @@ public class UserMapper {
             throw new UnsupportedOperationException("Old password not match");
         }
         if (!userDto.getNewPassword().equals(userDto.getRepeatPassword())){
-            throw new IllegalArgumentException("passwords not match");
+            throw new IllegalArgumentException(PASSWORDS_NOT_MATCH_ERROR_MESSAGE);
         }
 
         user.getUserCredentials().setPassword(userDto.getNewPassword());
