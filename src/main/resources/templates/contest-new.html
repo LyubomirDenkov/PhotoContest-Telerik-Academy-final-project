@@ -2,10 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Contest-Form</title>
+    <title>Create</title>
 
-    <!--<link th:href="@{/assets/css/edit-profile.css}" href="../static/assets/css/edit-profile.css" rel="stylesheet">
--->
+
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"
@@ -27,9 +26,10 @@
                 <input type="text" placeholder="Contest Title" th:field="*{title}">
                 <p th:errors="*{title}">Contest title error</p>
             </div>
+            <br>
             <div class="row">
                 <div class="col-md-12">
-                    <p>Contest category</p>
+                    <p class="text-own">Contest category</p>
                     <select class="form-control multiselect multiselect-icon" th:field="*{categoryId}">
                         <option th:each="category : ${categories}"
                                 th:value="${category.getId()}"
@@ -39,9 +39,10 @@
                     </select>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-md-12">
-                    <p>Contest type</p>
+                    <p class="text-own">Contest type</p>
                     <select class="form-control multiselect multiselect-icon" th:field="*{typeId}">
                         <option th:each="type : ${types}"
                                 th:value="${type.getId()}"
@@ -52,10 +53,11 @@
                 </div>
             </div>
             <br>
+            <br>
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        <p>Days till voting phase(from 1 to 30)</p>
+                        <p class="text-own">Days till voting phase(from 1 to 30)</p>
                         <input type="number" placeholder="Days Till Second Phase" th:field="*{phaseOne}">
                         <p th:errors="*{phaseOne}">Days Till Second Phase error</p>
                     </div>
@@ -65,14 +67,14 @@
                 <div class="col-md-12">
                     <div>
                         <br>
-                        <p>Voting hours(from 1 to 24)</p>
+                        <p class="text-own">Voting hours(from 1 to 24)</p>
                         <input type="number" placeholder="Hours Till Third Phase" th:field="*{phaseTwo}">
                         <p th:errors="*{phaseTwo}">Days Till Third Phase error</p>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <section class="ftco-section">
                         <div class="container">
                             <div class="row">
@@ -92,13 +94,13 @@
                         </div>
                     </section>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <section class="ftco-section">
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-md-8 col-lg-5 d-flex justify-content-center align-items-center">
                                     <div class="d-flex text-left align-items-center w-100">
-                                        <strong class="sl">Participants</strong>
+                                        <strong class="sl">Jury</strong>
                                         <select id="multiple-checkboxes2" multiple="multiple" th:field="*{jury}">
                                             <option th:each="user : ${jury}"
                                                     th:value="${user.getId()}"
@@ -115,7 +117,6 @@
             </div>
             <label class="error error-custom" th:errors="*{jury}">participant error placeholder</label>
             <br>
-            <hr>
             <br>
             <div class="col-md-12">
                 <input type="url" th:name="url" placeholder="Contest background url">
