@@ -59,8 +59,8 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                                                             th:href="@{/users}">Users</a>
+                <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                            th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -90,7 +90,9 @@
                         <h3 class="text-white mb-0">TOP 20</h3>
                     </div>
                     <div class="table-responsive">
-                        <table class="table align-items-center table-dark table-flush">
+                        <table class="table align-items-center sortable table-dark table-flush" id="myTable">
+                            <input type="text" id="myInputForSearch" onkeyup="myFunctionFilter()" placeholder="Search.."
+                                   title="Type in a name">
                             <thead class="thead-dark">
                             <tr>
                                 <th scope="col">First & Last Name</th>
@@ -101,7 +103,7 @@
                             </thead>
                             <tbody>
                             <tr th:each="user : ${users}">
-                                <th scope="row">
+                                <td scope="row">
                                     <div class="media align-items-center">
 
                                         <img class="avatar rounded-circle mr-3" th:src="*{user.getProfileImage()}"
@@ -115,48 +117,74 @@
                                             ' ' + user.getLastName().toUpperCase()}">Names</span>
                                                 </a></li>
                                             <ul th:if="${!currentUser.isOrganizer()}">
-                                            <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
-                                            ' ' + user.getLastName().toUpperCase()}">Names</span>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </th>
-                                <div th:each="points : *{user.getPoints()}">
-                                    <td th:text="*{points.getPoints()}">
-                                        200
-                                    </td>
+                                                <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
 
-                                    <td>
+                                         ' ' + user.getLastName().toUpperCase()}">Names</span>
+
+                                </ul>
+                    </div>
+
+                </div>
+                </td>
+                <div th:each="points : *{user.getPoints()}">
+                    <td th:text="*{points.getPoints()}">
+                        200
+                    </td>
+
+                    <td>
                       <span class="badge badge-dot mr-4" th:if="*{points.getPoints() < 51}">
                         <i class="bg-white"></i> Photo Junkie
                       </span>
-                                        <span class="badge badge-dot mr-4"
-                                              th:if="*{points.getPoints() > 50 && points.getPoints() < 151}">
+                        <span class="badge badge-dot mr-4"
+                              th:if="*{points.getPoints() > 50 && points.getPoints() < 151}">
                         <i class="bg-success"></i> Enthusiast
                       </span>
-                                        <span class="badge badge-dot mr-4"
-                                              th:if="*{points.getPoints() > 150 && points.getPoints() < 1001}">
+                        <span class="badge badge-dot mr-4"
+                              th:if="*{points.getPoints() > 150 && points.getPoints() < 1001}">
                         <i class="bg-danger"></i> Master
                       </span>
-                                        <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 1000}">
+                        <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 1000}">
                         <i class="bg-warning"></i> Photo Dictator
                       </span>
-                                    </td>
-                                </div>
-                                <td>
+                    </td>
+                </div>
+                <td>
                       <span class="badge badge-dot mr-4" th:text="*{user.getImages().size()}">
                         <i class="bg-warning"></i> pending
                       </span>
-                                </td>
-                            </tr>
-                            <tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                </td>
+                </tr>
+                <tr>
+                    </tbody>
+                    </table>
             </div>
         </div>
     </div>
 </div>
+</div>
+</div>
+<script>
+    function myFunctionFilter() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInputForSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            // Hide the row initially.
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (var j = 0; j < td.length; j++) {
+                cell = tr[i].getElementsByTagName("td")[j];
+                if (cell) {
+                    if (cell.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    }
+                }
+            }
+        }
+    }
+</script>
 </body>
 </html>
