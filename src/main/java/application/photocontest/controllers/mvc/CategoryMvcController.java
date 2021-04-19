@@ -75,19 +75,12 @@ public class CategoryMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            isOrganizer(currentUser);
-
             model.addAttribute("category", new CategoryDto());
 
             return "category-new";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";
-        }
-    }
-    private void isOrganizer(User currentUser) {
-        if (!currentUser.isOrganizer()) {
-            throw new UnauthorizedOperationException("Not authorized");
         }
     }
 

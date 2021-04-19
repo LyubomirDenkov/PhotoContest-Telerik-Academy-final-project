@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
+import static application.photocontest.service.constants.Constants.CURRENT_USER;
+
 @Controller
 @RequestMapping("images")
 public class ImageMvcController {
@@ -37,7 +39,7 @@ public class ImageMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             model.addAttribute("image", imageService.getById(currentUser,id));
             model.addAttribute("reviews", imageReviewService.getAllReviewsByImageId(currentUser, id));
             return "image";

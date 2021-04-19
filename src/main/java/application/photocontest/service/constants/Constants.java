@@ -2,6 +2,11 @@ package application.photocontest.service.constants;
 
 public class Constants {
 
+    public static final String FINISHED = "finished";
+    public static final String VOTING = "voting";
+    public static final String ONGOING = "ongoing";
+
+    public static final String CURRENT_USER = "currentUser";
     //ratingError
     public static final String RATING_TWICE_ERROR_MSG = "You cannot rate twice.";
     public static final String PHASE_RATING_ERROR_MESSAGE = "You can only rate images in second phase.";

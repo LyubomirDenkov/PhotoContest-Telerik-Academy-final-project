@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
+import static application.photocontest.service.constants.Constants.CURRENT_USER;
+
 @Controller
 @RequestMapping("/users")
 public class UserMvcController {
@@ -42,7 +44,7 @@ public class UserMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", user);
+            model.addAttribute(CURRENT_USER, user);
             model.addAttribute("users", userService.getAll(user));
             return "leaderboard";
         }catch (UnauthorizedOperationException e){
@@ -53,7 +55,7 @@ public class UserMvcController {
     @GetMapping("/leaderboard")
     public String getUsersLeaderboard(Model model, HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        model.addAttribute("currentUser", user);
+        model.addAttribute(CURRENT_USER, user);
         model.addAttribute("users", userService.getLeaderboard(user));
         return "leaderboard";
     }
@@ -63,7 +65,7 @@ public class UserMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", userService.getById(user, id));
+            model.addAttribute(CURRENT_USER, userService.getById(user, id));
             model.addAttribute("visitor", user);
             return "profile";
         } catch (AuthenticationFailureException | UnauthorizedOperationException | EntityNotFoundException e) {
@@ -76,7 +78,7 @@ public class UserMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", userService.getById(user, id));
+            model.addAttribute(CURRENT_USER, userService.getById(user, id));
             model.addAttribute("updateUserDto", new UpdateUserDto());
             return "edit-profile";
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {

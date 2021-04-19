@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
+import static application.photocontest.service.constants.Constants.CURRENT_USER;
+
 @Controller
 @RequestMapping("/notifications")
 public class NotificationMvcController {
@@ -32,7 +34,7 @@ public class NotificationMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", user);
+            model.addAttribute(CURRENT_USER, user);
             model.addAttribute("notifications", notificationService.getAll(user));
             return "notifications";
         } catch (UnauthorizedOperationException e) {

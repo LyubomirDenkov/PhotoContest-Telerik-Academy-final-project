@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
+import static application.photocontest.service.constants.Constants.CURRENT_USER;
+
 @Controller
 @RequestMapping("/")
 public class HomeMvcController {
@@ -40,9 +42,9 @@ public class HomeMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", user);
+            model.addAttribute(CURRENT_USER, user);
         } catch (UnauthorizedOperationException e) {
-            model.addAttribute("currentUser", null);
+            model.addAttribute(CURRENT_USER, null);
         }
 
         model.addAttribute("contests", contestService.mainPageOngoingContest());

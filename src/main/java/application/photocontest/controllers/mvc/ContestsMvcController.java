@@ -29,14 +29,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static application.photocontest.service.constants.Constants.*;
+
 @Controller
 @RequestMapping("/contests")
 public class ContestsMvcController {
 
 
-    private static final String FINISHED = "finished";
-    private static final String VOTING = "voting";
-    private static final String ONGOING = "ongoing";
+
+
     private final AuthenticationHelper authenticationHelper;
     private final ContestService contestService;
     private final CategoryService categoryService;
@@ -148,7 +149,7 @@ public class ContestsMvcController {
             User currentUser = authenticationHelper.tryGetUser(session);
 
             model.addAttribute("contests", contestService.getAll(currentUser, Optional.of(ONGOING)));
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             return "contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
@@ -162,7 +163,7 @@ public class ContestsMvcController {
             User currentUser = authenticationHelper.tryGetUser(session);
 
             model.addAttribute("contests", userService.getUserContests(currentUser, id, Optional.empty()));
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             return "contests";
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
@@ -178,7 +179,7 @@ public class ContestsMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
 
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             model.addAttribute("contest", new ContestDto());
             return "contest-new";
 
@@ -279,7 +280,7 @@ public class ContestsMvcController {
 
             Contest contest = contestService.getById(currentUser, contestId);
 
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             model.addAttribute("contest", contest);
 
             return "contest-images";
@@ -301,7 +302,7 @@ public class ContestsMvcController {
             Image image = imageService.getById(currentUser, imageId);
 
             model.addAttribute("imageReview", new ImageReviewDto());
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             model.addAttribute("image", image);
 
             return "image-review";
@@ -349,7 +350,7 @@ public class ContestsMvcController {
     public String showImageUploadPage(@PathVariable int id, HttpSession session, Model model) {
         try {
             User currentUser = authenticationHelper.tryGetUser(session);
-            model.addAttribute("currentUser", currentUser);
+            model.addAttribute(CURRENT_USER, currentUser);
             model.addAttribute("imageDto", new ImageDto());
             return "upload-image";
         } catch (AuthenticationFailureException e) {
