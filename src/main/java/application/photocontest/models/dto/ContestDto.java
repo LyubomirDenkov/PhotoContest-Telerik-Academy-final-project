@@ -17,8 +17,8 @@ public class ContestDto {
 
     public static final String PHASE_ONE_MAX_ERROR_MSG = "Phase one can be max 30 days.";
 
-    public static final String PHASE_TWO_MIN_ERROR_MSG = "Phase one can be minimum 1 hour.";
-    public static final String PHASE_TWO_MAX_ERROR_MSG = "Phase one can be max 24 hours.";
+    public static final String PHASE_TWO_MIN_ERROR_MSG = "Phase two can be minimum 1 hour.";
+    public static final String PHASE_TWO_MAX_ERROR_MSG = "Phase two can be max 24 hours.";
     private static final String CATEGORY_ID_ERROR_MESSAGE = "Category Id must be positive.";
     private static final String TITLE_ERROR_MESSAGE = "Contest title must be between 5 and 50 symbols.";
     private static final String TYPE_ID_SHOULD_BE_POSITIVE = "Type Id should be positive.";

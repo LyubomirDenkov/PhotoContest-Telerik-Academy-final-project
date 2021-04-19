@@ -127,7 +127,7 @@ public class ContestServiceImpl implements ContestService {
         Image image = imageRepository.getById(imageId);
 
         if (!user.isOrganizer()) {
-            validateUserIsJury(contest, user);
+            validateUserIsJury(contest, user,ONLY_JURY_CAN_REMOVE_IMAGES);
         }
 
         removeImageAndUpdateContest(contest, image);
@@ -335,7 +335,7 @@ public class ContestServiceImpl implements ContestService {
         boolean isUserRatedImageInContest = true;
 
         validateContestPhase(contest, ContestPhases.VOTING, PHASE_RATING_ERROR_MESSAGE);
-        validateUserIsJury(contest, user);
+        validateUserIsJury(contest, user,ONLY_JURY_CAN_RATE_IMAGES);
         validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, imageReview.getPoints());
 
         if (!isContestContainsImage(contest, image)) {
@@ -508,9 +508,9 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateUserIsJury(Contest contest, User user) {
+    private void validateUserIsJury(Contest contest, User user,String message) {
         if (!contest.getJury().contains(user)) {
-            throw new UnauthorizedOperationException(ONLY_JURY_CAN_REMOVE_IMAGES);
+            throw new UnauthorizedOperationException(message);
         }
     }
 
