@@ -39,4 +39,6 @@ public interface ContestService  {
 
     void removeImageFromContest(User user, int contestId, int imageId);
 
+    List<Contest> mainPageOngoingContest();
+
 }

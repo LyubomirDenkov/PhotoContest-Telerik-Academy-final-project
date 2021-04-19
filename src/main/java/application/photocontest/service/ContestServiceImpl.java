@@ -137,6 +137,17 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public List<Contest> mainPageOngoingContest() {
+
+        List<Contest> contests = contestRepository.mainPageOngoingContests();
+        if (contests.size() > 4) {
+            return contests.subList(0, 4);
+        }
+
+        return contests;
+    }
+
+    @Override
     public List<Type> getAllTypes() {
         return typeRepository.getAll();
     }
@@ -393,7 +404,7 @@ public class ContestServiceImpl implements ContestService {
         int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
         points.get().setPoints(pointsToIncrease);
         pointsRepository.update(points.get());
-        addNotificationToUserNotifications(userToJoinInContest,contest);
+        addNotificationToUserNotifications(userToJoinInContest, contest);
         userRepository.update(userToJoinInContest);
 
         participants.add(userToJoinInContest);
