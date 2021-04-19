@@ -91,7 +91,7 @@ BUILD AND RUN PROJECT STEPS
       Uploads a new image
 
 
-![](ReadMe images/upload image.png)
+![](ReadMeImages/upload image.png)
 ---
                                                                  USERS
 ---
@@ -185,7 +185,7 @@ BUILD AND RUN PROJECT STEPS
 
       Creates a new user
 
-![](ReadMe images/userRegister.png)
+![](ReadMeImages/userRegister.png)
 ---
 
 ---
@@ -197,7 +197,7 @@ BUILD AND RUN PROJECT STEPS
 - Route -  /api/users/userID
 
       Updates user
-![](ReadMe images/userUpdate.png)
+![](ReadMeImages/userUpdate.png)
 ---
 
 ---
@@ -252,7 +252,7 @@ BUILD AND RUN PROJECT STEPS
 - Route - /api/contests
 
       Create a new contest
-![](ReadMe images/create contest.png)
+![](ReadMeImages/create contest.png)
 
 ---
 
@@ -264,7 +264,7 @@ BUILD AND RUN PROJECT STEPS
 - Route - /api/contests
 
       Updates contest
-![](ReadMe images/update contest.png)
+![](ReadMeImages/update contest.png)
 
 ---
 
@@ -288,7 +288,7 @@ BUILD AND RUN PROJECT STEPS
 - Route - /api/contests/contestID/upload
 
       Uploads an image to contest
-![](ReadMe images/uploadToContest.png)
+![](ReadMeImages/uploadToContest.png)
 
 
 ---
@@ -324,7 +324,7 @@ BUILD AND RUN PROJECT STEPS
 - Route - /api/contests/contestID/image/rate
 
       Rates an image from contest
-![](ReadMe images/rateImage.png)
+![](ReadMeImages/rateImage.png)
 
 ---
 
