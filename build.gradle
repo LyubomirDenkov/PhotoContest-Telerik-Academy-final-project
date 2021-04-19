@@ -24,7 +24,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.4.5'
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: '5.4.5'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.0.3'
 

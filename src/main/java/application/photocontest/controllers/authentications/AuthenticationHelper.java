@@ -8,6 +8,7 @@ import application.photocontest.service.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,13 +20,16 @@ public class AuthenticationHelper {
     public static final String AUTHORIZATION_ERROR_MESSAGE = "The requested resource requires authentication.";
     public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid username.";
 
+
     public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong username or password.";
 
     private final UserService userService;
+    private final  PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthenticationHelper(UserService userService) {
+    public AuthenticationHelper(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -52,7 +56,7 @@ public class AuthenticationHelper {
     public User verifyAuthentication(String userName, String password) {
         try {
             User user = userService.getUserByUserName(userName);
-            if (!user.getUserCredentials().getPassword().equals(password)) {
+            if (!passwordEncoder.matches(password,user.getUserCredentials().getPassword())) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }
             return user;

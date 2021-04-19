@@ -1,21 +1,13 @@
 package application.photocontest.modelmappers;
 
-import application.photocontest.models.Points;
 import application.photocontest.models.User;
 import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.models.dto.UpdateUserDto;
 import application.photocontest.repository.contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import static application.photocontest.enums.UserRanks.JUNKIE;
 
 @Component
 public class UserMapper {
@@ -23,10 +15,12 @@ public class UserMapper {
 
     private static final String PASSWORDS_NOT_MATCH_ERROR_MESSAGE = "Passwords not match";
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserMapper(UserRepository userRepository) {
+    public UserMapper(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -38,7 +32,7 @@ public class UserMapper {
 
         UserCredentials userCredentials = new UserCredentials();
         userCredentials.setUserName(registerDto.getUserName());
-        userCredentials.setPassword(registerDto.getPassword());
+        userCredentials.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
 
         User user = new User();
@@ -60,7 +54,7 @@ public class UserMapper {
             throw new IllegalArgumentException(PASSWORDS_NOT_MATCH_ERROR_MESSAGE);
         }
 
-        user.getUserCredentials().setPassword(userDto.getNewPassword());
+        user.getUserCredentials().setPassword(passwordEncoder.encode(userDto.getNewPassword()));
         return user;
     }
 
