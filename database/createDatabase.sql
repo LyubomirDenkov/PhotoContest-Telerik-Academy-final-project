@@ -42,7 +42,7 @@ create or replace table roles
 create or replace table user_credentials
 (
     user_name varchar(30) not null,
-    password  varchar(30) not null,
+    password  text not null,
     constraint users_user_name_uindex
         unique (user_name)
 );
