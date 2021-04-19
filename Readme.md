@@ -87,3 +87,105 @@ BUILD AND RUN PROJECT STEPS
                                                                  USERS
 ---
 
+**Organizer OPERATION**
+
+**Get**
+- Route - /api/users
+
+      Returns all users
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+
+- Route -  /api/users/userID
+
+      Returns user by ID
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+
+- Route -  /api/users/leaderboard
+
+      Returns the current leaderboard in iPhoto
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+
+- Route -  /api/users/userID/profile
+
+      Returns the profile of the user
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+
+- Route -  /api/users/userID
+
+      Returns the user
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+
+- Route -  /api/users/userID/notifications
+
+      Returns the notifications of the user
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Get**
+
+- Route -  /api/users/userID/contests
+
+      Returns the contests in which the user participates in
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Post**
+
+- Route -  /api/users
+
+      Creates a new user
+
+---
+
+---
+
+**AUTHORIZATION NEEDED**
+
+**Put**
+
+- Route -  /api/users/userID
+
+      Updates user
+
+---
