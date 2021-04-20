@@ -61,5 +61,14 @@ public class Constants {
     //NOTIFICATION
     public static final String INVITED_AS_JURY = "jury";
     public static final String INVITED_AS_PARTICIPANT = "participant";
+    public static final String NOTIFICATION_TITLE = "Invitation";
+    public static final String CONTEST_INVITATION = "Congratulations %s ! You have been invited as a %s in %s contest. " +
+            "Voting phase starts at %s.";
+    public static final String SUCCESFULL_JOINING_TO_CONTEST = "Successful Joining";
+    public static final String SUCCESFULL_JOINING_NOTIFICATION = "Congratulations %s ! You have successfully joined %s contest. " +
+            "Voting phase starts at %s.";
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
+    public static final String NOTIFICATION_TITLE_WHEN_REGISTERED = "Welcome!";
+    public static final String NOTIFICATION_WHEN_SUCCESSFULLY_REGISTERED = "Congratulations! You have successfully joined to the iPhoto community!";
 
 }

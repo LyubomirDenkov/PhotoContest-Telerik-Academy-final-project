@@ -4,26 +4,26 @@ package application.photocontest.service.helper;
 import application.photocontest.models.Contest;
 import application.photocontest.models.Notification;
 import application.photocontest.models.User;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import static application.photocontest.constants.Constants.MAIL_TITLE_CONTEST_END;
-import static application.photocontest.constants.Constants.MESSAGE_CONTEST_END_TOP_POSITION;
+import static application.photocontest.constants.Constants.*;
 
 
 public class NotificationHelper {
 
 
-    public static Notification sendMessageWhenInvitedToJuryOrParticipant(User user,String role, Contest contest) {
+    public static Notification sendMessageWhenInvitedToJuryOrParticipant(User user, String role, Contest contest) {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
-        notification.setTitle("Invitation");
-        notification.setMessage(String.format("Congratulations %s ! You have been invited as a %s in %s contest. " +
-                        "Voting phase starts at %s."
-                , user.getFirstName(), role, contest.getTitle(), timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
-        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setTitle(NOTIFICATION_TITLE);
+        notification.setMessage(String.format(CONTEST_INVITATION
+                , user.getFirstName(), role, contest.getTitle(),
+                timeTillVoting.format(DateTimeFormatter.ofPattern(DATE_FORMAT))));
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         notification.setUser(user);
 
         return notification;
@@ -33,20 +33,20 @@ public class NotificationHelper {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
-        notification.setTitle("Successful Joining");
-        notification.setMessage(String.format("Congratulations %s ! You have successfully joined %s contest. " +
-                "Voting phase starts at %s.", user.getFirstName(), contest.getTitle(), timeTillVoting.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
-        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setTitle(SUCCESFULL_JOINING_TO_CONTEST);
+        notification.setMessage(String.format(SUCCESFULL_JOINING_NOTIFICATION, user.getFirstName(), contest.getTitle(),
+                timeTillVoting.format(DateTimeFormatter.ofPattern(DATE_FORMAT))));
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         notification.setUser(user);
 
-       return notification;
+        return notification;
     }
 
     public static Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
         Notification notification = new Notification();
         notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, contestTitle));
         notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION, user.getFirstName(), position, points));
-        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         notification.setUser(user);
 
         return notification;
@@ -54,11 +54,10 @@ public class NotificationHelper {
 
     public static Notification sendMessageWhenUserCreated(User user) {
         Notification notification = new Notification();
-        notification.setTitle("Welcome!");
-        notification.setMessage("Congratulations! You have successfully joined to the iPhoto community!");
-        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        notification.setTitle(NOTIFICATION_TITLE_WHEN_REGISTERED);
+        notification.setMessage(NOTIFICATION_WHEN_SUCCESSFULLY_REGISTERED);
+        notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         notification.setUser(user);
-
 
         return notification;
     }
@@ -67,4 +66,5 @@ public class NotificationHelper {
         return new java.sql.Timestamp(
                 dateToConvert.getTime()).toLocalDateTime();
     }
+
 }
