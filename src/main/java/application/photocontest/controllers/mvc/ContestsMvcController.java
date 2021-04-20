@@ -36,8 +36,6 @@ import static application.photocontest.constants.Constants.*;
 public class ContestsMvcController {
 
 
-
-
     private final AuthenticationHelper authenticationHelper;
     private final ContestService contestService;
     private final CategoryService categoryService;
@@ -303,6 +301,7 @@ public class ContestsMvcController {
 
             model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute(CURRENT_USER, currentUser);
+            model.addAttribute("contest", contestService.getById(currentUser, contestId));
             model.addAttribute("image", image);
 
             return "image-review";
@@ -345,6 +344,28 @@ public class ContestsMvcController {
             return "error";
         }
     }
+
+    @GetMapping("/{contestId}/images/{imageId}/remove")
+    public String removeImageFromContest(@PathVariable int contestId, @PathVariable int imageId,
+                                         HttpSession session, Model model) {
+
+        try {
+
+            User currentUser = authenticationHelper.tryGetUser(session);
+            model.addAttribute("image", imageService.getById(currentUser, imageId));
+
+            contestService.removeImageFromContest(currentUser, contestId, imageId);
+
+            return "redirect:/contests/{contestId}/images";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("UnauthorizedToRemoveImage", e.getMessage());
+            return "image-review";
+        } catch (AuthenticationFailureException | EntityNotFoundException e) {
+            return "error";
+        }
+
+    }
+
 
     @GetMapping("/{id}/upload")
     public String showImageUploadPage(@PathVariable int id, HttpSession session, Model model) {

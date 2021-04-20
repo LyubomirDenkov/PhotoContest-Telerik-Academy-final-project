@@ -55,8 +55,8 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                                                             th:href="@{/users}">Users</a>
+                <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                            th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -78,7 +78,7 @@
 <section id="speakers">
     <div class="container">
         <div class="section-header">
-            <h2 th:text="*{image.getTitle()}" >TEXT</h2>
+            <h2 th:text="*{image.getTitle()}">TEXT</h2>
             <br>
             <br>
         </div>
@@ -87,6 +87,14 @@
                 <div class="speaker">
                     <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
                          alt="Speaker 1" class="img-fluid">
+
+                    <div th:if="${contest.isJury() || currentUser.isOrganizer()}">
+                        <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/remove}">
+                            <button class="glow-on-hover" type="submit">
+                                REMOVE IMAGE
+                            </button>
+                        </a>
+                    </div>
 
                     <div class="container single-contest">
                         <div class="row">
@@ -108,7 +116,7 @@
 
                                             </div>
                                         </div>
-                                        <span class="custom-text-story" th:text="*{image.getStory()}" ></span>
+                                        <span class="custom-text-story" th:text="*{image.getStory()}"></span>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +125,7 @@
                                 <div class="card-custom">
                                     <div class="card__side card__side--front-2">
                                         <h3 class="custom-text-rate"> Rate </h3>
-                                        <h3 class="custom-text-rate" th:text="${rateTwice}" ></h3>
+                                        <h3 class="custom-text-rate" th:text="${rateTwice}"></h3>
                                         <form class="login-form" action="#"
                                               th:action="@{__${#httpServletRequest.requestURI}__}"
                                               th:object="${imageReview}" method="post">
