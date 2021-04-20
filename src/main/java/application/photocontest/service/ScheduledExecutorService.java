@@ -31,16 +31,17 @@ public class ScheduledExecutorService implements Runnable {
     private final UserRepository userRepository;
     private final PhaseRepository phaseRepository;
     private final PointsRepository pointsRepository;
-
+    private final NotificationRepository notificationRepository;
 
     @Autowired
     public ScheduledExecutorService(ContestRepository contestRepository,
-                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository, PointsRepository pointsRepository) {
+                                    ImageReviewRepository imageReviewRepository, UserRepository userRepository, PhaseRepository phaseRepository, PointsRepository pointsRepository, NotificationRepository notificationRepository) {
         this.contestRepository = contestRepository;
         this.imageReviewRepository = imageReviewRepository;
         this.userRepository = userRepository;
         this.phaseRepository = phaseRepository;
         this.pointsRepository = pointsRepository;
+        this.notificationRepository = notificationRepository;
     }
 
 
@@ -218,8 +219,14 @@ public class ScheduledExecutorService implements Runnable {
 
             Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
 
+            Notification notificationToAdd = notificationRepository.create(notification);
+
+            if (user.getNotifications() == null) {
+                user.setNotifications(new HashSet<>());
+            }
+
             Set<Notification> notifications = user.getNotifications();
-            notifications.add(notification);
+            notifications.add(notificationToAdd);
             user.setNotifications(notifications);
 
             userRepository.update(user);
