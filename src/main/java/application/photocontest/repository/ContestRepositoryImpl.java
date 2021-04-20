@@ -33,6 +33,14 @@ public class ContestRepositoryImpl implements ContestRepository {
         }
     }
 
+    public List<Contest> getContestInPhaseOneAndPhaseTwo() {
+
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Contest where phase.name like 'ongoing' or phase.name like 'voting' ", Contest.class)
+                    .list();
+        }
+    }
+
     @Override
     public Contest getById(int id) {
 

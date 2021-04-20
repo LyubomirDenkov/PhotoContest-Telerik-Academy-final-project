@@ -13,6 +13,8 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     Contest getByTitle(String title);
 
+    List<Contest> getContestInPhaseOneAndPhaseTwo();
+
     List<Contest> getOngoingContests(boolean isOrganizer);
 
     List<Contest> getFinishedContests(int userId, boolean isOrganizer);

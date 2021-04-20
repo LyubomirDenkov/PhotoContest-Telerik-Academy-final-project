@@ -48,7 +48,7 @@ public class ScheduledExecutorService implements Runnable {
     @Scheduled(fixedDelay = 60000)
     public void run() {
 
-        List<Contest> contests = contestRepository.getAll();
+        List<Contest> contests = contestRepository.getContestInPhaseOneAndPhaseTwo();
 
         for (Contest contest : contests) {
             changeContestPhaseWhenEndPhaseDateIsReached(contest);
@@ -134,8 +134,7 @@ public class ScheduledExecutorService implements Runnable {
                         Map.Entry::getValue,
                         (a, b) -> {
                             throw new AssertionError();
-                        },
-                        LinkedHashMap::new
+                        }, LinkedHashMap::new
                 ));
 
         calculateRewardPointsForFirstThreePlaces(sortedMap, contest.getTitle());
