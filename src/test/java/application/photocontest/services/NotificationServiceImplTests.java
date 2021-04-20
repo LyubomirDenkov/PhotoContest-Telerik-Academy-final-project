@@ -1,7 +1,5 @@
 package application.photocontest.services;
 
-
-import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.Notification;
 import application.photocontest.models.User;
@@ -53,20 +51,6 @@ public class NotificationServiceImplTests {
                 () -> notificationService.getAll(user));
 
     }
-
-    @Test
-    public void getAll_Should_Get_When_IsCalled() {
-        Notification notification = createMockNotification();
-        User user = createMockUser();
-
-        when(notificationRepository.getById(notification.getId())).thenReturn(notification);
-
-        notificationService.getById(user, notification.getId());
-
-        verify(notificationRepository, Mockito.times(1)).getById(notification.getId());
-
-    }
-
     @Test
     public void create_Should_create_When_IsCalled() {
         Notification notification = createMockNotification();
@@ -76,16 +60,4 @@ public class NotificationServiceImplTests {
         verify(notificationRepository, Mockito.times(1)).create(notification);
 
     }
-
-    @Test
-    public void delete_Should_Delete_When_IsCalled() {
-        Notification notification = createMockNotification();
-
-        notificationService.delete(notification.getId());
-
-        verify(notificationRepository, Mockito.times(1)).delete(notification.getId());
-
-    }
-
-
 }

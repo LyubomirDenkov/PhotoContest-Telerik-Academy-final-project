@@ -61,7 +61,7 @@ public class ScheduledExecutorServiceTests {
 
         scheduledExecutorService.run();
 
-        verify(contestRepository, times(1)).getAll();
+        verify(contestRepository, times(1)).getContestInPhaseOneAndPhaseTwo();
 
     }
 
@@ -87,7 +87,7 @@ public class ScheduledExecutorServiceTests {
         contest.setPhase(phase);
         contest.setImages(Set.of(image));
 
-        when(contestRepository.getAll()).thenReturn(List.of(contest));
+        when(contestRepository.getContestInPhaseOneAndPhaseTwo()).thenReturn(List.of(contest));
 
         when(userRepository.getUserByPictureId(1)).thenReturn(user);
 

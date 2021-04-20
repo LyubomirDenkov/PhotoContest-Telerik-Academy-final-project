@@ -465,6 +465,11 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void addNotificationToUserNotifications(User user, Contest contest, String invitationRole) {
+
+        if (user.getNotifications() == null) {
+            user.setNotifications(new HashSet<>());
+        }
+
         Set<Notification> userNotifications = user.getNotifications();
         Notification notification = sendMessageWhenInvitedToJuryOrParticipant(user, invitationRole, contest);
         Notification notificationToAdd = notificationRepository.create(notification);
