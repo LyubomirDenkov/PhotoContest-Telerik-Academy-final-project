@@ -1,6 +1,5 @@
 package application.photocontest.service;
 
-import application.photocontest.constants.Constants;
 import application.photocontest.enums.UserRoles;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;

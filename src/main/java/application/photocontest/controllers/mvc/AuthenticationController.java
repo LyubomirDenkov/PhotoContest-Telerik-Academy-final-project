@@ -6,7 +6,6 @@ import application.photocontest.exceptions.AuthenticationFailureException;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.modelmappers.UserMapper;
 import application.photocontest.models.User;
-import application.photocontest.models.UserCredentials;
 import application.photocontest.models.dto.LoginDto;
 import application.photocontest.models.dto.RegisterDto;
 import application.photocontest.service.contracts.UserService;

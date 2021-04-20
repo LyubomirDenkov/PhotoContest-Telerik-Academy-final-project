@@ -33,8 +33,8 @@ public class NotificationHelper {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
-        notification.setTitle(SUCCESFULL_JOINING_TO_CONTEST);
-        notification.setMessage(String.format(SUCCESFULL_JOINING_NOTIFICATION, user.getFirstName(), contest.getTitle(),
+        notification.setTitle(SUCCESSFUL_JOINING_TO_CONTEST);
+        notification.setMessage(String.format(SUCCESSFUL_JOINING_NOTIFICATION, user.getFirstName(), contest.getTitle(),
                 timeTillVoting.format(DateTimeFormatter.ofPattern(DATE_FORMAT))));
         notification.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         notification.setUser(user);

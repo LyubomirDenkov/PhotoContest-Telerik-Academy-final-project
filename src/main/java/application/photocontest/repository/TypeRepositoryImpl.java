@@ -21,7 +21,6 @@ public class TypeRepositoryImpl implements TypeRepository {
     }
 
 
-
     @Override
     public List<Type> getAll() {
         try (Session session = sessionFactory.openSession()) {

@@ -169,7 +169,7 @@ public class ContestServiceImpl implements ContestService {
 
         if (contest.getPhase().getName().equals(ContestPhases.VOTING.toString())) {
             if (!user.isOrganizer()) {
-                validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGTH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
+                validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
             }
         }
 

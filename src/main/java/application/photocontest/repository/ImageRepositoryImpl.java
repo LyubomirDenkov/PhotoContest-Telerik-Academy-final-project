@@ -24,12 +24,12 @@ public class ImageRepositoryImpl implements ImageRepository {
     @Override
     public Image getById(int id) {
 
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
 
-            Image image = session.get(Image.class,id);
+            Image image = session.get(Image.class, id);
 
-            if (image == null){
-                throw new EntityNotFoundException("Image",id);
+            if (image == null) {
+                throw new EntityNotFoundException("Image", id);
             }
             return image;
         }

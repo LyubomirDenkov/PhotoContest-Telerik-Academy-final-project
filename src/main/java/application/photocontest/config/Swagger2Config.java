@@ -21,7 +21,7 @@ import static com.google.common.collect.Lists.newArrayList;
 public class Swagger2Config {
 
     @Bean
-    public Docket docket(){
+    public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
@@ -46,7 +46,7 @@ public class Swagger2Config {
                 .build();
     }
 
-    private String description(){
+    private String description() {
         return "iPhoto is a platform powered by an amazing community that has uploaded hundreds of thousands\n" +
                 "of their own photos to fuel creativity around the world. You can sign up for free.\n" +
                 "Either way, you've got access to over a million photos under the iPhoto\n" +

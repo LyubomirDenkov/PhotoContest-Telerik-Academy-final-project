@@ -40,7 +40,7 @@ public class ImageMvcController {
             User currentUser = authenticationHelper.tryGetUser(session);
 
             model.addAttribute(CURRENT_USER, currentUser);
-            model.addAttribute("image", imageService.getById(currentUser,id));
+            model.addAttribute("image", imageService.getById(currentUser, id));
             model.addAttribute("reviews", imageReviewService.getAllReviewsByImageId(currentUser, id));
             return "image";
 

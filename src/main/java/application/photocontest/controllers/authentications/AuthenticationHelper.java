@@ -24,7 +24,7 @@ public class AuthenticationHelper {
     public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong username or password.";
 
     private final UserService userService;
-    private final  PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthenticationHelper(UserService userService, PasswordEncoder passwordEncoder) {
@@ -56,7 +56,7 @@ public class AuthenticationHelper {
     public User verifyAuthentication(String userName, String password) {
         try {
             User user = userService.getUserByUserName(userName);
-            if (!passwordEncoder.matches(password,user.getUserCredentials().getPassword())) {
+            if (!passwordEncoder.matches(password, user.getUserCredentials().getPassword())) {
                 throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
             }
             return user;

@@ -26,13 +26,13 @@ public class PhaseRepositoryImpl implements PhaseRepository {
 
         try (Session session = sessionFactory.openSession()) {
 
-            Query<Phase> query = session.createQuery("from Phase where name = :name ",Phase.class);
-            query.setParameter("name",phaseName);
+            Query<Phase> query = session.createQuery("from Phase where name = :name ", Phase.class);
+            query.setParameter("name", phaseName);
 
             List<Phase> phases = query.list();
 
             if (phases.isEmpty()) {
-                throw new EntityNotFoundException("Phase","name",phaseName);
+                throw new EntityNotFoundException("Phase", "name", phaseName);
             }
             return phases.get(0);
         }

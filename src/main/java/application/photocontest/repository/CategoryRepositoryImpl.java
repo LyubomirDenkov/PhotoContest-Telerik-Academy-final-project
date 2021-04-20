@@ -2,7 +2,6 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Category;
-import application.photocontest.models.Contest;
 import application.photocontest.repository.contracts.CategoryRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,7 +36,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public List<Category> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Category ",Category.class).list();
+            return session.createQuery("from Category ", Category.class).list();
         }
     }
 
@@ -54,6 +53,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         }
 
     }
+
     @Override
     public Category getByName(String name) {
         try (Session session = sessionFactory.openSession()) {

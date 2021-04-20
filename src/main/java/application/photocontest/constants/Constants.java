@@ -16,7 +16,7 @@ public class Constants {
     public static final String ONLY_JURY_CAN_RATE_IMAGES = "Only jury can rate images.";
     public static final String ONLY_JURY_CAN_REMOVE_IMAGES = "Only jury can remove images.";
     public static final String ONLY_JURY_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only jury can access voting contests.";
-    public static final String USER_WITH_ENOUGTH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only user with 150 or more points can access voting contests.";
+    public static final String USER_WITH_ENOUGH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE = "Only user with 150 or more points can access voting contests.";
 
 
     public static final String DEFAULT_CONTEST_BACKGROUND = "https://i.imgur.com/ophF343.jpg";
@@ -64,8 +64,8 @@ public class Constants {
     public static final String NOTIFICATION_TITLE = "Invitation";
     public static final String CONTEST_INVITATION = "Congratulations %s ! You have been invited as a %s in %s contest. " +
             "Voting phase starts at %s.";
-    public static final String SUCCESFULL_JOINING_TO_CONTEST = "Successful Joining";
-    public static final String SUCCESFULL_JOINING_NOTIFICATION = "Congratulations %s ! You have successfully joined %s contest. " +
+    public static final String SUCCESSFUL_JOINING_TO_CONTEST = "Successful Joining";
+    public static final String SUCCESSFUL_JOINING_NOTIFICATION = "Congratulations %s ! You have successfully joined %s contest. " +
             "Voting phase starts at %s.";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String NOTIFICATION_TITLE_WHEN_REGISTERED = "Welcome!";

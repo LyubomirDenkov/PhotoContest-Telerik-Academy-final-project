@@ -40,14 +40,14 @@ public class UserMvcController {
     }
 
     @GetMapping
-    public String getAllUsers(Model model, HttpSession session){
+    public String getAllUsers(Model model, HttpSession session) {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute(CURRENT_USER, user);
             model.addAttribute("users", userService.getAll(user));
             return "users";
-        }catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             return "error";
         }
     }
@@ -91,7 +91,7 @@ public class UserMvcController {
                                         @RequestParam(value = "url", required = false) Optional<String> url,
                                         @RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
                                         @Valid @ModelAttribute("updateUserDto") UpdateUserDto dto,
-                                        BindingResult bindingResult) {
+                                        BindingResult bindingResult,Model model) {
 
 
         if (bindingResult.hasErrors()) {
@@ -110,7 +110,10 @@ public class UserMvcController {
         } catch (IllegalArgumentException e) {
             bindingResult.rejectValue("repeatPassword", "password_error", e.getMessage());
             return "edit-profile";
-        } catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
+        } catch (IOException e) {
+           model.addAttribute("url",e.getMessage());
+            return "edit-profile";
+        } catch (AuthenticationFailureException | UnauthorizedOperationException e) {
             return "error";
         }
     }

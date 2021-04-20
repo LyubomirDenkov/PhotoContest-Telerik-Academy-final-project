@@ -46,8 +46,7 @@ public class ScheduledExecutorService implements Runnable {
 
     @Scheduled(fixedDelay = 60000)
     public void run() {
-        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
-                " INFO TASK START");
+
         List<Contest> contests = contestRepository.getAll();
 
         for (Contest contest : contests) {
@@ -55,7 +54,7 @@ public class ScheduledExecutorService implements Runnable {
         }
 
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:ms")) +
-                " INFO TASK DONE SUCCESSFULLY!!");
+                " Scheduled executor was called!");
     }
 
     private void changeContestPhaseWhenEndPhaseDateIsReached(Contest contest) {

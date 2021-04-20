@@ -2,7 +2,6 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Points;
-import application.photocontest.models.User;
 import application.photocontest.repository.contracts.PointsRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

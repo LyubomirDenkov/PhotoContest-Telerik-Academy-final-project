@@ -35,41 +35,40 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getById(int id) {
 
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
 
-            User user = session.get(User.class,id);
+            User user = session.get(User.class, id);
 
-            if (user == null){
-                throw new EntityNotFoundException("User",id);
+            if (user == null) {
+                throw new EntityNotFoundException("User", id);
             }
             return user;
         }
     }
 
     @Override
-    public List<User> getParticipantsFromContest(int id){
+    public List<User> getParticipantsFromContest(int id) {
 
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
 
             Query<User> query = session.createQuery("select u from Contest c " +
                     "join c.participants as u " +
                     "where c.id = :id ", User.class);
 
-            query.setParameter("id",id);
+            query.setParameter("id", id);
             return query.list();
         }
     }
 
     @Override
-    public User getUserByPictureId(int id){
+    public User getUserByPictureId(int id) {
 
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             return session.createQuery("select u from User u " +
                     "join u.images as images " +
-                    "where images.id = :id", User.class).setParameter("id",id).uniqueResult();
+                    "where images.id = :id", User.class).setParameter("id", id).uniqueResult();
         }
     }
-
 
 
     @Override
@@ -84,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getAllPotentialJury() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("select u from User u join u.points as p " +
-                    "where p.points > 150 ",User.class).list();
+                    "where p.points > 150 ", User.class).list();
         }
     }
 

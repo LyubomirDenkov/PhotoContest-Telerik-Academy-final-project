@@ -17,7 +17,7 @@ public interface ContestRepository extends GetRepositoryOperations<Contest>, Cud
 
     List<Contest> getFinishedContests(int userId, boolean isOrganizer);
 
-    List<Contest> getVotingContests(int userId,boolean isOrganizer);
+    List<Contest> getVotingContests(int userId, boolean isOrganizer);
 
     List<User> getContestParticipants(int contestId);
 
