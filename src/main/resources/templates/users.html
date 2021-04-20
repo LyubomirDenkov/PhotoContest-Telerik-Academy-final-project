@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" href="../static/assets/img/favicon.png" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" href="../static/assets/img/apple-touch-icon.png"
+        rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+        rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/aos/aos.css}" href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
+        href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}"
+        href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}"
+        href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}"
+        href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <link th:href="@{/assets/css/leaderboard.css}" href="../static/assets/css/leaderboard.css" rel="stylesheet">
+  <link th:href="@{/assets/css/style.css}" href="../static/assets/css/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="d-flex align-items-center ">
+  <div class="container-fluid container-xxl d-flex align-items-center">
+
+    <div id="logo" class="me-auto">
+      <!--             Uncomment below if you prefer to use a text logo
+                  <h1><a href="index.html">The<span>Event</span></a></h1>-->
+      <a href="" th:href="@{/}" class="scrollto"><img th:src="@{/assets/img/logo.png}"
+                                                      src="../static/assets/img/logo.png" alt="" title=""></a>
+    </div>
+
+    <nav id="navbar" class="navbar order-last order-lg-0">
+      <ul th:if="${currentUser == null}">
+        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+        <li><a class="nav-link scrollto" href="#about">About</a></li>
+        <li><a class="nav-link scrollto" href="#speakers">Contests</a></li>
+        <li><a class="nav-link scrollto" href="#venue">Top pictures</a></li>
+        <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+        <li><a class="nav-link scrollto" href="#buy-tickets">Ranks</a></li>
+      </ul>
+      <ul th:if="${currentUser != null}">
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/users/leaderboard}">Leaderboard</a>
+        </li>
+
+        <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
+        </li>
+        <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                    th:href="@{/users}">Users</a>
+        </li>
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/notifications}">Notifications</a>
+        </li>
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/categories}">Categories</a>
+        </li>
+
+        <li><a class="nav-link" href="#"
+               th:href="@{/users/{id}/profile(id=${currentUser.getId()})}">Profile</a>
+        </li>
+
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav><!-- .navbar -->
+    <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#">Login</a>
+    <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#">Logout</a>
+  </div>
+</header><!-- End Header -->
+
+<div class="main-content">
+  <div class="container mt-7">
+    <!-- Dark table -->
+    <div class="row mt-5">
+      <div class="col">
+        <div class="card bg-default shadow">
+          <div class="card-header bg-transparent border-0">
+            <h3 class="text-white mb-0">USERS</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-items-center sortable table-dark table-flush" id="myTable">
+              <input type="text" id="myInputForSearch" onkeyup="myFunctionFilter()" placeholder="Search.."
+                     title="Type in a name">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">First & Last Name</th>
+                <th scope="col">Points</th>
+                <th scope="col">Rank</th>
+                <th scope="col">Uploaded photos</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user : ${users}">
+                <td scope="row">
+                  <div class="media align-items-center">
+
+                    <img class="avatar rounded-circle mr-3" th:src="*{user.getProfileImage()}"
+                         alt="Image placeholder"
+                         src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/bootstrap.jpg">
+
+                    <div class="media-body">
+                      <li th:if="${currentUser.isOrganizer()}">
+                        <a href="#" th:href="@{/users/{id}/profile(id=${user.getId()})}">
+                                            <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
+                                            ' ' + user.getLastName().toUpperCase()}">Names</span>
+                        </a></li>
+                      <ul th:if="${!currentUser.isOrganizer()}">
+                                                <span class="mb-0 text-sm" th:text="*{user.getFirstName().toUpperCase() +
+
+                                         ' ' + user.getLastName().toUpperCase()}">Names</span>
+
+                      </ul>
+                    </div>
+
+                  </div>
+                </td>
+                <div th:each="points : *{user.getPoints()}">
+                  <td th:text="*{points.getPoints()}">
+                    200
+                  </td>
+
+                  <td>
+                      <span class="badge badge-dot mr-4" th:if="*{points.getPoints() < 51}">
+                        <i class="bg-white"></i> Photo Junkie
+                      </span>
+                    <span class="badge badge-dot mr-4"
+                          th:if="*{points.getPoints() > 50 && points.getPoints() < 151}">
+                        <i class="bg-success"></i> Enthusiast
+                      </span>
+                    <span class="badge badge-dot mr-4"
+                          th:if="*{points.getPoints() > 150 && points.getPoints() < 1001}">
+                        <i class="bg-danger"></i> Master
+                      </span>
+                    <span class="badge badge-dot mr-4" th:if="*{points.getPoints() > 1000}">
+                        <i class="bg-warning"></i> Photo Dictator
+                      </span>
+                  </td>
+                </div>
+                <td>
+                      <span class="badge badge-dot mr-4" th:text="*{user.getImages().size()}">
+                        <i class="bg-warning"></i> pending
+                      </span>
+                </td>
+              </tr>
+              <tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function myFunctionFilter() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputForSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 1; i < tr.length; i++) {
+      // Hide the row initially.
+      tr[i].style.display = "none";
+      td = tr[i].getElementsByTagName("td");
+      for (var j = 0; j < td.length; j++) {
+        cell = tr[i].getElementsByTagName("td")[j];
+        if (cell) {
+          if (cell.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+            break;
+          }
+        }
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

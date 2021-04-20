@@ -94,6 +94,20 @@ public class ContestsMvcController {
         }
     }
 
+    @GetMapping("/{id}/participants")
+    public String getContestParticipants(@PathVariable int id, Model model, HttpSession session) {
+
+
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            model.addAttribute("users", contestService.getContestParticipants(user, id));
+            model.addAttribute("currentUser", user);
+            return "users";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            return "error";
+        }
+    }
+
 
     @GetMapping
     public String getAllContests(Model model, HttpSession session) {

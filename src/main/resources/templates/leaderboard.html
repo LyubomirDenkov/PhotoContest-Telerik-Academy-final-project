@@ -78,8 +78,8 @@
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
-        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#buy-tickets">Login</a>
-        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#buy-tickets">Logout</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser == null}" th:href="@{/auth/login}" href="#">Login</a>
+        <a class="buy-tickets scrollto" th:if="${currentUser != null}" th:href="@{/auth/logout}" href="#">Logout</a>
     </div>
 </header><!-- End Header -->
 

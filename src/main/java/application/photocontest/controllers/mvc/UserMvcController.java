@@ -46,7 +46,7 @@ public class UserMvcController {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute(CURRENT_USER, user);
             model.addAttribute("users", userService.getAll(user));
-            return "leaderboard";
+            return "users";
         }catch (UnauthorizedOperationException e){
             return "error";
         }

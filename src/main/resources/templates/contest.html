@@ -127,8 +127,13 @@
                                 <li th:if="${currentUser.equals(contest.getUser())}">
                                     <a href="#" th:href="@{/contests/{id}/update(id=${contest.getId()})}">
                                         <button class="glow-on-hover" type="button">UPDATE</button>
-                                    </a></li>
-
+                                    </a>
+                                </li>
+                                <li th:if="${currentUser.isOrganizer()}">
+                                    <a href="#" th:href="@{/contests/{id}/participants(id=${contest.getId()})}">
+                                        <button class="glow-on-hover" type="button">PARTICIPANTS</button>
+                                    </a>
+                                </li>
 
                                 <li th:if="${contest.getPhase().getName().equals('ongoing') && !contest.isParticipant()
                                 && !contest.isJury() && !currentUser.isOrganizer()}">
