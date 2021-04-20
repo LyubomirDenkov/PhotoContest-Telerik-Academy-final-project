@@ -74,4 +74,13 @@ public class Constants {
 
     public static final String PASSWORDS_NOT_MATCH_ERROR_MESSAGE = "Passwords not match";
     public static final String OLD_PASSWORD_NOT_MATCH = "Old password not match";
+
+
+    //AuthorizationHelper
+
+    public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    public static final String AUTHORIZATION_ERROR_MESSAGE = "The requested resource requires authentication.";
+    public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid username.";
+    public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong username or password.";
+    public static final String NO_USER_LOGGED_IN = "No user logged in.";
 }

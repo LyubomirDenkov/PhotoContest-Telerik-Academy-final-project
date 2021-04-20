@@ -14,14 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpSession;
 
+import static application.photocontest.constants.Constants.*;
+
 @Component
 public class AuthenticationHelper {
-    public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
-    public static final String AUTHORIZATION_ERROR_MESSAGE = "The requested resource requires authentication.";
-    public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid username.";
 
-
-    public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong username or password.";
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -47,7 +44,7 @@ public class AuthenticationHelper {
         String currentUserName = (String) session.getAttribute("currentUser");
 
         if (currentUserName == null) {
-            throw new UnauthorizedOperationException("No user logged in.");
+            throw new UnauthorizedOperationException(NO_USER_LOGGED_IN);
         }
 
         return userService.getUserByUserName(currentUserName);
