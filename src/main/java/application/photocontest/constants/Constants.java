@@ -71,4 +71,7 @@ public class Constants {
     public static final String NOTIFICATION_TITLE_WHEN_REGISTERED = "Welcome!";
     public static final String NOTIFICATION_WHEN_SUCCESSFULLY_REGISTERED = "Congratulations! You have successfully joined to the iPhoto community!";
 
+
+    public static final String PASSWORDS_NOT_MATCH_ERROR_MESSAGE = "Passwords not match";
+    public static final String OLD_PASSWORD_NOT_MATCH = "Old password not match";
 }

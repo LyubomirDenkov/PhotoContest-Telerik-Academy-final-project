@@ -35,7 +35,6 @@ public class CategoryServiceImplTests {
     CategoryServiceImpl categoryService;
 
 
-
     @Test
     public void getAll_Should_ReturnAllCategories_When_IsCall() {
 
@@ -47,7 +46,7 @@ public class CategoryServiceImplTests {
 
         categoryService.getAll();
 
-        verify(categoryRepository,times(1)).getAll();
+        verify(categoryRepository, times(1)).getAll();
 
     }
 
@@ -57,24 +56,24 @@ public class CategoryServiceImplTests {
 
         Category category = createMockCategory();
         User user = createMockUser();
-        user.setRoles(Set.of(new Role(2,"organizer")));
+        user.setRoles(Set.of(new Role(2, "organizer")));
 
         when(categoryRepository.getById(1))
                 .thenReturn(category);
 
-        categoryService.getById(user,1);
+        categoryService.getById(user, 1);
 
         Mockito.verify(categoryRepository, Mockito.times(1)).getById(1);
 
     }
 
     @Test
-    public void create_Should_ThrowException_When_UserIsNotOrganizer(){
+    public void create_Should_ThrowException_When_UserIsNotOrganizer() {
         User user = createMockUser();
         Category category = createMockCategory();
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> categoryService.create(user,category));
+                () -> categoryService.create(user, category));
     }
 
     @Test
@@ -89,22 +88,22 @@ public class CategoryServiceImplTests {
 
 
     @Test
-    public void create_Should_ThrowException_When_DuplicateName(){
+    public void create_Should_ThrowException_When_DuplicateName() {
         User organizer = createMockOrganizer();
         Category category = createMockCategory();
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> categoryService.create(organizer,category));
+                () -> categoryService.create(organizer, category));
     }
 
     @Test
-    public void create_Should_Create_When_ValidationsOk(){
+    public void create_Should_Create_When_ValidationsOk() {
         User organizer = createMockOrganizer();
         Category category = createMockCategory();
 
         when(categoryRepository.getByName(category.getName())).thenThrow(EntityNotFoundException.class);
 
-        categoryService.create(organizer,category);
+        categoryService.create(organizer, category);
 
         verify(categoryRepository, times(1)).create(category);
 

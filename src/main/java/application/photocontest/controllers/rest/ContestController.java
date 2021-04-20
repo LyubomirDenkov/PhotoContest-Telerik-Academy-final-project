@@ -70,10 +70,8 @@ public class ContestController {
 
         try {
             return contestService.getContestParticipants(user, contestId);
-        } catch (
-                UnauthorizedOperationException e) {
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-
         }
     }
 
@@ -105,7 +103,6 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-
         }
     }
 
@@ -122,7 +119,6 @@ public class ContestController {
             Set<Integer> jurySet = contestDto.getJury();
             Set<Integer> participantsSet = contestDto.getParticipants();
             return contestService.create(user, contest, jurySet, participantsSet, file, url);
-
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -171,6 +167,7 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @ApiOperation(value = "Upload to contest")
     @PostMapping(value = "/{contestId}/upload", consumes = {"multipart/form-data", "application/json"})
     public Image uploadImageToContest(@RequestHeader HttpHeaders headers,
@@ -181,6 +178,7 @@ public class ContestController {
 
         User user = authenticationHelper.tryGetUser(headers);
         Image image = imageMapper.fromDto(user, dto);
+
         try {
             return contestService.uploadImageToContest(user, image, contestId, file, url);
         } catch (EntityNotFoundException e) {

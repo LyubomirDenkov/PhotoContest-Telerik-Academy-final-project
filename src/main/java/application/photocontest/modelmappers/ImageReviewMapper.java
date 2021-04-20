@@ -1,4 +1,5 @@
 package application.photocontest.modelmappers;
+
 import application.photocontest.models.ImageReview;
 import application.photocontest.models.dto.ImageReviewDto;
 
@@ -8,12 +9,9 @@ import org.springframework.stereotype.Component;
 public class ImageReviewMapper {
 
 
-
-
     public ImageReviewMapper() {
 
     }
-
 
 
     public ImageReview fromDto(ImageReviewDto imageReviewDto) {

@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static application.photocontest.constants.Constants.OLD_PASSWORD_NOT_MATCH;
+import static application.photocontest.constants.Constants.PASSWORDS_NOT_MATCH_ERROR_MESSAGE;
+
 @Component
 public class UserMapper {
 
 
-    private static final String PASSWORDS_NOT_MATCH_ERROR_MESSAGE = "Passwords not match";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -26,7 +29,7 @@ public class UserMapper {
 
     public User fromDto(RegisterDto registerDto) {
 
-        if (!registerDto.getPassword().equals(registerDto.getRepeatPassword())){
+        if (!registerDto.getPassword().equals(registerDto.getRepeatPassword())) {
             throw new IllegalArgumentException(PASSWORDS_NOT_MATCH_ERROR_MESSAGE);
         }
 
@@ -47,10 +50,10 @@ public class UserMapper {
 
         User user = userRepository.getById(id);
 
-        if (!passwordEncoder.matches(userDto.getOldPassword(),user.getUserCredentials().getPassword())){
-            throw new UnsupportedOperationException("Old password not match");
+        if (!passwordEncoder.matches(userDto.getOldPassword(), user.getUserCredentials().getPassword())) {
+            throw new UnsupportedOperationException(OLD_PASSWORD_NOT_MATCH);
         }
-        if (!userDto.getNewPassword().equals(userDto.getRepeatPassword())){
+        if (!userDto.getNewPassword().equals(userDto.getRepeatPassword())) {
             throw new IllegalArgumentException(PASSWORDS_NOT_MATCH_ERROR_MESSAGE);
         }
 

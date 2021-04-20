@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getById(User user, int id) {
 
-        verifyUserHasRoles(user,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.ORGANIZER);
         return categoryRepository.getById(id);
 
     }
@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             categoryRepository.getByName(category.getName());
         } catch (EntityNotFoundException e) {
-            ifCategoryExists= false;
+            ifCategoryExists = false;
         }
         if (ifCategoryExists) {
             throw new DuplicateEntityException("Category", "name", category.getName());

@@ -16,15 +16,13 @@ public class ContestMapper {
 
     private final ContestRepository contestRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
     private final TypeRepository typeRepository;
     private final PhaseRepository phaseRepository;
 
     @Autowired
-    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, UserRepository userRepository, TypeRepository typeRepository, PhaseRepository phaseRepository) {
+    public ContestMapper(ContestRepository contestRepository, CategoryRepository categoryRepository, TypeRepository typeRepository, PhaseRepository phaseRepository) {
         this.contestRepository = contestRepository;
         this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
         this.typeRepository = typeRepository;
         this.phaseRepository = phaseRepository;
     }

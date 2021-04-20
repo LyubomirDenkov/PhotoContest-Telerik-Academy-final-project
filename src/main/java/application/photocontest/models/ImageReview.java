@@ -35,7 +35,6 @@ public class ImageReview {
     private String comment;
 
 
-
     public ImageReview() {
     }
 

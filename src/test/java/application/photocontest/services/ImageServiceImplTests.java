@@ -45,7 +45,7 @@ public class ImageServiceImplTests {
         Image image = createMockImage();
         User user = createMockUser();
 
-        imageService.getById(user,image.getId());
+        imageService.getById(user, image.getId());
 
         verify(imageRepository, times(1)).getById(image.getId());
 

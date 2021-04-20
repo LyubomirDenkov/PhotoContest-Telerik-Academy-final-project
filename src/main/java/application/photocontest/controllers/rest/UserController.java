@@ -93,7 +93,7 @@ public class UserController {
         User user = authenticationHelper.tryGetUser(headers);
 
         try {
-            return userService.getUserContests(user, userId,phase);
+            return userService.getUserContests(user, userId, phase);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

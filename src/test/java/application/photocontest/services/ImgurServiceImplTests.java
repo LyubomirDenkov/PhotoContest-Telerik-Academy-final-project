@@ -22,36 +22,33 @@ import static org.mockito.Mockito.verify;
 public class ImgurServiceImplTests {
 
 
-
     @InjectMocks
     ImgurServiceImpl imgurService;
 
 
-
-
     @Test
-    public void Should_ThrowException_When_BothParametersArePresent(){
+    public void Should_ThrowException_When_BothParametersArePresent() {
 
         MockMultipartFile multipartFile = new MockMultipartFile("data", "filename.kml",
                 "text/plain", "some kml".getBytes());
 
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> imgurService.uploadImageToImgurAndReturnUrl(Optional.of(multipartFile),Optional.of("MockTestUrl")));
+                () -> imgurService.uploadImageToImgurAndReturnUrl(Optional.of(multipartFile), Optional.of("MockTestUrl")));
 
     }
 
     @Test
-    public void Should_ThrowException_When_UrlIsNotValid(){
+    public void Should_ThrowException_When_UrlIsNotValid() {
 
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.of("MockTestUrl")));
+                () -> imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.of("MockTestUrl")));
     }
 
     @Test
-    public void Should_ThrowException_When_UrlIsNotImage(){
+    public void Should_ThrowException_When_UrlIsNotImage() {
 
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(),Optional.of("https://www.youtube.com/")));
+                () -> imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.of("https://www.youtube.com/")));
     }
 
 }

@@ -107,7 +107,7 @@ public class ContestServiceImplTests {
         boolean isOrganizer = true;
         List<Contest> contests = new ArrayList<>();
 
-        when(contestRepository.getVotingContests(user.getId(),isOrganizer)).thenReturn(contests);
+        when(contestRepository.getVotingContests(user.getId(), isOrganizer)).thenReturn(contests);
 
         contestService.getAll(user, Optional.of("voting"));
 
@@ -122,7 +122,7 @@ public class ContestServiceImplTests {
         boolean isOrganizer = true;
         List<Contest> contests = new ArrayList<>();
 
-        when(contestRepository.getFinishedContests(user.getId(),isOrganizer)).thenReturn(contests);
+        when(contestRepository.getFinishedContests(user.getId(), isOrganizer)).thenReturn(contests);
 
         contestService.getAll(user, Optional.of("finished"));
 

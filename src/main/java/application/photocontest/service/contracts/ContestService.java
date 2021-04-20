@@ -2,7 +2,6 @@ package application.photocontest.service.contracts;
 
 
 import application.photocontest.models.*;
-import application.photocontest.service.contracts.genericservice.GetServiceOperations;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

@@ -127,7 +127,7 @@ public class ContestServiceImpl implements ContestService {
         Image image = imageRepository.getById(imageId);
 
         if (!user.isOrganizer()) {
-            validateUserIsJury(contest, user,ONLY_JURY_CAN_REMOVE_IMAGES);
+            validateUserIsJury(contest, user, ONLY_JURY_CAN_REMOVE_IMAGES);
         }
 
         removeImageAndUpdateContest(contest, image);
@@ -287,12 +287,12 @@ public class ContestServiceImpl implements ContestService {
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
         Contest contest = contestRepository.getById(contestId);
 
-        if (isJuryOrOrganizer(contest.getJury(),user)){
+        if (isJuryOrOrganizer(contest.getJury(), user)) {
             return contestRepository.getContestImages(contestId);
         }
 
-        if (contest.getPhase().getName().equals(ContestPhases.FINISHED.toString())){
-            if (contest.getParticipants().contains(user)){
+        if (contest.getPhase().getName().equals(ContestPhases.FINISHED.toString())) {
+            if (contest.getParticipants().contains(user)) {
                 return contestRepository.getContestImages(contestId);
             }
         }
@@ -335,7 +335,7 @@ public class ContestServiceImpl implements ContestService {
         boolean isUserRatedImageInContest = true;
 
         validateContestPhase(contest, ContestPhases.VOTING, PHASE_RATING_ERROR_MESSAGE);
-        validateUserIsJury(contest, user,ONLY_JURY_CAN_RATE_IMAGES);
+        validateUserIsJury(contest, user, ONLY_JURY_CAN_RATE_IMAGES);
         validateRatingPointsRange(MIN_RATING_POINTS, MAX_RATING_POINTS, imageReview.getPoints());
 
         if (!isContestContainsImage(contest, image)) {
@@ -510,7 +510,7 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void validateUserIsJury(Contest contest, User user,String message) {
+    private void validateUserIsJury(Contest contest, User user, String message) {
         if (!contest.getJury().contains(user)) {
             throw new UnauthorizedOperationException(message);
         }

@@ -93,11 +93,9 @@ public class ScheduledExecutorServiceTests {
 
         scheduledExecutorService.run();
 
-        verify(pointsRepository,times(1)).update(points);
+        verify(pointsRepository, times(1)).update(points);
 
     }
-
-
 
 
 }

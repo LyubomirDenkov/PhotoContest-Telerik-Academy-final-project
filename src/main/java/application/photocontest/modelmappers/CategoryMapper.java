@@ -2,20 +2,14 @@ package application.photocontest.modelmappers;
 
 import application.photocontest.models.Category;
 import application.photocontest.models.dto.CategoryDto;
-import application.photocontest.repository.contracts.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapper {
 
-    private final CategoryRepository categoryRepository;
-
-    @Autowired
-    public CategoryMapper(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryMapper() {
     }
-
 
     public Category fromDto(CategoryDto categoryDto) {
 

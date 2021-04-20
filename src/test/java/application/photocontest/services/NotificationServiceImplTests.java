@@ -34,11 +34,9 @@ public class NotificationServiceImplTests {
     NotificationServiceImpl notificationService;
 
 
-
-
     @Test
     public void getAllUsers_Should_Return_All() {
-        User user =  createMockUser();
+        User user = createMockUser();
         List<Notification> list = new ArrayList<>();
         when(notificationRepository.getAll(user.getId())).thenReturn(list);
         notificationService.getAll(user);
@@ -63,9 +61,9 @@ public class NotificationServiceImplTests {
 
         when(notificationRepository.getById(notification.getId())).thenReturn(notification);
 
-        notificationService.getById(user,notification.getId());
+        notificationService.getById(user, notification.getId());
 
-        verify(notificationRepository,Mockito.times(1)).getById(notification.getId());
+        verify(notificationRepository, Mockito.times(1)).getById(notification.getId());
 
     }
 
@@ -75,19 +73,19 @@ public class NotificationServiceImplTests {
 
         notificationService.create(notification);
 
-        verify(notificationRepository,Mockito.times(1)).create(notification);
+        verify(notificationRepository, Mockito.times(1)).create(notification);
 
     }
+
     @Test
     public void delete_Should_Delete_When_IsCalled() {
         Notification notification = createMockNotification();
 
         notificationService.delete(notification.getId());
 
-        verify(notificationRepository,Mockito.times(1)).delete(notification.getId());
+        verify(notificationRepository, Mockito.times(1)).delete(notification.getId());
 
     }
-
 
 
 }

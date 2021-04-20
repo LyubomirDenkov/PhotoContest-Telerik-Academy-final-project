@@ -42,7 +42,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image getById(User user, int id) {
 
-        verifyUserHasRoles(user, UserRoles.USER,UserRoles.ORGANIZER);
+        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
 
         return imageRepository.getById(id);
     }

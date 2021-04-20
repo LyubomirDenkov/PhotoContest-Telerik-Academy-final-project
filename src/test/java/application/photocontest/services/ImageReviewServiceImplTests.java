@@ -32,29 +32,28 @@ public class ImageReviewServiceImplTests {
     ImageReviewServiceImpl imageReviewService;
 
 
-
     @Test
-    public void Should_ThrowException_When_UserDontHaveRole(){
+    public void Should_ThrowException_When_UserDontHaveRole() {
         User user = new User();
         Set<Role> roles = new HashSet<>();
         user.setRoles(roles);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> imageReviewService.getAllReviewsByImageId(user,1));
+                () -> imageReviewService.getAllReviewsByImageId(user, 1));
 
     }
 
 
     @Test
-    public void Should_callRepository_When_InputIsValid(){
+    public void Should_callRepository_When_InputIsValid() {
         ImageReview imageReview = createMockImageReview();
         User user = createMockUser();
 
-       when(imageReviewRepository.getImageReviewByImageId(1)).thenReturn(List.of(imageReview));
+        when(imageReviewRepository.getImageReviewByImageId(1)).thenReturn(List.of(imageReview));
 
-       imageReviewService.getAllReviewsByImageId(user,1);
+        imageReviewService.getAllReviewsByImageId(user, 1);
 
-       verify(imageReviewRepository,times(1)).getImageReviewByImageId(1);
+        verify(imageReviewRepository, times(1)).getImageReviewByImageId(1);
 
     }
 
