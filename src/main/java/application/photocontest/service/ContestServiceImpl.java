@@ -445,7 +445,9 @@ public class ContestServiceImpl implements ContestService {
     private void setContestJury(Set<Integer> jurySet, Contest contest) {
 
         Set<User> jury = new HashSet<>(userRepository.getOrganizers());
-
+        for (User organizer : jury) {
+            addNotificationToUserNotifications(organizer, contest, INVITED_AS_JURY);
+        }
 
         for (Integer userId : jurySet) {
             User userToAdd = userRepository.getById(userId);
