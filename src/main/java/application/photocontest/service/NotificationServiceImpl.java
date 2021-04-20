@@ -29,13 +29,6 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.getAll(user.getId());
     }
 
-    @Override
-    public Notification getById(User user, int id) {
-
-        verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
-
-        return notificationRepository.getById(id);
-    }
 
     @Override
     public Notification create(Notification notification) {
@@ -43,10 +36,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
-    @Override
-    public void delete(int messageId) {
-        notificationRepository.delete(messageId);
-    }
 
 }
 

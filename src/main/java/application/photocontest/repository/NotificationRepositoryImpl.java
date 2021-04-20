@@ -61,14 +61,4 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         }
     }
 
-    @Transactional
-    @Override
-    public void delete(int id) {
-        Notification notification = getById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(notification);
-            session.getTransaction().commit();
-        }
-    }
 }
