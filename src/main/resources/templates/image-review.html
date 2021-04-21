@@ -90,7 +90,7 @@
                     <img th:src="*{image.getUrl()}" src="../static/assets/img/speakers/1.jpg"
                          alt="Speaker 1" class="img-fluid">
 
-                    <div th:if="${contest.isJury() || currentUser.isOrganizer()}">
+                    <div th:if="${userActions.isJury() || currentUser.isOrganizer()}">
                         <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/remove}">
                             <button class="glow-on-hover" type="submit">
                                 REMOVE IMAGE

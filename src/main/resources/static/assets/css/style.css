@@ -16,6 +16,11 @@ body {
     font-family: "Open Sans", sans-serif;
 }
 
+.h4own{
+    text-align: center;
+    font-weight: bolder;
+}
+
 .custom-text {
     color: wheat;
     font-weight: bolder;

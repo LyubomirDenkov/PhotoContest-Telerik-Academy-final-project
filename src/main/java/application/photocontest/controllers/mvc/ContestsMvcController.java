@@ -88,7 +88,7 @@ public class ContestsMvcController {
             Contest contest = contestService.getById(user, id);
             model.addAttribute("currentUser", user);
             model.addAttribute("contest", contest);
-            model.addAttribute("userActions",contestService.getUserActionsDto(user, contest));
+            model.addAttribute("userActions", contestService.getUserActionsDto(user, contest));
             return "contest";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             return "error";
@@ -205,7 +205,7 @@ public class ContestsMvcController {
     public String handleNewContestPage(@RequestParam(value = "multiPartFile", required = false) Optional<MultipartFile> file,
                                        @RequestParam(value = "url", required = false) Optional<String> url,
                                        @Valid @ModelAttribute("contest") ContestDto contestDto, BindingResult errors,
-                                       HttpSession session) {
+                                       HttpSession session,Model model) {
 
         if (errors.hasErrors()) {
             return "contest-new";
@@ -224,6 +224,9 @@ public class ContestsMvcController {
 
         } catch (AuthenticationFailureException | UnauthorizedOperationException | IOException e) {
             return "error";
+        }catch (DuplicateEntityException e){
+            errors.rejectValue("title","title-exist",e.getMessage());
+            return "contest-new";
         }
     }
 
@@ -295,6 +298,7 @@ public class ContestsMvcController {
 
             model.addAttribute(CURRENT_USER, currentUser);
             model.addAttribute("contest", contest);
+            model.addAttribute("userActions", contestService.getUserActionsDto(currentUser, contest));
 
             return "contest-images";
         } catch (AuthenticationFailureException | EntityNotFoundException | UnauthorizedOperationException e) {
@@ -313,10 +317,11 @@ public class ContestsMvcController {
             User currentUser = authenticationHelper.tryGetUser(session);
 
             Image image = imageService.getById(currentUser, imageId);
-
+            Contest contest = contestService.getById(currentUser, contestId);
             model.addAttribute("imageReview", new ImageReviewDto());
             model.addAttribute(CURRENT_USER, currentUser);
-            model.addAttribute("contest", contestService.getById(currentUser, contestId));
+            model.addAttribute("contest", contest);
+            model.addAttribute("userActions", contestService.getUserActionsDto(currentUser, contest));
             model.addAttribute("image", image);
 
             return "image-review";

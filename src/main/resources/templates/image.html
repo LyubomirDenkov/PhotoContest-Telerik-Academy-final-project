@@ -56,8 +56,8 @@
 
                 <li><a class="nav-link" href="#" th:href="@{/contests/ongoing}">Contests</a>
                 </li>
-                <li th:if="${currentUser.isOrganizer()}" ><a class="nav-link" href="#"
-                                                             th:href="@{/users}">Users</a>
+                <li th:if="${currentUser.isOrganizer()}"><a class="nav-link" href="#"
+                                                            th:href="@{/users}">Users</a>
                 </li>
 
                 <li><a class="nav-link" href="#"
@@ -81,22 +81,28 @@
 </div>
 <br>
 <section id="speakers">
-        <div class="section-header">
-            <h2>Reviews</h2>
-        </div>
-<div th:each="review : ${reviews}">
-    <div class="comments">
-        <div class="comments-text" >
-        <span th:text="*{review.getUser().getFirstName() + ' ' + review.getUser().getLastName()}">NAME rated with</span>
-            <span>Rated with:</span><span><img th:src="@{/assets/img/star.png}" src="../static/assets/img/star.png" alt="star" width="20px"></span>
-            <span th:text="*{review.getPoints()}">RATE</span>
-            <span> points</span>
-            <br>
-           <span>Comment: </span> <span th:text="*{review.getComment()}">COMMENT</span>
-        </div>
+
+    <div class="section-header h4own">
+        <h5 th:text="*{image.getTitle()}">TITLE</h5>
+        <h5 th:text="*{image.getStory()}">STORY</h5>
     </div>
-    <br>
-</div>
+    <div class="section-header">
+        <h2>Reviews</h2>
+    </div>
+    <div th:each="review : ${reviews}">
+        <div class="comments">
+            <div class="comments-text">
+                <span th:text="*{review.getUser().getFirstName() + ' ' + review.getUser().getLastName()}">NAME rated with</span>
+                <span>Rated with:</span><span><img th:src="@{/assets/img/star.png}" src="../static/assets/img/star.png"
+                                                   alt="star" width="20px"></span>
+                <span th:text="*{review.getPoints()}">RATE</span>
+                <span> points</span>
+                <br>
+                <span>Comment: </span> <span th:text="*{review.getComment()}">COMMENT</span>
+            </div>
+        </div>
+        <br>
+    </div>
 </section>
 </body>
 </html>

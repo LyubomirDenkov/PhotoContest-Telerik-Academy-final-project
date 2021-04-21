@@ -138,7 +138,10 @@ VALUES ('Nature'),
        ('Cities'),
        ('Mountains'),
        ('Cars'),
-       ('Beaches');
+       ('Beaches'),
+       ('Motorcycles'),
+       ('Fire'),
+       ('Stadium');
 
 
 INSERT INTO points (points)
@@ -284,6 +287,11 @@ VALUES ('Animals', 2, '2021-04-16 18:52:35', '2021-04-17 18:52:35', 1, 1, 'https
        ('Cars', 7, '2021-04-27 18:52:35', '2021-04-28 18:52:35', 2, 1, 'https://i.imgur.com/vJjekqs.jpg', 1),
        ('Mountains', 6, '2021-04-17 18:52:35', '2021-04-23 18:52:35', 3, 1, 'https://i.imgur.com/xnWz7Bl.jpg', 1),
        ('Lamborghini', 7, '2021-04-23 18:52:35', '2021-04-24 18:52:35', 4, 1, 'https://i.imgur.com/VRI2dVR.jpg', 1),
+       ('Hawks', 2, '2021-04-23 18:52:35', '2021-04-24 18:52:35', 4, 1, 'https://i.imgur.com/j6r2jTk.jpg', 1),
+       ('Motorcycle', 9, '2021-04-23 18:52:35', '2021-04-24 18:52:35', 4, 1, 'https://i.imgur.com/SYnV7SQ.jpg', 1),
+       ('Stadium', 11, '2021-04-23 18:52:35', '2021-04-24 18:52:35', 4, 1, 'https://i.imgur.com/0sPe9C9.jpg', 1),
+       ('Cities', 5, '2021-04-23 18:52:35', '2021-04-24 18:52:35', 4, 1, 'https://i.imgur.com/Dxxqvv6.jpg', 1),
+       ('Fire', 10, '2021-04-23 18:52:35', '2021-04-24 18:52:35', 4, 1, 'https://i.imgur.com/HBfFhYe.jpg', 1),
        ('Beach Photos', 8, '2021-04-17 18:52:35', '2021-04-30 18:52:35', 4, 2, 'https://i.imgur.com/1HMT838.jpg', 2);
 INSERT
 INTO user_points(user_id, points_id)
