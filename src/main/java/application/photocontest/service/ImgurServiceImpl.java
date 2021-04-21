@@ -12,59 +12,36 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Optional;
 
+import static application.photocontest.constants.Constants.*;
+
 @Service
 public class ImgurServiceImpl implements ImgurService {
 
-    private static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
-    private static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
-    private static final String IMGUR_AUTHORIZATION = "Authorization";
-    private static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
 
-    private static final int SUCCESS_STATUS_CODE = 200;
-    private static final String ONLY_LOCAL_FILE_OR_URL_ERROR_MESSAGE = "Only local file or url";
-
-
-    public ImgurServiceImpl() {
-    }
-
-    public String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file, Optional<String> url) throws IOException {
-
+    public String uploadImageToImgur(Optional<MultipartFile> file, Optional<String> url) throws IOException {
 
         if (file.isPresent()) {
-
-            if (file.get().getOriginalFilename().isBlank()) {
-                file = Optional.empty();
-            }
+            file = validateFileIsNotBlank(file);
         }
-
         if (url.isPresent()) {
-            if (url.get().isBlank()) {
-                url = Optional.empty();
-            }
+            url = validateUrlIsNotBlank(url);
         }
-
         if (file.isPresent() && url.isPresent()) {
-
             throw new UnsupportedOperationException(ONLY_LOCAL_FILE_OR_URL_ERROR_MESSAGE);
-
         } else if (file.isEmpty() && url.isEmpty()) {
             return "";
         }
-
         String image = "";
         if (file.isPresent()) {
             image = Base64.getEncoder().encodeToString(file.get().getBytes());
         } else {
             validateUrl(url);
             image = url.get();
-
         }
-
         return upload(image);
     }
 
     private void validateUrl(Optional<String> url) {
-
         try {
             URL imageUrl = new URL(url.get());
             HttpURLConnection huc = (HttpURLConnection) imageUrl.openConnection();
@@ -72,9 +49,22 @@ public class ImgurServiceImpl implements ImgurService {
         } catch (IOException e) {
             throw new UnsupportedOperationException(URL_IS_NOT_VALID_ERROR_MESSAGE);
         }
-
-
     }
+
+    private Optional<MultipartFile> validateFileIsNotBlank(Optional<MultipartFile> file) {
+        if (file.get().getOriginalFilename().isBlank()) {
+            return Optional.empty();
+        }
+        return file;
+    }
+
+    private Optional<String> validateUrlIsNotBlank(Optional<String> url) {
+        if (url.get().isBlank()) {
+            return Optional.empty();
+        }
+        return url;
+    }
+
 
     private String upload(String image) throws IOException {
 

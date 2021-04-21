@@ -227,7 +227,7 @@ public class ContestServiceImpl implements ContestService {
         }
 
 
-        String contestBackground = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        String contestBackground = imgurService.uploadImageToImgur(file, url);
 
         if (!contestBackground.isBlank()) {
             contest.setBackgroundImage(contestBackground);
@@ -259,7 +259,7 @@ public class ContestServiceImpl implements ContestService {
 
 
         if (file.isPresent() || url.isPresent()) {
-            String backgroundImage = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+            String backgroundImage = imgurService.uploadImageToImgur(file, url);
 
             if (!backgroundImage.isBlank()) {
                 contest.setBackgroundImage(backgroundImage);

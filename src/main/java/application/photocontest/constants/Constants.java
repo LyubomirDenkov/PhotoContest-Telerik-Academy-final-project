@@ -77,6 +77,7 @@ public class Constants {
 
 
     //AuthorizationHelper
+
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String AUTHORIZATION_ERROR_MESSAGE = "The requested resource requires authentication.";
     public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid username.";
@@ -88,4 +89,14 @@ public class Constants {
     public static final String SECOND_POSITION = "second";
     public static final String THIRD_POSITION = "third";
     public static final int DEFAULT_SCORE = 3;
+
+
+    //IMGUR SERVICE
+
+    public static final String IMGUR_IMAGE_UPLOAD_URL = "https://api.imgur.com/3/image";
+    public static final String IMGUR_CLIENT_ID = "Client-ID 442f5d37036bc37";
+    public static final String IMGUR_AUTHORIZATION = "Authorization";
+    public static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
+    public static final int SUCCESS_STATUS_CODE = 200;
+    public static final String ONLY_LOCAL_FILE_OR_URL_ERROR_MESSAGE = "Only local file or url";
 }

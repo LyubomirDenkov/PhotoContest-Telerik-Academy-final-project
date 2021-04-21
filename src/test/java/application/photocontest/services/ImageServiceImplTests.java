@@ -63,7 +63,7 @@ public class ImageServiceImplTests {
 
         when(userRepository.getById(user.getId())).thenReturn(user);
 
-        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.of(image.getUrl()))).thenReturn(image.getUrl());
+        when(imgurService.uploadImageToImgur(Optional.empty(), Optional.of(image.getUrl()))).thenReturn(image.getUrl());
 
         when(imageRepository.create(image)).thenReturn(image);
 

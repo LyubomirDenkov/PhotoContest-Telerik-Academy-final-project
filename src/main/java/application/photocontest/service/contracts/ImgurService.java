@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ImgurService {
 
-    String uploadImageToImgurAndReturnUrl(Optional<MultipartFile> file ,Optional<String> url) throws IOException;
+    String uploadImageToImgur(Optional<MultipartFile> file , Optional<String> url) throws IOException;
 
 }

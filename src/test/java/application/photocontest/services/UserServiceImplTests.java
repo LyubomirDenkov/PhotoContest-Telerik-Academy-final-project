@@ -164,7 +164,7 @@ public class UserServiceImplTests {
 
         when(userRepository.getUserByUserName(user.getUserCredentials().getUserName())).thenThrow(EntityNotFoundException.class);
 
-        when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.empty())).thenReturn("");
+        when(imgurService.uploadImageToImgur(Optional.empty(), Optional.empty())).thenReturn("");
 
         when(userRepository.create(user)).thenReturn(user);
 

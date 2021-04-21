@@ -1,13 +1,9 @@
 package application.photocontest.service;
 
 import application.photocontest.enums.UserRoles;
-import application.photocontest.models.Contest;
 import application.photocontest.models.Image;
-import application.photocontest.models.ImageReview;
 import application.photocontest.models.User;
-import application.photocontest.repository.contracts.ContestRepository;
 import application.photocontest.repository.contracts.ImageRepository;
-import application.photocontest.repository.contracts.ImageReviewRepository;
 import application.photocontest.repository.contracts.UserRepository;
 import application.photocontest.service.contracts.ImageService;
 import application.photocontest.service.contracts.ImgurService;
@@ -54,7 +50,7 @@ public class ImageServiceImpl implements ImageService {
         User userUploader = userRepository.getById(user.getId());
         image.setUploader(userUploader);
 
-        String imageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        String imageUrl = imgurService.uploadImageToImgur(file, url);
         image.setUrl(imageUrl);
 
         Image imageToCreate = imageRepository.create(image);

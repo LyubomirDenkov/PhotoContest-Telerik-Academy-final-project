@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException(USERNAME_ALREADY_EXIST_ERROR_MESSAGE);
         }
 
-        String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+        String profileImageUrl = imgurService.uploadImageToImgur(file, url);
 
         if (profileImageUrl.isBlank()) {
             user.setProfileImage(INITIAL_PROFILE_IMAGE);
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         verifyIsUserOwnAccount(user.getId(), userToUpdate.getId(), IS_USER_OWN_ACCOUNT_ERROR_MESSAGE);
 
         if (file.isPresent() || url.isPresent()) {
-            String profileImageUrl = imgurService.uploadImageToImgurAndReturnUrl(file, url);
+            String profileImageUrl = imgurService.uploadImageToImgur(file, url);
 
             if (!profileImageUrl.isBlank()) {
                 userToUpdate.setProfileImage(profileImageUrl);

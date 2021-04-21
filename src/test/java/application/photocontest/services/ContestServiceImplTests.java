@@ -1,6 +1,5 @@
 package application.photocontest.services;
 
-import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
@@ -388,7 +387,7 @@ public class ContestServiceImplTests {
 
         Mockito.when(userRepository.getById(user.getId())).thenReturn(user);
 
-        Mockito.when(imgurService.uploadImageToImgurAndReturnUrl(Optional.empty(), Optional.empty())).thenReturn("");
+        Mockito.when(imgurService.uploadImageToImgur(Optional.empty(), Optional.empty())).thenReturn("");
 
         Mockito.when(userRepository.getById(userParticipant.getId())).thenReturn(userParticipant);
 
