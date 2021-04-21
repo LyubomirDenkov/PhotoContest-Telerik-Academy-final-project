@@ -77,10 +77,15 @@ public class Constants {
 
 
     //AuthorizationHelper
-
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String AUTHORIZATION_ERROR_MESSAGE = "The requested resource requires authentication.";
     public static final String INVALID_EMAIL_ERROR_MESSAGE = "Invalid username.";
     public static final String AUTHENTICATION_FAILURE_MESSAGE = "Wrong username or password.";
     public static final String NO_USER_LOGGED_IN = "No user logged in.";
+
+    //ScheduledExecutorServiceConstants
+    public static final String FIRST_POSITION = "first";
+    public static final String SECOND_POSITION = "second";
+    public static final String THIRD_POSITION = "third";
+    public static final int DEFAULT_SCORE = 3;
 }

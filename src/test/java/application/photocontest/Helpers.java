@@ -69,9 +69,6 @@ public class Helpers {
         contest.setJury(Set.of(createMockOrganizer()));
         contest.setParticipants(Set.of(createMockUser()));
         contest.setImages(new HashSet<>());
-        contest.setIsJury(true);
-        contest.setParticipant(true);
-        contest.setHasImageUploaded(true);
 
         return contest;
     }

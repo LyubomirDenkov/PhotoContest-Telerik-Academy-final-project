@@ -7,6 +7,7 @@ import application.photocontest.exceptions.DuplicateEntityException;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.exceptions.UnauthorizedOperationException;
 import application.photocontest.models.*;
+import application.photocontest.models.dto.UserActionsDto;
 import application.photocontest.repository.contracts.*;
 import application.photocontest.service.contracts.ContestService;
 import application.photocontest.service.contracts.ImageService;
@@ -145,6 +146,7 @@ public class ContestServiceImpl implements ContestService {
         return contests;
     }
 
+
     @Override
     public List<Type> getAllTypes() {
         return typeRepository.getAll();
@@ -161,6 +163,34 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public UserActionsDto getUserActionsDto(User user, Contest contest) {
+
+        UserActionsDto userActionsDto = new UserActionsDto();
+
+        if (contest.getJury().contains(user)) {
+            userActionsDto.setJury(true);
+            return userActionsDto;
+        } else {
+            userActionsDto.setJury(false);
+        }
+
+        if (contest.getParticipants().contains(user)) {
+            userActionsDto.setParticipant(true);
+
+        } else {
+            userActionsDto.setParticipant(false);
+        }
+        try {
+            contestRepository.getContestByImageUploaderId(contest.getId(), user.getId());
+            userActionsDto.setHasImageUploaded(true);
+        } catch (EntityNotFoundException e) {
+            userActionsDto.setHasImageUploaded(false);
+        }
+
+        return userActionsDto;
+    }
+
+    @Override
     public Contest getById(User user, int id) {
 
         verifyUserHasRoles(user, UserRoles.USER, UserRoles.ORGANIZER);
@@ -171,22 +201,6 @@ public class ContestServiceImpl implements ContestService {
             if (!user.isOrganizer()) {
                 validateUserHasPointsToSeeVotingContests(user, USER_WITH_ENOUGH_POINTS_CAN_ACCESS_VOTING_CONTEST_ERROR_MESSAGE);
             }
-        }
-
-        if (contest.getJury().contains(user)) {
-            contest.setIsJury(true);
-            return contest;
-        }
-
-        if (contest.getParticipants().contains(user)) {
-            contest.setParticipant(true);
-        }
-
-        try {
-            contestRepository.getContestByImageUploaderId(contest.getId(), user.getId());
-            contest.setHasImageUploaded(true);
-        } catch (EntityNotFoundException e) {
-            contest.setHasImageUploaded(false);
         }
 
         return contest;

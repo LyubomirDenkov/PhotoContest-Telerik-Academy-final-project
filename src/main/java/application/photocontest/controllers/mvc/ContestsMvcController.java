@@ -88,6 +88,7 @@ public class ContestsMvcController {
             Contest contest = contestService.getById(user, id);
             model.addAttribute("currentUser", user);
             model.addAttribute("contest", contest);
+            model.addAttribute("userActions",contestService.getUserActionsDto(user, contest));
             return "contest";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             return "error";

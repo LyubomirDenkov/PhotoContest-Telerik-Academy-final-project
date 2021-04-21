@@ -74,9 +74,6 @@ create or replace table contest
     type_id            int                  not null,
     image_url          text                 not null,
     phase_id           int                  not null,
-    is_jury            tinyint(1) default 0 not null,
-    is_participant     tinyint(1) default 0 not null,
-    has_image_uploaded tinyint(1) default 0 not null,
     constraint contest_category_fk
         foreign key (category_id) references category (category_id),
     constraint contest_organizers_fk

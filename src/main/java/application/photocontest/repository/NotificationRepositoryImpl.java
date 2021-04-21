@@ -3,11 +3,9 @@ package application.photocontest.repository;
 
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.Notification;
-import application.photocontest.models.User;
 import application.photocontest.repository.contracts.NotificationRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

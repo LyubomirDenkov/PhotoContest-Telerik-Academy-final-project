@@ -78,17 +78,6 @@ public class Contest {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Set<Image> winnerImages;
 
-    @JsonIgnore
-    @Column(name = "is_jury")
-    private boolean isJury;
-
-    @JsonIgnore
-    @Column(name = "is_participant")
-    private boolean isParticipant;
-
-    @JsonIgnore
-    @Column(name = "has_image_uploaded")
-    private boolean hasImageUploaded;
 
     public Contest() {
     }
@@ -104,10 +93,7 @@ public class Contest {
                    Phase phase,
                    Set<User> participants,
                    Set<User> jury,
-                   Set<Image> images,
-                   boolean isJury,
-                   boolean isParticipant,
-                   boolean hasImageUploaded) {
+                   Set<Image> images) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -120,9 +106,6 @@ public class Contest {
         this.participants = participants;
         this.jury = jury;
         this.images = images;
-        this.isJury = isJury;
-        this.isParticipant = isParticipant;
-        this.hasImageUploaded = hasImageUploaded;
     }
 
     public int getId() {
@@ -232,41 +215,23 @@ public class Contest {
         this.winnerImages = winnerImages;
     }
 
-    public boolean isJury() {
-        return isJury;
-    }
 
-    public void setIsJury(boolean userIsJury) {
-        this.isJury = userIsJury;
-    }
-
-    public boolean isParticipant() {
-        return isParticipant;
-    }
-
-    public void setParticipant(boolean participant) {
-        isParticipant = participant;
-    }
-
-
-    public boolean isHasImageUploaded() {
-        return hasImageUploaded;
-    }
-
-    public void setHasImageUploaded(boolean hasImageUploaded) {
-        this.hasImageUploaded = hasImageUploaded;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contest contest = (Contest) o;
-        return getId() == contest.getId() && isJury() == contest.isJury() && isParticipant() == contest.isParticipant() && isHasImageUploaded() == contest.isHasImageUploaded() && getTitle().equals(contest.getTitle()) && getCategory().equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished().equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) && getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) && getPhase().equals(contest.getPhase());
+        return getId() == contest.getId()   && getTitle().equals(contest.getTitle()) && getCategory()
+                .equals(contest.getCategory()) && getTimeTillVoting().equals(contest.getTimeTillVoting()) && getTimeTillFinished()
+                .equals(contest.getTimeTillFinished()) && getUser().equals(contest.getUser()) &&
+                getType().equals(contest.getType()) && getBackgroundImage().equals(contest.getBackgroundImage()) &&
+                getPhase().equals(contest.getPhase());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(), getType(), getBackgroundImage(), getPhase(), isJury(), isParticipant(), isHasImageUploaded());
+        return Objects.hash(getId(), getTitle(), getCategory(), getTimeTillVoting(), getTimeTillFinished(), getUser(),
+                getType(), getBackgroundImage(), getPhase());
     }
 }

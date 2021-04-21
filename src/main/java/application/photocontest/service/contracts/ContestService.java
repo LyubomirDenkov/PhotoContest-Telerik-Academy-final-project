@@ -2,6 +2,7 @@ package application.photocontest.service.contracts;
 
 
 import application.photocontest.models.*;
+import application.photocontest.models.dto.UserActionsDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -40,4 +41,5 @@ public interface ContestService  {
 
     List<Contest> mainPageOngoingContest();
 
+    UserActionsDto getUserActionsDto(User user, Contest contest);
 }

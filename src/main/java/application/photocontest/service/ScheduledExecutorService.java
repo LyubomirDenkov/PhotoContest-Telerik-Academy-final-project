@@ -1,5 +1,6 @@
 package application.photocontest.service;
 
+import application.photocontest.constants.Constants;
 import application.photocontest.enums.ContestPhases;
 import application.photocontest.exceptions.EntityNotFoundException;
 import application.photocontest.models.*;
@@ -14,17 +15,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static application.photocontest.constants.Constants.*;
 import static application.photocontest.service.helper.NotificationHelper.buildMessageWhenContestFinishedAndUserIsInTopPosition;
 
 @Component
 @EnableScheduling
 public class ScheduledExecutorService implements Runnable {
 
-    private final String FIRST_POSITION = "first";
-    private final String SECOND_POSITION = "second";
-    private final String THIRD_POSITION = "third";
-
-    private final int DEFAULT_SCORE = 3;
 
     private final ContestRepository contestRepository;
     private final ImageReviewRepository imageReviewRepository;
