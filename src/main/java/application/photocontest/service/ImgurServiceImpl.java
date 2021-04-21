@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 import java.util.Optional;
@@ -22,6 +21,7 @@ public class ImgurServiceImpl implements ImgurService {
     private static final String URL_IS_NOT_VALID_ERROR_MESSAGE = "Url is not valid";
 
     private static final int SUCCESS_STATUS_CODE = 200;
+    private static final String ONLY_LOCAL_FILE_OR_URL_ERROR_MESSAGE = "Only local file or url";
 
 
     public ImgurServiceImpl() {
@@ -45,7 +45,7 @@ public class ImgurServiceImpl implements ImgurService {
 
         if (file.isPresent() && url.isPresent()) {
 
-            throw new UnsupportedOperationException("Only local file or url");
+            throw new UnsupportedOperationException(ONLY_LOCAL_FILE_OR_URL_ERROR_MESSAGE);
 
         } else if (file.isEmpty() && url.isEmpty()) {
             return "";
@@ -55,18 +55,28 @@ public class ImgurServiceImpl implements ImgurService {
         if (file.isPresent()) {
             image = Base64.getEncoder().encodeToString(file.get().getBytes());
         } else {
-
-            try {
-                URL imageUrl = new URL(url.get());
-                HttpURLConnection huc = (HttpURLConnection) imageUrl.openConnection();
-                validateStatusCodeIsSuccess(huc.getResponseCode());
-                image = url.get();
-            } catch (MalformedURLException e) {
-                throw new UnsupportedOperationException("URL is not valid");
-            }
+            validateUrl(url);
+            image = url.get();
 
         }
 
+        return upload(image);
+    }
+
+    private void validateUrl(Optional<String> url) {
+
+        try {
+            URL imageUrl = new URL(url.get());
+            HttpURLConnection huc = (HttpURLConnection) imageUrl.openConnection();
+            validateStatusCodeIsSuccess(huc.getResponseCode());
+        } catch (IOException e) {
+            throw new UnsupportedOperationException(URL_IS_NOT_VALID_ERROR_MESSAGE);
+        }
+
+
+    }
+
+    private String upload(String image) throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -88,7 +98,6 @@ public class ImgurServiceImpl implements ImgurService {
         JSONObject jsonObjectData = jsonObject.getJSONObject("data");
         return jsonObjectData.getString("link");
     }
-
 
     private void validateStatusCodeIsSuccess(int statusCode) {
         if (statusCode != SUCCESS_STATUS_CODE) {
