@@ -15,7 +15,7 @@ import static application.photocontest.constants.Constants.*;
 public class NotificationHelper {
 
 
-    public static Notification sendMessageWhenInvitedToJuryOrParticipant(User user, String role, Contest contest) {
+    public static Notification buildMessageWhenInvitedToJuryOrParticipant(User user, String role, Contest contest) {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
@@ -29,7 +29,7 @@ public class NotificationHelper {
         return notification;
     }
 
-    public static Notification sendMessageWhenSuccessfullyJoinedContest(User user, Contest contest) {
+    public static Notification buildMessageWhenSuccessfullyJoinedContest(User user, Contest contest) {
         Notification notification = new Notification();
         LocalDateTime timeTillVoting = convertToLocalDateTimeViaSqlTimestamp(contest.getTimeTillVoting());
 
@@ -42,7 +42,7 @@ public class NotificationHelper {
         return notification;
     }
 
-    public static Notification buildAndCreateNotification(User user, int points, String position, String contestTitle) {
+    public static Notification buildMessageWhenContestFinishedAndUserIsInTopPosition(User user, int points, String position, String contestTitle) {
         Notification notification = new Notification();
         notification.setTitle(String.format(MAIL_TITLE_CONTEST_END, contestTitle));
         notification.setMessage(String.format(MESSAGE_CONTEST_END_TOP_POSITION, user.getFirstName(), position, points));

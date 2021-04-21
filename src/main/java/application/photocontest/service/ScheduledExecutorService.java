@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static application.photocontest.service.helper.NotificationHelper.buildAndCreateNotification;
+import static application.photocontest.service.helper.NotificationHelper.buildMessageWhenContestFinishedAndUserIsInTopPosition;
 
 @Component
 @EnableScheduling
@@ -216,7 +216,7 @@ public class ScheduledExecutorService implements Runnable {
             }
             points.get().setPoints(points.get().getPoints() + pointsRewardByPosition);
 
-            Notification notification = buildAndCreateNotification(user, pointsRewardByPosition, position, contestTitle);
+            Notification notification = buildMessageWhenContestFinishedAndUserIsInTopPosition(user, pointsRewardByPosition, position, contestTitle);
 
             Notification notificationToAdd = notificationRepository.create(notification);
 

@@ -25,8 +25,8 @@ import java.util.Set;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyIsUserOwnAccount;
 import static application.photocontest.service.authorization.AuthorizationHelper.verifyUserHasRoles;
 import static application.photocontest.constants.Constants.*;
-import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenInvitedToJuryOrParticipant;
-import static application.photocontest.service.helper.NotificationHelper.sendMessageWhenSuccessfullyJoinedContest;
+import static application.photocontest.service.helper.NotificationHelper.buildMessageWhenInvitedToJuryOrParticipant;
+import static application.photocontest.service.helper.NotificationHelper.buildMessageWhenSuccessfullyJoinedContest;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -314,10 +314,11 @@ public class ContestServiceImpl implements ContestService {
             if (jury.contains(participantToAdd) || participantToAdd.isOrganizer()) continue;
 
             Optional<Points> points = participantToAdd.getPoints().stream().findFirst();
-
-            int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
-            points.get().setPoints(pointsToIncrease);
-            pointsRepository.update(points.get());
+            if (points.isPresent()) {
+                int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+                points.get().setPoints(pointsToIncrease);
+                pointsRepository.update(points.get());
+            }
             participants.add(participantToAdd);
             userRepository.update(participantToAdd);
 
@@ -404,10 +405,12 @@ public class ContestServiceImpl implements ContestService {
         }
 
         Optional<Points> points = userToJoinInContest.getPoints().stream().findFirst();
+        if (points.isPresent()) {
+            int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
+            points.get().setPoints(pointsToIncrease);
+            pointsRepository.update(points.get());
+        }
 
-        int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_JOINING_OPEN_CONTEST;
-        points.get().setPoints(pointsToIncrease);
-        pointsRepository.update(points.get());
         addNotificationToUserNotifications(userToJoinInContest, contest);
         userRepository.update(userToJoinInContest);
 
@@ -431,13 +434,14 @@ public class ContestServiceImpl implements ContestService {
             }
 
             Optional<Points> points = user.getPoints().stream().findFirst();
-
-            int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
-            points.get().setPoints(pointsToIncrease);
-            pointsRepository.update(points.get());
-            addNotificationToUserNotifications(user, contest, INVITED_AS_PARTICIPANT);
-            userRepository.update(user);
-            participants.add(user);
+            if (points.isPresent()) {
+                int pointsToIncrease = points.get().getPoints() + POINTS_REWARD_WHEN_INVITED_TO_CONTEST;
+                points.get().setPoints(pointsToIncrease);
+                pointsRepository.update(points.get());
+                addNotificationToUserNotifications(user, contest, INVITED_AS_PARTICIPANT);
+                userRepository.update(user);
+                participants.add(user);
+            }
         }
         contest.setParticipants(participants);
     }
@@ -455,31 +459,33 @@ public class ContestServiceImpl implements ContestService {
 
             Optional<Points> points = userToAdd.getPoints().stream().findFirst();
 
-            if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
-                jury.add(userToAdd);
-                addNotificationToUserNotifications(userToAdd, contest, INVITED_AS_JURY);
-                userRepository.update(userToAdd);
+            if (points.isPresent()) {
+                if (points.get().getPoints() > NEEDED_POINTS_TO_BE_JURY) {
+                    jury.add(userToAdd);
+                    addNotificationToUserNotifications(userToAdd, contest, INVITED_AS_JURY);
+                    userRepository.update(userToAdd);
+                }
             }
         }
         contest.setJury(jury);
     }
 
     private void addNotificationToUserNotifications(User user, Contest contest, String invitationRole) {
+        Notification notification = buildMessageWhenInvitedToJuryOrParticipant(user, invitationRole, contest);
+        setNotificationToUser(user, notification);
+    }
+
+    private void addNotificationToUserNotifications(User user, Contest contest) {
+        Notification notification = buildMessageWhenSuccessfullyJoinedContest(user, contest);
+        setNotificationToUser(user, notification);
+    }
+
+    private void setNotificationToUser(User user, Notification notification) {
 
         if (user.getNotifications() == null) {
             user.setNotifications(new HashSet<>());
         }
-
         Set<Notification> userNotifications = user.getNotifications();
-        Notification notification = sendMessageWhenInvitedToJuryOrParticipant(user, invitationRole, contest);
-        Notification notificationToAdd = notificationRepository.create(notification);
-        userNotifications.add(notificationToAdd);
-        user.setNotifications(userNotifications);
-    }
-
-    private void addNotificationToUserNotifications(User user, Contest contest) {
-        Set<Notification> userNotifications = user.getNotifications();
-        Notification notification = sendMessageWhenSuccessfullyJoinedContest(user, contest);
         Notification notificationToAdd = notificationRepository.create(notification);
         userNotifications.add(notificationToAdd);
         user.setNotifications(userNotifications);
