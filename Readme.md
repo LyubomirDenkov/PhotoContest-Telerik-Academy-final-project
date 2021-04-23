@@ -1,16 +1,7 @@
 
-![alt](https://i.imgur.com/5jSDw6U.gif)
-
 iPhoto Database relations:
 ![](ReadMeImages/iPhotoDB.png)
 
-
-
-Link to Trello board:
-https://trello.com/b/pdC2sZtN/photo-contest
-
-Link to Api Documentation
-http://localhost:8080/swagger-ui.html#/
 
 iPhoto is a platform powered by an amazing community that has uploaded hundreds of thousands
 of their own photos to fuel creativity around the world. You can sign up for free.
@@ -26,10 +17,6 @@ BUILD AND RUN PROJECT STEPS
 - 4 - Build and run iPhoto project.
 - 5 - Open the following link: http://localhost:8080/swagger-ui.html#/ or use another program to test the application.
 - 6 - ENJOY!
----
-
-![alt](https://i.imgur.com/1HjvoUF.gif)
-
 ---
                                                                  CATEGORIES
 ---
